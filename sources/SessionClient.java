@@ -76,7 +76,7 @@ class SessionClient {
 
     }
     
-    void validerProposition(IDObjet i) {
+    void validerProposition(int i) {
 
     }
     

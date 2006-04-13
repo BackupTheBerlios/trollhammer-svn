@@ -9,3 +9,5 @@ enums:
 sessionclient:
 	javac -cp classes -d classes sources/SessionClient.java
 
+clean:
+	rm -rf ./classes/*

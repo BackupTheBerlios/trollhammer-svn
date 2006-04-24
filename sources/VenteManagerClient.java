@@ -2,7 +2,7 @@ package trollhammer;
 
 class VenteManagerClient {
 
-    Set<Vente> ventes;
+    private Set<Vente> ventes;
 
     void détailsVente(Vente v, List<Objet> os) {
 

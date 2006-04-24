@@ -3,10 +3,10 @@ package trollhammer;
 class SessionClient {
 
     /* champs du design */
-    String login;
-    String adresse;
-    boolean connecté;
-    boolean modérateur;
+    private String login;
+    private String adresse;
+    private boolean connecté;
+    private boolean modérateur;
 
     void enchérir(int prix) {
 

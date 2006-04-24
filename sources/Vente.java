@@ -2,10 +2,10 @@ package trollhammer;
 
 class Vente {
 
-    int id;
-    String nom;
-    String description;
-    int date;
-    Mode mode;
+    private int id;
+    private String nom;
+    private String description;
+    private int date;
+    private Mode mode;
     
 }

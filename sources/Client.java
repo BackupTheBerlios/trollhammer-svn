@@ -5,12 +5,12 @@ package trollhammer;
 public class Client {
 
     /* champs du Design */
-    Onglet mode;
-    int prix_courant;
-    int nouveau_prix;
-    String dernier_enchérisseur; // IDUtilisateur n'est pas définissable comme type
-    long date; // long (temps UNIX en ms), remplace le int par défaut
-    String superviseur;
+    private Onglet mode;
+    private int prix_courant;
+    private int nouveau_prix;
+    private String dernier_enchérisseur; // IDUtilisateur n'est pas définissable comme type
+    private long date; // long (temps UNIX en ms), remplace le int par défaut
+    private String superviseur;
 
     void Chat(String m, String i) {
 

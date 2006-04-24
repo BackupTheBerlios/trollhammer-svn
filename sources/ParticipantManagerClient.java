@@ -2,7 +2,7 @@ package trollhammer;
 
 class ParticipantManagerClient {
 
-    Set<Participant> participants;
+    private Set<Participant> participants;
 
     void étatParticipant(Participant p) {
 

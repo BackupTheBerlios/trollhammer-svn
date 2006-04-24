@@ -2,12 +2,12 @@ package trollhammer;
 
 public class Serveur {
     
-    int date;
-    String dernier_enchérisseur;
-    Onglet mode;
-    int nouveau_prix;
-    int prix_courant;
-    String superviseur;
+    private int date;
+    private String dernier_enchérisseur;
+    private Onglet mode;
+    private int nouveau_prix;
+    private int prix_courant;
+    private String superviseur;
 
     void envoyerCoupdeMASSE() {
 

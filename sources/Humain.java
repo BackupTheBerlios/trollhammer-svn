@@ -2,7 +2,7 @@ package trollhammer;
 
 class Humain {
 
-    Vente vente;
+    private Vente vente;
 
     Vente getVente() {
 

@@ -2,7 +2,7 @@ package trollhammer;
 
 class VenteManagerServeur {
 
-    Set<Vente> ventes;
+    private Set<Vente> ventes;
 
     void insérerObjetVente(int o, int v, Position p, String i) {
 

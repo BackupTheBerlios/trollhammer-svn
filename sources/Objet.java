@@ -2,11 +2,11 @@ package trollhammer;
 
 class Objet {
     
-    int id;
-    int nom;
-    int description;
-    int prix_de_base;
-    int prix_de_vente;
-    StatutObjet statut;
+    private int id;
+    private int nom;
+    private int description;
+    private int prix_de_base;
+    private int prix_de_vente;
+    private StatutObjet statut;
 
 }

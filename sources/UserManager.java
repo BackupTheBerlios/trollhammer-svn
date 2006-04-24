@@ -2,7 +2,7 @@ package trollhammer;
 
 class UserManager {
 
-    Set<Utilisateur> utilisateurs;
+    private Set<Utilisateur> utilisateurs;
 
     void détailsUtilisateur(Utilisateur u) {
 

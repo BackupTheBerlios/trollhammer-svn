@@ -2,10 +2,10 @@ package trollhammer;
 
 class ObjectManagerClient {
 
-    Set<Objet> objets;
-    Set<Objet> vendu;
-    Set<Objet> acheté;
-    Set<Objet> propositions;
+    private Set<Objet> objets;
+    private Set<Objet> vendu;
+    private Set<Objet> acheté;
+    private Set<Objet> propositions;
 
     void listeObjets(Onglet t, Set<Objet> ol) {
 

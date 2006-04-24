@@ -2,9 +2,9 @@ package trollhammer;
 
 class Participant {
     
-    String login;
-    String nom;
-    String prénom;
-    StatutLogin statut;
+    private String login;
+    private String nom;
+    private String prénom;
+    private StatutLogin statut;
 
 }

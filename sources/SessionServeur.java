@@ -1,6 +1,8 @@
 package trollhammer;
 
-class UtilisateurServeur extends Utilisateur {
+class SessionServeur {
+
+    private String login;
 
     void résultatLogin(StatutLogin s) {
 
@@ -10,7 +12,7 @@ class UtilisateurServeur extends Utilisateur {
 
     }
 
-    void événement(Evénement e) {
+    void événement(e : Evénement) {
 
     }
 
@@ -34,7 +36,7 @@ class UtilisateurServeur extends Utilisateur {
 
     }
 
-    void listeParticipants(Set<Participant> pl) {
+    void listeParticipants(Set<Participants> pl) {
 
     }
 
@@ -51,10 +53,6 @@ class UtilisateurServeur extends Utilisateur {
     }
 
     void superviseur(String i) {
-
-    }
-
-    void doLogin(String mdp) {
 
     }
 

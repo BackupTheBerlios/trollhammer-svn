@@ -1,6 +1,6 @@
 package trollhammer;
 
-class UserManager {
+class UserManagerClient {
 
     private Set<Utilisateur> utilisateurs;
 

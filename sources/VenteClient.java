@@ -8,6 +8,7 @@ package trollhammer;
 
 class VenteClient extends Vente {
 
+    /* les trois fonctions suivantes peuvent être mises dans Vente */
     void getFirst() {
 
     }
@@ -20,6 +21,8 @@ class VenteClient extends Vente {
 
     }
 
+    /* jr : celle-ci ne peut pas l'être, fonctions spécifiques à Client.
+     * je propose un déplacement vers VenteManagerClient */
     void setPrices() {
 
     }

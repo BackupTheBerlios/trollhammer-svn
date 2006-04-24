@@ -8,5 +8,7 @@ class Objet {
     private int prix_de_base;
     private int prix_de_vente;
     private StatutObjet statut;
+    private String acheteur;
+    private String vendeur;
 
 }

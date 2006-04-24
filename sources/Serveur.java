@@ -2,7 +2,7 @@ package trollhammer;
 
 public class Serveur {
     
-    private int date;
+    private long date;
     private String dernier_enchérisseur;
     private Onglet mode;
     private int nouveau_prix;

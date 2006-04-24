@@ -6,19 +6,19 @@ package trollhammer;
  */
 class VenteServeur extends Vente {
 
-    void modoLeaving(IDUtilisateur i) {
+    void modoLeaving(String i) {
 
     }
 
-    boolean isSuperviseur(IDUtilisateur s) {
+    boolean isSuperviseur(String s) {
 
     }
 
-    boolean checkPAF(IDUtilisateur s) {
+    boolean checkPAF(String s) {
 
     }
 
-    void sellObject(IDUtilisateur i, Integer prix) {
+    void sellObject(String i, int prix) {
 
     }
 
@@ -26,7 +26,7 @@ class VenteServeur extends Vente {
 
     }
 
-    void insertObject(Objet o, Position p, Utilisateur u, Integer date) {
+    void insertObject(Objet o, int p, Utilisateur u, long date) {
 
     }
 

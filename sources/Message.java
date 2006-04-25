@@ -13,7 +13,7 @@ import java.util.List;
  * L'inspiration en vient fortement des 'case classes' de Scala.
  */
 
-abstract class Message {
+abstract class Message implements java.io.Serializable {
 }
 
 /* Messages Client -> Serveur */

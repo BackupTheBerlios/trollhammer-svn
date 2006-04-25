@@ -1,8 +1,8 @@
 package trollhammer;
 
-/** Classe englobante pour la partie Client.
+/** Classe englobante pour la partie Client. C'est un singleton.
 */
-public class Client {
+class Client {
 
     /* champs du Design */
     private Onglet mode;
@@ -12,10 +12,51 @@ public class Client {
     private long date; // long (temps UNIX en ms), remplace le int par défaut
     private String superviseur;
 
-    void Chat(String m, String i) {
+    /* les champs 'globaux' */
+    static Client client;
+    static ClientEntry cliententry;
+    static SessionClient session;
+    static HI hi;
+    static ObjectManagerClient objectmanager;
+    static UserManagerClient usermanager;
+    static ParticipantManagerClient participantmanager;
+    static VenteManagerClient ventemanager;
+    
+    /* la méthode main... */
+    public static void main(String[] args) {
+        Client.démarrer();
+    }
+
+    static void démarrer() {
+        if (Client.client == null) {
+            Client.client = new Client();
+        }
+    }
+
+    /* constructeur du Client, réservé à lui seul (via démarrer()) */
+    private Client() {
+        System.out.println("[sys] Démarrage Client.");
+
+        Client.cliententry = new ClientEntry();
+        Client.session = null; // pas créée initialement, seulement au Login
+        Client.hi = new HI(); // crée l'interface graphique !
+        Client.objectmanager = new ObjectManagerClient();
+        Client.usermanager = new UserManagerClient();
+        Client.participantmanager = new ParticipantManagerClient();
+        Client.ventemanager = new VenteManagerClient();
+
+        System.out.println("[sys] Client démarré.");
+        SessionClient sc = SessionClient.login("tefal", "tefal", "localhost");
+        sc.envoyerChat("lol");
+        sc.logout();
+    }
+
+    /* méthodes du Design */
+
+    void chat(String m, String i) {
 
     }
-    
+
     void enchère(int prix, String i) {
 
     }
@@ -23,7 +64,7 @@ public class Client {
     void événement(Evénement e) {
 
     }
-    
+
     void notification(Notification n) {
 
     }
@@ -31,9 +72,11 @@ public class Client {
     void résultatLogin(StatutLogin s) {
 
     }
-    
+
     void superviseur(String i) {
 
     }
+
+    /* fin des méthodes du Design */
 
 }

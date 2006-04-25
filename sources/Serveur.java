@@ -5,11 +5,9 @@ class Serveur {
     
     /* champs du design */
     private long date;
-    private String dernier_enchérisseur;
-    private Onglet mode;
-    private int nouveau_prix;
+    private int marteau;
     private int prix_courant;
-    private String superviseur;
+    private String dernier_enchérisseur;
 
     /* champ 'globaux'. Tous doivent se voir avoir une valeur
      * correcte attribuée au démarrage du Serveur. */
@@ -37,7 +35,6 @@ class Serveur {
     /* constructeur du Serveur, à son propre usage uniquement */
     private Serveur() {
         System.out.println("[sys] Démarrage serveur.");
-        Serveur.serveur = this;
         Serveur.serveurentry = new ServeurEntry();
         Serveur.broadcaster = new Broadcaster();
         Serveur.objectmanager = new ObjectManagerServeur();
@@ -47,18 +44,29 @@ class Serveur {
 
         System.out.println("[sys] Serveur démarré, passage en boucle d'attente");
         attendre();
+        /* attente finie => tout quitter, en forçant la main même au threads
+         * qui attendent ad eternam (ie. le thread Listener)
+         */
+        System.exit(0);
     }
 
-    /* jr : attendre stupidement.
-     * C'est pour garder les autres threads vivants!
-     * Entrer une ligne au clavier quitte le prog.
+    /* jr : attendre en acceptant, éventuellement, des commandes simples.
+     * Permet un peu de contrôle sur les autres threads.
      */
 
     private void attendre() {
         try {
-            System.in.read();
-        } catch (Exception ioe) {
-            System.out.println("[sys] utilisateur mauvais : exception sur stdin : "+ioe.getMessage());
+            String commande;
+            java.io.BufferedReader lr = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(System.in));
+
+            do {
+                commande = lr.readLine();
+            } while(!commande.equals("q"));
+            
+            lr.close();
+        } catch (Exception e) {
+            System.out.println("[sys] utilisateur mauvais : exception sur stdin : "+e.getMessage());
         }
     }
     

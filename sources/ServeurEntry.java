@@ -20,7 +20,7 @@ class ServeurEntry {
     }
 
     void envoyerChat(String msg, String sender) {
-
+        System.out.println("[chat] "+sender+" dit : "+msg);
     }
 
     void envoyerCoupdeMASSE(String sender) {

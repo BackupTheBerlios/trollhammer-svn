@@ -1,13 +1,13 @@
 package trollhammer;
 
-enum Action { Enchérir, Déconnecter };
+enum Action { EnchÃ©rir, DÃ©connecter };
 enum ActionModo { CoupDeMassePAF };
-enum Onglet { Achat, Vente, HôtelDesVentes, Planification, Validation, GestionUtilisateurs };
-enum StatutObjet { Vendu, Proposé, Accepté, Refusé, EnVente };
-enum StatutLogin { Connecté_Utilisateur, Connecté_Modérateur, Déconnecté, Invalide, Banni };
-enum StatutEdition { Réussi, ExisteDéjà, NonTrouvé, DéjàEffectué };
-enum Edition { Créer, Modifier, Supprimer }
-enum Evénement { CoupDeMassePAF1, CoupDeMassePAF2, Adjugé, VenteAutomatique }
-enum Notification { DébutVente, VenteEnCours, FinVente, LogOut, Déconnexion, Kické }
-enum Erreur { Déconnecté, Invalide, Banni, ExisteDéjà, NonTrouvé, DéjàEffectué }
+enum Onglet { Achat, Vente, HÃ´telDesVentes, Planification, Validation, GestionUtilisateurs };
+enum StatutObjet { Vendu, ProposÃ©, AcceptÃ©, RefusÃ©, EnVente };
+enum StatutLogin { ConnectÃ©_Utilisateur, ConnectÃ©_ModÃ©rateur, DÃ©connectÃ©, Invalide, Banni };
+enum StatutEdition { RÃ©ussi, ExisteDÃ©jÃ , NonTrouvÃ©, DÃ©jÃ EffectuÃ© };
+enum Edition { CrÃ©er, Modifier, Supprimer }
+enum EvÃ©nement { CoupDeMassePAF1, CoupDeMassePAF2, AdjugÃ©, VenteAutomatique }
+enum Notification { DÃ©butVente, VenteEnCours, FinVente, LogOut, DÃ©connexion, KickÃ© }
+enum Erreur { DÃ©connectÃ©, Invalide, Banni, ExisteDÃ©jÃ , NonTrouvÃ©, DÃ©jÃ EffectuÃ© }
 enum Mode { Automatique, Manuel }

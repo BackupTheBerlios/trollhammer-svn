@@ -8,19 +8,19 @@ public class Client {
     private Onglet mode;
     private int prix_courant;
     private int nouveau_prix;
-    private String dernier_enchérisseur; // IDUtilisateur n'est pas définissable comme type
-    private long date; // long (temps UNIX en ms), remplace le int par défaut
+    private String dernier_enchÃ©risseur; // IDUtilisateur n'est pas dÃ©finissable comme type
+    private long date; // long (temps UNIX en ms), remplace le int par dÃ©faut
     private String superviseur;
 
     void Chat(String m, String i) {
 
     }
     
-    void enchère(int prix, String i) {
+    void enchÃ¨re(int prix, String i) {
 
     }
 
-    void événement(Evénement e) {
+    void Ã©vÃ©nement(EvÃ©nement e) {
 
     }
     
@@ -28,7 +28,7 @@ public class Client {
 
     }
 
-    void résultatLogin(StatutLogin s) {
+    void rÃ©sultatLogin(StatutLogin s) {
 
     }
     

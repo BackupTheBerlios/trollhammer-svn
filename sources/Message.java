@@ -1,4 +1,6 @@
 package trollhammer;
+import java.util.Set;
+import java.util.List;
 
 /* Projet Trollhammer
  * Déclaration des objets-messages
@@ -9,6 +11,7 @@ package trollhammer;
  * (syntaxiquement) des messages quand on les expédie,
  * ainsi que la lecture tout aussi rapide de l'autre côté.
  * L'inspiration en vient fortement des 'case classes' de Scala.
+ */
 
 abstract class Message {
 }
@@ -25,7 +28,7 @@ class MessageClientServeur {
 
 }
 
-class login extends ClientServeurMessage {
+class login extends MessageClientServeur {
 
     String u;
     String motdepasse;
@@ -38,7 +41,7 @@ class login extends ClientServeurMessage {
 
 }
 
-class logout extends ClientServeurMessage {
+class logout extends MessageClientServeur {
 
     logout(String sender) {
         super(sender);
@@ -46,7 +49,7 @@ class logout extends ClientServeurMessage {
 
 }
 
-class envoyerChat extends ClientServeurMessage {
+class envoyerChat extends MessageClientServeur {
     
     String msg;
 
@@ -57,7 +60,7 @@ class envoyerChat extends ClientServeurMessage {
 
 }
 
-class envoyerCoupdeMASSE extends ClientServeurMessage {
+class envoyerCoupdeMASSE extends MessageClientServeur {
 
     envoyerCoupdeMASSE(String sender) {
         super(sender);
@@ -65,7 +68,7 @@ class envoyerCoupdeMASSE extends ClientServeurMessage {
 
 }
 
-class kickerUtilisateur extends ClientServeurMessage {
+class kickerUtilisateur extends MessageClientServeur {
 
     String u;
 
@@ -76,7 +79,7 @@ class kickerUtilisateur extends ClientServeurMessage {
 
 }
 
-class enchérir extends ClientServeurMessage {
+class enchérir extends MessageClientServeur {
 
     int prix;
 
@@ -87,7 +90,7 @@ class enchérir extends ClientServeurMessage {
 
 }
 
-class envoyerProposition extends ClientServeurMessage {
+class envoyerProposition extends MessageClientServeur {
 
     Objet proposition;
 
@@ -98,7 +101,7 @@ class envoyerProposition extends ClientServeurMessage {
 
 }
 
-class validerProposition extends ClientServeurMessage {
+class validerProposition extends MessageClientServeur {
 
     int objet;
 
@@ -109,7 +112,7 @@ class validerProposition extends ClientServeurMessage {
 
 }
 
-class invaliderProposition extends ClientServeurMessage {
+class invaliderProposition extends MessageClientServeur {
 
     int objet;
 
@@ -120,7 +123,7 @@ class invaliderProposition extends ClientServeurMessage {
 
 }
 
-class insérerObjetVente extends ClientServeurMessage {
+class insérerObjetVente extends MessageClientServeur {
 
     int objet;
     int vente;
@@ -135,7 +138,7 @@ class insérerObjetVente extends ClientServeurMessage {
 
 }
 
-class enleverObjetVente extends ClientServeurMessage {
+class enleverObjetVente extends MessageClientServeur {
 
     int objet;
     int vente;
@@ -148,18 +151,18 @@ class enleverObjetVente extends ClientServeurMessage {
 
 }
 
-class obtenirUtilisateur extends ClientServeurMessage {
+class obtenirUtilisateur extends MessageClientServeur {
 
     String u;
     
-    obtenirUtilisateur(String sender, string u) {
+    obtenirUtilisateur(String sender, String u) {
         super(sender);
         this.u = u;
     }
 
 }
 
-class utilisateur extends ClientServeurMessage {
+class utilisateur extends MessageClientServeur {
 
     Edition e;
     Utilisateur u;
@@ -172,7 +175,7 @@ class utilisateur extends ClientServeurMessage {
 
 }
 
-class obtenirListeObjets extends ClientServeurMessage {
+class obtenirListeObjets extends MessageClientServeur {
 
     Onglet type;
 
@@ -183,7 +186,7 @@ class obtenirListeObjets extends ClientServeurMessage {
 
 }
 
-class obtenirListeUtilisateurs extends ClientServeurMessage {
+class obtenirListeUtilisateurs extends MessageClientServeur {
 
     obtenirListeUtilisateurs(String sender) {
         super(sender);
@@ -191,7 +194,7 @@ class obtenirListeUtilisateurs extends ClientServeurMessage {
 
 }
 
-class obtenirListeParticipants extends ClientServeurMessage {
+class obtenirListeParticipants extends MessageClientServeur {
 
     obtenirListeParticipants(String sender) {
         super(sender);
@@ -199,7 +202,7 @@ class obtenirListeParticipants extends ClientServeurMessage {
 
 }
 
-class obtenirListeVentes extends ClientServeurMessage {
+class obtenirListeVentes extends MessageClientServeur {
 
     obtenirListeVentes(String sender) {
         super(sender);
@@ -207,7 +210,7 @@ class obtenirListeVentes extends ClientServeurMessage {
 
 }
 
-class obtenirVente extends ClientServeurMessage {
+class obtenirVente extends MessageClientServeur {
     
     int v;
 
@@ -218,7 +221,7 @@ class obtenirVente extends ClientServeurMessage {
 
 }
 
-class vente extends ClientServeurMessage {
+class vente extends MessageClientServeur {
 
     Edition e;
     Vente v;

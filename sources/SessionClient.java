@@ -5,10 +5,12 @@ class SessionClient {
     /* champs du design */
     private String login;
     private String adresse;
-    private boolean connect�;
-    private boolean mod�rateur;
+    private boolean connecté;
+    private boolean modérateur;
 
-    void ench�rir(int prix) {
+    /* méthodes du design */
+
+    void enchérir(int prix) {
 
     }
 
@@ -28,7 +30,7 @@ class SessionClient {
 
     }
     
-    void ins�rerObjetVente(int o, int v, int p) {
+    void insérerObjetVente(int o, int v, int p) {
 
     }
     
@@ -40,8 +42,9 @@ class SessionClient {
 
     }
 
-    Session login(String i, String m, String s) {
-
+    /* jr : à vérifier. Que fait exactement cette fonction ? */
+    SessionClient login(String i, String m, String s) {
+        return null;
     }
     
     void logout() {
@@ -83,4 +86,6 @@ class SessionClient {
     void vente(Edition e, Vente v) {
 
     }
+
+    /* fin méthodes du design */
 }

@@ -1,13 +1,29 @@
+PREFIX=javac -cp classes -d classes sources/
 all: client
 
-client: sessionclient enums
-	javac -cp classes -d classes sources/Client.java
+client: enums vente utilisateur objet sessionclient message
+	${PREFIX}Client.java
 
 enums:
-	javac -cp classes -d classes sources/Enums.java
+	${PREFIX}Enums.java
+
+message:
+	${PREFIX}Message.java
 
 sessionclient:
-	javac -cp classes -d classes sources/SessionClient.java
+	${PREFIX}SessionClient.java
+
+objet:
+	${PREFIX}Objet.java
+
+vente:
+	${PREFIX}Vente.java
+
+utilisateur: participant
+	${PREFIX}Utilisateur.java
+
+participant:
+	${PREFIX}Participant.java
 
 clean:
 	rm -rf ./classes/*

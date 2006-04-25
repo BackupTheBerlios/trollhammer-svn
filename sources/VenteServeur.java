@@ -11,11 +11,11 @@ class VenteServeur extends Vente {
     }
 
     boolean isSuperviseur(String s) {
-
+        return false;
     }
 
     boolean checkPAF(String s) {
-
+        return false;
     }
 
     void sellObject(String i, int prix) {
@@ -23,7 +23,7 @@ class VenteServeur extends Vente {
     }
 
     Objet removeHead() {
-
+        return null;
     }
 
     void insertObject(Objet o, int p, Utilisateur u, long date) {

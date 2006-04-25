@@ -26,23 +26,23 @@ class SessionClient {
     void envoyerChat(String message) {
         envoyer(new envoyerChat(login, message));
     }
-    
-    void envoyerCoupDeMASSE() {
+
+    void envoyerCoupdeMASSE() {
 
     }
 
     void envoyerProposition(Objet o) {
 
     }
-    
+
     void insérerObjetVente(int o, int v, int p) {
 
     }
-    
+
     void invaliderProposition(int i) {
 
     }
-    
+
     void kickerUtilisateur(String i) {
 
     }
@@ -51,7 +51,7 @@ class SessionClient {
      * retourne la Session y correspondant si la connexion est possible,
      * null sinon.
      */
-    
+
     static SessionClient login(String i, String m, String s) {
         try {
             System.out.println("[net] Tentative de connexion sur "+s
@@ -86,7 +86,7 @@ class SessionClient {
         // a toute session correspond le thread 'handler'. Démarrons-le.
         new ClientEntryHandler(socket).start();
     }
-    
+
     void logout() {
         this.connecté = false;
         this.modérateur = false;
@@ -98,39 +98,39 @@ class SessionClient {
                     + ioe.getMessage());
         }
     }
-    
+
     void obtenirListeObjets(Onglet quoi) {
 
     }
 
-    void obtenirListeUtilisateur() {
+    void obtenirListeUtilisateurs() {
 
     }
 
     void obtenirListeParticipants() {
 
     }
-    
+
     void obtenirListeVentes() {
 
     }
-    
+
     void obtenirProchaineVente() {
 
     }
-    
+
     void obtenirVente(int i) {
 
     }
-    
+
     void utilisateur(Edition e, Utilisateur u) {
 
     }
-    
+
     void validerProposition(int i) {
 
     }
-    
+
     void vente(Edition e, Vente v) {
 
     }
@@ -144,4 +144,40 @@ class SessionClient {
             System.out.println("[net] Incapable d'envoyer la requête : "+ioe.getMessage());
         }
     }
+
+    /* getters-setters and BLAH BLAH BLAH */
+
+    String getLogin() {
+        return this.login;
+    }
+
+    String getAdresse() {
+        return this.adresse;
+    }
+
+    boolean getConnecté() {
+        return this.connecté;
+    }
+
+    boolean getModérateur() {
+        return this.modérateur;
+    }
+
+    void setlogin(String login) {
+        this.login = login;
+    }
+
+    void setadresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    void setConnecté(boolean connecté) {
+        this.connecté = connecté;
+    }
+
+    void setModérateur(boolean modérateur) {
+        this.modérateur = modérateur;
+    }
+
+
 }

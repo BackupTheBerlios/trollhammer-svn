@@ -1,4 +1,6 @@
 package trollhammer;
+import java.util.Set;
+import java.util.List;
 
 class SessionServeur {
 
@@ -36,7 +38,7 @@ class SessionServeur {
 
     }
 
-    void listeParticipants(Set<Participants> pl) {
+    void listeParticipants(Set<Participant> pl) {
 
     }
 

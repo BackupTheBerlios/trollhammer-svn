@@ -1,6 +1,6 @@
 package trollhammer;
 
-class ModerateurServeur extends Moderateur {
+class ModérateurServeur extends Modérateur {
 
    void disconnect() {
 

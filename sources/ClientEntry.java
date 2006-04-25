@@ -7,59 +7,112 @@ import java.net.*;
 class ClientEntry {
 
     void résultatLogin(StatutLogin s) {
-
+        switch(s) {
+            case Connecté_Utilisateur:
+                Client.hi.voir(Onglet.HôtelDesVentes);
+                Client.session.setModérateur(false);
+                Client.session.setConnecté(true);
+                break;
+            case Connecté_Modérateur:
+                Client.hi.voir(Onglet.HôtelDesVentes);
+                Client.session.setModérateur(true);
+                Client.session.setConnecté(true);
+                break;
+            case Banni:
+                Client.hi.messageErreur(Erreur.Banni);
+                Client.session = null;
+                break;
+            case Invalide:
+                Client.hi.messageErreur(Erreur.Invalide);
+                Client.session = null;
+                break;
+        }
     }
 
     void notification(Notification n) {
+        Client.hi.message(n);
 
+        switch (n) {
+            case FinVente:
+                Client.humain.setVente(null);
+                break;
+            case DébutVente:
+            case VenteEnCours:
+                Vente v = Client.ventemanager.getVenteEnCours();
+                if(v != null) {
+                    Client.humain.setVente(v);
+                }
+        }
     }
 
     void événement(Evénement e) {
+        Client.hi.affichage(e);
+        Vente v = Client.humain.getVente();
 
+        if (v != null && e == Evénement.Adjugé) {
+            v.removeFirst();
+            VenteClientAdapter.setPrices(v);
+        } else if (v != null && e == Evénement.VenteAutomatique) {
+            v.setMode(Mode.Automatique);
+        }
     }
 
     void enchère(int prix, String i) {
+        Client.client.setPrixCourant(prix);
 
+        // incrément de 10% sur le prix initial
+        // dans le design, on avait fait l'erreur de
+        // faire 10% sur le prix _courant_.
+        Objet o = Client.humain.getVente().getFirst();
+        Client.client.setPrixCourant((int) 1.1*o.getPrixDeBase());
+        
+        Client.client.setDernierEnchérisseur(i);
+
+        if (Client.client.getMode() == Onglet.HôtelDesVentes) {
+            Client.hi.affichageEnchère(prix, i);
+        }
     }
 
     void chat(String m, String i) {
-
+        Client.hi.affichageChat(m, i);
     }
 
     void détailsVente(Vente v, List<Objet> liste) {
-
+        Client.ventemanager.détailsVente(v, liste);
     }
 
     void détailsUtilisateur(Utilisateur u) {
-
+        Client.usermanager.détailsUtilisateur(u);
     }
 
     void listeObjets(Onglet t, Set<Objet> ol) {
-
+        Client.objectmanager.listeObjets(t, ol);
     }
 
     void listeUtilisateurs(Set<Utilisateur> liste) {
-
+        Client.usermanager.listeUtilisateurs(liste);
     }
     
     void listeParticipants(Set<Participant> liste) {
-
+        Client.participantmanager.listeParticipants(liste);
     }
 
     void listeVentes(Set<Vente> liste) {
-
+        Client.ventemanager.listeVentes(liste);
     }
 
     void résultatEdition(StatutEdition s) {
-
+        Client.hi.résultatEdition(s);
     }
 
     void étatParticipant(Participant p) {
-
+        Client.participantmanager.étatParticipant(p);
     }
 
     void superviseur(String u) {
-
+        Client.client.setSuperviseur(u);
+        Vente v = Client.humain.getVente();
+        v.setMode(Mode.Manuel);
     }
 
 }

@@ -1,4 +1,5 @@
 package trollhammer;
+import java.util.ArrayList;
 
 class Vente {
 
@@ -8,6 +9,18 @@ class Vente {
     private long date;
     private Mode mode;
     private String superviseur;
+
+    private ArrayList<Objet> objets;
+
+    Objet getFirst() {
+        return objets.get(0);
+    }
+
+    Objet removeFirst() {
+        return objets.remove(0);
+    }
+
+    /* getters-setters and BLAH BLAH BLAH */
 
     int getId() {
         return this.id;

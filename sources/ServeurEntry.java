@@ -1,6 +1,10 @@
 package trollhammer;
+import java.io.*;
+import java.net.*;
 
 class ServeurEntry {
+
+    /* méthodes du design */
 
     void login(String u, String motDePasse, String sender) {
 
@@ -78,4 +82,28 @@ class ServeurEntry {
 
     }
 
+    /* fin des méthodes du design */
 }
+
+/** Un thread listener qui répond aux commandes d'une connexion particulière.
+ * Lancé pour chaque nouvelle connexion établie.
+ */
+class ServeurEntryThread extends Thread {
+
+    Socket s;
+
+    ServeurEntryThread(Socket socket) {
+        this.s = socket;
+    }
+
+    /** Boucle de lecture des objets sérialisés reçus du socket.
+     */
+    public void run() {
+        Object o; // l'objet qui va être lu du Socket.
+
+        try {
+            ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+            do {
+                o = ois.readObject();
+            } while (!(o instanceof Logout))
+

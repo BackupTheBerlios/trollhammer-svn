@@ -8,5 +8,53 @@ class Vente {
     private long date;
     private Mode mode;
     private String superviseur;
-    
+
+    int getId() {
+        return this.id;
+    }
+
+    String getNom() {
+        return this.nom;
+    }
+
+    String getDescription() {
+        return this.description;
+    }
+
+    long getDate() {
+        return this.date;
+    }
+
+    Mode getMode() {
+        return this.mode;
+    }
+
+    String getSuperviseur() {
+        return this.superviseur;
+    }
+
+    void setId(int id) {
+        this.id = id;
+    }
+
+    void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    void setDescription(String description) {
+        this.description = description;
+    }
+
+    void setDate(long date) {
+        this.date = date;
+    }
+
+    void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    void setSuperviseur(String superviseur) {
+        this.superviseur = superviseur;
+    }
+
 }

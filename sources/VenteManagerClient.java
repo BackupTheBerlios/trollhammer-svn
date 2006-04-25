@@ -1,4 +1,6 @@
 package trollhammer;
+import java.util.Set;
+import java.util.List;
 
 class VenteManagerClient {
 
@@ -8,8 +10,9 @@ class VenteManagerClient {
 
     }
 
-    boolean isInVenteEnCours(Date d) {
+    boolean isInVenteEnCours(long d) {
 
+        return false;
     }
 
     void listeVentes(Set<Vente> vl) {

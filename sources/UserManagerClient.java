@@ -1,4 +1,5 @@
 package trollhammer;
+import java.util.Set;
 
 class UserManagerClient {
 
@@ -8,7 +9,7 @@ class UserManagerClient {
 
     }
 
-    void listeUtilisateurs(List[Utilisateur] ul) {
+    void listeUtilisateurs(Set<Utilisateur> ul) {
 
     }
 

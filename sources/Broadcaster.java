@@ -1,6 +1,10 @@
 package trollhammer;
+import java.util.Set;
+import java.util.List;
 
 class Broadcaster {
+
+    /* méthodes du design */
 
     void étatParticipant(Participant p) {
 
@@ -33,5 +37,7 @@ class Broadcaster {
     void superviseur(String i) {
 
     }
+
+    /* fin méthodes du design */
 
 }

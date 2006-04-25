@@ -1,7 +1,7 @@
 package trollhammer;
 import java.util.Set;
 
-class UtilisateurManagerServeur {
+class UserManagerServeur {
 
     private Set<Utilisateur> utilisateurs;
 

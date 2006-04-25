@@ -25,5 +25,8 @@ utilisateur: participant
 participant:
 	${PREFIX}Participant.java
 
+serveur:
+	${PREFIX}Serveur.java
+
 clean:
 	rm -rf ./classes/*

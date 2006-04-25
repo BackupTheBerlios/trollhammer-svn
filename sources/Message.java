@@ -18,7 +18,7 @@ abstract class Message {
 
 /* Messages Client -> Serveur */
 
-class MessageClientServeur {
+class MessageClientServeur extends Message {
 
     String sender;
 

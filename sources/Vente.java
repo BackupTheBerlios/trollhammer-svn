@@ -10,13 +10,16 @@ class Vente {
     private Mode mode;
     private String superviseur;
 
-    private ArrayList<Objet> objets;
+    // une liste de POINTEURS sur des objets. Leurs IDs.
+    // risque d'incohérences monstrueuses si on prend les objets
+    // avec alors même qu'on fournit la liste dans les messages d'update. (jr)
+    private ArrayList<Integer> objets;
 
-    Objet getFirst() {
+    int getFirst() {
         return objets.get(0);
     }
 
-    Objet removeFirst() {
+    int removeFirst() {
         return objets.remove(0);
     }
 

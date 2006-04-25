@@ -3,6 +3,8 @@ import java.util.Set;
 
 class ObjectManagerServeur {
 
+    Set<Object> objets;
+
     void invaliderProposition(int i, String sender) {
 
     }

@@ -63,7 +63,8 @@ class ClientEntry {
         // incrément de 10% sur le prix initial
         // dans le design, on avait fait l'erreur de
         // faire 10% sur le prix _courant_.
-        Objet o = Client.humain.getVente().getFirst();
+        Objet o = Client.objectmanager.getObject(
+                Client.humain.getVente().getFirst());
         Client.client.setPrixCourant((int) 1.1*o.getPrixDeBase());
         
         Client.client.setDernierEnchérisseur(i);

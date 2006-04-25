@@ -8,6 +8,15 @@ class ObjectManagerClient {
     private Set<Objet> acheté;
     private Set<Objet> propositions;
 
+    Objet getObject(int i) {
+        for(Objet o : objets) {
+            if(o.getId() == i) {
+                return o;
+            }
+        }
+        return null;
+    }
+
     void listeObjets(Onglet t, Set<Objet> ol) {
         this.updateListe(t, ol);
         Onglet mode = Client.client.getMode();
@@ -16,47 +25,47 @@ class ObjectManagerClient {
         }
     }
 
-        private void update(Set<Objet> liste, Objet o) {
+    private void update(Set<Objet> liste, Objet o) {
 
-            // pour mettre à jour un objet, on enlève
-            // sa précédente instance de la liste
-            for(Objet obj : liste) {
-                if(obj.getId() == o.getId()) {
-                    liste.remove(obj);
-                }
-            }
-            // puis on rajoute la nouvelle.
-            liste.add(o);
-        }
-
-        // sauf mention contraire, c'est la liste des objets qu'on modifie.
-        void update(Objet o) {
-            this.update(objets, o);
-        }
-
-        void updateListe(Onglet type, Set<Objet> ol) {
-            for(Objet o : ol) {
-                this.update(o);
-
-                switch(type) {
-                    case Achat:
-                        this.update(acheté, o); break;
-                    case Vente:
-                        this.update(vendu, o); break;
-                    case Validation:
-                        this.update(propositions, o); break;
-                }
+        // pour mettre à jour un objet, on enlève
+        // sa précédente instance de la liste
+        for(Objet obj : liste) {
+            if(obj.getId() == o.getId()) {
+                liste.remove(obj);
             }
         }
+        // puis on rajoute la nouvelle.
+        liste.add(o);
+    }
 
-        /** Retourne l'objet d'identifiant i, null sinon. */
-        Objet getObjet(int i) {
-            // ceci est une boucle foreach !!!
-            for(Objet obj : objets) {
-                if(obj.getId() == i) {
-                    return obj;
-                }
+    // sauf mention contraire, c'est la liste des objets qu'on modifie.
+    void update(Objet o) {
+        this.update(objets, o);
+    }
+
+    void updateListe(Onglet type, Set<Objet> ol) {
+        for(Objet o : ol) {
+            this.update(o);
+
+            switch(type) {
+                case Achat:
+                    this.update(acheté, o); break;
+                case Vente:
+                    this.update(vendu, o); break;
+                case Validation:
+                    this.update(propositions, o); break;
             }
-            return null;
         }
+    }
+
+    /** Retourne l'objet d'identifiant i, null sinon. */
+    Objet getObjet(int i) {
+        // ceci est une boucle foreach !!!
+        for(Objet obj : objets) {
+            if(obj.getId() == i) {
+                return obj;
+            }
+        }
+        return null;
+    }
 }

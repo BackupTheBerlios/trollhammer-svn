@@ -1,10 +1,16 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
 
 class ParticipantManagerServeur {
 
     Set<Participant> getParticipants() {
-        return null;
+        Set<Participant> pl = new HashSet<Participant>();
+        Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
+        for(UtilisateurServeur u : ul) {
+            pl.add((Participant) u.getUtilisateur());
+        }
+        return pl;
     }
 
     void obtenirListeParticipants(String sender) {

@@ -2,7 +2,23 @@ package trollhammer;
 import java.util.Set;
 import java.util.List;
 
-class UtilisateurServeur extends Utilisateur {
+/** Adaptateur Serveur pour un Utilisateur. Permet la mémorisation de sa Session
+ * associée, ainsi que l'envoi de messages à l'Utilisateur,
+ * plus quelques opérations spécifiques.
+ */
+
+class UtilisateurServeur {
+
+    Utilisateur u;
+    SessionServeur session;
+
+    UtilisateurServeur(Utilisateur u) {
+        this.u = u;
+    }
+
+    Utilisateur getUtilisateur() {
+        return this.u;
+    }
 
     void résultatLogin(StatutLogin s) {
 

@@ -3,7 +3,16 @@ import java.util.Set;
 
 class UserManagerServeur {
 
-    private Set<Utilisateur> utilisateurs;
+    private Set<UtilisateurServeur> utilisateurs;
+
+    UtilisateurServeur getUtilisateur(String login) {
+        for(UtilisateurServeur u : utilisateurs) {
+            if(login == u.getLogin()) {
+                return u;
+            }
+        }
+        return null;
+    }
 
     void kickerUtilisateur(String i, String sender) {
 
@@ -29,4 +38,7 @@ class UserManagerServeur {
 
     }
 
+    Set<UtilisateurServeur> getUtilisateurs() {
+        return utilisateurs;
+    }
 }

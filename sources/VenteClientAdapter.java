@@ -9,7 +9,7 @@ package trollhammer;
 class VenteClientAdapter {
 
     static void setPrices(Vente v) {
-        Objet o = v.getFirst();
+        Objet o = Client.objectmanager.getObject(v.getFirst());
         if(o != null) {
             int pb = o.getPrixDeBase();
             Client.client.setPrixCourant(pb);

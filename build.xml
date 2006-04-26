@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project name="troll" default="compile" basedir=".">
+
+
+	<property name="sources" value="sources"/>
+	<property name="classes" value="classes"/>
+	<property name="encodage" value="UTF8"/>
+
+	<target name="compile" description="Construit le projet en entier">
+	<echo>Compilation... nous declinons toutes responsabilites en cas d'erreurs de compilation...</echo>
+	<javac encoding="${encodage}" srcdir="${sources}" destdir="${classes}"/>
+	</target>
+
+
+	<target name="serveur"  description="Lancement du serveur (apres compilation)">
+	<echo>Execution du serveur!</echo>
+	<java classname="Serveur">
+		<classpath>
+			<pathelement location="classes/trollhammer/"/>
+		</classpath>
+	</java>
+	
+	</target>
+
+	<target name="client"  description="Lancement du client (apres compilation)">
+	<echo>Execution du client!</echo>
+	<java classname="Client">
+		<classpath>
+			<pathelement location="classes/trollhammer/"/>
+		</classpath>
+	</java>
+	
+	</target>
+
+
+	<target name="putz" description="Putzfrau mode mega-destroy">
+	<echo>Et ca putz!!!</echo>
+		<delete verbose="true">
+			<fileset dir="${classes}"/>
+		</delete>
+	</target>
+	
+	
+
+</project>

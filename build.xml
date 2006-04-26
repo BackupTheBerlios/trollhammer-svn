@@ -14,9 +14,9 @@
 
 	<target name="serveur"  description="Lancement du serveur (apres compilation)">
 	<echo>Execution du serveur!</echo>
-	<java classname="Serveur">
+	<java classname="trollhammer.Serveur">
 		<classpath>
-			<pathelement location="classes/trollhammer/"/>
+			<pathelement location="classes/"/>
 		</classpath>
 	</java>
 	
@@ -24,9 +24,9 @@
 
 	<target name="client"  description="Lancement du client (apres compilation)">
 	<echo>Execution du client!</echo>
-	<java classname="Client">
+	<java classname="trollhammer.Client">
 		<classpath>
-			<pathelement location="classes/trollhammer/"/>
+			<pathelement location="classes/"/>
 		</classpath>
 	</java>
 	

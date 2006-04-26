@@ -76,4 +76,47 @@ class UtilisateurServeur {
 
     }
 
+    /* getters/setters, relaient l'appel à l'Utilisateur */
+
+    String getLogin() {
+        return u.getLogin();
+    }
+
+    String getNom() {
+        return u.getNom();
+    }
+
+    String getPrénom() {
+        return u.getPrénom();
+    }
+
+    StatutLogin getStatut() {
+        return u.getStatut();
+    }
+
+    void setLogin(String login) {
+        u.setLogin(login);
+    }
+
+    void setNom(String nom) {
+        u.setNom(nom);
+    }
+
+    void setPrénom(String prénom) {
+        u.setPrénom(prénom);
+    }
+
+    void setStatut(StatutLogin statut) {
+        u.setStatut(statut);
+    }
+
+    String getMotDePasse() {
+        return u.getMotDePasse();
+    }
+
+    void setMotDePasse(String mot_de_passe) {
+        u.setMotDePasse(mot_de_passe);
+    }
+
+
 }

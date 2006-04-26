@@ -1,7 +1,7 @@
 package trollhammer;
 
 /** Serveur Trollhammer. Cette classe est un singleton. */
-class Serveur {
+public class Serveur {
     
     /* champs du design */
     private long date;

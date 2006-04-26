@@ -2,7 +2,7 @@ package trollhammer;
 
 /** Classe englobante pour la partie Client. C'est un singleton.
 */
-class Client {
+public class Client {
 
     /* champs du Design */
     private Onglet mode;

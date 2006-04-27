@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ce fichier ant fonctionne parfaitement pour ce qu'il est censé faire pour l'instant.
-	 J'ajouterai au fur et à mesure différentes fonctionnalités supplémentaires. 
+<!-- Ce fichier ant fonctionne parfaitement pour ce qu'il est censÃ© faire pour l'instant.
+	 J'ajouterai au fur et Ã  mesure diffÃ©rentes fonctionnalitÃ©s supplÃ©mentaires. 
      Si vous avez des propositions de modifications, faites m'en part et on en discute.
      
-     Si vous modifiez qqch sans m'en parler ou sans mon accord, veillez à ce que je ne 
-     le sache pas et/ou que je ne le remarque pas sous peine de mort lente et extrêmement douloureuse.
-     Vous êtes prévenu.
+     Si vous modifiez qqch sans m'en parler ou sans mon accord, veillez Ã  ce que je ne 
+     le sache pas et/ou que je ne le remarque pas sous peine de mort lente et extrÃªmement douloureuse.
+     Vous Ãªtes prÃ©venu.
      Have a nice day 
  -->
 <project name="troll" default="compile" basedir=".">

@@ -221,6 +221,14 @@ class obtenirVente extends MessageClientServeur {
 
 }
 
+class obtenirProchaineVente extends MessageClientServeur {
+
+    obtenirProchaineVente(String sender) {
+        super(sender);
+    }
+
+}
+
 class vente extends MessageClientServeur {
 
     Edition e;

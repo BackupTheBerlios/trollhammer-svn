@@ -35,12 +35,55 @@ class VenteManagerServeur {
     }
 
     void modoLeaving(String sender) {
-
+        Vente v = this.getVenteEnCours();
+        if(sender == v.getSuperviseur()) {
+            v.setSuperviseur(null);
+            v.setMode(Mode.Automatique);
+            // à vérifier : est-ce que la Vente fait un broadcast de son
+            // Mode aux participants présents ? Sinon, il faut penser à
+            // le faire ici...
+        }
     }
 
     void détailsVente(Vente v, List<Objet> ol) {
 
     }
 
+    /** Cherche une vente par son identifiant et la retourne,
+     * ou null si non trouvée.
+     */
+    Vente getVente(int i) {
+        for(Vente v : ventes) {
+            if(v.getId() == i) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    Vente getVenteEnCours() {
+        long min = Long.MAX_VALUE;
+        long prevmin = 0;
+        Vente encours = null;
+
+        /* d'abord, on prend la vente la plus proche dans le temps */
+        for(Vente v : ventes) {
+            prevmin = min;
+            min = Math.min(min, v.getDate());
+            if(min < prevmin) {
+                encours = v;
+            }
+        }
+
+        /* puis on vérifie si elle a démarré ! Si pas,
+         * alors on retourne null (ie. aucune vente n'est en cours)
+         */
+        if(encours.getDate() < Serveur.serveur.getDate()) {
+            return encours;
+        } else {
+            return null;
+        }
+
+    }
 
 }

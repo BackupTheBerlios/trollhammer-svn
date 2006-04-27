@@ -1,7 +1,7 @@
 package trollhammer;
 import java.util.ArrayList;
 
-class Vente {
+class Vente implements java.io.Serializable {
 
     private int id;
     private String nom;

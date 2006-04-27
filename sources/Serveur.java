@@ -4,7 +4,7 @@ package trollhammer;
 public class Serveur {
     
     /* champs du design */
-    private long date;
+    // private long date; // remplacé par getDate() !
     private int marteau;
     private int prix_courant;
     private String dernier_enchérisseur;
@@ -23,6 +23,24 @@ public class Serveur {
     /* la méthode main... */
     public static void main(String[] args) {
         Serveur.démarrer();
+
+        // CECI EST UN TEST
+        
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("tefal", "", "", "tefal")
+                );
+
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("falte", "", "", "falte")
+                );
+        
+        // FIN DU TEST
+        
+        attendre();
+        /* attente finie => tout quitter, en forçant la main même au threads
+         * qui attendent ad eternam (ie. le thread Listener)
+         */
+        System.exit(0);
     }
 
     /* démarrage du serveur. Il ne peut en y avoir qu'une seule instance.*/
@@ -43,18 +61,13 @@ public class Serveur {
         Serveur.ventemanager = new VenteManagerServeur();
 
         System.out.println("[sys] Serveur démarré, passage en boucle d'attente");
-        attendre();
-        /* attente finie => tout quitter, en forçant la main même au threads
-         * qui attendent ad eternam (ie. le thread Listener)
-         */
-        System.exit(0);
     }
 
     /* jr : attendre en acceptant, éventuellement, des commandes simples.
      * Permet un peu de contrôle sur les autres threads.
      */
 
-    private void attendre() {
+    private static void attendre() {
         try {
             String commande;
             java.io.BufferedReader lr = new java.io.BufferedReader(
@@ -93,5 +106,9 @@ public class Serveur {
     }
 
     /* fin méthodes du design */
+
+    long getDate() {
+        return System.currentTimeMillis();
+    }
 
 }

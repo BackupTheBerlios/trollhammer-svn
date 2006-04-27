@@ -79,7 +79,9 @@ class HI {
         SessionClient sess = SessionClient.login(i, mdp, s);
         if(sess != null) {
             Client.session = sess;
+            System.out.println("[net] Session établie et assignée.");
         } else {
+            System.out.println("[net] Erreur d'ouverture de Session : non trouvé."); 
             this.messageErreur(Erreur.NonTrouvé);
         }
     }

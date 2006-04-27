@@ -30,6 +30,20 @@ public class Client {
     /* la méthode main... */
     public static void main(String[] args) {
         Client.démarrer();
+
+        // ceci est du test, et du test uniquement.
+        Client.hi.connecter("tefal", "tefal", "localhost");
+
+        Client.hi.écrireChat("lol");
+        //Client.hi.exécuter(Action.Déconnecter);
+
+        attendre();
+        /* attente finie => tout quitter, en forçant la main même au threads
+         * qui attendent ad eternam (ie. le thread Listener)
+         */
+        Client.hi.exécuter(Action.Déconnecter);
+        System.exit(0);
+
     }
 
     static void démarrer() {
@@ -52,10 +66,28 @@ public class Client {
         Client.ventemanager = new VenteManagerClient();
 
         System.out.println("[sys] Client démarré.");
-        SessionClient sc = SessionClient.login("tefal", "tefal", "localhost");
-        sc.envoyerChat("lol");
-        sc.logout();
     }
+
+    /* jr : attendre en acceptant, éventuellement, des commandes simples.
+     *      * Permet un peu de contrôle sur les autres threads.
+     *           */
+
+    private static void attendre() {
+        try {
+            String commande;
+            java.io.BufferedReader lr = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(System.in));
+
+            do {
+                commande = lr.readLine();
+            } while(!commande.equals("q"));
+
+            lr.close();
+        } catch (Exception e) {
+            System.out.println("[sys] utilisateur mauvais : exception sur stdin : "+e.getMessage());
+        }
+    }
+
 
     /* méthodes du Design */
 

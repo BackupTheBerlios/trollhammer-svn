@@ -7,7 +7,7 @@ class UserManagerClient {
 
     void détailsUtilisateur(Utilisateur u) {
         for(Utilisateur util : utilisateurs) {
-            if(u.getLogin() == util.getLogin()) {
+            if(u.getLogin().equals(util.getLogin())) {
                 utilisateurs.remove(util);
             }
         }
@@ -27,7 +27,7 @@ class UserManagerClient {
      */
     Utilisateur getUser(String i) {
         for(Utilisateur u : utilisateurs) {
-            if(u.getLogin() == i) {
+            if(u.getLogin().equals(i)) {
                 return u;
             }
         }

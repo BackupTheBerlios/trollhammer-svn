@@ -8,7 +8,10 @@ class ParticipantManagerServeur {
         Set<Participant> pl = new HashSet<Participant>();
         Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
         for(UtilisateurServeur u : ul) {
-            pl.add((Participant) u.getUtilisateur());
+            if(u.getStatut() == StatutLogin.Connecté_Utilisateur
+            || u.getStatut() == StatutLogin.Connecté_Modérateur) {
+                pl.add((Participant) u.getUtilisateur());
+            }
         }
         return pl;
     }

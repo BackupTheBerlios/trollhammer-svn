@@ -11,16 +11,19 @@ class ServeurEntry {
 
     /* méthodes du design */
 
-    void login(String u, String motDePasse, String sender) {
-
+    // modif p.r. au design : passage du Socket en argument, pour
+    // créer la Session qui permettra le renvoi de messages
+    void login(Socket s, String u, String motDePasse, String sender) {
+        Serveur.usermanager.login(s, u, motDePasse);
     }
 
     void logout(String sender) {
-
+        Serveur.usermanager.logout(sender);
     }
 
     void envoyerChat(String msg, String sender) {
         System.out.println("[chat] "+sender+" dit : "+msg);
+        Serveur.broadcaster.chat(msg, sender);
     }
 
     void envoyerCoupdeMASSE(String sender) {
@@ -80,6 +83,10 @@ class ServeurEntry {
     }
 
     void obtenirVente(int v, String sender) {
+
+    }
+
+    void obtenirProchaineVente(String sender) {
 
     }
 
@@ -147,8 +154,9 @@ class ServeurEntryHandler extends Thread {
             do {
                 o = ois.readObject(); // lire le message.
 
-                if(o instanceof Message) {
-                    Message m = (Message) o;
+                if(o instanceof MessageClientServeur) {
+                    MessageClientServeur m = (MessageClientServeur) o;
+                    System.out.println("[net] reçu requête : "+m+" de "+m.sender);
                     this.execute(m);
                 } else {
                     System.out.println("[net] objet invalide de "+s.getInetAddress()+" : ignoré");
@@ -160,6 +168,13 @@ class ServeurEntryHandler extends Thread {
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
             System.out.println("[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
+
+            /* on essaie de savoir si la connexion venait de la session d'un
+             * Utilisateur, et si oui, on déconnecte ce dernier */
+            UtilisateurServeur u = Serveur.usermanager.getUserForSocket(s);
+            if(u != null) {
+                u.disconnect();
+            }
         } catch (Exception e) {
             System.out.println("[net] EXCEPTION : déconnexion de "+s.getInetAddress());
             e.printStackTrace();
@@ -175,10 +190,10 @@ class ServeurEntryHandler extends Thread {
     }
 
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
-    private void execute(Message m) {
+    private void execute(MessageClientServeur m) {
         if(m instanceof login) {
             login l = (login) m;
-            Serveur.serveurentry.login(l.u, l.motdepasse, l.sender);
+            Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
         } else if (m instanceof logout) {
             logout l = (logout) m;
             Serveur.serveurentry.logout(l.sender);
@@ -229,12 +244,15 @@ class ServeurEntryHandler extends Thread {
             Serveur.serveurentry.obtenirListeParticipants(olp.sender);
         } else if (m instanceof obtenirVente) {
             obtenirVente ov = (obtenirVente) m;
-            Serveur.serveurentry.obtenirListeParticipants(ov.sender);
+            Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
+        } else if (m instanceof obtenirProchaineVente) {
+            obtenirProchaineVente ov = (obtenirProchaineVente) m;
+            Serveur.serveurentry.obtenirProchaineVente(ov.sender);
         } else if (m instanceof vente) {
             vente v = (vente) m;
             Serveur.serveurentry.vente(v.e, v.v, v.sender);
         } else {
-            System.out.println("[net] message de type non reconnu.");
+            System.out.println("[net] message de type non reconnu : "+m);
         }
     }
 }

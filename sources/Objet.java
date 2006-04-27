@@ -1,6 +1,6 @@
 package trollhammer;
 
-class Objet {
+class Objet implements java.io.Serializable {
     
     private int id;
     private int nom;

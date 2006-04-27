@@ -9,21 +9,31 @@ class ClientEntry {
     void résultatLogin(StatutLogin s) {
         switch(s) {
             case Connecté_Utilisateur:
+                System.out.println("[login] reçu réponse : Connecté Utilisateur");
                 Client.hi.voir(Onglet.HôtelDesVentes);
                 Client.session.setModérateur(false);
                 Client.session.setConnecté(true);
                 break;
             case Connecté_Modérateur:
+                System.out.println("[login] reçu réponse : Connecté Modérateur");
                 Client.hi.voir(Onglet.HôtelDesVentes);
                 Client.session.setModérateur(true);
                 Client.session.setConnecté(true);
                 break;
             case Banni:
+                System.out.println("[login] reçu réponse : Banni");
                 Client.hi.messageErreur(Erreur.Banni);
+                // mod p.r. design : pas de destroy() (impossible en Java),
+                // mais on tient quand même à fermer la connexion!
+                Client.session.fermer();
                 Client.session = null;
                 break;
             case Invalide:
+                System.out.println("[login] reçu réponse : Invalide");
                 Client.hi.messageErreur(Erreur.Invalide);
+                // mod p.r. design : pas de destroy() (impossible en Java),
+                // mais on tient quand même à fermer la connexion!
+                Client.session.fermer();
                 Client.session = null;
                 break;
         }
@@ -75,6 +85,7 @@ class ClientEntry {
     }
 
     void chat(String m, String i) {
+        System.out.println("[chat] "+i+" dit : "+m);
         Client.hi.affichageChat(m, i);
     }
 
@@ -142,6 +153,7 @@ class ClientEntryHandler extends Thread {
 
                 if(o instanceof Message) {
                     Message m = (Message) o;
+                    System.out.println("[net] reçu message : "+m);
                     this.execute(m);
                 } else {
                     System.out.println("[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");

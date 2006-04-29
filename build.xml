@@ -15,7 +15,7 @@
     <property name="src.dir" value="src"/>
     <property name="src.client" value="${src.dir}/client"/>
     <property name="src.serveur" value="${src.dir}/serveur"/>
-    <property name="src.common" value="${src.dir}/common"/>
+    <property name="src.commun" value="${src.dir}/commun"/>
 
     <property name="build.dir" value="build"/>
     <property name="build.client" value="${build.dir}/client"/>
@@ -24,7 +24,7 @@
     <property name="doc.dir" value="doc"/>
     <property name="doc.client" value="${doc.dir}/client"/>
     <property name="doc.serveur" value="${doc.dir}/serveur"/>
-    <property name="doc.common" value="${doc.dir}/common"/>
+    <property name="doc.commun" value="${doc.dir}/commun"/>
 
 
     <property name="sound.dir" value="soundsrc"/>
@@ -39,10 +39,9 @@
     <property name="mysound" value="libsounds"/>
     
     <path id="classpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar"/>
+		<fileset dir="${src.commun}">
+			<include name="**/*.class"/>
 		</fileset>
-		<pathelement location="${src.common}"/>
 	</path>
     
     
@@ -96,12 +95,12 @@
  	    <mkdir dir="${src.dir}"/>
  	    <mkdir dir="${src.client}"/>
  	    <mkdir dir="${src.serveur}"/>
- 	    <mkdir dir="${src.common}"/>
+ 	    <mkdir dir="${src.commun}"/>
  	    
  	    <mkdir dir="${doc.dir}"/>
  	    <mkdir dir="${doc.client}"/>
  	    <mkdir dir="${doc.serveur}"/>
- 	    <mkdir dir="${doc.common}"/>
+ 	    <mkdir dir="${doc.commun}"/>
 
     	<!-- Ajoute un timestamp a cette creation. Ca ne se voit pas sur les fichiers ou repertoire, mais
     	ca peut etre utile ici-meme dans le fichier ant. Donc toi lecteur potentiel, tu t'en tapes en fait.
@@ -121,8 +120,7 @@
         	<success source="${mysound}/won/"/>
         	<fail source="${mysound}/loose/"/>
         </sound>
-        <javac encoding="${encodage}" 
-			srcdir="${src.client}" 
+        <javac 	srcdir="${src.client}" 
 			destdir="${build.dir}" >
 			<classpath refid="classpath"/>
 		</javac>
@@ -178,7 +176,7 @@
 
             <delete dir="${doc.client}"/>
             <delete dir="${doc.serveur}"/>
-            <delete dir="${doc.common}"/>
+            <delete dir="${doc.commun}"/>
             <delete dir="${build.client}"/>
             <delete dir="${build.serveur}"/>
             <delete dir="${doc.dir}"/>

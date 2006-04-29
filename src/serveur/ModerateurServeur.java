@@ -8,9 +8,9 @@ import java.util.Set;
  *  via le constructeur.
  */
 
-class ModérateurServeur extends UtilisateurServeur {
+class ModerateurServeur extends UtilisateurServeur {
 
-    ModérateurServeur(Modérateur m) {
+    ModerateurServeur(Moderateur m) {
         super(m);
     }
 
@@ -24,20 +24,20 @@ class ModérateurServeur extends UtilisateurServeur {
         if(mdp == mot_de_passe && statut != StatutLogin.Banni) {
             System.out.println("[login] login de Modérateur accepté : login "
                     +u.getLogin());
-            session.résultatLogin(StatutLogin.Connecté_Modérateur);
-            u.setStatut(StatutLogin.Connecté_Modérateur);
+            session.resultatLogin(StatutLogin.Connecte_Moderateur);
+            u.setStatut(StatutLogin.Connecte_Moderateur);
             Set<Participant> pl = Serveur.participantmanager.getParticipants();
             session.listeParticipants(pl);
-            Serveur.broadcaster.étatParticipant((Participant) u);
+            Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (mdp != mot_de_passe) {
             System.out.println("[login] login Modérateur refusé, mauvais mot de passe : login "
                     +u.getLogin());
-            session.résultatLogin(StatutLogin.Invalide);
-            u.setStatut(StatutLogin.Déconnecté);
+            session.resultatLogin(StatutLogin.Invalide);
+            u.setStatut(StatutLogin.Deconnecte);
         } else if (statut == StatutLogin.Banni) {
             System.out.println("[login] login de Modérateur banni refusé : login "
                     +u.getLogin());
-            session.résultatLogin(StatutLogin.Banni);
+            session.resultatLogin(StatutLogin.Banni);
         } else {
             // pas sensé arriver. on ignore...
             System.out.println("[login] cas non-traité de login Modérateur : login "
@@ -47,7 +47,7 @@ class ModérateurServeur extends UtilisateurServeur {
     }
 
     void disconnect() {
-        u.setStatut(StatutLogin.Déconnecté);
+        u.setStatut(StatutLogin.Deconnecte);
         this.session = null;
         // jr : j'ai dû 'aplatir' l'appel et le splitter,
         // ce qui est différent du Design :

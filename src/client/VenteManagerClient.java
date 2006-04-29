@@ -63,7 +63,7 @@ class VenteManagerClient {
 
     }
 
-    void détailsVente(Vente v, List<Objet> os) {
+    void detailsVente(Vente v, List<Objet> os) {
         // pour mettre à jour une vente, on enlève
         // sa précédente instance de la liste
         for(Vente vte : ventes) {

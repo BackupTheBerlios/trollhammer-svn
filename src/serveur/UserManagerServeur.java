@@ -24,8 +24,8 @@ class UserManagerServeur {
     Set<UtilisateurServeur> getConnected() {
         Set<UtilisateurServeur> liste = new HashSet<UtilisateurServeur>();
         for(UtilisateurServeur u : utilisateurs) {
-            if(u.getStatut() == StatutLogin.Connecté_Utilisateur
-               || u.getStatut() == StatutLogin.Connecté_Modérateur) {
+            if(u.getStatut() == StatutLogin.Connecte_Utilisateur
+               || u.getStatut() == StatutLogin.Connecte_Moderateur) {
                 liste.add(u);
                }
         }
@@ -72,7 +72,7 @@ class UserManagerServeur {
             u.doLogin(mdp);
         } else {
             System.out.println("[login] Utilisateur "+i+" non trouvé");
-            sess.résultatLogin(StatutLogin.Invalide);
+            sess.resultatLogin(StatutLogin.Invalide);
             // jr : et on suppose que le Garbage Collector
             // passe après que la variable locale sess
             // n'existe plus à la sortie de login()...
@@ -81,9 +81,9 @@ class UserManagerServeur {
 
     void logout(String sender) {
         UtilisateurServeur u = this.getUtilisateur(sender);
-        u.notification(Notification.Déconnexion);
+        u.notification(Notification.Deconnexion);
         u.disconnect();
-        Serveur.broadcaster.étatParticipant((Participant) u.getUtilisateur());
+        Serveur.broadcaster.etatParticipant((Participant) u.getUtilisateur());
     }
 
     void obtenirListeUtilisateurs(String sender) {

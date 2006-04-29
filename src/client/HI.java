@@ -8,7 +8,7 @@ class HI {
         Client.session.validerProposition(i);
     }
 
-    void affichage(Evénement e) {
+    void affichage(Evenement e) {
 
     }
 
@@ -16,7 +16,7 @@ class HI {
 
     }
 
-    void affichageEnchère(Integer prix, String i) {
+    void affichageEnchere(Integer prix, String i) {
 
     }
 
@@ -53,7 +53,7 @@ class HI {
     }
 
     void ajouterObjetVente(int o, int v, int p) {
-        Client.session.insérerObjetVente(o, v, p);
+        Client.session.insererObjetVente(o, v, p);
     }
 
     void choisirObjet(int i) {
@@ -82,35 +82,35 @@ class HI {
             System.out.println("[net] Session établie et assignée.");
         } else {
             System.out.println("[net] Erreur d'ouverture de Session : non trouvé."); 
-            this.messageErreur(Erreur.NonTrouvé);
+            this.messageErreur(Erreur.NonTrouve);
         }
     }
 
-    void écrireChat(String message) {
+    void ecrireChat(String message) {
         Client.session.envoyerChat(message);
     }
 
-    void éditerUtilisateur(Edition e, Utilisateur u) {
+    void editerUtilisateur(Edition e, Utilisateur u) {
         Client.session.utilisateur(e, u);
     }
 
-    void éditerVente(Edition e, Vente v) {
+    void editerVente(Edition e, Vente v) {
         Client.session.vente(e, v);
     }
 
-    void exécuter(Action a) {
-        if(a == Action.Déconnecter) {
+    void executer(Action a) {
+        if(a == Action.Deconnecter) {
             Client.session.logout();
-        } else if(a == Action.Enchérir) {
+        } else if(a == Action.Encherir) {
             boolean en_cours = Client.ventemanager.isInVenteEnCours(Client.client.getDate());
             int np = Client.client.getNouveauPrix();
             if(en_cours) {
-                Client.session.enchérir(np);
+                Client.session.encherir(np);
             }
         }
     }
 
-    void exécuterModo(ActionModo a) {
+    void executerModo(ActionModo a) {
         switch(a) {
             case CoupDeMassePAF:
                 Client.session.envoyerCoupdeMASSE(); break;
@@ -137,16 +137,16 @@ class HI {
         Client.session.invaliderProposition(i);
     }
 
-    void résultatEdition(StatutEdition s) {
+    void resultatEdition(StatutEdition s) {
         switch(s) {
-            case NonTrouvé:
-                this.messageErreur(Erreur.NonTrouvé);
+            case NonTrouve:
+                this.messageErreur(Erreur.NonTrouve);
                 break;
-            case ExisteDéjà:
-                this.messageErreur(Erreur.ExisteDéjà);
+            case ExisteDejà:
+                this.messageErreur(Erreur.ExisteDejà);
                 break;
-            case DéjàEffectué:
-                this.messageErreur(Erreur.DéjàEffectué);
+            case DejàEffectue:
+                this.messageErreur(Erreur.DejàEffectue);
                 break;
         }
     }
@@ -160,7 +160,7 @@ class HI {
             case Planification:
             case Validation:
             case GestionUtilisateurs:
-                boolean modo = Client.session.getModérateur();
+                boolean modo = Client.session.getModerateur();
                 if(modo) {
                     switch(quoi) {
                         case Planification:

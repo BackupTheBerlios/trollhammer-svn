@@ -6,7 +6,7 @@ class VenteManagerServeur {
 
     private Set<Vente> ventes;
 
-    void insérerObjetVente(int o, int v, int p, String i) {
+    void insererObjetVente(int o, int v, int p, String i) {
 
     }
 
@@ -26,7 +26,7 @@ class VenteManagerServeur {
 
     }
 
-    boolean checkEnchérisseur(String i) {
+    boolean checkEncherisseur(String i) {
         return false;
     }
 
@@ -45,7 +45,7 @@ class VenteManagerServeur {
         }
     }
 
-    void détailsVente(Vente v, List<Objet> ol) {
+    void detailsVente(Vente v, List<Objet> ol) {
 
     }
 

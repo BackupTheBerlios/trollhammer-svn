@@ -30,8 +30,8 @@ class SessionServeur {
 
     /* méthodes du Design */
 
-    void résultatLogin(StatutLogin s) {
-        envoyer(new résultatLogin(s));
+    void resultatLogin(StatutLogin s) {
+        envoyer(new resultatLogin(s));
     }
 
     void chat(String m, String i) {
@@ -42,20 +42,20 @@ class SessionServeur {
         envoyer(new notification(n));
     }
 
-    void événement(Evénement e) {
-        envoyer(new événement(e));
+    void evenement(Evenement e) {
+        envoyer(new evenement(e));
     }
 
-    void enchère(int prix, String i) {
-        envoyer(new enchère(prix, i));
+    void enchere(int prix, String i) {
+        envoyer(new enchere(prix, i));
     }
 
-    void détailsVente(Vente v, List<Objet> o) {
-        envoyer(new détailsVente(v, o));
+    void detailsVente(Vente v, List<Objet> o) {
+        envoyer(new detailsVente(v, o));
     }
 
-    void détailsUtilisateur(Utilisateur u) {
-        envoyer(new détailsUtilisateur(u));
+    void detailsUtilisateur(Utilisateur u) {
+        envoyer(new detailsUtilisateur(u));
     }
 
     void listeObjets(Onglet type, Set<Objet> lo) {
@@ -74,12 +74,12 @@ class SessionServeur {
         envoyer(new listeVentes(l));
     }
 
-    void résultatEdition(StatutEdition s) {
-        envoyer(new résultatEdition(s));
+    void resultatEdition(StatutEdition s) {
+        envoyer(new resultatEdition(s));
     }
 
-    void étatParticipant(Participant p) {
-        envoyer(new étatParticipant(p));
+    void etatParticipant(Participant p) {
+        envoyer(new etatParticipant(p));
     }
 
     void superviseur(String i) {

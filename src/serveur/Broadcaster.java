@@ -6,10 +6,10 @@ class Broadcaster {
 
     /* méthodes du design */
 
-    void étatParticipant(Participant p) {
+    void etatParticipant(Participant p) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
-            u.étatParticipant(p);
+            u.etatParticipant(p);
         }
     }
 
@@ -20,17 +20,17 @@ class Broadcaster {
         }
     }
 
-    void enchère(int prix, String i) {
+    void enchere(int prix, String i) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
-            u.enchère(prix, i);
+            u.enchere(prix, i);
         }
     }
 
-    void événement(Evénement e) {
+    void evenement(Evenement e) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
-            u.événement(e);
+            u.evenement(e);
         }
     }
 
@@ -48,10 +48,10 @@ class Broadcaster {
         }
     }
 
-    void détailsVente(Vente v, List<Objet> vo) {
+    void detailsVente(Vente v, List<Objet> vo) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
-            u.détailsVente(v, vo);
+            u.detailsVente(v, vo);
         }
     }
 

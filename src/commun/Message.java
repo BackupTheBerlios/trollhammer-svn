@@ -79,11 +79,11 @@ class kickerUtilisateur extends MessageClientServeur {
 
 }
 
-class enchérir extends MessageClientServeur {
+class encherir extends MessageClientServeur {
 
     int prix;
 
-    enchérir(String sender, int prix) {
+    encherir(String sender, int prix) {
         super(sender);
         this.prix = prix;
     }
@@ -123,13 +123,13 @@ class invaliderProposition extends MessageClientServeur {
 
 }
 
-class insérerObjetVente extends MessageClientServeur {
+class insererObjetVente extends MessageClientServeur {
 
     int objet;
     int vente;
     int pos;
 
-    insérerObjetVente(String sender, int objet, int vente, int pos) {
+    insererObjetVente(String sender, int objet, int vente, int pos) {
         super(sender);
         this.objet = objet;
         this.vente = vente;
@@ -244,11 +244,11 @@ class vente extends MessageClientServeur {
 
 /* messages Serveur -> Client */
 
-class résultatLogin extends Message {
+class resultatLogin extends Message {
 
     StatutLogin s;
 
-    résultatLogin(StatutLogin s) {
+    resultatLogin(StatutLogin s) {
         this.s = s;
     }
 
@@ -264,22 +264,22 @@ class notification extends Message {
 
 }
 
-class événement extends Message {
+class evenement extends Message {
 
-    Evénement e;
+    Evenement e;
 
-    événement(Evénement e) {
+    evenement(Evenement e) {
         this.e = e;
     }
 
 }
 
-class enchère extends Message {
+class enchere extends Message {
 
     int prix;
     String u;
 
-    enchère(int prix, String u) {
+    enchere(int prix, String u) {
         this.prix = prix;
         this.u = u;
     }
@@ -298,23 +298,23 @@ class chat extends Message {
 
 }
 
-class détailsVente extends Message {
+class detailsVente extends Message {
 
     Vente v;
     List<Objet> o;
 
-    détailsVente(Vente v, List<Objet> o) {
+    detailsVente(Vente v, List<Objet> o) {
         this.v = v;
         this.o = o;
     }
 
 }
 
-class détailsUtilisateur extends Message {
+class detailsUtilisateur extends Message {
 
     Utilisateur u;
 
-    détailsUtilisateur(Utilisateur u) {
+    detailsUtilisateur(Utilisateur u) {
         this.u = u;
     }
 
@@ -362,21 +362,21 @@ class listeVentes extends Message {
 
 }
 
-class résultatEdition extends Message {
+class resultatEdition extends Message {
 
     StatutEdition s;
 
-    résultatEdition(StatutEdition s) {
+    resultatEdition(StatutEdition s) {
         this.s = s;
     }
 
 }
 
-class étatParticipant extends Message {
+class etatParticipant extends Message {
 
     Participant p;
 
-    étatParticipant(Participant p) {
+    etatParticipant(Participant p) {
         this.p = p;
     }
 

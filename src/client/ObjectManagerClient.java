@@ -5,7 +5,7 @@ class ObjectManagerClient {
 
     private Set<Objet> objets;
     private Set<Objet> vendu;
-    private Set<Objet> acheté;
+    private Set<Objet> achete;
     private Set<Objet> propositions;
 
     Objet getObject(int i) {
@@ -49,7 +49,7 @@ class ObjectManagerClient {
 
             switch(type) {
                 case Achat:
-                    this.update(acheté, o); break;
+                    this.update(achete, o); break;
                 case Vente:
                     this.update(vendu, o); break;
                 case Validation:

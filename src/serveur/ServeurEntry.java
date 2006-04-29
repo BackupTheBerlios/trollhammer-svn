@@ -34,7 +34,7 @@ class ServeurEntry {
 
     }
 
-    void enchérir(int prix, String sender) {
+    void encherir(int prix, String sender) {
 
     }
 
@@ -50,7 +50,7 @@ class ServeurEntry {
 
     }
 
-    void insérerObjetVente(int objet, int vente, int pos, String sender) {
+    void insererObjetVente(int objet, int vente, int pos, String sender) {
 
     }
 
@@ -206,9 +206,9 @@ class ServeurEntryHandler extends Thread {
         } else if (m instanceof kickerUtilisateur) {
             kickerUtilisateur ku = (kickerUtilisateur) m;
             Serveur.serveurentry.kickerUtilisateur(ku.u, ku.sender);
-        } else if (m instanceof enchérir) {
-            enchérir e = (enchérir) m;
-            Serveur.serveurentry.enchérir(e.prix, e.sender);
+        } else if (m instanceof encherir) {
+            encherir e = (encherir) m;
+            Serveur.serveurentry.encherir(e.prix, e.sender);
         } else if (m instanceof envoyerProposition) {
             envoyerProposition ep = (envoyerProposition) m;
             Serveur.serveurentry.envoyerProposition(ep.proposition, ep.sender);
@@ -218,9 +218,9 @@ class ServeurEntryHandler extends Thread {
         } else if (m instanceof invaliderProposition) {
             invaliderProposition ip = (invaliderProposition) m;
             Serveur.serveurentry.invaliderProposition(ip.objet, ip.sender);
-        } else if (m instanceof insérerObjetVente) {
-            insérerObjetVente iov = (insérerObjetVente) m;
-            Serveur.serveurentry.insérerObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
+        } else if (m instanceof insererObjetVente) {
+            insererObjetVente iov = (insererObjetVente) m;
+            Serveur.serveurentry.insererObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
         } else if (m instanceof enleverObjetVente) {
             enleverObjetVente eov = (enleverObjetVente) m;
             Serveur.serveurentry.enleverObjetVente(eov.objet, eov.vente, eov.sender);

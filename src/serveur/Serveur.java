@@ -7,7 +7,7 @@ public class Serveur {
     // private long date; // remplacé par getDate() !
     private int marteau;
     private int prix_courant;
-    private String dernier_enchérisseur;
+    private String dernier_encherisseur;
 
     /* champ 'globaux'. Tous doivent se voir avoir une valeur
      * correcte attribuée au démarrage du Serveur. */
@@ -22,7 +22,7 @@ public class Serveur {
 
     /* la méthode main... */
     public static void main(String[] args) {
-        Serveur.démarrer();
+        Serveur.demarrer();
 
         // CECI EST UN TEST
         
@@ -43,8 +43,8 @@ public class Serveur {
         System.exit(0);
     }
 
-    /* démarrage du serveur. Il ne peut en y avoir qu'une seule instance.*/
-    static void démarrer() {
+    /* demarrage du serveur. Il ne peut en y avoir qu'une seule instance.*/
+    static void demarrer() {
         if (Serveur.serveur == null) {
             Serveur.serveur = new Serveur();
         }
@@ -89,15 +89,15 @@ public class Serveur {
 
     }
 
-    boolean checkEnchère(int prix, String i) {
+    boolean checkEnchere(int prix, String i) {
         return false;
     }
 
-    void doEnchère(int prix, String i) {
+    void doEnchere(int prix, String i) {
 
     }
 
-    void enchérir(int prix, String i) {
+    void encherir(int prix, String i) {
 
     }
 

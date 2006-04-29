@@ -6,19 +6,19 @@ import java.net.*;
 
 class ClientEntry {
 
-    void résultatLogin(StatutLogin s) {
+    void resultatLogin(StatutLogin s) {
         switch(s) {
-            case Connecté_Utilisateur:
+            case Connecte_Utilisateur:
                 System.out.println("[login] reçu réponse : Connecté Utilisateur");
                 Client.hi.voir(Onglet.HôtelDesVentes);
-                Client.session.setModérateur(false);
-                Client.session.setConnecté(true);
+                Client.session.setModerateur(false);
+                Client.session.setConnecte(true);
                 break;
-            case Connecté_Modérateur:
+            case Connecte_Moderateur:
                 System.out.println("[login] reçu réponse : Connecté Modérateur");
                 Client.hi.voir(Onglet.HôtelDesVentes);
-                Client.session.setModérateur(true);
-                Client.session.setConnecté(true);
+                Client.session.setModerateur(true);
+                Client.session.setConnecte(true);
                 break;
             case Banni:
                 System.out.println("[login] reçu réponse : Banni");
@@ -46,7 +46,7 @@ class ClientEntry {
             case FinVente:
                 Client.humain.setVente(null);
                 break;
-            case DébutVente:
+            case DebutVente:
             case VenteEnCours:
                 Vente v = Client.ventemanager.getVenteEnCours();
                 if(v != null) {
@@ -55,19 +55,19 @@ class ClientEntry {
         }
     }
 
-    void événement(Evénement e) {
+    void evenement(Evenement e) {
         Client.hi.affichage(e);
         Vente v = Client.humain.getVente();
 
-        if (v != null && e == Evénement.Adjugé) {
+        if (v != null && e == Evenement.Adjuge) {
             v.removeFirst();
             VenteClientAdapter.setPrices(v);
-        } else if (v != null && e == Evénement.VenteAutomatique) {
+        } else if (v != null && e == Evenement.VenteAutomatique) {
             v.setMode(Mode.Automatique);
         }
     }
 
-    void enchère(int prix, String i) {
+    void enchere(int prix, String i) {
         Client.client.setPrixCourant(prix);
 
         // incrément de 10% sur le prix initial
@@ -77,10 +77,10 @@ class ClientEntry {
                 Client.humain.getVente().getFirst());
         Client.client.setPrixCourant((int) 1.1*o.getPrixDeBase());
         
-        Client.client.setDernierEnchérisseur(i);
+        Client.client.setDernierEncherisseur(i);
 
         if (Client.client.getMode() == Onglet.HôtelDesVentes) {
-            Client.hi.affichageEnchère(prix, i);
+            Client.hi.affichageEnchere(prix, i);
         }
     }
 
@@ -89,12 +89,12 @@ class ClientEntry {
         Client.hi.affichageChat(m, i);
     }
 
-    void détailsVente(Vente v, List<Objet> liste) {
-        Client.ventemanager.détailsVente(v, liste);
+    void detailsVente(Vente v, List<Objet> liste) {
+        Client.ventemanager.detailsVente(v, liste);
     }
 
-    void détailsUtilisateur(Utilisateur u) {
-        Client.usermanager.détailsUtilisateur(u);
+    void detailsUtilisateur(Utilisateur u) {
+        Client.usermanager.detailsUtilisateur(u);
     }
 
     void listeObjets(Onglet t, Set<Objet> ol) {
@@ -113,12 +113,12 @@ class ClientEntry {
         Client.ventemanager.listeVentes(liste);
     }
 
-    void résultatEdition(StatutEdition s) {
-        Client.hi.résultatEdition(s);
+    void resultatEdition(StatutEdition s) {
+        Client.hi.resultatEdition(s);
     }
 
-    void étatParticipant(Participant p) {
-        Client.participantmanager.étatParticipant(p);
+    void etatParticipant(Participant p) {
+        Client.participantmanager.etatParticipant(p);
     }
 
     void superviseur(String u) {
@@ -158,8 +158,8 @@ class ClientEntryHandler extends Thread {
                 } else {
                     System.out.println("[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");
                 }
-            } while ( !((o instanceof résultatLogin)
-                         && (((résultatLogin) o).s == StatutLogin.Déconnecté)) );
+            } while ( !((o instanceof resultatLogin)
+                         && (((resultatLogin) o).s == StatutLogin.Deconnecte)) );
 
             // tant qu'on ne reçoit pas de StatutLogin(Déconnecté), on boucle.
             // sinon, on ferme le stream. La fermeture de Socket et autres est fait
@@ -186,27 +186,27 @@ class ClientEntryHandler extends Thread {
 
     /** Agit sur le système via ClientEntry en fonction du Message reçu. */
     private void execute(Message m) {
-        if(m instanceof résultatLogin) {
-            résultatLogin rl = (résultatLogin) m;
-            Client.cliententry.résultatLogin(rl.s);
+        if(m instanceof resultatLogin) {
+            resultatLogin rl = (resultatLogin) m;
+            Client.cliententry.resultatLogin(rl.s);
         } else if (m instanceof notification) {
             notification n = (notification) m;
             Client.cliententry.notification(n.n);
-        } else if (m instanceof événement) {
-            événement e = (événement) m;
-            Client.cliententry.événement(e.e);
-        } else if (m instanceof enchère) {
-            enchère e = (enchère) m;
-            Client.cliententry.enchère(e.prix, e.u);
+        } else if (m instanceof evenement) {
+            evenement e = (evenement) m;
+            Client.cliententry.evenement(e.e);
+        } else if (m instanceof enchere) {
+            enchere e = (enchere) m;
+            Client.cliententry.enchere(e.prix, e.u);
         } else if (m instanceof chat) {
             chat c = (chat) m;
             Client.cliententry.chat(c.m, c.u);
-        } else if (m instanceof détailsVente) {
-            détailsVente dv = (détailsVente) m;
-            Client.cliententry.détailsVente(dv.v, dv.o);
-        } else if (m instanceof détailsUtilisateur) {
-            détailsUtilisateur du = (détailsUtilisateur) m;
-            Client.cliententry.détailsUtilisateur(du.u);
+        } else if (m instanceof detailsVente) {
+            detailsVente dv = (detailsVente) m;
+            Client.cliententry.detailsVente(dv.v, dv.o);
+        } else if (m instanceof detailsUtilisateur) {
+            detailsUtilisateur du = (detailsUtilisateur) m;
+            Client.cliententry.detailsUtilisateur(du.u);
         } else if (m instanceof listeObjets) {
             listeObjets lo = (listeObjets) m;
             Client.cliententry.listeObjets(lo.type, lo.liste);
@@ -219,12 +219,12 @@ class ClientEntryHandler extends Thread {
         } else if (m instanceof listeVentes) {
             listeVentes lv = (listeVentes) m;
             Client.cliententry.listeVentes(lv.liste);
-        } else if (m instanceof résultatEdition) {
-            résultatEdition re = (résultatEdition) m;
-            Client.cliententry.résultatEdition(re.s);
-        } else if (m instanceof étatParticipant) {
-            étatParticipant ep = (étatParticipant) m;
-            Client.cliententry.étatParticipant(ep.p);
+        } else if (m instanceof resultatEdition) {
+            resultatEdition re = (resultatEdition) m;
+            Client.cliententry.resultatEdition(re.s);
+        } else if (m instanceof etatParticipant) {
+            etatParticipant ep = (etatParticipant) m;
+            Client.cliententry.etatParticipant(ep.p);
         } else if (m instanceof superviseur) {
             superviseur s = (superviseur) m;
             Client.cliententry.superviseur(s.id);

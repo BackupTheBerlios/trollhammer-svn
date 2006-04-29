@@ -5,7 +5,7 @@ class ParticipantManagerClient {
 
     private Set<Participant> participants;
 
-    void étatParticipant(Participant p) {
+    void etatParticipant(Participant p) {
         for(Participant pr : participants) {
             if(pr.getLogin() == p.getLogin()) {
                 participants.remove(pr);

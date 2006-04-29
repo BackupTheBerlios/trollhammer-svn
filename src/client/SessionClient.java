@@ -10,8 +10,8 @@ class SessionClient {
     /* champs du design */
     private String login;
     private String adresse;
-    private boolean connecté;
-    private boolean modérateur;
+    private boolean connecte;
+    private boolean moderateur;
 
     /* méthodes du design */
 
@@ -40,8 +40,8 @@ class SessionClient {
     private SessionClient(String i, String m, String s, Socket socket) {
         this.login = i;
         this.adresse = s;
-        this.connecté = false;
-        this.modérateur = false;
+        this.connecte = false;
+        this.moderateur = false;
         this.s = socket;
 
         // création de l'output stream utilisé par le reste des méthodes
@@ -61,8 +61,8 @@ class SessionClient {
         new ClientEntryHandler(socket).start();
     }
 
-    void enchérir(int prix) {
-        envoyer(new enchérir(login, prix));
+    void encherir(int prix) {
+        envoyer(new encherir(login, prix));
     }
 
     void enleverObjetVente(int o, int v) {
@@ -81,8 +81,8 @@ class SessionClient {
         envoyer(new envoyerProposition(login, o));
     }
 
-    void insérerObjetVente(int o, int v, int p) {
-        envoyer(new insérerObjetVente(login, o, v, p));
+    void insererObjetVente(int o, int v, int p) {
+        envoyer(new insererObjetVente(login, o, v, p));
     }
 
     void invaliderProposition(int i) {
@@ -94,8 +94,8 @@ class SessionClient {
     }
 
     void logout() {
-        this.connecté = false;
-        this.modérateur = false;
+        this.connecte = false;
+        this.moderateur = false;
         envoyer(new logout(this.login));
         /* PAS BIEN.
         try {
@@ -113,7 +113,7 @@ class SessionClient {
         try {
             this.oos.close();
             this.s.close();
-            System.out.println("[net] Déconnecté de "+this.adresse);
+            System.out.println("[net] Deconnecté de "+this.adresse);
         } catch (IOException ioe) {
             System.out.println("[net] Erreur pendant la déconnexion : "
                     + ioe.getMessage());
@@ -177,12 +177,12 @@ class SessionClient {
         return this.adresse;
     }
 
-    boolean getConnecté() {
-        return this.connecté;
+    boolean getConnecte() {
+        return this.connecte;
     }
 
-    boolean getModérateur() {
-        return this.modérateur;
+    boolean getModerateur() {
+        return this.moderateur;
     }
 
     void setlogin(String login) {
@@ -193,12 +193,12 @@ class SessionClient {
         this.adresse = adresse;
     }
 
-    void setConnecté(boolean connecté) {
-        this.connecté = connecté;
+    void setConnecte(boolean connecte) {
+        this.connecte = connecte;
     }
 
-    void setModérateur(boolean modérateur) {
-        this.modérateur = modérateur;
+    void setModerateur(boolean moderateur) {
+        this.moderateur = moderateur;
     }
 
 

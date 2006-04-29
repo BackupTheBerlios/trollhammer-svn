@@ -9,7 +9,7 @@ public class Client {
     private int prix_courant;
     private int nouveau_prix;
     // IDUtilisateur n'est pas définissable comme type
-    private String dernier_enchérisseur;
+    private String dernier_encherisseur;
     // NE DOIT PAS ETRE UTILISE, EST UN PLACEHOLDER DU DESIGN (jr)
     // private long date;
     // long (temps UNIX en ms), remplace le int par défaut
@@ -29,24 +29,24 @@ public class Client {
 
     /* la méthode main... */
     public static void main(String[] args) {
-        Client.démarrer();
+        Client.demarrer();
 
         // ceci est du test, et du test uniquement.
         Client.hi.connecter("tefal", "tefal", "localhost");
 
-        Client.hi.écrireChat("lol");
-        //Client.hi.exécuter(Action.Déconnecter);
+        Client.hi.ecrireChat("lol");
+        //Client.hi.executer(Action.Deconnecter);
 
         attendre();
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */
-        Client.hi.exécuter(Action.Déconnecter);
+        Client.hi.executer(Action.Deconnecter);
         System.exit(0);
 
     }
 
-    static void démarrer() {
+    static void demarrer() {
         if (Client.client == null) {
             Client.client = new Client();
         }
@@ -95,11 +95,11 @@ public class Client {
 
     }
 
-    void enchère(int prix, String i) {
+    void enchere(int prix, String i) {
 
     }
 
-    void événement(Evénement e) {
+    void evenement(Evenement e) {
 
     }
 
@@ -107,7 +107,7 @@ public class Client {
 
     }
 
-    void résultatLogin(StatutLogin s) {
+    void resultatLogin(StatutLogin s) {
 
     }
 
@@ -149,12 +149,12 @@ public class Client {
         this.nouveau_prix = nouveau_prix;
     }
 
-    String getDernierEnchérisseur() {
-        return this.dernier_enchérisseur;
+    String getDernierEncherisseur() {
+        return this.dernier_encherisseur;
     }
 
-    void setDernierEnchérisseur(String dernier_enchérisseur) {
-        this.dernier_enchérisseur = dernier_enchérisseur;
+    void setDernierEncherisseur(String dernier_encherisseur) {
+        this.dernier_encherisseur = dernier_encherisseur;
     }
 
     String getSuperviseur() {

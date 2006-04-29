@@ -16,16 +16,16 @@ class UtilisateurServeur {
         this.u = u;
     }
 
-    UtilisateurServeur(String login, String nom, String prénom, String motdepasse) {
-        this(new Utilisateur(login, nom, prénom, motdepasse));
+    UtilisateurServeur(String login, String nom, String prenom, String motdepasse) {
+        this(new Utilisateur(login, nom, prenom, motdepasse));
     }
 
     Utilisateur getUtilisateur() {
         return this.u;
     }
 
-    void résultatLogin(StatutLogin s) {
-        session.résultatLogin(s);
+    void resultatLogin(StatutLogin s) {
+        session.resultatLogin(s);
     }
 
     void chat(String m, String i) {
@@ -36,20 +36,20 @@ class UtilisateurServeur {
         session.notification(n);
     }
 
-    void événement(Evénement e) {
-        session.événement(e);
+    void evenement(Evenement e) {
+        session.evenement(e);
     }
 
-    void enchère(int prix, String i) {
-        session.enchère(prix, i);
+    void enchere(int prix, String i) {
+        session.enchere(prix, i);
     }
 
-    void détailsVente(Vente v, List<Objet> o) {
-        session.détailsVente(v, o);
+    void detailsVente(Vente v, List<Objet> o) {
+        session.detailsVente(v, o);
     }
 
-    void détailsUtilisateur(Utilisateur u) {
-        session.détailsUtilisateur(u);
+    void detailsUtilisateur(Utilisateur u) {
+        session.detailsUtilisateur(u);
     }
 
     void listeObjets(Onglet type, Set<Objet> lo) {
@@ -68,12 +68,12 @@ class UtilisateurServeur {
         session.listeVentes(l);
     }
 
-    void résultatEdition(StatutEdition s) {
-        session.résultatEdition(s);
+    void resultatEdition(StatutEdition s) {
+        session.resultatEdition(s);
     }
 
-    void étatParticipant(Participant p) {
-        session.étatParticipant(p);
+    void etatParticipant(Participant p) {
+        session.etatParticipant(p);
     }
 
     void superviseur(String i) {
@@ -91,23 +91,23 @@ class UtilisateurServeur {
             System.out.println("[login] login d'Utilisateur accepté : login "
                     +u.getLogin());
 
-            session.résultatLogin(StatutLogin.Connecté_Utilisateur);
-            u.setStatut(StatutLogin.Connecté_Utilisateur);
+            session.resultatLogin(StatutLogin.Connecte_Utilisateur);
+            u.setStatut(StatutLogin.Connecte_Utilisateur);
             Set<Participant> pl = Serveur.participantmanager.getParticipants();
             System.out.println("[login] envoi de la liste des Participants connectés");
             session.listeParticipants(pl);
             System.out.println("[login] broadcast du login");
-            Serveur.broadcaster.étatParticipant((Participant) u);
+            Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (!mdp.equals(mot_de_passe)) {
             System.out.println("[login] login Utilisateur refusé, mauvais mot de passe : login "
                     +u.getLogin());
-            session.résultatLogin(StatutLogin.Invalide);
-            u.setStatut(StatutLogin.Déconnecté);
+            session.resultatLogin(StatutLogin.Invalide);
+            u.setStatut(StatutLogin.Deconnecte);
             this.session = null;
         } else if (statut == StatutLogin.Banni) {
             System.out.println("[login] login d'Utilisateur banni refusé : login "
                     +u.getLogin());
-            session.résultatLogin(StatutLogin.Banni);
+            session.resultatLogin(StatutLogin.Banni);
             this.session = null;
         } else {
             // pas sensé arriver. on ignore...
@@ -120,7 +120,7 @@ class UtilisateurServeur {
 
     void disconnect() {
         System.out.println("[logout] déconnexion : login "+u.getLogin());
-        u.setStatut(StatutLogin.Déconnecté);
+        u.setStatut(StatutLogin.Deconnecte);
         this.session = null;
     }
 
@@ -134,8 +134,8 @@ class UtilisateurServeur {
         return u.getNom();
     }
 
-    String getPrénom() {
-        return u.getPrénom();
+    String getPrenom() {
+        return u.getPrenom();
     }
 
     StatutLogin getStatut() {
@@ -154,8 +154,8 @@ class UtilisateurServeur {
         u.setNom(nom);
     }
 
-    void setPrénom(String prénom) {
-        u.setPrénom(prénom);
+    void setPrenom(String prenom) {
+        u.setPrenom(prenom);
     }
 
     void setStatut(StatutLogin statut) {

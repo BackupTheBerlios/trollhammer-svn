@@ -4,14 +4,14 @@ class Participant implements java.io.Serializable {
     
     private String login;
     private String nom;
-    private String prénom;
+    private String prenom;
     private StatutLogin statut;
 
-    Participant(String login, String nom, String prénom) {
+    Participant(String login, String nom, String prenom) {
         this.login = login;
         this.nom = nom;
-        this.prénom = prénom;
-        this.statut = StatutLogin.Déconnecté;
+        this.prenom = prenom;
+        this.statut = StatutLogin.Deconnecte;
     }
 
     String getLogin() {
@@ -22,8 +22,8 @@ class Participant implements java.io.Serializable {
         return this.nom;
     }
 
-    String getPrénom() {
-        return this.prénom;
+    String getPrenom() {
+        return this.prenom;
     }
 
     StatutLogin getStatut() {
@@ -38,8 +38,8 @@ class Participant implements java.io.Serializable {
         this.nom = nom;
     }
 
-    void setPrénom(String prénom) {
-        this.prénom = prénom;
+    void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     void setStatut(StatutLogin statut) {

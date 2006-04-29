@@ -17,7 +17,7 @@ class ParticipantManagerClient {
     void listeParticipants(Set<Participant> pl) {
         participants = pl;
         Onglet m = Client.client.getMode();
-        if(m == Onglet.HôtelDesVentes) {
+        if(m == Onglet.HotelDesVentes) {
             Client.hi.affichageListeParticipants(pl);
         }
     }

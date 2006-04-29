@@ -142,11 +142,11 @@ class HI {
             case NonTrouve:
                 this.messageErreur(Erreur.NonTrouve);
                 break;
-            case ExisteDejà:
-                this.messageErreur(Erreur.ExisteDejà);
+            case ExisteDeja:
+                this.messageErreur(Erreur.ExisteDeja);
                 break;
-            case DejàEffectue:
-                this.messageErreur(Erreur.DejàEffectue);
+            case DejaEffectue:
+                this.messageErreur(Erreur.DejaEffectue);
                 break;
         }
     }
@@ -175,7 +175,7 @@ class HI {
             case Achat:
             case Vente:
                 Client.session.obtenirListeObjets(quoi); break;
-            case HôtelDesVentes:
+            case HotelDesVentes:
                 Client.session.obtenirProchaineVente();
                 Client.session.obtenirListeParticipants();
                 break;

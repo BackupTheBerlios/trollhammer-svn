@@ -10,13 +10,13 @@ class ClientEntry {
         switch(s) {
             case Connecte_Utilisateur:
                 System.out.println("[login] reçu réponse : Connecté Utilisateur");
-                Client.hi.voir(Onglet.HôtelDesVentes);
+                Client.hi.voir(Onglet.HotelDesVentes);
                 Client.session.setModerateur(false);
                 Client.session.setConnecte(true);
                 break;
             case Connecte_Moderateur:
                 System.out.println("[login] reçu réponse : Connecté Modérateur");
-                Client.hi.voir(Onglet.HôtelDesVentes);
+                Client.hi.voir(Onglet.HotelDesVentes);
                 Client.session.setModerateur(true);
                 Client.session.setConnecte(true);
                 break;
@@ -79,7 +79,7 @@ class ClientEntry {
         
         Client.client.setDernierEncherisseur(i);
 
-        if (Client.client.getMode() == Onglet.HôtelDesVentes) {
+        if (Client.client.getMode() == Onglet.HotelDesVentes) {
             Client.hi.affichageEnchere(prix, i);
         }
     }

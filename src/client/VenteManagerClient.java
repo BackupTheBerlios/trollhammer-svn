@@ -77,7 +77,7 @@ class VenteManagerClient {
         // on pense aussi à mettre à jour les objets qui y sont vendus.
         // le type de la liste est donc de planification...
         // ou bien d'Hôtel des Ventes ? (jr)
-        Client.objectmanager.updateListe(Onglet.HôtelDesVentes, new HashSet<Objet>(os));
+        Client.objectmanager.updateListe(Onglet.HotelDesVentes, new HashSet<Objet>(os));
     }
 
 }

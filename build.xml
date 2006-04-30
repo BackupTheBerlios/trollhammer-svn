@@ -65,7 +65,7 @@
 			<echo></echo>
 			<echo> serveur - (compile) et lance la partie serveur</echo>
 			<echo></echo>
-			<echo> AFAIRErun - (compile) et lance le soft en entier</echo>
+			<echo> Atester sous nuxrun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
 			<echo> AFAIREjar - cree les fichiers jar</echo>
 			<echo></echo>
@@ -233,6 +233,39 @@
                 <pathelement location="${build.client}"/>
             </classpath>
         </java>
+    </target>
+    
+    <target name="run" description="Execution du client et du serveur">
+		
+		<parallel>
+			<sequential>
+
+				<echo>Attente de 3 secondes avant le lancement du client</echo>
+				<sleep seconds="3"/>	
+				<exec executable="start" vmlauncher="false" os="Windows XP">
+					<arg line="java -cp ${build.client};${build.commun} ${clientClass}"/>
+				</exec>
+				
+				<exec executable="xterm" vmlauncher="false" os="Linux">
+					<arg line="-e 'java -cp ${build.client};${build.commun} ${clientClass}'"/>
+				</exec>
+
+			</sequential>
+			
+
+	
+			<exec executable="start" vmlauncher="false" os="Windows XP">
+					<arg line="java -cp ${build.serveur};${build.commun} ${serveurClass}"/>
+			</exec>
+			
+			<exec executable="xterm" vmlauncher="false" os="Linux">
+					<arg line="-e 'java -cp ${build.client};${build.commun} ${clientClass}'"/>
+			</exec>
+
+	
+		</parallel>
+		<echo>Fini!</echo>
+    
     </target>
     
     <target name="clean" description="Nettoyage des fichiers .class">

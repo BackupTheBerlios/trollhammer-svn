@@ -28,8 +28,7 @@
     <property name="doc.serveur" value="${doc.dir}/serveur"/>
     <property name="doc.commun" value="${doc.dir}/commun"/>
 
-
-    <property name="sound.dir" value="soundsrc"/>
+	
     <property name="dist.dir" value="dist"/>
     <property name="res.dir" value="res"/>
     <property name="lib.dir" value="lib"/>
@@ -38,7 +37,7 @@
     <property name="clientClass" value="trollhammer.Client"/>
     <property name="serveurClass" value="trollhammer.Serveur"/>
     <property name="encodage" value="UTF-8"/>
-    <property name="mysound" value="libsounds"/>
+    <property name="mysound" value="ant"/>
     
     <path id="classpath">
 		<pathelement path="${build.commun}"/>

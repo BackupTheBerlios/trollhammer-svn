@@ -20,6 +20,8 @@
     <property name="build.dir" value="build"/>
     <property name="build.client" value="${build.dir}/client"/>
     <property name="build.serveur" value="${build.dir}/serveur"/>
+    <property name="build.commun" value="${build.dir}/commun"/>
+
 
     <property name="doc.dir" value="doc"/>
     <property name="doc.client" value="${doc.dir}/client"/>
@@ -39,9 +41,9 @@
     <property name="mysound" value="libsounds"/>
     
     <path id="classpath">
-		<fileset dir="${src.commun}">
-			<include name="**/*.class"/>
-		</fileset>
+		<pathelement path="${build.commun}"/>
+		<pathelement path="${build.client}"/>
+		<pathelement path="${build.serveur}"/>
 	</path>
     
     
@@ -53,15 +55,16 @@
 			<echo> prepare - construit les differents repertoires necessaires
  au projet. Est utilise implicitement avant chaque compilation</echo>
  			<echo></echo>
-			<echo> ATESTERbuild - compile le projet en entier, client et serveur</echo>
+			<echo> b (= build) - compile le projet en entier, 
+ client et serveur en multithread</echo>
+		 	<echo></echo>
+			<echo> bc (= buildClient) - compile la partie client</echo>
 			<echo></echo>
-			<echo> ATESTERbuildClient - compile la partie client</echo>
+			<echo> bs (= buildServeur) - compile la partie serveur</echo>
 			<echo></echo>
-			<echo> ATESTERbuildServeur - compile la partie serveur</echo>
+			<echo> client - (compile) et lance la partie client</echo>
 			<echo></echo>
-			<echo> ATESTERclient - (compile) et lance la partie client</echo>
-			<echo></echo>
-			<echo> ATESTERserveur - (compile) et lance la partie serveur</echo>
+			<echo> serveur - (compile) et lance la partie serveur</echo>
 			<echo></echo>
 			<echo> AFAIRErun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
@@ -70,9 +73,9 @@
 			<echo> AFAIREjavadoc - cree la javadoc</echo>
 			<echo></echo>
 
-			<echo> clean - nettoie le repertoire "${build.dir}"</echo>
+			<echo> putz (= clean) - nettoie le repertoire "${build.dir}"</echo>
 			<echo></echo>
-			<echo> dist-clean - nettoie les repertoires de sorte à 
+			<echo> megaputz (= dist-clean) - nettoie les repertoires de sorte à 
  faire un commit propre</echo>
 			<echo></echo>
 
@@ -91,6 +94,7 @@
  	    <mkdir dir="${build.dir}"/>
  	    <mkdir dir="${build.client}"/>
  	    <mkdir dir="${build.serveur}"/>
+ 	    <mkdir dir="${build.commun}"/>
  	    
  	    <mkdir dir="${src.dir}"/>
  	    <mkdir dir="${src.client}"/>
@@ -110,39 +114,117 @@
     		<echo message="${TSTAMP}"/>
     </target>
     	
-    <target name="build" depends="buildClient, buildServeur" description="Construit tout le projet">
-        <echo></echo>
-    </target>
+	<target name="buildCommun" depends="prepare" description="Construit les classes communes">
+		<echo>Compilation des classes communes</echo>
+	
+		<javac 	srcdir="${src.commun}" 
+			destdir="${build.commun}" >
+		</javac>
+	</target>
 
-    <target name="buildClient" depends="prepare" description="Construit le client uniquement">
+                
+    <target name="buildClient" depends="buildCommun" description="Construit le client uniquement">
         <echo>Compilation... du client</echo>
-        <sound>
-        	<success source="${mysound}/won/"/>
-        	<fail source="${mysound}/loose/"/>
-        </sound>
+		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
+		<echo>Utilisez la commande "bc" a la place</echo>
         <javac 	srcdir="${src.client}" 
-			destdir="${build.dir}" >
+			destdir="${build.client}" >
 			<classpath refid="classpath"/>
 		</javac>
     </target>    
 
-    <target name="buildServeur" depends="prepare" description="Construit le serveur uniquement">
-        <echo>Compilation... du serveur</echo>
-        <sound>
+	<target name="bc" depends="buildCommun" description="Construit le client uniquement (alias)">
+		<echo>Forge en cours pour... le client</echo>
+		<sound>
         	<success source="${mysound}/won/"/>
         	<fail source="${mysound}/loose/"/>
         </sound>
+		<javac encoding="${encodage}" 
+			srcdir="${src.client}" 
+			destdir="${build.client}" >
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+
+    <target name="buildServeur" depends="buildCommun" description="Construit le serveur uniquement">
+        <echo>Compilation... du serveur</echo>
+		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
+		<echo>Utilisez la commande "bs" a la place</echo>
         <javac encoding="${encodage}" 
 			srcdir="${src.serveur}" 
-			destdir="${build.dir}" >
+			destdir="${build.serveur}" >
 			<classpath refid="classpath"/>
 		</javac>
     </target>   
 
-    
+    <target name="bs" depends="buildCommun" description="Construit le client uniquement (alias)">
+        <echo>Forge en cours pour... le serveur</echo>
+        <sound>
+        	<success source="${mysound}/won/"/>
+        	<fail source="${mysound}/loose/"/>
+        </sound>
+
+        <javac encoding="${encodage}" 
+			srcdir="${src.serveur}" 
+			destdir="${build.serveur}" >
+			<classpath refid="classpath"/>
+		</javac>
+    </target>   
+
+	<target name="build" depends="buildCommun" description="Construit tout le projet (2 threads)">
+	
+		<parallel>
+			<sequential>
+					<echo>Compilation serveur</echo>
+					<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
+					<echo>Utilisez la commande "b" a la place</echo>
+					<javac encoding="${encodage}" 
+					srcdir="${src.serveur}" 
+					destdir="${build.serveur}" >
+					<classpath refid="classpath"/>
+					</javac>
+	
+			</sequential>
+			<echo>Compilation client</echo>
+			<javac encoding="${encodage}" 
+				srcdir="${src.client}" 
+				destdir="${build.client}" >
+				<classpath refid="classpath"/>
+			</javac>
+
+		</parallel>
+	</target>
+	
+	<target name="b" depends="buildCommun" description="Construit tout le projet (alias)">
+	    <sound>
+        	<success source="${mysound}/won/"/>
+        	<fail source="${mysound}/loose/"/>
+        </sound>
+
+		<parallel>
+			<sequential>
+					<echo>Ambidextrie : forge pour le serveur</echo>
+					<javac encoding="${encodage}" 
+					srcdir="${src.serveur}" 
+					destdir="${build.serveur}" >
+					<classpath refid="classpath"/>
+					</javac>
+	
+			</sequential>
+			<echo>et forge pour le client en meme temps</echo>
+			<javac encoding="${encodage}" 
+				srcdir="${src.client}" 
+				destdir="${build.client}" >
+				<classpath refid="classpath"/>
+			</javac>
+
+		</parallel>
+    </target>
+
+  
     <target name="serveur" depends="buildServeur" description="Lancement du serveur (apres compilation)">
         <echo>Execution du serveur!</echo>
-        <java classname="{serveurClass}">
+        <java classname="${serveurClass}">
             <classpath>
                 <pathelement location="${build.serveur}"/>
             </classpath>
@@ -151,22 +233,32 @@
     
     <target name="client" depends="buildClient" description="Lancement du client (apres compilation)">
         <echo>Execution du client!</echo>
-        <java classname="{clientClass}">
+        <java classname="${clientClass}">
             <classpath>
                 <pathelement location="${build.client}"/>
             </classpath>
         </java>
     </target>
     
-    <target name="clean" description="La putzfrau s'occupe de vos .class generes">
+    <target name="clean" description="Nettoyage des fichiers .class">
+        <echo>Effacement des .class...</echo>
+        
+        <delete verbose="true">
+            <fileset dir="${build.dir}"/>
+        </delete>
+    </target>
+    
+    <target name="putz" description="La putzfrau s'occupe de vos .class generes">
         <echo>Et ca putz!!!</echo>
         <delete verbose="true">
             <fileset dir="${build.dir}"/>
         </delete>
     </target>
     
-    <target name="dist-clean" depends="clean" description="La putzfrau prend tout et jette tout par la fenetre">
-        <echo>Et ca MEGAputz!!!</echo>
+    
+    
+    <target name="dist-clean" depends="clean" description="Nettoyage de tous les fichiers generes">
+        <echo>Effacage...</echo>
 
         <delete verbose="true">
 
@@ -182,6 +274,25 @@
             <delete dir="${doc.dir}"/>
             <delete dir="${build.dir}"/>      
     </target>
+
+    <target name="megaputz" depends="putz" description="Nettoyage de tous les fichiers generes (alias)">
+        <echo>DESTRUCTION!!.</echo>
+
+        <delete verbose="true">
+
+            <fileset dir="${doc.dir}"/>
+		    <fileset dir="${build.dir}"/>
+        </delete>
+
+            <delete dir="${doc.client}"/>
+            <delete dir="${doc.serveur}"/>
+            <delete dir="${doc.commun}"/>
+            <delete dir="${build.client}"/>
+            <delete dir="${build.serveur}"/>
+            <delete dir="${doc.dir}"/>
+            <delete dir="${build.dir}"/>      
+    </target>
+
 
 	<target name="javadoc" depends="build" description="Genere la javadoc du projet">
 		<echo>Ne fait rien pour l'instant</echo>

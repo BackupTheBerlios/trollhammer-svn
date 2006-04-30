@@ -95,11 +95,7 @@
  	    <mkdir dir="${build.client}"/>
  	    <mkdir dir="${build.serveur}"/>
  	    <mkdir dir="${build.commun}"/>
- 	    
- 	    <mkdir dir="${src.dir}"/>
- 	    <mkdir dir="${src.client}"/>
- 	    <mkdir dir="${src.serveur}"/>
- 	    <mkdir dir="${src.commun}"/>
+    
  	    
  	    <mkdir dir="${doc.dir}"/>
  	    <mkdir dir="${doc.client}"/>

@@ -65,7 +65,9 @@
 			<echo></echo>
 			<echo> serveur - (compile) et lance la partie serveur</echo>
 			<echo></echo>
-			<echo> Atester sous nuxrun - (compile) et lance le soft en entier</echo>
+			<echo> run - lance le soft en entier</echo>
+			<echo></echo>
+			<echo> brun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
 			<echo> AFAIREjar - cree les fichiers jar</echo>
 			<echo></echo>
@@ -171,8 +173,6 @@
 		<parallel>
 			<sequential>
 					<echo>Compilation serveur</echo>
-					<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
-					<echo>Utilisez la commande "b" a la place</echo>
 					<javac encoding="${encodage}" 
 					srcdir="${src.serveur}" 
 					destdir="${build.serveur}" >
@@ -253,7 +253,7 @@
 			</sequential>
 			
 
-	
+			<echo>Lancement du serveur</echo>
 			<exec executable="start" vmlauncher="false" os="Windows XP">
 					<arg line="java -cp ${build.serveur};${build.commun} ${serveurClass}"/>
 			</exec>
@@ -267,6 +267,41 @@
 		<echo>Fini!</echo>
     
     </target>
+    
+    
+    <target name="brun" depends="build" description="Execution du client et du serveur (apres compilation)">
+		
+		<parallel>
+			<sequential>
+
+				<echo>Attente de 3 secondes avant le lancement du client</echo>
+				<sleep seconds="3"/>	
+				<exec executable="start" vmlauncher="false" os="Windows XP">
+					<arg line="java -cp ${build.client};${build.commun} ${clientClass}"/>
+				</exec>
+				
+				<exec executable="xterm" vmlauncher="false" os="Linux">
+					<arg line="-e 'java -cp ${build.client}:${build.commun} ${clientClass}'"/>
+				</exec>
+
+			</sequential>
+			
+
+			<echo>Lancement du serveur</echo>
+			<exec executable="start" vmlauncher="false" os="Windows XP">
+					<arg line="java -cp ${build.serveur};${build.commun} ${serveurClass}"/>
+			</exec>
+			
+			<exec executable="xterm" vmlauncher="false" os="Linux">
+					<arg line="-e 'java -cp ${build.serveur}:${build.commun} ${serveurClass}'"/>
+			</exec>
+
+	
+		</parallel>
+		<echo>Fini!</echo>
+    
+    </target>
+    
     
     <target name="clean" description="Nettoyage des fichiers .class">
         <echo>Effacement des .class...</echo>

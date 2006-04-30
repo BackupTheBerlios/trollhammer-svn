@@ -259,7 +259,7 @@
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.client}:${build.commun} ${clientClass}'"/>
+					<arg line="-e 'java -cp ${build.serveur}:${build.commun} ${serveurClass}'"/>
 			</exec>
 
 	

@@ -20,9 +20,9 @@
     <property name="src.commun" value="${src.dir}/commun"/>
 
     <property name="build.dir" value="build"/>
-    <property name="build.client" value="${build.dir}/client"/>
-    <property name="build.serveur" value="${build.dir}/serveur"/>
-    <property name="build.commun" value="${build.dir}/commun"/>
+    <property name="build.client" value="${build.dir}"/>
+    <property name="build.serveur" value="${build.dir}"/>
+    <property name="build.commun" value="${build.dir}"/>
 
 
     <property name="doc.dir" value="doc"/>

@@ -36,8 +36,8 @@
     <property name="lib.dir" value="lib"/>
     
 
-    <property name="clientClass" value="trollhammer.client.Client"/>
-    <property name="serveurClass" value="trollhammer.serveur.Serveur"/>
+    <property name="clientClass" value="trollhammer.Client"/>
+    <property name="serveurClass" value="trollhammer.Serveur"/>
     <property name="encodage" value="UTF-8"/>
     <property name="mysound" value="ant"/>
     

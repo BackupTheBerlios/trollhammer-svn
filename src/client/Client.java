@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.client;
 
 /** Classe englobante pour la partie Client. C'est un singleton.
 */

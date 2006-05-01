@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.client;
 
 /** Classe adaptateur Client pour la Vente.
  * Permet d'effectuer des opérations sur la vente qui sont

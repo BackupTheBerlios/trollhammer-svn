@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.commun;
 
 class Participant implements java.io.Serializable {
     

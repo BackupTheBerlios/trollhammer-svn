@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.commun;
 
 enum Action { Encherir, Deconnecter };
 enum ActionModo { CoupDeMassePAF };

@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.serveur;
 
 /** Sous-classe interface côté Serveur pour Vente.
  * Permet d'exécuter les opérations sur la vente

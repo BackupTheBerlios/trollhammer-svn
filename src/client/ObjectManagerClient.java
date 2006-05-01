@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.client;
 import java.util.Set;
 
 class ObjectManagerClient {

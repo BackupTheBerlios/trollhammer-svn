@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.commun;
 import java.util.ArrayList;
 
 class Vente implements java.io.Serializable {

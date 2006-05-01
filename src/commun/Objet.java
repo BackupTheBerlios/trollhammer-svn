@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.commun;
 
 class Objet implements java.io.Serializable {
     

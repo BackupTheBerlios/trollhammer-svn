@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.serveur;
 
 /** Serveur Trollhammer. Cette classe est un singleton. */
 public class Serveur {

@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.serveur;
 import java.util.Set;
 
 /** Adaptateur Serveur pour un Modérateur. Hérite des propriétés

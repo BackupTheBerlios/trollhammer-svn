@@ -1,4 +1,4 @@
-package trollhammer;
+package trollhammer.serveur;
 import java.io.*;
 import java.net.*;
 

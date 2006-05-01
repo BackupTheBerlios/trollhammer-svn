@@ -1,4 +1,5 @@
 package trollhammer.serveur;
+import trollhammer.commun;
 
 class ObjetServeur {
 

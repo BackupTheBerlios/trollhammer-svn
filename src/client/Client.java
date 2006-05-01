@@ -1,4 +1,5 @@
 package trollhammer.client;
+import trollhammer.commun;
 
 /** Classe englobante pour la partie Client. C'est un singleton.
 */

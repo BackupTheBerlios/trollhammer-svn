@@ -12,6 +12,8 @@
      NB : Pour lancer une nouvelle console, utiliser xterm -c 'commande'-->
      
 <project name="troll" default="help" basedir=".">
+
+	<property name="build.compiler" value="modern"/>
     <property name="src.dir" value="src"/>
     <property name="src.client" value="${src.dir}/client"/>
     <property name="src.serveur" value="${src.dir}/serveur"/>
@@ -34,8 +36,8 @@
     <property name="lib.dir" value="lib"/>
     
 
-    <property name="clientClass" value="trollhammer.Client"/>
-    <property name="serveurClass" value="trollhammer.Serveur"/>
+    <property name="clientClass" value="trollhammer.client.Client"/>
+    <property name="serveurClass" value="trollhammer.serveur.Serveur"/>
     <property name="encodage" value="UTF-8"/>
     <property name="mysound" value="ant"/>
     
@@ -43,6 +45,7 @@
 		<pathelement path="${build.commun}"/>
 		<pathelement path="${build.client}"/>
 		<pathelement path="${build.serveur}"/>
+		<pathelement path="${lib.dir}"/>
 	</path>
     
     
@@ -243,11 +246,11 @@
 				<echo>Attente de 3 secondes avant le lancement du client</echo>
 				<sleep seconds="3"/>	
 				<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.client};${build.commun} ${clientClass}"/>
+					<arg line="java -cp ${build.client};${build.commun};${lib.dir} ${clientClass}"/>
 				</exec>
 				
 				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.client}:${build.commun} ${clientClass}'"/>
+					<arg line="-e 'java -cp ${build.client}:${build.commun}:${lib.dir} ${clientClass}'"/>
 				</exec>
 
 			</sequential>
@@ -255,11 +258,11 @@
 
 			<echo>Lancement du serveur</echo>
 			<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.serveur};${build.commun} ${serveurClass}"/>
+					<arg line="java -cp ${build.serveur};${build.commun};${lib.dir} ${serveurClass}"/>
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.serveur}:${build.commun} ${serveurClass}'"/>
+					<arg line="-e 'java -cp ${build.serveur}:${build.commun}:${lib.dir} ${serveurClass}'"/>
 			</exec>
 
 	

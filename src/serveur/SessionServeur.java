@@ -1,5 +1,4 @@
-package trollhammer.serveur;
-import trollhammer.commun;
+package trollhammer;
 import java.net.*;
 import java.io.*;
 import java.util.Set;

@@ -1,5 +1,4 @@
-package trollhammer.serveur;
-import trollhammer.commun;
+package trollhammer;
 
 class ChatSystem {
 

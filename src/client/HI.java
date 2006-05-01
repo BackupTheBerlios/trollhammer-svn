@@ -1,5 +1,4 @@
-package trollhammer.client;
-import trollhammer.commun;
+package trollhammer;
 import java.util.Set;
 import java.util.List;
 

@@ -1,5 +1,4 @@
-package trollhammer.client;
-import trollhammer.commun;
+package trollhammer;
 
 class Humain {
 

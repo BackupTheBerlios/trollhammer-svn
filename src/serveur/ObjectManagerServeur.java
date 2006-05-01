@@ -1,5 +1,4 @@
-package trollhammer.serveur;
-import trollhammer.commun;
+package trollhammer;
 import java.util.Set;
 
 class ObjectManagerServeur {

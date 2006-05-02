@@ -207,9 +207,7 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
             }
         } else if (m instanceof logout) {
-            // le logout est toujours possible à part
-            // si l'on n'est pas déjà connecté
-            if(etat != Etat.L1) {
+            if(changementPhase()) {
                 etat = Etat.L1;
                 logout l = (logout) m;
                 Serveur.serveurentry.logout(l.sender);
@@ -367,6 +365,16 @@ class ServeurEntryHandler extends Thread {
      * d'une transition dans les états du thread.
      */
     private boolean changementPhase() {
-        return true;
+        switch(etat) {
+            case TR1:
+            case PL3:
+            case GU2:
+            case V2:
+            case VA2:
+            case HV3:
+                return true;
+            default:
+                return false;
+        }
     }
 }

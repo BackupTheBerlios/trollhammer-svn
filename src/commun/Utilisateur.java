@@ -1,4 +1,4 @@
-package trollhammer.commun;
+package trollhammer;
 
 class Utilisateur extends Participant {
 

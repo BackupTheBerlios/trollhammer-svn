@@ -1,6 +1,7 @@
 package trollhammer;
 import java.util.Set;
 import java.util.List;
+import javax.swing.SwingUtilities;
 
 class HI {
 
@@ -14,6 +15,7 @@ class HI {
 					new LoginWindow();
 				}
 			}); // pask on s'la pète!!!
+				// quand on s'la pète on oublie pas d'importer les bons packages chacal putride! ^^ 
 		
 
 	}

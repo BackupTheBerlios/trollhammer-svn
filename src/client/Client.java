@@ -38,6 +38,9 @@ public class Client {
         // ceci est du test, et du test uniquement.
         Client.hi.connecter("tefal", "tefal", "localhost");
 
+        Client.session.obtenirListeParticipants();
+        Client.session.obtenirProchaineVente();
+
         Client.hi.ecrireChat("lol");
         //Client.hi.executer(Action.Deconnecter);
 
@@ -70,7 +73,7 @@ public class Client {
         Client.ventemanager = new VenteManagerClient();
 
         // spécifique Protocol Model Client
-        Client.fsm = new ClientFSM();
+        // Client.fsm = new ClientFSM(); // utilité discutable
 
         System.out.println("[sys] Client démarré.");
     }
@@ -182,6 +185,9 @@ public class Client {
  * nom de l'opération, qui retourne true si c'est possible
  * (et exécute la transition dans ses états), false sinon (et n'effectue
  * aucune transition).
+ *
+ * L'utilité d'une telle classe est très discutable. En effet, il est plus
+ * facile de forcer l'ordre les opérations via l'interface !
  */
 class ClientFSM {
 
@@ -189,7 +195,8 @@ class ClientFSM {
     enum Etat {HV1, HV2, HV3, HV4, HV5, HV6, HV7, HV8, HV9, HV10, HV11,
                HV12, HV13, GU1, GU2, GU3, GU4, A1, L1, L2, L3, V1, V2,
                V3, V4, V5, V6, VA1, VA2, VA3, VA4, VA5, VA6, TR1, TR2,
-               PL1, PL2, PL3, PL4, PL5, PL6, PL7, PL8, PL9, PL10};
+               PL1, PL2, PL3, PL4, PL5, PL6, PL7, PL8, PL9, PL10, A2};
+                                         // A2 rajouté, voir listeObjets()
 
     Etat etat; // l'état actuel du Client
 
@@ -217,7 +224,8 @@ class ClientFSM {
          * directement. (je ne peux qu'adapter le non-déterminisme... - jr)
          */
         return transition(Etat.VA3, Etat.VA4)
-            || transition(Etat.V3, Etat.V3);
+            || transition(Etat.V3, Etat.V3)
+            || transition(Etat.HV4, Etat.HV4);
     }
 
     boolean choisirUtilisateur() {
@@ -233,7 +241,7 @@ class ClientFSM {
     }
 
     boolean ecrireChat() {
-        return true;
+        return transition(Etat.HV4, Etat.HV13);
     }
 
     boolean editerUtilisateur() {
@@ -255,15 +263,16 @@ class ClientFSM {
     }
 
     boolean executer() {
-        return transition(Etat.TR1, Etat.TR2);
+        return transition(Etat.TR1, Etat.TR2)
+            || transition(Etat.HV4, Etat.HV8);
     }
 
     boolean executerModo() {
-        return true;
+        return transition(Etat.HV4, Etat.HV11);
     }
 
     boolean kicker() {
-        return true;
+        return transition(Etat.HV4, Etat.HV9);
     }
 
     boolean proposerObjet() {
@@ -278,10 +287,25 @@ class ClientFSM {
         return transition(Etat.PL4, Etat.PL5);
     }
 
-    boolean voir() {
-        return changementPhase(Etat.PL2)
-            || changementPhase(Etat.V2)
-            || changementPhase(Etat.GU2);
+    // le prochain état va fortement dépendre de ce que
+    // l'Utilisateur veut voir !
+    boolean voir(Onglet quoi) {
+        switch(quoi) {
+            case Planification:
+                return changementPhase(Etat.PL2);
+            case Vente:
+                return changementPhase(Etat.V2);
+            case GestionUtilisateurs:
+                return changementPhase(Etat.GU2);
+            case Achat:
+                return changementPhase(Etat.A1);
+            case HotelDesVentes:
+                return changementPhase(Etat.HV2);
+            case Validation:
+                return changementPhase(Etat.VA2);
+            default:
+                return false;
+        }
     }
 
     /* fonctions de vérification de requête venant de ClientEntry */
@@ -291,28 +315,34 @@ class ClientFSM {
     }
     
     boolean notification() {
-        return transition(Etat.TR2, Etat.L1);
+        return transition(Etat.TR2, Etat.L1)
+            || transition(Etat.HV5, Etat.HV6)
+            || transition(Etat.HV9, Etat.HV10)
+            || transition(Etat.HV4, Etat.HV4)
+            || transition(Etat.HV12, Etat.HV4);
     }
 
     boolean evenement() {
-        return true;
+        return transition(Etat.HV11, Etat.HV12);
     }
 
     boolean enchere() {
-        return true;
+        return transition(Etat.HV8, Etat.HV4);
     }
 
     boolean chat() {
-        return true;
+        return transition(Etat.HV13, Etat.HV4);
     }
 
     boolean detailsVente() {
         return transition(Etat.PL5, Etat.PL4)
             || transition(Etat.PL9, Etat.PL10)
-            || transition(Etat.PL7, Etat.PL4);
+            || transition(Etat.PL7, Etat.PL4)
+            || transition(Etat.HV3, Etat.HV5);
     }
 
     boolean detailsUtilisateur() {
+        // gné ? inconnu du proto model...
         return true;
     }
 
@@ -322,7 +352,11 @@ class ClientFSM {
             || transition(Etat.VA2, Etat.VA3)
             || transition(Etat.VA5, Etat.VA6)
             || transition(Etat.V2, Etat.V3)
-            || transition(Etat.V6, Etat.V3);
+            || transition(Etat.V6, Etat.V3)
+            || transition(Etat.A1, Etat.A2);
+            // modif. p.r. Protocol Model : le diagramme de la phase
+            // 'Achat' transitionne de A1 sur l'état de sortie directement...
+            // pas bon...
     }
 
     boolean listeUtilisateurs() {
@@ -330,7 +364,7 @@ class ClientFSM {
     }
 
     boolean listeParticipants() {
-        return true;
+        return transition(Etat.HV2, Etat.HV3);
     }
 
     boolean listeVentes() {
@@ -346,11 +380,13 @@ class ClientFSM {
     }
 
     boolean etatParticipant() {
-        return true;
+        return transition(Etat.HV10, Etat.HV4);
     }
 
     boolean superviseur() {
-        return true;
+        return transition(Etat.HV4, Etat.HV4);
+//            || transition(Etat.HV4, Etat.HV7); retiré cette branche : ne mène
+//            à rien ???
     }
 
     /** Teste si la FSM est dans l'état e1, et effectue e1 = e2 en retournant true
@@ -378,7 +414,7 @@ class ClientFSM {
             case HV4:
             case PL4:
             case GU4:
-            case A1:
+            case A2:
                 etat = e; return true;
             default:
                 return false;

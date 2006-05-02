@@ -64,12 +64,7 @@ class UserManagerServeur {
 
         if(u != null) {
             System.out.println("[login] Utilisateur "+i+" trouvé");
-            // modif p.r. au design : on rattache la Session
-            // à l'Utilisateur, sinon ce dernier ne pourra
-            // pas s'en servir. doLogin() se charge
-            // de détruire la session si le login est incorrect
-            u.setSession(sess);
-            u.doLogin(mdp);
+            u.doLogin(sess, mdp);
         } else {
             System.out.println("[login] Utilisateur "+i+" non trouvé");
             sess.resultatLogin(StatutLogin.Invalide);

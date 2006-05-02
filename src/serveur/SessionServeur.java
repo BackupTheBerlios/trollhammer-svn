@@ -91,4 +91,15 @@ class SessionServeur {
     Socket getSocket() {
         return this.s;
     }
+
+    /* un destructeur pour les logins ratés et déconnexions */
+
+    void kaboom() {
+        try {
+            oos.close();
+            s.close();
+        } catch (IOException ioe) {
+            System.out.println("[net] Erreur de fermeture de Session : "+ioe.getMessage());
+        }
+    }
 }

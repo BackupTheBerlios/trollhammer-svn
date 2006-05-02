@@ -17,31 +17,36 @@ class ModerateurServeur extends UtilisateurServeur {
     /* des différences avec UtilisateurServeur.doLogin() existent !
      * elles sont juste relativement subtiles (la réponse renvoyée p. ex.)
      */
-    void doLogin(String mdp) {
+    void doLogin(SessionServeur sess, String mdp) {
         String mot_de_passe = u.getMotDePasse();
         StatutLogin statut = u.getStatut();
 
         if(mdp == mot_de_passe && statut != StatutLogin.Banni) {
             System.out.println("[login] login de Modérateur accepté : login "
                     +u.getLogin());
-            session.resultatLogin(StatutLogin.Connecte_Moderateur);
+            sess.resultatLogin(StatutLogin.Connecte_Moderateur);
+            // la session est valide, on la fixe pour le Modérateur
+            this.session = sess;
             u.setStatut(StatutLogin.Connecte_Moderateur);
             Set<Participant> pl = Serveur.participantmanager.getParticipants();
-            session.listeParticipants(pl);
+            sess.listeParticipants(pl);
             Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (mdp != mot_de_passe) {
             System.out.println("[login] login Modérateur refusé, mauvais mot de passe : login "
                     +u.getLogin());
-            session.resultatLogin(StatutLogin.Invalide);
+            sess.resultatLogin(StatutLogin.Invalide);
             u.setStatut(StatutLogin.Deconnecte);
+            sess.kaboom();
         } else if (statut == StatutLogin.Banni) {
             System.out.println("[login] login de Modérateur banni refusé : login "
                     +u.getLogin());
-            session.resultatLogin(StatutLogin.Banni);
+            sess.resultatLogin(StatutLogin.Banni);
+            sess.kaboom();
         } else {
             // pas sensé arriver. on ignore...
             System.out.println("[login] cas non-traité de login Modérateur : login "
                     +u.getLogin());
+            sess.kaboom();
         }
 
     }

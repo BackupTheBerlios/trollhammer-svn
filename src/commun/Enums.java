@@ -4,7 +4,7 @@ enum Action { Encherir, Deconnecter };
 enum ActionModo { CoupDeMassePAF };
 enum Onglet { Achat, Vente, HotelDesVentes, Planification, Validation, GestionUtilisateurs };
 enum StatutObjet { Vendu, Propose, Accepte, Refuse, EnVente };
-enum StatutLogin { Connecte_Utilisateur, Connecte_Moderateur, Deconnecte, Invalide, Banni };
+enum StatutLogin { Connecte_Utilisateur, Connecte_Moderateur, Deconnecte, Invalide, Banni, Deja_Connecte};
 enum StatutEdition { Reussi, ExisteDeja, NonTrouve, DejaEffectue };
 enum Edition { Creer, Modifier, Supprimer }
 enum Evenement { CoupDeMassePAF1, CoupDeMassePAF2, Adjuge, VenteAutomatique }

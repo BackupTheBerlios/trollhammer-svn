@@ -45,7 +45,9 @@
 		<pathelement path="${build.commun}"/>
 		<pathelement path="${build.client}"/>
 		<pathelement path="${build.serveur}"/>
-		<pathelement path="${lib.dir}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
 	</path>
     
     

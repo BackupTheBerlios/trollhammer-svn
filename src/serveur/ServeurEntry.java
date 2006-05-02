@@ -134,13 +134,22 @@ class ServeurEntryListener extends Thread {
 
 /** Un thread qui répond aux commandes d'une connexion particulière.
  * Lancé pour chaque nouvelle connexion établie.
+ * Il s'occupe également de faire respecter l'ordre des opérations
+ * selon le Protocol Model.
  */
 class ServeurEntryHandler extends Thread {
+
+    // les états que peut prendre un thread 'handler' serveur
+    enum Etat {V1, V2, VA1, VA2, VA3, TR1, PL1, PL2, PL3, PL4, PL5,
+        L1, GU1, GU2, HV1, HV2, HV3};
+
+    Etat etat; // l'état du thread !
 
     Socket s;
 
     ServeurEntryHandler(Socket socket) {
         this.s = socket;
+        this.etat = Etat.L1;
         System.out.println("[net] connexion de "+s.getInetAddress());
     }
 
@@ -192,67 +201,172 @@ class ServeurEntryHandler extends Thread {
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
     private void execute(MessageClientServeur m) {
         if(m instanceof login) {
-            login l = (login) m;
-            Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
+            if(etat == Etat.L1) {
+                etat = Etat.TR1;
+                login l = (login) m;
+                Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
+            }
         } else if (m instanceof logout) {
-            logout l = (logout) m;
-            Serveur.serveurentry.logout(l.sender);
+            // le logout est toujours possible à part
+            // si l'on n'est pas déjà connecté
+            if(etat != Etat.L1) {
+                etat = Etat.L1;
+                logout l = (logout) m;
+                Serveur.serveurentry.logout(l.sender);
+            }
         } else if (m instanceof envoyerChat) {
-            envoyerChat ec = (envoyerChat) m;
-            Serveur.serveurentry.envoyerChat(ec.msg, ec.sender);
+            if(etat == Etat.HV3) {
+                etat = Etat.HV3;
+                envoyerChat ec = (envoyerChat) m;
+                Serveur.serveurentry.envoyerChat(ec.msg, ec.sender);
+            }
         } else if (m instanceof envoyerCoupdeMASSE) {
-            envoyerCoupdeMASSE ecdm = (envoyerCoupdeMASSE) m;
-            Serveur.serveurentry.envoyerCoupdeMASSE(ecdm.sender);
+            if(etat == Etat.HV3) {
+                etat = Etat.HV3;
+                envoyerCoupdeMASSE ecdm = (envoyerCoupdeMASSE) m;
+                Serveur.serveurentry.envoyerCoupdeMASSE(ecdm.sender);
+            }
         } else if (m instanceof kickerUtilisateur) {
-            kickerUtilisateur ku = (kickerUtilisateur) m;
-            Serveur.serveurentry.kickerUtilisateur(ku.u, ku.sender);
+            if(etat == Etat.HV3) {
+                etat = Etat.HV3;
+                kickerUtilisateur ku = (kickerUtilisateur) m;
+                Serveur.serveurentry.kickerUtilisateur(ku.u, ku.sender);
+            }
         } else if (m instanceof encherir) {
-            encherir e = (encherir) m;
-            Serveur.serveurentry.encherir(e.prix, e.sender);
+            if(etat == Etat.HV3) {
+                etat = Etat.HV3;
+                encherir e = (encherir) m;
+                Serveur.serveurentry.encherir(e.prix, e.sender);
+            }
         } else if (m instanceof envoyerProposition) {
-            envoyerProposition ep = (envoyerProposition) m;
-            Serveur.serveurentry.envoyerProposition(ep.proposition, ep.sender);
+            if(etat == Etat.V2) {
+                etat = Etat.V2;
+                envoyerProposition ep = (envoyerProposition) m;
+                Serveur.serveurentry.envoyerProposition(ep.proposition, ep.sender);
+            }
         } else if (m instanceof validerProposition) {
-            validerProposition vp = (validerProposition) m;
-            Serveur.serveurentry.validerProposition(vp.objet, vp.sender);
+            // pour les mêmes raisons que les modifications sur la phase 'Planifier'
+            // ci-dessous, on supprime l'état VA3 pour faire boucler directement
+            // la transition sur VA2.
+            if(etat == Etat.VA2) {
+                etat = Etat.VA2;
+                validerProposition vp = (validerProposition) m;
+                Serveur.serveurentry.validerProposition(vp.objet, vp.sender);
+            }
         } else if (m instanceof invaliderProposition) {
-            invaliderProposition ip = (invaliderProposition) m;
-            Serveur.serveurentry.invaliderProposition(ip.objet, ip.sender);
+            // même remarque que directement ci-dessus.
+            if(etat == Etat.VA2) {
+                etat = Etat.VA2;
+                invaliderProposition ip = (invaliderProposition) m;
+                Serveur.serveurentry.invaliderProposition(ip.objet, ip.sender);
+            }
         } else if (m instanceof insererObjetVente) {
-            insererObjetVente iov = (insererObjetVente) m;
-            Serveur.serveurentry.insererObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
+            // NB: les transitions de la phase 'Planifier' ne correspondent
+            // pas strictement à ce que le Protocol Model spécifie. En effet,
+            // ce dernier est transformable en automate déterministe
+            // (directement implémentable) relativement dépourvu de sens.
+            // Ce qui est implémenté ici est donc une ré-écriture avec la
+            // sémantique suivante : on ne peut pas envoyer de messages
+            // de modification de vente sans en avoir obtenu une avant.
+            // Il est possible d'en demander une autre après en avoir obtenu une
+            // première. Sur le graphe du proto model, cela équivaut à
+            // supprimer PL5 et à faire boucler les transitions
+            // "insérerObjetVente" et "enleverObjetVente".
+            if(etat == Etat.PL4) {
+                etat = Etat.PL4;
+                insererObjetVente iov = (insererObjetVente) m;
+                Serveur.serveurentry.insererObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
+            }
         } else if (m instanceof enleverObjetVente) {
-            enleverObjetVente eov = (enleverObjetVente) m;
-            Serveur.serveurentry.enleverObjetVente(eov.objet, eov.vente, eov.sender);
+            // même remarque que ci-dessus.
+            if(etat == Etat.PL4) {
+                etat = Etat.PL4;
+                enleverObjetVente eov = (enleverObjetVente) m;
+                Serveur.serveurentry.enleverObjetVente(eov.objet, eov.vente, eov.sender);
+            }
         } else if (m instanceof obtenirUtilisateur) {
             obtenirUtilisateur ou = (obtenirUtilisateur) m;
             Serveur.serveurentry.obtenirUtilisateur(ou.u, ou.sender);
         } else if (m instanceof utilisateur) {
-            utilisateur u = (utilisateur) m;
-            Serveur.serveurentry.utilisateur(u.e, u.u, u.sender);
+            if(etat == Etat.GU2) {
+                etat = Etat.GU2;
+                utilisateur u = (utilisateur) m;
+                Serveur.serveurentry.utilisateur(u.e, u.u, u.sender);
+            }
         } else if (m instanceof obtenirListeObjets) {
-            obtenirListeObjets olo = (obtenirListeObjets) m;
-            Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
+            // trans. dans la phase de planification
+            if(etat == Etat.PL2) {
+                etat = Etat.PL3;
+                obtenirListeObjets olo = (obtenirListeObjets) m;
+                Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
+            } else if(changementPhase()) { // trans. spontanée d'une autre phase
+                obtenirListeObjets olo = (obtenirListeObjets) m;
+                // l'état suivant va dépendre des paramètres du message.
+                switch(olo.type) {
+                    case Validation:
+                        etat = Etat.VA2; break;
+                    case Vente:
+                        etat = Etat.V2; break;
+                    case Achat: // achat est un cas un peu étrange,
+                                // mais le proto model, si on le réduit,
+                                // nous donne une boucle sur l'état 'central'
+                                // TR1 avec la transition obtenirListeObjets
+                                // (du type Achat) !
+                        etat = Etat.TR1; break;
+                }
+                Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
+            }
         } else if (m instanceof obtenirListeUtilisateurs) {
-            obtenirListeUtilisateurs olu = (obtenirListeUtilisateurs) m;
-            Serveur.serveurentry.obtenirListeUtilisateurs(olu.sender);
+            if(changementPhase()) {
+                etat = Etat.GU2;
+                obtenirListeUtilisateurs olu = (obtenirListeUtilisateurs) m;
+                Serveur.serveurentry.obtenirListeUtilisateurs(olu.sender);
+            }
         } else if (m instanceof obtenirListeVentes) {
-            obtenirListeVentes olv = (obtenirListeVentes) m;
-            Serveur.serveurentry.obtenirListeVentes(olv.sender);
+            if(changementPhase()) {
+                etat = Etat.PL2;
+                obtenirListeVentes olv = (obtenirListeVentes) m;
+                Serveur.serveurentry.obtenirListeVentes(olv.sender);
+            }
         } else if (m instanceof obtenirListeParticipants) {
-            obtenirListeParticipants olp = (obtenirListeParticipants) m;
-            Serveur.serveurentry.obtenirListeParticipants(olp.sender);
+            if(changementPhase()) {
+                etat = Etat.HV2;
+                obtenirListeParticipants olp = (obtenirListeParticipants) m;
+                Serveur.serveurentry.obtenirListeParticipants(olp.sender);
+            }
         } else if (m instanceof obtenirVente) {
-            obtenirVente ov = (obtenirVente) m;
-            Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
+            if(etat == Etat.PL3) {
+                etat = Etat.PL4;
+                obtenirVente ov = (obtenirVente) m;
+                Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
+            } else if(etat == Etat.PL4) {
+                etat = Etat.PL4;
+                obtenirVente ov = (obtenirVente) m;
+                Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
+            }
         } else if (m instanceof obtenirProchaineVente) {
-            obtenirProchaineVente ov = (obtenirProchaineVente) m;
-            Serveur.serveurentry.obtenirProchaineVente(ov.sender);
+            if(etat == Etat.HV2) {
+                etat = Etat.HV3;
+                obtenirProchaineVente ov = (obtenirProchaineVente) m;
+                Serveur.serveurentry.obtenirProchaineVente(ov.sender);
+            }
         } else if (m instanceof vente) {
-            vente v = (vente) m;
-            Serveur.serveurentry.vente(v.e, v.v, v.sender);
+            if(etat == Etat.PL4) {
+                etat = Etat.PL3;
+                vente v = (vente) m;
+                Serveur.serveurentry.vente(v.e, v.v, v.sender);
+            }
         } else {
             System.out.println("[net] message de type non reconnu : "+m);
         }
+    }
+
+    /** Retourne true si l'état actuel est un état duquel on peut changer de
+     * 'phase' (mode d'utilisation), false sinon. Utilisé pour déterminer
+     * si les changements de phase sont effectivement faisables ou pas lors
+     * d'une transition dans les états du thread.
+     */
+    private boolean changementPhase() {
+        return true;
     }
 }

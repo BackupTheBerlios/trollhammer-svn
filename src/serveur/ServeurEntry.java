@@ -368,6 +368,9 @@ class ServeurEntryHandler extends Thread {
         switch(etat) {
             case TR1:
             case PL3:
+            case PL4: // ceci est un rajout p.r. au Protocol Model !!
+                      // on veut pouvoir changer de phase en pleine
+                      // édition de vente... non ?
             case GU2:
             case V2:
             case VA2:

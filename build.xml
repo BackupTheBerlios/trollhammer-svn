@@ -20,9 +20,9 @@
     <property name="src.commun" value="${src.dir}/commun"/>
 
     <property name="build.dir" value="build"/>
-    <property name="build.client" value="${build.dir}"/>
-    <property name="build.serveur" value="${build.dir}"/>
-    <property name="build.commun" value="${build.dir}"/>
+    <property name="build.client" value="${build.dir}/client"/>
+    <property name="build.serveur" value="${build.dir}/serveur"/>
+    <property name="build.commun" value="${build.dir}/commun"/>
 
 
     <property name="doc.dir" value="doc"/>
@@ -42,7 +42,6 @@
     <property name="mysound" value="ant"/>
     
     <path id="classpath">
-		<pathelement path="${build.commun}"/>
 		<pathelement path="${build.client}"/>
 		<pathelement path="${build.serveur}"/>
 		<fileset dir="${lib.dir}">
@@ -50,7 +49,19 @@
 		</fileset>
 	</path>
     
-    
+        <path id="sclasspath">
+		<pathelement path="${build.serveur}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+    <path id="cclasspath">
+		<pathelement path="${build.client}"/>
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
     <target name="help" description="Affiche l'aide des differentes target disponibles">
     		<echo> Syntaxe du fichier build du projet Trollhammer</echo>
     		<echo> ----------------------------------------------</echo>
@@ -66,9 +77,9 @@
 			<echo></echo>
 			<echo> bs (= buildServeur) - compile la partie serveur</echo>
 			<echo></echo>
-			<echo> client - (compile) et lance la partie client</echo>
+			<echo> (b)client - (compile) et lance la partie client</echo>
 			<echo></echo>
-			<echo> serveur - (compile) et lance la partie serveur</echo>
+			<echo> (b)serveur - (compile) et lance la partie serveur</echo>
 			<echo></echo>
 			<echo> run - lance le soft en entier</echo>
 			<echo></echo>
@@ -107,7 +118,22 @@
  	    <mkdir dir="${doc.client}"/>
  	    <mkdir dir="${doc.serveur}"/>
  	    <mkdir dir="${doc.commun}"/>
-
+ 	    
+ 	    <!-- On copie ces rogntudjus de fichiers communs pour que ca compile chez les gens normaux -->
+ 	    
+ 	    <echo>Copie de ces fichiers communs baveux</echo>
+ 	    <copy todir="${src.client}">
+			<fileset dir="${src.commun}">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+		
+		
+ 	    <copy todir="${src.serveur}">
+			<fileset dir="${src.commun}">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
     	<!-- Ajoute un timestamp a cette creation. Ca ne se voit pas sur les fichiers ou repertoire, mais
     	ca peut etre utile ici-meme dans le fichier ant. Donc toi lecteur potentiel, tu t'en tapes en fait.
     	-->
@@ -125,7 +151,7 @@
 	</target>
 
                 
-    <target name="buildClient" depends="buildCommun" description="Construit le client uniquement">
+    <target name="buildClient" depends="prepare" description="Construit le client uniquement">
         <echo>Compilation... du client</echo>
 		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
 		<echo>Utilisez la commande "bc" a la place</echo>
@@ -135,7 +161,7 @@
 		</javac>
     </target>    
 
-	<target name="bc" depends="buildCommun" description="Construit le client uniquement (alias)">
+	<target name="bc"  description="Construit le client uniquement (alias)">
 		<echo>Forge en cours pour... le client</echo>
 		<sound>
         	<success source="${mysound}/won/"/>
@@ -148,7 +174,7 @@
 		</javac>
 	</target>
 
-    <target name="buildServeur" depends="buildCommun" description="Construit le serveur uniquement">
+    <target name="buildServeur" depends="prepare" description="Construit le serveur uniquement">
         <echo>Compilation... du serveur</echo>
 		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
 		<echo>Utilisez la commande "bs" a la place</echo>
@@ -159,7 +185,7 @@
 		</javac>
     </target>   
 
-    <target name="bs" depends="buildCommun" description="Construit le client uniquement (alias)">
+    <target name="bs"  description="Construit le client uniquement (alias)">
         <echo>Forge en cours pour... le serveur</echo>
         <sound>
         	<success source="${mysound}/won/"/>
@@ -173,7 +199,7 @@
 		</javac>
     </target>   
 
-	<target name="build" depends="buildCommun" description="Construit tout le projet (2 threads)">
+	<target name="build" description="Construit tout le projet (2 threads)">
 	
 		<parallel>
 			<sequential>
@@ -195,7 +221,7 @@
 		</parallel>
 	</target>
 	
-	<target name="b" depends="buildCommun" description="Construit tout le projet (alias)">
+	<target name="b"  description="Construit tout le projet (alias)">
 	    <sound>
         	<success source="${mysound}/won/"/>
         	<fail source="${mysound}/loose/"/>
@@ -222,23 +248,34 @@
     </target>
 
   
-    <target name="serveur" depends="buildServeur" description="Lancement du serveur (apres compilation)">
+    <target name="serveur" description="Lancement du serveur">
         <echo>Execution du serveur!</echo>
         <java classname="${serveurClass}">
-            <classpath>
-                <pathelement location="${build.serveur}"/>
-            </classpath>
+				<classpath refid="sclasspath"/>
         </java>
     </target>
     
-    <target name="client" depends="buildClient" description="Lancement du client (apres compilation)">
+    <target name="client" description="Lancement du client">
         <echo>Execution du client!</echo>
         <java classname="${clientClass}">
-            <classpath>
-                <pathelement location="${build.client}"/>
-            </classpath>
+				<classpath refid="cclasspath"/>
         </java>
     </target>
+    
+    <target name="bserveur" depends="buildServeur" description="Lancement du serveur (apres compilation)">
+        <echo>Execution du serveur!</echo>
+        <java classname="${serveurClass}">
+				<classpath refid="classpath"/>
+        </java>
+    </target>
+    
+    <target name="bclient" depends="buildClient" description="Lancement du client (apres compilation)">
+        <echo>Execution du client!</echo>
+        <java classname="${clientClass}">
+				<classpath refid="classpath"/>
+        </java>
+    </target>
+    
     
     <target name="run" description="Execution du client et du serveur">
 		
@@ -248,11 +285,11 @@
 				<echo>Attente de 3 secondes avant le lancement du client</echo>
 				<sleep seconds="3"/>	
 				<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.client};${build.commun};${lib.dir} ${clientClass}"/>
+					<arg line="ant client"/>
 				</exec>
 				
 				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.client}:${build.commun}:${lib.dir} ${clientClass}'"/>
+					<arg line="ant client"/>
 				</exec>
 
 			</sequential>
@@ -260,33 +297,31 @@
 
 			<echo>Lancement du serveur</echo>
 			<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.serveur};${build.commun};${lib.dir} ${serveurClass}"/>
+					<arg line="ant serveur"/>
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.serveur}:${build.commun}:${lib.dir} ${serveurClass}'"/>
+					<arg line="ant serveur"/>
 			</exec>
 
 	
 		</parallel>
 		<echo>Fini!</echo>
-    
     </target>
     
+    <target name="brun" description="Execution du client et du serveur (apres compilation)">
     
-    <target name="brun" depends="build" description="Execution du client et du serveur (apres compilation)">
-		
-		<parallel>
+    		<parallel>
 			<sequential>
 
 				<echo>Attente de 3 secondes avant le lancement du client</echo>
 				<sleep seconds="3"/>	
 				<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.client};${build.commun} ${clientClass}"/>
+					<arg line="ant bclient"/>
 				</exec>
 				
 				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.client}:${build.commun} ${clientClass}'"/>
+					<arg line="ant bclient"/>
 				</exec>
 
 			</sequential>
@@ -294,19 +329,20 @@
 
 			<echo>Lancement du serveur</echo>
 			<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="java -cp ${build.serveur};${build.commun} ${serveurClass}"/>
+					<arg line="ant bserveur"/>
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e 'java -cp ${build.serveur}:${build.commun} ${serveurClass}'"/>
+					<arg line="ant bserveur"/>
 			</exec>
 
 	
 		</parallel>
 		<echo>Fini!</echo>
+
     
     </target>
-    
+      
     
     <target name="clean" description="Nettoyage des fichiers .class">
         <echo>Effacement des .class...</echo>

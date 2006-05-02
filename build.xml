@@ -289,7 +289,7 @@
 				</exec>
 				
 				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="ant client"/>
+					<arg line="-e ant client"/>
 				</exec>
 
 			</sequential>
@@ -301,7 +301,7 @@
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="ant serveur"/>
+					<arg line="-e ant serveur"/>
 			</exec>
 
 	

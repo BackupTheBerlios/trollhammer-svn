@@ -4,6 +4,20 @@ import java.util.List;
 
 class HI {
 
+	public static void main(String[] args)
+	{
+		SwingUtilities.invokeLater(
+			new Runnable()
+			{
+				public void run()
+				{
+					new LoginWindow();
+				}
+			}); // pask on s'la pète!!!
+		
+
+	}
+
     void accepterProposition(int i) {
         Client.session.validerProposition(i);
     }

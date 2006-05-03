@@ -155,8 +155,6 @@
                 
     <target name="buildClient" depends="prepare" description="Construit le client uniquement">
         <echo>Compilation... du client</echo>
-		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
-		<echo>Utilisez la commande "bc" a la place</echo>
         <javac 	srcdir="${src.client}" 
 			destdir="${build.client}" >
 			<classpath refid="classpath"/>
@@ -178,8 +176,6 @@
 
     <target name="buildServeur" depends="prepare" description="Construit le serveur uniquement">
         <echo>Compilation... du serveur</echo>
-		<echo>Saviez-vous que cette fonction est deconseillee (deprecated)?</echo>
-		<echo>Utilisez la commande "bs" a la place</echo>
         <javac encoding="${encodage}" 
 			srcdir="${src.serveur}" 
 			destdir="${build.serveur}" >

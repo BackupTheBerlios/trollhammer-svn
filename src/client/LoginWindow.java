@@ -26,7 +26,7 @@ class LoginWindow implements ActionListener {
 	private JButton RaZB = null;
 	private FormLayout layout = null;
 	private JLabel imgLabel = null;
-	private Image img = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource(System.getProperty("user.dir") + "/ressources/images/hammer.gif"));//à changer pour System.getProperty("user.dir") + ".../hammer.gif"
+	//private Image img = Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource(System.getProperty("user.dir") + "/ressources/images/hammer.gif"));//à changer pour System.getProperty("user.dir") + ".../hammer.gif"
 	public LoginWindow()
 	{
 		if (loginFrame == null)
@@ -59,7 +59,7 @@ class LoginWindow implements ActionListener {
 		RaZB.setActionCommand("RaZ");
 		RaZB.addActionListener(this);
 		//insertion de l'image
-		imgLabel = new JLabel(new ImageIcon(img));
+		//imgLabel = new JLabel(new ImageIcon(img));
 		
 	}
 	private JComponent buildPanel()
@@ -86,7 +86,7 @@ class LoginWindow implements ActionListener {
 		builder.add(srvBox, cc.xyw(3,4,2));
 		builder.add(connectB, cc.xy(3,5));
 		builder.add(RaZB, cc.xy(4,5));
-		builder.add(imgLabel, cc.xy(4,6));
+		//builder.add(imgLabel, cc.xy(4,6));
 		
 		return builder.getPanel();
 	}

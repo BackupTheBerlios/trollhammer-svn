@@ -38,6 +38,8 @@
 
     <property name="clientClass" value="trollhammer.Client"/>
     <property name="serveurClass" value="trollhammer.Serveur"/>
+    <property name="guiClass" value="trollhammer.HI"/>
+    
     <property name="encodage" value="UTF-8"/>
     <property name="mysound" value="ant"/>
     
@@ -161,7 +163,7 @@
 		</javac>
     </target>    
 
-	<target name="bc"  description="Construit le client uniquement (alias)">
+	<target name="bc" depends="prepare" description="Construit le client uniquement (alias)">
 		<echo>Forge en cours pour... le client</echo>
 		<sound>
         	<success source="${mysound}/won/"/>
@@ -185,7 +187,7 @@
 		</javac>
     </target>   
 
-    <target name="bs"  description="Construit le client uniquement (alias)">
+    <target name="bs" depends="prepare" description="Construit le client uniquement (alias)">
         <echo>Forge en cours pour... le serveur</echo>
         <sound>
         	<success source="${mysound}/won/"/>
@@ -199,7 +201,7 @@
 		</javac>
     </target>   
 
-	<target name="build" description="Construit tout le projet (2 threads)">
+	<target name="build" depends="prepare" description="Construit tout le projet (2 threads)">
 	
 		<parallel>
 			<sequential>
@@ -221,7 +223,7 @@
 		</parallel>
 	</target>
 	
-	<target name="b"  description="Construit tout le projet (alias)">
+	<target name="b" depends="prepare" description="Construit tout le projet (alias)">
 	    <sound>
         	<success source="${mysound}/won/"/>
         	<fail source="${mysound}/loose/"/>
@@ -262,6 +264,15 @@
         </java>
     </target>
     
+    <target name="gui" depends="buildClient" description="Lancement du gui">
+        <echo>Execution de l'interface!</echo>
+        <java classname="${guiClass}">
+				<classpath refid="cclasspath"/>
+        </java>
+    </target>
+
+
+
     <target name="bserveur" depends="buildServeur" description="Lancement du serveur (apres compilation)">
         <echo>Execution du serveur!</echo>
         <java classname="${serveurClass}">

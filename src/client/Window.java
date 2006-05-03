@@ -302,34 +302,4 @@ class Window implements ActionListener
 		
 		
 	}
-
-	private class CoolPanel extends JPanel
-	{
-		private FormLayout layout = null;
-		private PanelBuilder builder = null;
-		private CellConstraints cc = null;
-		CoolPanel()
-		{
-			this.setBackground(Color.WHITE);
-			this.setBorder(BorderFactory.createEtchedBorder());
-		}
-		CoolPanel(String col, String row)
-		{
-			layout = new FormLayout(col,row);
-			builder = new PanelBuilder(layout);
-			builder.setDefaultDialogBorder();
-			cc = new CellConstraints();
-			this.add(builder.getPanel());
-			this.setBackground(Color.WHITE);
-			this.setBorder(BorderFactory.createEtchedBorder());
-		}
-		public void add(Component c, CellConstraints cc)
-		{
-			builder.add(c,cc);
-		}
-		public void addLabel(String s, CellConstraints cc)
-		{
-			builder.addLabel(s, cc);
-		}
-	}
 }

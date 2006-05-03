@@ -3,7 +3,7 @@ import java.util.Set;
 import java.util.List;
 import javax.swing.SwingUtilities;
 
-class HI {
+public class HI {  //doit être public si on veut un main... donc a gicler en temps voulu
 
 	public static void main(String[] args)
 	{
@@ -15,9 +15,7 @@ class HI {
 					new LoginWindow();
 				}
 			}); // pask on s'la pète!!!
-				// quand on s'la pète on oublie pas d'importer les bons packages chacal putride! ^^ 
-		
-
+				
 	}
 
     void accepterProposition(int i) {

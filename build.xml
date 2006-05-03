@@ -190,8 +190,8 @@
     <target name="bs" depends="prepare" description="Construit le client uniquement (alias)">
         <echo>Forge en cours pour... le serveur</echo>
         <sound>
-        	<success source="${mysound}/won/"/>
-        	<fail source="${mysound}/loose/"/>
+        	<success source="${mysound}/won"/>
+        	<fail source="${mysound}/loose"/>
         </sound>
 
         <javac encoding="${encodage}" 
@@ -266,8 +266,9 @@
     
     <target name="gui" depends="buildClient" description="Lancement du gui">
         <echo>Execution de l'interface!</echo>
-        <java classname="${guiClass}">
+        <java classname="${guiClass}" fork="true" failonerror="true">
 				<classpath refid="cclasspath"/>
+				
         </java>
     </target>
 

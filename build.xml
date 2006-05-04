@@ -261,7 +261,7 @@
 			</exec>
 
 			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
-					<arg line="-e ant client"/>
+					<arg line="-e ant serveur"/>
 			</exec>
 	
 		</parallel>

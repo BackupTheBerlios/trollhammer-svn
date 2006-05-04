@@ -9,19 +9,19 @@ class ClientEntry {
     void resultatLogin(StatutLogin s) {
         switch(s) {
             case Connecte_Utilisateur:
-                System.out.println("[login] reçu réponse : Connecté Utilisateur");
+                Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Utilisateur");
                 Client.hi.voir(Onglet.HotelDesVentes);
                 Client.session.setModerateur(false);
                 Client.session.setConnecte(true);
                 break;
             case Connecte_Moderateur:
-                System.out.println("[login] reçu réponse : Connecté Modérateur");
+                Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Modérateur");
                 Client.hi.voir(Onglet.HotelDesVentes);
                 Client.session.setModerateur(true);
                 Client.session.setConnecte(true);
                 break;
             case Banni:
-                System.out.println("[login] reçu réponse : Banni");
+                Logger.log("ClientEntry", 1, "[login] reçu réponse : Banni");
                 Client.hi.messageErreur(Erreur.Banni);
                 // mod p.r. design : pas de destroy() (impossible en Java),
                 // mais on tient quand même à fermer la connexion!
@@ -29,7 +29,7 @@ class ClientEntry {
                 Client.session = null;
                 break;
             case Invalide:
-                System.out.println("[login] reçu réponse : Invalide");
+                Logger.log("ClientEntry", 1, "[login] reçu réponse : Invalide");
                 Client.hi.messageErreur(Erreur.Invalide);
                 // mod p.r. design : pas de destroy() (impossible en Java),
                 // mais on tient quand même à fermer la connexion!
@@ -73,9 +73,10 @@ class ClientEntry {
         // incrément de 10% sur le prix initial
         // dans le design, on avait fait l'erreur de
         // faire 10% sur le prix _courant_.
+		// Fix de l'incrément du prix lors d'une enchère
         Objet o = Client.objectmanager.getObject(
                 Client.humain.getVente().getFirst());
-        Client.client.setPrixCourant((int) 1.1*o.getPrixDeBase());
+        Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1*o.getPrixDeBase()));
         
         Client.client.setDernierEncherisseur(i);
 
@@ -85,7 +86,7 @@ class ClientEntry {
     }
 
     void chat(String m, String i) {
-        System.out.println("[chat] "+i+" dit : "+m);
+        Logger.log("ClientEntry", 2, "[chat] "+i+" dit : "+m);
         Client.hi.affichageChat(m, i);
     }
 
@@ -143,7 +144,7 @@ class ClientEntryHandler extends Thread {
     /** Boucle de lecture des objets sérialisés reçus du socket.
      */
     public void run() {
-        System.out.println("[net] Ecoute des réponses Serveur lancée");
+        Logger.log("ClientEntryHandler", 1, "[net] Ecoute des réponses Serveur lancée");
         Object o; // l'objet qui va être lu du Socket.
 
         try {
@@ -153,10 +154,10 @@ class ClientEntryHandler extends Thread {
 
                 if(o instanceof Message) {
                     Message m = (Message) o;
-                    System.out.println("[net] reçu message : "+m);
+                    Logger.log("ClientEntryHandler", 2, "[net] reçu message : "+m);
                     this.execute(m);
                 } else {
-                    System.out.println("[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");
+                    Logger.log("ClientEntryHandler", 1, "[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");
                 }
             } while ( !((o instanceof resultatLogin)
                          && (((resultatLogin) o).s == StatutLogin.Deconnecte)) );
@@ -169,9 +170,9 @@ class ClientEntryHandler extends Thread {
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
-            System.out.println("[net] Listener déconnecté du serveur "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("ClientEntryHandler", 0, "[net] Listener déconnecté du serveur "+s.getInetAddress()+" : "+ioe.getMessage());
         } catch (Exception e) {
-            System.out.println("[net] EXCEPTION : déconnexion du serveur "+s.getInetAddress());
+            Logger.log("ClientEntryHandler", 0, "[net] EXCEPTION : déconnexion du serveur "+s.getInetAddress());
             e.printStackTrace();
         } finally {
             /*// de toute façon, on ferme le Socket.
@@ -229,7 +230,7 @@ class ClientEntryHandler extends Thread {
             superviseur s = (superviseur) m;
             Client.cliententry.superviseur(s.id);
         } else {
-            System.out.println("[net] message de type non reconnu.");
+            Logger.log("ClientEntryHandler", 2, "[net] message de type non reconnu.");
         }
     }
 }

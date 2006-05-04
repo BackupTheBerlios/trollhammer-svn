@@ -61,7 +61,7 @@ public class Client {
 
     /* constructeur du Client, réservé à lui seul (via démarrer()) */
     private Client() {
-        System.out.println("[sys] Démarrage Client.");
+        Logger.log("Client", 0, "Démarrage Client.");
 
         Client.cliententry = new ClientEntry();
         Client.session = null; // pas créée initialement, seulement au Login
@@ -75,12 +75,12 @@ public class Client {
         // spécifique Protocol Model Client
         // Client.fsm = new ClientFSM(); // utilité discutable
 
-        System.out.println("[sys] Client démarré.");
+        Logger.log("Client", 0, "Client démarré.");
     }
 
     /* jr : attendre en acceptant, éventuellement, des commandes simples.
-     *      * Permet un peu de contrôle sur les autres threads.
-     *           */
+	 * Permet un peu de contrôle sur les autres threads.
+	*/
 
     private static void attendre() {
         try {
@@ -94,7 +94,7 @@ public class Client {
 
             lr.close();
         } catch (Exception e) {
-            System.out.println("[sys] utilisateur mauvais : exception sur stdin : "+e.getMessage());
+            Logger.log("Client", 0, "utilisateur mauvais : exception sur stdin : "+e.getMessage());
         }
     }
 

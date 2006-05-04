@@ -22,14 +22,14 @@ class SessionClient {
 
     static SessionClient login(String i, String m, String s) {
         try {
-            System.out.println("[net] Tentative de connexion sur "+s
-                    +", port 4662...");
+            Logger.log("SessionClient", 1, "[net] Tentative de connexion sur "+s
+                       +", port 4662...");
             Socket socket = new Socket(s, 4662);
-            System.out.println("[net] Connecté sur le serveur "+s+
+            Logger.log("SessionClient", 1, "[net] Connecté sur le serveur "+s+
                     " ("+socket.getInetAddress()+")");
             return new SessionClient(i, m, s, socket);
         } catch (IOException ioe) {
-            System.out.println("[net] Ne peut pas se connecter à "+s);
+            Logger.log("SessionClient", 0, "[net] Ne peut pas se connecter à "+s);
             return null;
         }
     }
@@ -48,12 +48,12 @@ class SessionClient {
         try {
             oos = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException ioe) {
-            System.out.println("[net] EXCEPTION : ne peut pas créer l'ObjectOutputStream : "+ioe.getMessage());
+            Logger.log("SessionClient", 0, "[net] EXCEPTION : ne peut pas créer l'ObjectOutputStream : "+ioe.getMessage());
         }
 
         // ceci fait, lançons une tentative de login !
         
-        System.out.println("[net] Tentative de login : login "+i+
+        Logger.log("SessionClient", 2, "[net] Tentative de login : login "+i+
                 " pass "+m);
         envoyer(new login(i, i, m));
 
@@ -113,9 +113,9 @@ class SessionClient {
         try {
             this.oos.close();
             this.s.close();
-            System.out.println("[net] Deconnecté de "+this.adresse);
+            Logger.log("SessionClient", 1, "[net] Deconnecté de "+this.adresse);
         } catch (IOException ioe) {
-            System.out.println("[net] Erreur pendant la déconnexion : "
+            Logger.log("SessionClient", 0, "[net] Erreur pendant la déconnexion : "
                     + ioe.getMessage());
         }
     }
@@ -160,10 +160,10 @@ class SessionClient {
 
     private void envoyer(Message m) {
         try {
-            System.out.println("[net] Envoi de la requête : "+m);
+            Logger.log("SessionClient", 2, "[net] Envoi de la requête : "+m);
             oos.writeObject(m);
         } catch (IOException ioe) {
-            System.out.println("[net] Incapable d'envoyer la requête : "+ioe.getMessage());
+            Logger.log("SessionClient", 1, "[net] Incapable d'envoyer la requête : "+ioe.getMessage());
         }
     }
 

@@ -43,6 +43,28 @@
     <property name="encodage" value="UTF-8"/>
     <property name="mysound" value="ant"/>
     
+    
+    <fileset id="communfile.client" dir="${src.client}">
+     <include name="Enums.java"/>
+     <include name="Logger.java"/>
+     <include name="Message.java"/>
+     <include name="Objet.java"/>
+     <include name="Participant.java"/>
+     <include name="Utilisateur.java"/>
+     <include name="Vente.java"/>
+	</fileset>
+		
+	
+    <fileset id="communfile.serveur" dir="${src.serveur}">
+     <include name="Enums.java"/>
+     <include name="Logger.java"/>
+     <include name="Message.java"/>
+     <include name="Objet.java"/>
+     <include name="Participant.java"/>
+     <include name="Utilisateur.java"/>
+     <include name="Vente.java"/>
+	</fileset>
+
     <path id="classpath">
 		<pathelement path="${build.client}"/>
 		<pathelement path="${build.serveur}"/>
@@ -275,39 +297,19 @@
     </target>
       
     
-    <target name="clean" description="Nettoyage des fichiers .class">
-        <echo>Effacement des .class...</echo>
-        
-        <delete verbose="true">
-            <fileset dir="${build.dir}"/>
-        </delete>
+    <target name="clean" depends="putz" description="Nettoyage des fichiers .class">
     </target>
     
     <target name="putz" description="La putzfrau s'occupe de vos .class generes">
-        <echo>Et ca putz!!!</echo>
-        <delete verbose="true">
+        <echo>Effacement des .class</echo>
+        <delete>
             <fileset dir="${build.dir}"/>
         </delete>
     </target>
     
     
     
-    <target name="dist-clean" depends="clean" description="Nettoyage de tous les fichiers generes">
-        <echo>Effacage...</echo>
-
-        <delete verbose="true">
-
-            <fileset dir="${doc.dir}"/>
-		    <fileset dir="${build.dir}"/>
-        </delete>
-
-            <delete dir="${doc.client}"/>
-            <delete dir="${doc.serveur}"/>
-            <delete dir="${doc.commun}"/>
-            <delete dir="${build.client}"/>
-            <delete dir="${build.serveur}"/>
-            <delete dir="${doc.dir}"/>
-            <delete dir="${build.dir}"/>      
+    <target name="dist-clean" depends="megaputz" description="Nettoyage de tous les fichiers generes">
     </target>
     
 	<target name="megatuerie" depends="putz" description="Detruit votre systeme">
@@ -351,22 +353,10 @@
             <delete dir="${doc.dir}"/>
             <delete dir="${build.dir}"/>    
         <delete verbose="true">
-			<fileset file ="${src.client}/Enums.java"/>
-            <fileset file ="${src.client}/Logger.java"/>
-            <fileset file ="${src.client}/Message.java"/>
-            <fileset file ="${src.client}/Objet.java"/>
-            <fileset file ="${src.client}/Participant.java"/>
-            <fileset file ="${src.client}/Utilisateur.java"/>
-            <fileset file ="${src.client}/Vente.java"/>
+			<fileset refid="communfile.client"/>
         </delete>
         <delete verbose="true">
-			<fileset file ="${src.serveur}/Enums.java"/>
-            <fileset file ="${src.serveur}/Logger.java"/>
-            <fileset file ="${src.serveur}/Message.java"/>
-            <fileset file ="${src.serveur}/Objet.java"/>
-            <fileset file ="${src.serveur}/Participant.java"/>
-            <fileset file ="${src.serveur}/Utilisateur.java"/>
-            <fileset file ="${src.serveur}/Vente.java"/>
+			<fileset refid="communfile.serveur"/>
         </delete>
               
     </target>

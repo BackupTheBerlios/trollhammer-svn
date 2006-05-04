@@ -7,9 +7,7 @@
      le sache pas et/ou que je ne le remarque pas sous peine de mort lente et extremement douloureuse.
      Vous etes prevenu.
      Have a nice day -->
-     
-     <!-- A implementer : buildClient, buildServeur, client, serveur, build all, run all, jar, javadoc
-     NB : Pour lancer une nouvelle console, utiliser xterm -c 'commande'-->
+
      
 <project name="troll" default="help" basedir=".">
 
@@ -44,6 +42,7 @@
     <property name="mysound" value="ant"/>
     
     
+    <!-- Definition des fichiers communs -->
     <fileset id="communfile.client" dir="${src.client}">
      <include name="Enums.java"/>
      <include name="Logger.java"/>
@@ -245,6 +244,10 @@
 					<arg line="-e ant client"/>
 				</exec>
 
+				<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+					<arg line="-e ant client"/>
+				</exec>
+
 			</sequential>
 			
 
@@ -257,6 +260,9 @@
 					<arg line="-e ant serveur"/>
 			</exec>
 
+			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+					<arg line="-e ant client"/>
+			</exec>
 	
 		</parallel>
 		<echo>Fini!</echo>
@@ -274,7 +280,11 @@
 				</exec>
 				
 				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="ant bclient"/>
+					<arg line="-e ant bclient"/>
+				</exec>
+
+				<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+					<arg line="-e ant bclient"/>
 				</exec>
 
 			</sequential>
@@ -286,8 +296,15 @@
 			</exec>
 			
 			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="ant bserveur"/>
+					<arg line="-e ant bserveur"/>
 			</exec>
+			
+			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+				<arg line="-e ant bserveur"/>
+			</exec>
+
+			
+
 
 	
 		</parallel>

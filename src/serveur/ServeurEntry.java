@@ -18,6 +18,7 @@ class ServeurEntry {
     }
 
     void logout(String sender) {
+        Logger.log("ServeurEntry", 0, "Logout de "+sender);
         Serveur.usermanager.logout(sender);
     }
 
@@ -200,6 +201,7 @@ class ServeurEntryHandler extends Thread {
 
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
     private void execute(MessageClientServeur m) {
+        Logger.log("ServeurEntryHandler",0,"Etat precedent : "+etat);
         if(m instanceof login) {
             if(etat == Etat.L1) {
                 etat = Etat.TR1;
@@ -207,11 +209,13 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
             }
         } else if (m instanceof logout) {
-            if(changementPhase()) {
+            // modif p.r. Protocol Model : on aimerait pouvoir faire
+            // un Logout inconditionnellement, oui
+            //if(changementPhase()) {
                 etat = Etat.L1;
                 logout l = (logout) m;
                 Serveur.serveurentry.logout(l.sender);
-            }
+            //}
         } else if (m instanceof envoyerChat) {
             if(etat == Etat.HV3) {
                 etat = Etat.HV3;
@@ -357,6 +361,7 @@ class ServeurEntryHandler extends Thread {
         } else {
             System.out.println("[net] message de type non reconnu : "+m);
         }
+        Logger.log("ServeurEntryHandler",0,"Nouvel etat : "+etat);
     }
 
     /** Retourne true si l'état actuel est un état duquel on peut changer de

@@ -75,6 +75,7 @@ class UserManagerServeur {
     }
 
     void logout(String sender) {
+        Logger.log("UserManagerServeur", 0, "Logout de "+sender);
         UtilisateurServeur u = this.getUtilisateur(sender);
         u.notification(Notification.Deconnexion);
         u.disconnect();

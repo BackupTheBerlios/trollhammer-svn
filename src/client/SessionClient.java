@@ -161,6 +161,7 @@ class SessionClient {
     private void envoyer(Message m) {
         try {
             Logger.log("SessionClient", 2, "[net] Envoi de la requête : "+m);
+            System.out.println("MAIS TANT MIEUX, ENVOI DE "+m);
             oos.writeObject(m);
         } catch (IOException ioe) {
             Logger.log("SessionClient", 1, "[net] Incapable d'envoyer la requête : "+ioe.getMessage());

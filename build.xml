@@ -349,7 +349,26 @@
             <delete dir="${build.client}"/>
             <delete dir="${build.serveur}"/>
             <delete dir="${doc.dir}"/>
-            <delete dir="${build.dir}"/>      
+            <delete dir="${build.dir}"/>    
+        <delete verbose="true">
+			<fileset file ="${src.client}/Enums.java"/>
+            <fileset file ="${src.client}/Logger.java"/>
+            <fileset file ="${src.client}/Message.java"/>
+            <fileset file ="${src.client}/Objet.java"/>
+            <fileset file ="${src.client}/Participant.java"/>
+            <fileset file ="${src.client}/Utilisateur.java"/>
+            <fileset file ="${src.client}/Vente.java"/>
+        </delete>
+        <delete verbose="true">
+			<fileset file ="${src.serveur}/Enums.java"/>
+            <fileset file ="${src.serveur}/Logger.java"/>
+            <fileset file ="${src.serveur}/Message.java"/>
+            <fileset file ="${src.serveur}/Objet.java"/>
+            <fileset file ="${src.serveur}/Participant.java"/>
+            <fileset file ="${src.serveur}/Utilisateur.java"/>
+            <fileset file ="${src.serveur}/Vente.java"/>
+        </delete>
+              
     </target>
 	
 

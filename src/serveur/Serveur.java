@@ -60,6 +60,9 @@ public class Serveur {
         Serveur.participantmanager = new ParticipantManagerServeur();
         Serveur.ventemanager = new VenteManagerServeur();
 
+        /* le thread démarreur de ventes ! */
+        new VenteStarter().start();
+
         Logger.log("Serveur", 0, "[sys] Serveur démarré, passage en boucle d'attente");
     }
 

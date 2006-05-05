@@ -61,19 +61,31 @@ class VenteManagerServeur {
         return null;
     }
 
-    Vente getVenteEnCours() {
+    /** Retourne la Vente à la date de début la plus proche dans le temps.
+     */
+    Vente getStarting() {
         long min = Long.MAX_VALUE;
         long prevmin = 0;
-        Vente encours = null;
+        Vente starting = null;
 
-        /* d'abord, on prend la vente la plus proche dans le temps */
+        /* on prend la vente la plus proche dans le temps */
         for(Vente v : ventes) {
             prevmin = min;
             min = Math.min(min, v.getDate());
             if(min < prevmin) {
-                encours = v;
+                starting = v;
             }
         }
+
+        return starting;
+    }
+
+    /** Retourne la Vente à la date de début la plus proche dans le temps
+     * et dans le passé, null s'il n'y en a pas.
+     */
+    Vente getVenteEnCours() {
+        /* on commence par prendre la vente la plus proche dans le temps */
+        Vente encours = getStarting();
 
         /* puis on vérifie si elle a démarré ! Si pas,
          * alors on retourne null (ie. aucune vente n'est en cours)

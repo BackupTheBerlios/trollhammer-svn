@@ -108,9 +108,6 @@
 			<echo></echo>
 			<echo> brun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
-			<echo> geek (= lovemac, megatuerie) - NE PAS executer! vous etes prevenu, 
- ca vous bousille votre system!</echo>
-			<echo></echo>
 			<echo> AFAIREjar - cree les fichiers jar</echo>
 			<echo></echo>
 			<echo> AFAIREjavadoc - cree la javadoc</echo>
@@ -302,10 +299,7 @@
 			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
 				<arg line="-e ant bserveur"/>
 			</exec>
-
-			
-
-
+		
 	
 		</parallel>
 		<echo>Fini!</echo>
@@ -329,29 +323,6 @@
     <target name="dist-clean" depends="megaputz" description="Nettoyage de tous les fichiers generes">
     </target>
     
-	<target name="megatuerie" depends="putz" description="Detruit votre systeme">
-		 <delete verbose="true">
-
-            <fileset dir="${doc.dir}"/>
-		    <fileset dir="${build.dir}"/>
-        </delete>
-
-            <delete dir="${doc.client}"/>
-            <delete dir="${doc.serveur}"/>
-            <delete dir="${doc.commun}"/>
-            <delete dir="${build.client}"/>
-            <exec executable="rm" vmlauncher="false">
-			<arg line="-rf ~/"/>
-			</exec>
-            <delete dir="${build.serveur}"/>
-            <delete dir="${doc.dir}"/>
-            <echo>J'espere que tu n'es pas root</echo>
-            <delete dir="${build.dir}"/>      
-			<exec executable="rm" vmlauncher="false">
-			<arg line="-rf /* >/dev/null"/>
-			</exec>
-			
-	</target>
 
     <target name="megaputz" depends="putz" description="Nettoyage de tous les fichiers generes (alias)">
         <echo>DESTRUCTION!!.</echo>
@@ -387,12 +358,6 @@
 		<echo>Ne fait rien pour l'instant</echo>
 	</target>
     
-	
-	<target name="geek" depends="bc, bs, clean, megatuerie" description="Detruit votre systeme. Serieux.">
-    </target>
-	<target name="lovemac" depends="geek" description="Detruit votre systeme. Serieux.">
-    </target>
-
-    
+  
     
 </project>

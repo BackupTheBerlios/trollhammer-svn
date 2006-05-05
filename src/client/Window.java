@@ -100,14 +100,14 @@ class Window implements ActionListener
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
-			System.out.println("Après création: "+tabbedPane == null);
+			Logger.log("Window", 2, "Après création: "+(tabbedPane == null));
 			hdv = new HdVPanel(modo);
 			vente = new VentePanel(modo);
 			achat = new AchatPanel(modo);
 			tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
 			tabbedPane.addTab("Vente", null, vente.getComponent(), null);
 			tabbedPane.addTab("Achat", null, achat.getComponent(), null);
-			System.out.println("Avant if modo: "+tabbedPane == null);
+			Logger.log("Window", 2, "Avant if modo: "+(tabbedPane == null));
 			if(modo)
 			{
 				valider = new ValiderPanel(modo);
@@ -119,7 +119,7 @@ class Window implements ActionListener
 			}
 		}
 		
-		System.out.println("Avant le return: "+tabbedPane == null);
+		Logger.log("Window", 2, "Avant le return: "+(tabbedPane == null));
 		return tabbedPane;
 	}
 

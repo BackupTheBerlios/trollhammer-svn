@@ -14,7 +14,7 @@ package trollhammer;
 */
 class Logger {
 	/* C'est ici que l'on choisi le lvl de logging */
-	static private int level = 0; /**
+	static private int level = 2; /**
 /**
 * Log un message, avec l'expéditeur de celui-ci, suivant le level de logging.
 * 

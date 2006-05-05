@@ -1,9 +1,14 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
 
 class ParticipantManagerClient {
 
     private Set<Participant> participants;
+
+    ParticipantManagerClient() {
+        participants = new HashSet<Participant>();
+    }
 
     void etatParticipant(Participant p) {
         for(Participant pr : participants) {

@@ -15,16 +15,16 @@ class SessionServeur {
         try {
             oos = new ObjectOutputStream(s.getOutputStream());
         } catch (IOException ioe) {
-            System.out.println("[net] Ne peut pas créer d'ObjectOutputStream pour "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("Serveur", 0, "[net] Ne peut pas créer d'ObjectOutputStream pour "+s.getInetAddress()+" : "+ioe.getMessage());
         }
     }
 
     private void envoyer(Message m) {
         try {
-            System.out.println("[net] envoi de "+m);
+            Logger.log("Serveur", 1, "[net] envoi de "+m);
             oos.writeObject(m);
         } catch (IOException ioe) {
-            System.out.println("[net] Incapable d'envoyer le message : "+ioe.getMessage());
+            Logger.log("Serveur", 1, "[net] Incapable d'envoyer le message : "+ioe.getMessage());
         }
     }
 
@@ -99,7 +99,7 @@ class SessionServeur {
             oos.close();
             s.close();
         } catch (IOException ioe) {
-            System.out.println("[net] Erreur de fermeture de Session : "+ioe.getMessage());
+            Logger.log("SessionServeur", 0, "[net] Erreur de fermeture de Session : "+ioe.getMessage());
         }
     }
 }

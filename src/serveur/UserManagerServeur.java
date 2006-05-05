@@ -58,15 +58,15 @@ class UserManagerServeur {
     // modif p.r. au design : passage du Socket en argument,
     // histoire de savoir à quoi la Session se connecte
     void login(Socket s, String i, String mdp) {
-        System.out.println("[login] tentative de login : "+i);
+        Logger.log("Serveur", 0, "[login] tentative de login : "+i);
         SessionServeur sess = new SessionServeur(s);
         UtilisateurServeur u = this.getUtilisateur(i);
 
         if(u != null) {
-            System.out.println("[login] Utilisateur "+i+" trouvé");
+            Logger.log("Serveur", 0, "[login] Utilisateur "+i+" trouvé");
             u.doLogin(sess, mdp);
         } else {
-            System.out.println("[login] Utilisateur "+i+" non trouvé");
+            Logger.log("Serveur", 0, "[login] Utilisateur "+i+" non trouvé");
             sess.resultatLogin(StatutLogin.Invalide);
             // jr : et on suppose que le Garbage Collector
             // passe après que la variable locale sess

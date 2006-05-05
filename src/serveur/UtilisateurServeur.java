@@ -86,7 +86,7 @@ class UtilisateurServeur {
         // pas recevoir de messages du Serveur!
         // ici, on le fait uniquement si le login est valide.
 
-        System.out.println("[login] vérification statut/pass pour "+u.getLogin());
+        Logger.log("UtilisateurServeur", 0, "[login] vérification statut/pass pour "+u.getLogin());
         String mot_de_passe = u.getMotDePasse();
         StatutLogin statut = u.getStatut();
 
@@ -94,7 +94,7 @@ class UtilisateurServeur {
          * deux fois, ça va passer! */
         if(mdp.equals(mot_de_passe) && statut != StatutLogin.Connecte_Utilisateur
                 && statut != StatutLogin.Banni) {
-            System.out.println("[login] login d'Utilisateur accepté : login "
+            Logger.log("UtilisateurServeur", 0, "[login] login d'Utilisateur accepté : login "
                     +u.getLogin());
 
             sess.resultatLogin(StatutLogin.Connecte_Utilisateur);
@@ -102,30 +102,30 @@ class UtilisateurServeur {
             this.session = sess;
             u.setStatut(StatutLogin.Connecte_Utilisateur);
             Set<Participant> pl = Serveur.participantmanager.getParticipants();
-            System.out.println("[login] envoi de la liste des Participants connectés");
+            Logger.log("UtilisateurServeur", 2, "[login] envoi de la liste des Participants connectés");
             sess.listeParticipants(pl);
-            System.out.println("[login] broadcast du login");
+            Logger.log("UtilisateurServeur", 2, "[login] broadcast du login");
             Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (!mdp.equals(mot_de_passe)) {
-            System.out.println("[login] login Utilisateur refusé, mauvais mot de passe : login "
+            Logger.log("UtilisateurServeur", 0, "[login] login Utilisateur refusé, mauvais mot de passe : login "
                     +u.getLogin());
             session.resultatLogin(StatutLogin.Invalide);
             u.setStatut(StatutLogin.Deconnecte);
             sess.kaboom();
         } else if (statut == StatutLogin.Banni) {
-            System.out.println("[login] login d'Utilisateur banni refusé : login "
+            Logger.log("UtilisateurServeur", 0, "[login] login d'Utilisateur banni refusé : login "
                     +u.getLogin());
             sess.resultatLogin(StatutLogin.Banni);
             sess.kaboom();
         } else if (statut == StatutLogin.Connecte_Utilisateur) {
             // t'es déjà connecté gaillard, va voir ailleurs
-            System.out.println("[login] login refusé pour "+u.getLogin()
+            Logger.log("UtilisateurServeur", 0, "[login] login refusé pour "+u.getLogin()
                     +" : déjà connecté !");
             sess.resultatLogin(StatutLogin.Deja_Connecte);
             sess.kaboom();
         } else {
             // pas sensé arriver. on ignore...
-            System.out.println("[login] cas non-traité de login Utilisateur : login "
+            Logger.log("UtilisateurServeur", 0, "[login] cas non-traité de login Utilisateur : login "
                     +u.getLogin());
             sess.kaboom();
         }
@@ -133,7 +133,7 @@ class UtilisateurServeur {
     }
 
     void disconnect() {
-        System.out.println("[logout] déconnexion : login "+u.getLogin());
+        Logger.log("UtilisateurServeur", 0, "[logout] déconnexion : login "+u.getLogin());
         u.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
         this.session = null;

@@ -23,7 +23,7 @@ class ServeurEntry {
     }
 
     void envoyerChat(String msg, String sender) {
-        System.out.println("[chat] "+sender+" dit : "+msg);
+        Logger.log("ServeurEntry", 0, "[chat] "+sender+" dit : "+msg);
         Serveur.broadcaster.chat(msg, sender);
     }
 
@@ -111,7 +111,7 @@ class ServeurEntryListener extends Thread {
 
             // jr : socket actif sur le port 4662. choix demi-arbitraire (ed2k)
             ss = new ServerSocket(4662); 
-            System.out.println("[net] Serveur actif sur le port 4662");
+            Logger.log("ServeurEntry", 0, "[net] Serveur actif sur le port 4662");
             Socket s; // le socket d'une nouvelle connexion
 
             while(true) {
@@ -121,13 +121,13 @@ class ServeurEntryListener extends Thread {
                 new ServeurEntryHandler(s).start();
             }
         } catch (Exception e) {
-            System.out.println("[net] exception thread listener :");
+            Logger.log("ServeurEntry", 0, "[net] exception thread listener :");
             e.printStackTrace();
             try {
                 // on balaie après soi, vé.
                 ss.close();
             } catch (Exception ebis) {
-                System.out.println("[net] exception sur la fermeture thread listener. La vie est rude.");
+                Logger.log("ServeurEntry", 0, "[net] exception sur la fermeture thread listener. La vie est rude.");
             }
         } 
     }
@@ -151,7 +151,7 @@ class ServeurEntryHandler extends Thread {
     ServeurEntryHandler(Socket socket) {
         this.s = socket;
         this.etat = Etat.L1;
-        System.out.println("[net] connexion de "+s.getInetAddress());
+        Logger.log("ServeurEntry", 0, "[net] connexion de "+s.getInetAddress());
     }
 
     /** Boucle de lecture des objets sérialisés reçus du socket.
@@ -166,10 +166,10 @@ class ServeurEntryHandler extends Thread {
 
                 if(o instanceof MessageClientServeur) {
                     MessageClientServeur m = (MessageClientServeur) o;
-                    System.out.println("[net] reçu requête : "+m+" de "+m.sender);
+                    Logger.log("ServeurEntry", 1, "[net] reçu requête : "+m+" de "+m.sender);
                     this.execute(m);
                 } else {
-                    System.out.println("[net] objet invalide de "+s.getInetAddress()+" : ignoré");
+                    Logger.log("ServeurEntry", 1, "[net] objet invalide de "+s.getInetAddress()+" : ignoré");
                 }
             } while (!(o instanceof logout));
 
@@ -177,7 +177,7 @@ class ServeurEntryHandler extends Thread {
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
-            System.out.println("[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("ServeurEntry", 0, "[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
 
             /* on essaie de savoir si la connexion venait de la session d'un
              * Utilisateur, et si oui, on déconnecte ce dernier */
@@ -186,14 +186,14 @@ class ServeurEntryHandler extends Thread {
                 u.disconnect();
             }
         } catch (Exception e) {
-            System.out.println("[net] EXCEPTION : déconnexion de "+s.getInetAddress());
+            Logger.log("ServeurEntry", 0, "[net] EXCEPTION : déconnexion de "+s.getInetAddress());
             e.printStackTrace();
         } finally {
             // de toute façon, on ferme le Socket.
             try {
                 s.close();
             } catch (IOException ioeagain) {
-                System.out.println("[net] EXCEPTION : fermeture du socket impossible : "+ioeagain.getMessage());
+                Logger.log("ServeurEntry", 0, "[net] EXCEPTION : fermeture du socket impossible : "+ioeagain.getMessage());
             }
         }
 
@@ -201,7 +201,7 @@ class ServeurEntryHandler extends Thread {
 
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
     private void execute(MessageClientServeur m) {
-        Logger.log("ServeurEntryHandler",0,"Etat precedent : "+etat);
+        Logger.log("ServeurEntryHandler",2,"Etat precedent : "+etat);
         if(m instanceof login) {
             if(etat == Etat.L1) {
                 etat = Etat.TR1;
@@ -359,9 +359,9 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.vente(v.e, v.v, v.sender);
             }
         } else {
-            System.out.println("[net] message de type non reconnu : "+m);
+            Logger.log("ServeurEntryHandler", 0, "[net] message de type non reconnu : "+m);
         }
-        Logger.log("ServeurEntryHandler",0,"Nouvel etat : "+etat);
+        Logger.log("ServeurEntryHandler",2,"Nouvel etat : "+etat);
     }
 
     /** Retourne true si l'état actuel est un état duquel on peut changer de

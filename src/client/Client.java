@@ -73,7 +73,7 @@ public class Client {
         Client.ventemanager = new VenteManagerClient();
 
         // spécifique Protocol Model Client
-        // Client.fsm = new ClientFSM(); // utilité discutable
+        Client.fsm = new ClientFSM();
 
         Logger.log("Client", 0, "Client démarré.");
     }
@@ -395,6 +395,7 @@ class ClientFSM {
 
     private boolean transition(Etat e1, Etat e2) {
         if (etat == e1) {
+            Logger.log("ClientFSM", 2, "Transition : "+e1+" -> "+e2);
             e1 = e2;
             return true;
         } else return false;
@@ -415,6 +416,7 @@ class ClientFSM {
             case PL4:
             case GU4:
             case A2:
+                Logger.log("ClientFSM", 2, "Transition : "+etat+" -> "+e);
                 etat = e; return true;
             default:
                 return false;

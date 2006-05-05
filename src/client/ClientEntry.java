@@ -7,40 +7,49 @@ import java.net.*;
 class ClientEntry {
 
     void resultatLogin(StatutLogin s) {
-        switch(s) {
-            case Connecte_Utilisateur:
-                Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Utilisateur");
-                Client.hi.voir(Onglet.HotelDesVentes);
-                Client.session.setModerateur(false);
-                Client.session.setConnecte(true);
-                break;
-            case Connecte_Moderateur:
-                Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Modérateur");
-                Client.hi.voir(Onglet.HotelDesVentes);
-                Client.session.setModerateur(true);
-                Client.session.setConnecte(true);
-                break;
-            case Banni:
-                Logger.log("ClientEntry", 1, "[login] reçu réponse : Banni");
-                Client.hi.messageErreur(Erreur.Banni);
-                // mod p.r. design : pas de destroy() (impossible en Java),
-                // mais on tient quand même à fermer la connexion!
-                Client.session.fermer();
-                Client.session = null;
-                break;
-            case Invalide:
-                Logger.log("ClientEntry", 1, "[login] reçu réponse : Invalide");
-                Client.hi.messageErreur(Erreur.Invalide);
-                // mod p.r. design : pas de destroy() (impossible en Java),
-                // mais on tient quand même à fermer la connexion!
-                Client.session.fermer();
-                Client.session = null;
-                break;
+        if(Client.fsm.resultatLogin()) {
+            switch(s) {
+                case Connecte_Utilisateur:
+                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Utilisateur");
+                    Client.hi.voir(Onglet.HotelDesVentes);
+                    Client.session.setModerateur(false);
+                    Client.session.setConnecte(true);
+                    break;
+                case Connecte_Moderateur:
+                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Modérateur");
+                    Client.hi.voir(Onglet.HotelDesVentes);
+                    Client.session.setModerateur(true);
+                    Client.session.setConnecte(true);
+                    break;
+                case Banni:
+                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Banni");
+                    Client.hi.messageErreur(Erreur.Banni);
+                    // mod p.r. design : pas de destroy() (impossible en Java),
+                    // mais on tient quand même à fermer la connexion!
+                    Client.session.fermer();
+                    Client.session = null;
+                    break;
+                case Invalide:
+                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Invalide");
+                    Client.hi.messageErreur(Erreur.Invalide);
+                    // mod p.r. design : pas de destroy() (impossible en Java),
+                    // mais on tient quand même à fermer la connexion!
+                    Client.session.fermer();
+                    Client.session = null;
+                    break;
+            }
         }
     }
 
     void notification(Notification n) {
-        Client.hi.message(n);
+
+        if(Client.fsm.notification()) {
+            Client.hi.message(n);
+        }
+
+        // peu importe réellement l'état de la FSM,
+        // la réception de notifications & updates
+        // est inconditionnelle (l'affichage l'est)
 
         switch (n) {
             case FinVente:
@@ -56,7 +65,10 @@ class ClientEntry {
     }
 
     void evenement(Evenement e) {
-        Client.hi.affichage(e);
+        if(Client.fsm.evenement()) {
+            Client.hi.affichage(e);
+        }
+
         Vente v = Client.humain.getVente();
 
         if (v != null && e == Evenement.Adjuge) {
@@ -73,59 +85,83 @@ class ClientEntry {
         // incrément de 10% sur le prix initial
         // dans le design, on avait fait l'erreur de
         // faire 10% sur le prix _courant_.
-		// Fix de l'incrément du prix lors d'une enchère
+        // Fix de l'incrément du prix lors d'une enchère
         Objet o = Client.objectmanager.getObject(
                 Client.humain.getVente().getFirst());
         Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1*o.getPrixDeBase()));
-        
+
         Client.client.setDernierEncherisseur(i);
 
-        if (Client.client.getMode() == Onglet.HotelDesVentes) {
+        if (Client.fsm.enchere()
+                && Client.client.getMode() == Onglet.HotelDesVentes) {
             Client.hi.affichageEnchere(prix, i);
         }
     }
 
     void chat(String m, String i) {
         Logger.log("ClientEntry", 2, "[chat] "+i+" dit : "+m);
-        Client.hi.affichageChat(m, i);
+
+        if(Client.fsm.chat()) {
+            Client.hi.affichageChat(m, i);
+        }
     }
 
     void detailsVente(Vente v, List<Objet> liste) {
-        Client.ventemanager.detailsVente(v, liste);
+        if(Client.fsm.detailsVente()) {
+            Client.ventemanager.detailsVente(v, liste);
+        }
     }
 
     void detailsUtilisateur(Utilisateur u) {
-        Client.usermanager.detailsUtilisateur(u);
+        if(Client.fsm.detailsUtilisateur()) {
+            Client.usermanager.detailsUtilisateur(u);
+        }
     }
 
     void listeObjets(Onglet t, Set<Objet> ol) {
-        Client.objectmanager.listeObjets(t, ol);
+        if(Client.fsm.listeObjets()) {
+            Client.objectmanager.listeObjets(t, ol);
+        }
     }
 
     void listeUtilisateurs(Set<Utilisateur> liste) {
-        Client.usermanager.listeUtilisateurs(liste);
+        if(Client.fsm.listeUtilisateurs()) {
+            Client.usermanager.listeUtilisateurs(liste);
+        }
     }
-    
+
     void listeParticipants(Set<Participant> liste) {
-        Client.participantmanager.listeParticipants(liste);
+        if(Client.fsm.listeParticipants()) {
+            Client.participantmanager.listeParticipants(liste);
+        }
     }
 
     void listeVentes(Set<Vente> liste) {
-        Client.ventemanager.listeVentes(liste);
+        if(Client.fsm.listeVentes()) {
+            Client.ventemanager.listeVentes(liste);
+        }
     }
 
     void resultatEdition(StatutEdition s) {
-        Client.hi.resultatEdition(s);
+        if(Client.fsm.resultatEdition()) {
+            Client.hi.resultatEdition(s);
+        }
     }
 
     void etatParticipant(Participant p) {
+        // inconditionnel pour raisons de cohérence
+        //if(Client.fsm.etatParticipant()) {
         Client.participantmanager.etatParticipant(p);
+        //}
     }
 
     void superviseur(String u) {
+        // inconditionnel pour raisons de cohérence
+        //if(Client.fsm.superviseur()) {
         Client.client.setSuperviseur(u);
         Vente v = Client.humain.getVente();
         v.setMode(Mode.Manuel);
+        //}
     }
 
 }
@@ -142,7 +178,7 @@ class ClientEntryHandler extends Thread {
     }
 
     /** Boucle de lecture des objets sérialisés reçus du socket.
-     */
+    */
     public void run() {
         Logger.log("ClientEntryHandler", 1, "[net] Ecoute des réponses Serveur lancée");
         Object o; // l'objet qui va être lu du Socket.
@@ -160,7 +196,7 @@ class ClientEntryHandler extends Thread {
                     Logger.log("ClientEntryHandler", 1, "[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");
                 }
             } while ( !((o instanceof resultatLogin)
-                         && (((resultatLogin) o).s == StatutLogin.Deconnecte)) );
+                        && (((resultatLogin) o).s == StatutLogin.Deconnecte)) );
 
             // tant qu'on ne reçoit pas de StatutLogin(Déconnecté), on boucle.
             // sinon, on ferme le stream. La fermeture de Socket et autres est fait
@@ -176,11 +212,11 @@ class ClientEntryHandler extends Thread {
             e.printStackTrace();
         } finally {
             /*// de toute façon, on ferme le Socket.
-            try {
-                s.close();
-            } catch (IOException ioeagain) {
-                System.out.println("[net] EXCEPTION : socket déjà fermé : "+ioeagain.getMessage());
-            }*/
+              try {
+              s.close();
+              } catch (IOException ioeagain) {
+              System.out.println("[net] EXCEPTION : socket déjà fermé : "+ioeagain.getMessage());
+              }*/
         }
 
     }

@@ -92,17 +92,17 @@ class LoginWindow implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent event)
 	{
-		System.out.println(event.getActionCommand());
+		Logger.log("LoginWindow", 2, event.getActionCommand());
 		if(event.getActionCommand().equals("connect"))
 		{
-			System.out.println("haha tu essaie de te connecter!!");
+			Logger.log("LoginWindow", 2, "haha tu essaie de te connecter!!");
 			name = nomField.getText();
 			passwd = String.copyValueOf(passwordField.getPassword());
 			modo = false;
 			if(name.equals("modo"))
 				modo = true;
-			//System.out.println("modo == "+modo);
-			//System.out.println("passwd: "+passwd);
+			//Logger.log("LoginWindow", 2, "modo == "+modo);
+			//Logger.log("LoginWindow", 2, "passwd: "+passwd);
 			SwingUtilities.invokeLater(
 			new Runnable()
 			{
@@ -116,7 +116,7 @@ class LoginWindow implements ActionListener {
 		}
 		else if(event.getActionCommand().equals("RaZ"))
 		{
-			System.out.println("mouhahaha utlime remise à ZERO!!!");
+			Logger.log("LoginWindow", 2, "mouhahaha utlime remise à ZERO!!!");
 			nomField.setText("");
 			passwordField.setText("");
 			

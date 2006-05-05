@@ -1,6 +1,11 @@
 package trollhammer;
 import java.util.Set;
 
+/** Classe Manager des Objets du Serveur.
+ * Regroupe et gère tous les Objets (au sens Trollhammer, pas Java).
+ * 
+ * @author squelette : Julien Ruffin
+ */
 class ObjectManagerServeur {
 
     Set<Object> objets;

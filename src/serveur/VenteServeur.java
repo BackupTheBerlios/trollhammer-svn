@@ -1,6 +1,7 @@
 package trollhammer;
 
-/** Sous-classe interface côté Serveur pour Vente.
+/**
+ * Sous-classe Adaptateur côté Serveur pour Vente.
  * Permet d'exécuter les opérations sur la vente
  * spécifiques au Serveur.
  */

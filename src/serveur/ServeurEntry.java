@@ -2,6 +2,13 @@ package trollhammer;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Point d'entrée des commandes pour le Serveur.
+ * Chaque requête d'un client passe par cette classe qui redirige la requête
+ * à l'objet qui est chargé de traiter la requête.
+ *
+ * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
+ */
 class ServeurEntry {
 
     ServeurEntry() {
@@ -98,10 +105,12 @@ class ServeurEntry {
     /* fin des méthodes du design */
 }
 
-/** Un thread en permanence en attente d'une nouvelle connexion,
- *  qui lance ensuite le thread qui lui est dédié.
+/** 
+ * Un thread en permanence en attente d'une nouvelle connexion,
+ *  qui lance ensuite le thread dédié au traitement des requêtes de la connexion.
+ *
+ *  @author Julien Ruffin
  */
-
 class ServeurEntryListener extends Thread {
 
     ServerSocket ss;
@@ -137,6 +146,8 @@ class ServeurEntryListener extends Thread {
  * Lancé pour chaque nouvelle connexion établie.
  * Il s'occupe également de faire respecter l'ordre des opérations
  * selon le Protocol Model.
+ *
+ * @author Julien Ruffin
  */
 class ServeurEntryHandler extends Thread {
 

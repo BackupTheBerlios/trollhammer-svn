@@ -6,6 +6,8 @@ import java.util.Set;
  *  spécifiques au Modérateur : dans ce cas précis, doLogin(mdp)
  *  et disconnect(). L'objet encapsulé est restreint au type Modérateur,
  *  via le constructeur.
+ *
+ *  @author Julien Ruffin
  */
 
 class ModerateurServeur extends UtilisateurServeur {

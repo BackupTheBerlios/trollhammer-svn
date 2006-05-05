@@ -2,6 +2,12 @@ package trollhammer;
 import java.util.Set;
 import java.util.List;
 
+/**
+ * La classe se chargeant d'envoyer un message à tous les clients connectés
+ * au serveur.
+ * Ses méthodes portent le nom des messages qui peuvent être envoyés en "broadcast".
+ * @author squelette et implémentation : Julien Ruffin
+ */
 class Broadcaster {
 
     /* méthodes du design */

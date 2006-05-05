@@ -4,6 +4,14 @@ import java.io.*;
 import java.util.Set;
 import java.util.List;
 
+/**
+ * Classe d'envoi de messages réseau à un client.
+ * Encapsule l'envoi de réponses aux clients.
+ * Chaque client connecté, 'incarné' par un Utilisateur ou Modérateur,
+ * se voit attribué une SessionServeur.
+ *
+ * @author Julien Ruffin
+ */
 class SessionServeur {
 
     private Socket s;

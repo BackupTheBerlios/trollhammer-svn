@@ -4,6 +4,14 @@ import java.util.HashSet;
 
 import java.net.Socket; // nécessaire à login()...
 
+/**
+ * Classe Manager pour les Utilisateurs.
+ * Regroupe et gère les Utilisateurs et Modérateurs du Serveur.
+ * Pour des raisons d'adaptation, les classes stockées sont respectivement
+ * UtilisateurServeur et ModérateurServeur.
+ *
+ * @author squelette : Julien Ruffin
+ */
 class UserManagerServeur {
 
     private Set<UtilisateurServeur> utilisateurs;

@@ -2,6 +2,12 @@ package trollhammer;
 import java.util.Set;
 import java.util.List;
 
+/**
+ * Classe Manager pour les Ventes.
+ * Regroupe et gère les Ventes du Serveur.
+ *
+ * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
+ */
 class VenteManagerServeur {
 
     private Set<Vente> ventes;

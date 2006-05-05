@@ -1,6 +1,11 @@
 package trollhammer;
 
-/** Serveur Trollhammer. Cette classe est un singleton. */
+/**
+ * Serveur Trollhammer.
+ * Cette classe est un singleton.
+ *
+ * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
+ */
 public class Serveur {
     
     /* champs du design */

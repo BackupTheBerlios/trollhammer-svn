@@ -24,6 +24,7 @@ public class Serveur {
     static UserManagerServeur usermanager;
     static ParticipantManagerServeur participantmanager;
     static VenteManagerServeur ventemanager;
+    static ChatSystem chatsystem;
 
     /* la méthode main... */
     public static void main(String[] args) {
@@ -64,6 +65,7 @@ public class Serveur {
         Serveur.usermanager = new UserManagerServeur();
         Serveur.participantmanager = new ParticipantManagerServeur();
         Serveur.ventemanager = new VenteManagerServeur();
+        Serveur.chatsystem = new ChatSystem();
 
         /* le thread démarreur de ventes ! */
         new VenteStarter().start();

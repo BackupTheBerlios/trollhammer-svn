@@ -51,6 +51,29 @@ class UserManagerServeur {
         return null;
     }
 
+    boolean isConnected(String login) {
+        UtilisateurServeur u = getUtilisateur(login);
+        if(u != null &&
+                (u.getStatut() == StatutLogin.Connecte_Utilisateur
+                || u.getStatut() == StatutLogin.Connecte_Moderateur)
+          ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean isModo(String login) {
+        UtilisateurServeur u = getUtilisateur(login);
+        if(u != null && u instanceof ModerateurServeur &&
+                (u.getStatut() == StatutLogin.Connecte_Moderateur)
+          ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     void addUtilisateur(UtilisateurServeur u) {
         utilisateurs.add(u);
     }

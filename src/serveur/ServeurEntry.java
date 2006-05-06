@@ -25,81 +25,118 @@ class ServeurEntry {
     }
 
     void logout(String sender) {
-        Logger.log("ServeurEntry", 0, "Logout de "+sender);
-        Serveur.usermanager.logout(sender);
+        if(Serveur.usermanager.isConnected(sender)) {
+            Logger.log("ServeurEntry", 0, "Logout de "+sender);
+            Serveur.usermanager.logout(sender);
+        }
     }
 
     void envoyerChat(String msg, String sender) {
-        Logger.log("ServeurEntry", 0, "[chat] "+sender+" dit : "+msg);
-        Serveur.broadcaster.chat(msg, sender);
+        if(Serveur.usermanager.isConnected(sender)) {
+            Serveur.chatsystem.envoyerChat(msg, sender);
+        }
     }
 
     void envoyerCoupdeMASSE(String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void kickerUtilisateur(String u, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void encherir(int prix, String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void envoyerProposition(Objet proposition, String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void validerProposition(int objet, String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void invaliderProposition(int objet, String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void insererObjetVente(int objet, int vente, int pos, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void enleverObjetVente(int objet, int vente, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void obtenirUtilisateur(String u, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void utilisateur(Edition e, Utilisateur u, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void obtenirListeObjets(Onglet type, String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void obtenirListeUtilisateurs(String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void obtenirListeVentes(String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void obtenirListeParticipants(String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void obtenirVente(int v, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     void obtenirProchaineVente(String sender) {
+        if(Serveur.usermanager.isConnected(sender)) {
 
+        }
     }
 
     void vente(Edition e, Vente v, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
 
+        }
     }
 
     /* fin des méthodes du design */
@@ -125,7 +162,7 @@ class ServeurEntryListener extends Thread {
 
             while(true) {
                 s = ss.accept(); // attendre et obtenir le socket d'une
-                                 // nouvelle connexion
+                // nouvelle connexion
                 // et lancer le thread handler dessus.
                 new ServeurEntryHandler(s).start();
             }
@@ -166,7 +203,7 @@ class ServeurEntryHandler extends Thread {
     }
 
     /** Boucle de lecture des objets sérialisés reçus du socket.
-     */
+    */
     public void run() {
         Object o; // l'objet qui va être lu du Socket.
 
@@ -228,9 +265,9 @@ class ServeurEntryHandler extends Thread {
             // modif p.r. Protocol Model : on aimerait pouvoir faire
             // un Logout inconditionnellement, oui
             //if(changementPhase()) {
-                etat = Etat.L1;
-                logout l = (logout) m;
-                Serveur.serveurentry.logout(l.sender);
+            etat = Etat.L1;
+            logout l = (logout) m;
+            Serveur.serveurentry.logout(l.sender);
             //}
         } else if (m instanceof envoyerChat) {
             if(etat == Etat.HV3) {
@@ -326,10 +363,10 @@ class ServeurEntryHandler extends Thread {
                     case Vente:
                         etat = Etat.V2; break;
                     case Achat: // achat est un cas un peu étrange,
-                                // mais le proto model, si on le réduit,
-                                // nous donne une boucle sur l'état 'central'
-                                // TR1 avec la transition obtenirListeObjets
-                                // (du type Achat) !
+                        // mais le proto model, si on le réduit,
+                        // nous donne une boucle sur l'état 'central'
+                        // TR1 avec la transition obtenirListeObjets
+                        // (du type Achat) !
                         etat = Etat.TR1; break;
                 }
                 Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
@@ -390,8 +427,8 @@ class ServeurEntryHandler extends Thread {
             case TR1:
             case PL3:
             case PL4: // ceci est un rajout p.r. au Protocol Model !!
-                      // on veut pouvoir changer de phase en pleine
-                      // édition de vente... non ?
+                // on veut pouvoir changer de phase en pleine
+                // édition de vente... non ?
             case GU2:
             case V2:
             case VA2:

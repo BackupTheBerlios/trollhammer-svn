@@ -38,9 +38,6 @@ public class Client {
         // ceci est du test, et du test uniquement.
         Client.hi.connecter("tefal", "tefal", "localhost");
 
-        Client.session.obtenirListeParticipants();
-        Client.session.obtenirProchaineVente();
-
         Client.hi.ecrireChat("lol");
         //Client.hi.executer(Action.Deconnecter);
 
@@ -90,6 +87,7 @@ public class Client {
 
             do {
                 commande = lr.readLine();
+                interpreter(commande);
             } while(!commande.equals("q"));
 
             lr.close();
@@ -98,6 +96,28 @@ public class Client {
         }
     }
 
+    private static void interpreter(String commande) {
+        // on découpe la commande en tokens. WOOOSH.
+        String tokens[] = commande.split("\\s");
+
+        // puis on interprète.
+        
+        if(tokens[0].equals("login")) {
+            if(tokens.length != 4) {
+                System.out.println("login : se connecter à un serveur.\n"
+                        +"Syntaxe : login ADRESSE LOGIN MOTDEPASSE");
+            } else {
+                Client.hi.connecter(tokens[2], tokens[3], tokens[1]);
+            }
+        } else if(tokens[0].equals("logout")) {
+            if(tokens.length != 1) {
+                System.out.println("logout : se déconnecter du serveur.\n"
+                        +"Ne prend pas d'arguments");
+            } else {
+                Client.hi.executer(Action.Deconnecter);
+            }
+        }
+    }
 
     /* méthodes du Design */
 
@@ -205,6 +225,14 @@ class ClientFSM {
         this.etat = Etat.L1;
     }
 
+    /** Remet à zéro l'état de la FSM.
+     * Utilisé dans les cas d'erreur graves tels l'erreur de déconnexion.
+     */
+    void reset() {
+        Logger.log("ClientFSM", 1, "Remise à zéro FSM");
+        this.etat = Etat.L1;
+    }
+
     /* les fonctions de vérification des requêtes */
 
     /* venant de HI */
@@ -262,9 +290,18 @@ class ClientFSM {
         return transition(Etat.PL4, Etat.PL6);
     }
 
-    boolean executer() {
-        return transition(Etat.TR1, Etat.TR2)
-            || transition(Etat.HV4, Etat.HV8);
+    boolean executer(Action a) {
+        // la transition dépend pas mal de si c'est une
+        // déconnexion ou une enchère.
+        switch(a) {
+            case Deconnecter:
+            return changementPhase(Etat.TR2);
+            case Encherir:
+            return transition(Etat.HV4, Etat.HV8);
+            default:
+            return false;
+        }
+        /* FAUX ! transition(Etat.TR1, Etat.TR2) */
     }
 
     boolean executerModo() {
@@ -311,7 +348,10 @@ class ClientFSM {
     /* fonctions de vérification de requête venant de ClientEntry */
 
     boolean resultatLogin() {
-        return transition(Etat.L2, Etat.L3);
+        //return transition(Etat.L2, Etat.L3);
+        // modif p.r. Protocol Model : transition directement sur TR1
+        // après que le login soit fait
+        return transition(Etat.L2, Etat.TR1);
     }
     
     boolean notification() {
@@ -338,7 +378,9 @@ class ClientFSM {
         return transition(Etat.PL5, Etat.PL4)
             || transition(Etat.PL9, Etat.PL10)
             || transition(Etat.PL7, Etat.PL4)
-            || transition(Etat.HV3, Etat.HV5);
+            // modif p.r. Protocol Model : toute la branche
+            // HV3-HV5-HV6-HV7 est groupée sur HV4
+            || transition(Etat.HV4, Etat.HV4);
     }
 
     boolean detailsUtilisateur() {
@@ -364,7 +406,9 @@ class ClientFSM {
     }
 
     boolean listeParticipants() {
-        return transition(Etat.HV2, Etat.HV3);
+        // modif p.r. Protocol Model : toute la branche
+        // HV3-HV5-HV6-HV7 est groupée sur HV4
+        return transition(Etat.HV2, Etat.HV4);
     }
 
     boolean listeVentes() {
@@ -396,7 +440,7 @@ class ClientFSM {
     private boolean transition(Etat e1, Etat e2) {
         if (etat == e1) {
             Logger.log("ClientFSM", 2, "Transition : "+e1+" -> "+e2);
-            e1 = e2;
+            etat = e2;
             return true;
         } else return false;
     }

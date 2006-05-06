@@ -207,9 +207,11 @@ class ClientEntryHandler extends Thread {
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
             Logger.log("ClientEntryHandler", 0, "[net] Listener déconnecté du serveur "+s.getInetAddress()+" : "+ioe.getMessage());
+            Client.fsm.reset(); // on repart à zéro niveau FSM.
         } catch (Exception e) {
             Logger.log("ClientEntryHandler", 0, "[net] EXCEPTION : déconnexion du serveur "+s.getInetAddress());
             e.printStackTrace();
+            Client.fsm.reset(); // on repart à zéro niveau FSM.
         } finally {
             /*// de toute façon, on ferme le Socket.
               try {

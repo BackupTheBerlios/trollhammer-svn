@@ -177,10 +177,10 @@ class ServeurEntryHandler extends Thread {
 
                 if(o instanceof MessageClientServeur) {
                     MessageClientServeur m = (MessageClientServeur) o;
-                    Logger.log("ServeurEntry", 1, "[net] reçu requête : "+m+" de "+m.sender);
+                    Logger.log("ServeurEntryHandler", 1, "[net] reçu requête : "+m+" de "+m.sender);
                     this.execute(m);
                 } else {
-                    Logger.log("ServeurEntry", 1, "[net] objet invalide de "+s.getInetAddress()+" : ignoré");
+                    Logger.log("ServeurEntryHandler", 1, "[net] objet invalide de "+s.getInetAddress()+" : ignoré");
                 }
             } while (!(o instanceof logout));
 
@@ -188,26 +188,31 @@ class ServeurEntryHandler extends Thread {
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
-            Logger.log("ServeurEntry", 0, "[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("ServeurEntryHandler", 0, "[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
 
-            /* on essaie de savoir si la connexion venait de la session d'un
-             * Utilisateur, et si oui, on déconnecte ce dernier */
+            /* on essaie de savoir si la connexion venait réellement
+             * de la session d'un Utilisateur, et si oui,
+             * on déconnecte ce dernier */
             UtilisateurServeur u = Serveur.usermanager.getUserForSocket(s);
             if(u != null) {
-                u.disconnect();
+                // cela ne passe pas par les checks d'état, mais comme
+                // le thread va se terminer après, on s'en fiche
+                Serveur.serveurentry.logout(u.getLogin());
             }
         } catch (Exception e) {
-            Logger.log("ServeurEntry", 0, "[net] EXCEPTION : déconnexion de "+s.getInetAddress());
+            Logger.log("ServeurEntryHandler", 0, "[net] EXCEPTION : déconnexion de "+s.getInetAddress());
             e.printStackTrace();
         } finally {
             // de toute façon, on ferme le Socket.
             try {
                 s.close();
             } catch (IOException ioeagain) {
-                Logger.log("ServeurEntry", 0, "[net] EXCEPTION : fermeture du socket impossible : "+ioeagain.getMessage());
+                Logger.log("ServeurEntryHandler", 0, "[net] EXCEPTION : fermeture du socket impossible : "+ioeagain.getMessage());
             }
         }
 
+        Logger.log("ServeurEntryHandler", 1, "[net] Terminaison thread pour "+
+                this.s.getInetAddress());
     }
 
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */

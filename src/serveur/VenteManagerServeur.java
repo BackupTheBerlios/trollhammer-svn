@@ -1,6 +1,8 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Classe Manager pour les Ventes.
@@ -10,7 +12,11 @@ import java.util.List;
  */
 class VenteManagerServeur {
 
-    private Set<Vente> ventes;
+    private Set<VenteServeur> ventes;
+
+    VenteManagerServeur() {
+        ventes = new HashSet<VenteServeur>();
+    }
 
     void insererObjetVente(int o, int v, int p, String i) {
 
@@ -36,13 +42,16 @@ class VenteManagerServeur {
         return false;
     }
 
-    void vente(Edition e, Vente v, String sender) {
+    void vente(Edition e, VenteServeur v, String sender) {
 
     }
 
     void modoLeaving(String sender) {
-        Vente v = this.getVenteEnCours();
-        if(sender == v.getSuperviseur()) {
+        VenteServeur v = this.getVenteEnCours();
+
+        /* si une vente est en cours et que le modo la supervise,
+         * prévenir et passer en mode auto. */
+        if(v != null && sender == v.getSuperviseur()) {
             v.setSuperviseur(null);
             v.setMode(Mode.Automatique);
             // à vérifier : est-ce que la Vente fait un broadcast de son
@@ -51,15 +60,15 @@ class VenteManagerServeur {
         }
     }
 
-    void detailsVente(Vente v, List<Objet> ol) {
+    void detailsVente(VenteServeur v, List<Objet> ol) {
 
     }
 
     /** Cherche une vente par son identifiant et la retourne,
      * ou null si non trouvée.
      */
-    Vente getVente(int i) {
-        for(Vente v : ventes) {
+    VenteServeur getVente(int i) {
+        for(VenteServeur v : ventes) {
             if(v.getId() == i) {
                 return v;
             }
@@ -69,13 +78,13 @@ class VenteManagerServeur {
 
     /** Retourne la Vente à la date de début la plus proche dans le temps.
      */
-    Vente getStarting() {
+    VenteServeur getStarting() {
         long min = Long.MAX_VALUE;
         long prevmin = 0;
-        Vente starting = null;
+        VenteServeur starting = null;
 
         /* on prend la vente la plus proche dans le temps */
-        for(Vente v : ventes) {
+        for(VenteServeur v : ventes) {
             prevmin = min;
             min = Math.min(min, v.getDate());
             if(min < prevmin) {
@@ -89,14 +98,14 @@ class VenteManagerServeur {
     /** Retourne la Vente à la date de début la plus proche dans le temps
      * et dans le passé, null s'il n'y en a pas.
      */
-    Vente getVenteEnCours() {
+    VenteServeur getVenteEnCours() {
         /* on commence par prendre la vente la plus proche dans le temps */
-        Vente encours = getStarting();
+        VenteServeur encours = getStarting();
 
         /* puis on vérifie si elle a démarré ! Si pas,
          * alors on retourne null (ie. aucune vente n'est en cours)
          */
-        if(encours.getDate() < Serveur.serveur.getDate()) {
+        if(encours != null && encours.getDate() < Serveur.serveur.getDate()) {
             return encours;
         } else {
             return null;

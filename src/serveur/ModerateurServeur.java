@@ -16,47 +16,19 @@ class ModerateurServeur extends UtilisateurServeur {
         super(m);
     }
 
-    /* des différences avec UtilisateurServeur.doLogin() existent !
-     * elles sont juste relativement subtiles (la réponse renvoyée p. ex.)
-     */
-    void doLogin(SessionServeur sess, String mdp) {
-        String mot_de_passe = u.getMotDePasse();
-        StatutLogin statut = u.getStatut();
-
-        if(mdp == mot_de_passe && statut != StatutLogin.Banni) {
-            Logger.log("ModerateurServeur", 0, "[login] login de Modérateur accepté : login "
-                    +u.getLogin());
-            sess.resultatLogin(StatutLogin.Connecte_Moderateur);
-            // la session est valide, on la fixe pour le Modérateur
-            this.session = sess;
-            u.setStatut(StatutLogin.Connecte_Moderateur);
-            Set<Participant> pl = Serveur.participantmanager.getParticipants();
-            Logger.log("ModérateurServeur", 2, "[login] envoi de la liste des Participants connectés");
-            sess.listeParticipants(pl);
-            Logger.log("ModérateurServeur", 2, "[login] broadcast du login");
-            Serveur.broadcaster.etatParticipant((Participant) u);
-        } else if (mdp != mot_de_passe) {
-            Logger.log("ModerateurServeur", 0, "[login] login Modérateur refusé, mauvais mot de passe : login "
-                    +u.getLogin());
-            sess.resultatLogin(StatutLogin.Invalide);
-            u.setStatut(StatutLogin.Deconnecte);
-            sess.kaboom();
-        } else if (statut == StatutLogin.Banni) {
-            Logger.log("ModerateurServeur", 0, "[login] login de Modérateur banni refusé : login "
-                    +u.getLogin());
-            sess.resultatLogin(StatutLogin.Banni);
-            sess.kaboom();
-        } else {
-            // pas sensé arriver. on ignore...
-            Logger.log("ModerateurServeur", 0, "[login] cas non-traité de login Modérateur : login "
-                    +u.getLogin());
-            sess.kaboom();
-        }
-
+    ModerateurServeur(String login, String nom, String prenom, String motdepasse) {
+        this(new Moderateur(login, nom, prenom, motdepasse));
     }
 
+    /* doLogin() a été enlevée. Elle s'occupe désormais des deux classes.
+     * il serait parfaitement possible de faire une version lourdement
+     * paramétrisée de doLogin() avec en paramètres rajoutés les réponses à donner,
+     * mais j'ai (jr) préféré faire en sorte qu'elle autodétecte le type et
+     * adapte les réponses...
+     */
+
     void disconnect() {
-        Logger.log("Modérateur", 0, "[logout] déconnexion : login "+u.getLogin());
+        Logger.log("ModérateurServeur", 0, "[logout] déconnexion : login "+u.getLogin());
         u.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
         this.session = null;

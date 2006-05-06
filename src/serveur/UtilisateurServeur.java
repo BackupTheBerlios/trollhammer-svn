@@ -82,52 +82,65 @@ class UtilisateurServeur {
         session.superviseur(i);
     }
 
+    /* cette méthode a été généralisée. Elle gère aussi
+     * le cas du Modérateur. Au vu de la complexité relative des deux,
+     * et de leur similitude quasi-parfaite à part les réponses envoyées,
+     * c'est la meilleure manière de faire niveau compactitude. */
     void doLogin(SessionServeur sess, String mdp) {
         // modif p.r. au design : on rattache la Session
         // à l'Utilisateur, sinon ce dernier ne pourra
         // pas recevoir de messages du Serveur!
         // ici, on le fait uniquement si le login est valide.
+        
+        // tout ce qui est utile à la généralisation de la méthode est ici.
+        StatutLogin reponse_login_correct = StatutLogin.Connecte_Utilisateur;
+        String type = "Utilisateur";
+        String nomclasse = this.getClass().getName();
 
-        Logger.log("UtilisateurServeur", 0, "[login] vérification statut/pass pour "+u.getLogin());
+        if(this instanceof ModerateurServeur) {
+            Logger.log(nomclasse, 1, u.getLogin()+" est un Modérateur");
+            reponse_login_correct = StatutLogin.Connecte_Moderateur;
+            type = "Modérateur";
+        }
+
+        Logger.log(nomclasse, 0, "[login] vérification statut/pass pour "+u.getLogin());
         String mot_de_passe = u.getMotDePasse();
         StatutLogin statut = u.getStatut();
 
-        /* bug monstrueux : si le même utilisateur essaie de se connecter
-         * deux fois, ça va passer! */
         if(mdp.equals(mot_de_passe) && statut != StatutLogin.Connecte_Utilisateur
                 && statut != StatutLogin.Banni) {
-            Logger.log("UtilisateurServeur", 0, "[login] login d'Utilisateur accepté : login "
+            Logger.log(nomclasse, 0, "[login] login "+type+" accepté : login "
                     +u.getLogin());
 
-            sess.resultatLogin(StatutLogin.Connecte_Utilisateur);
+            sess.resultatLogin(reponse_login_correct);
             // la session est valide, on la fixe pour l'Utilisateur
             this.session = sess;
-            u.setStatut(StatutLogin.Connecte_Utilisateur);
+            u.setStatut(reponse_login_correct);
             Set<Participant> pl = Serveur.participantmanager.getParticipants();
-            Logger.log("UtilisateurServeur", 2, "[login] envoi de la liste des Participants connectés");
+            Logger.log(nomclasse, 2, "[login] envoi de la liste des Participants connectés");
             sess.listeParticipants(pl);
-            Logger.log("UtilisateurServeur", 2, "[login] broadcast du login");
+            Logger.log(nomclasse, 2, "[login] broadcast du login");
             Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (!mdp.equals(mot_de_passe)) {
-            Logger.log("UtilisateurServeur", 0, "[login] login Utilisateur refusé, mauvais mot de passe : login "
+            Logger.log(nomclasse, 0, "[login] login "+type+" refusé, mauvais mot de passe : login "
                     +u.getLogin());
             session.resultatLogin(StatutLogin.Invalide);
             u.setStatut(StatutLogin.Deconnecte);
             sess.kaboom();
         } else if (statut == StatutLogin.Banni) {
-            Logger.log("UtilisateurServeur", 0, "[login] login d'Utilisateur banni refusé : login "
+            Logger.log(nomclasse, 0, "[login] login "+type+" banni refusé : login "
                     +u.getLogin());
             sess.resultatLogin(StatutLogin.Banni);
             sess.kaboom();
-        } else if (statut == StatutLogin.Connecte_Utilisateur) {
+        } else if (statut == reponse_login_correct) {
             // t'es déjà connecté gaillard, va voir ailleurs
-            Logger.log("UtilisateurServeur", 0, "[login] login refusé pour "+u.getLogin()
+            Logger.log(nomclasse, 0, "[login] login refusé pour "+u.getLogin()
                     +" : déjà connecté !");
             sess.resultatLogin(StatutLogin.Deja_Connecte);
             sess.kaboom();
         } else {
             // pas sensé arriver. on ignore...
-            Logger.log("UtilisateurServeur", 0, "[login] cas non-traité de login Utilisateur : login "
+            Logger.log(nomclasse, 0, "[login] cas non-traité de login "+type+" : login "
                     +u.getLogin());
             sess.kaboom();
         }

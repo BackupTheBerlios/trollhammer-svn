@@ -105,6 +105,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
                 Logger.log("HI", 1, "[net] Session établie et assignée.");
             } else {
                 Logger.log("HI", 0, "[net] Erreur d'ouverture de Session : non trouvé."); 
+                Client.fsm.reset(); // on repart à zéro avec la FSM
                 this.messageErreur(Erreur.NonTrouve);
             }
         }
@@ -129,7 +130,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void executer(Action a) {
-        if(Client.fsm.executer()) {
+        if(Client.fsm.executer(a)) {
             if(a == Action.Deconnecter) {
                 Client.session.logout();
             } else if(a == Action.Encherir) {

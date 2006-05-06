@@ -117,7 +117,7 @@ public class Serveur {
                         "nm LOGIN NOM PRENOM MOTDEPASSE");
             } else {
                 Serveur.usermanager.addUtilisateur(
-                        new UtilisateurServeur(tokens[1],
+                        new ModerateurServeur(tokens[1],
                             tokens[2], tokens[3], tokens[4])
                         );
                 System.out.println("Nouveau Modérateur créé : "+tokens[1]);

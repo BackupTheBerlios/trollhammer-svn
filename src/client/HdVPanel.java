@@ -43,9 +43,12 @@ class HdVPanel extends JComponent implements ActionListener
 	private double prochaineEnchere = 0.;
 	private Vector lstObjVect = null;
 
-	public HdVPanel(boolean modo)
+    private Window mw;
+
+	public HdVPanel(boolean modo, Window mw)
 	{
 		this.modo = modo;
+        this.mw = mw;
 	}
 	private void initHdVComponents()
 	{
@@ -140,6 +143,12 @@ class HdVPanel extends JComponent implements ActionListener
 		builder.add(chatPanel, cc.xy(4,6));
 		builder.add(cmdPanel, cc.xyw(2,7,3));
 		
+        /* action pour le bouton de logout */
+        logOutButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                mw.doLogout();
+            }
+        });
 		
 		return builder.getPanel();
 	}

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -29,10 +31,15 @@ class Window implements ActionListener
 	private PlanifierPanel planifier = null;
 	//Panel Gestion MODO
 	private GestionPanel gestion = null;
+
+    // la LoginWindow. On la passe au début, et la garde pour
+    // la rendre visible à nouveau à la déconnexion (callback)
+    private LoginWindow lw = null;
 	
-	public Window(boolean modo)
+	public Window(boolean modo, LoginWindow lw)
 	{
 		this.modo = modo;
+        this.lw = lw;
 		getFrame();
 	}
 
@@ -47,7 +54,26 @@ class Window implements ActionListener
 			frame = new JFrame("Trollhammer");
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 			frame.setBounds(dim.width/2-400,dim.height/2-300,800,600);
-			frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+
+			//frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+            // on veut détruire la fenêtre Trollhammer, mais certainement pas
+            // tout quitter quand on la ferme : il faut faire un logout !
+            frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+
+            // ce que l'on décide de faire ici...
+            
+            {
+                /* juste pour garder la référence et l'utiliser dans l'Adapter
+                 * (c'est absolument dégueulasse, je sais)
+                 */
+                final Window w = this;
+                frame.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        w.doLogout();
+                    }
+                });
+            }
+
 			frame.setVisible(true);
 			frame.setJMenuBar(getMenuBar());
 			frame.setContentPane(getTabbedPane());
@@ -101,7 +127,7 @@ class Window implements ActionListener
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
 			Logger.log("Window", 2, "Après création: "+(tabbedPane == null));
-			hdv = new HdVPanel(modo);
+			hdv = new HdVPanel(modo, this);
 			vente = new VentePanel(modo);
 			achat = new AchatPanel(modo);
 			tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
@@ -128,4 +154,15 @@ class Window implements ActionListener
 		
 		
 	}
+
+    /** Lancer la déconnexion, fermer la fenêtre, revenir à la fenêtre de Login.
+     * Utilisé lorsque la fenêtre est fermée, ou que l'utilisateur choisit de
+     * se déconnecter.
+     */
+    public void doLogout() {
+        Client.hi.executer(Action.Deconnecter);
+        frame.setVisible(false);
+        lw.setVisible(true);
+    }
+
 }

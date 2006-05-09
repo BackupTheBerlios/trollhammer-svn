@@ -11,12 +11,14 @@ class ClientEntry {
             switch(s) {
                 case Connecte_Utilisateur:
                     Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Utilisateur");
+                    Client.hi.mainWindow(false);
                     Client.hi.voir(Onglet.HotelDesVentes);
                     Client.session.setModerateur(false);
                     Client.session.setConnecte(true);
                     break;
                 case Connecte_Moderateur:
                     Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Modérateur");
+                    Client.hi.mainWindow(true);
                     Client.hi.voir(Onglet.HotelDesVentes);
                     Client.session.setModerateur(true);
                     Client.session.setConnecte(true);

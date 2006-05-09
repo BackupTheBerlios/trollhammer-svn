@@ -18,6 +18,7 @@ class LoginWindow implements ActionListener {
 	private JTextPane bienvenue = null;
 	private String name = null;
 	private String passwd = null;
+    private String serveur = null;
 	private boolean modo = false;
 	private JTextField nomField = null;
 	private JPasswordField passwordField = null;
@@ -34,6 +35,8 @@ class LoginWindow implements ActionListener {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		loginFrame.setBounds(dim.width/2-150,dim.height/2-100,300,200);
 		loginFrame.setTitle("Trollhammer login");
+        // ça c'est bon, on garde : on quitte juste le programme
+        // si l'on ferme la fenêtre de Login.
 		loginFrame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 		loginFrame.setJMenuBar(getMenuBar());
 		loginFrame.add(buildPanel());
@@ -47,7 +50,7 @@ class LoginWindow implements ActionListener {
 		bienvenue.setText("Veuillez s'il vous plait vous identifier.");
 		nomField = new JTextField();
 		passwordField = new JPasswordField();
-		String[] data = {"one","two","tree"};
+		String[] data = {"localhost"};
 		srvBox = new JComboBox(data);
 		srvBox.setEditable(true);
 		connectB = new JButton("Connecter");
@@ -98,21 +101,10 @@ class LoginWindow implements ActionListener {
 			Logger.log("LoginWindow", 2, "haha tu essaie de te connecter!!");
 			name = nomField.getText();
 			passwd = String.copyValueOf(passwordField.getPassword());
-			modo = false;
-			if(name.equals("modo"))
-				modo = true;
-			//Logger.log("LoginWindow", 2, "modo == "+modo);
-			//Logger.log("LoginWindow", 2, "passwd: "+passwd);
-			SwingUtilities.invokeLater(
-			new Runnable()
-			{
-				public void run()
-				{
-					new Window(modo);
-				}
-			});
-			loginFrame.setVisible(false);
-			
+            serveur = (String) srvBox.getSelectedItem();
+
+            Client.hi.connecter(name, passwd, serveur);
+            
 		}
 		else if(event.getActionCommand().equals("RaZ"))
 		{
@@ -123,6 +115,10 @@ class LoginWindow implements ActionListener {
 		}
 		
 	}
+
+    void setVisible(boolean visible) {
+        this.loginFrame.setVisible(visible);
+    }
 	
 	/**
 	 * This method initializes menuBar	

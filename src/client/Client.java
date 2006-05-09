@@ -36,9 +36,9 @@ public class Client {
         Client.demarrer();
 
         // ceci est du test, et du test uniquement.
-        Client.hi.connecter("tefal", "tefal", "localhost");
+        //Client.hi.connecter("tefal", "tefal", "localhost");
 
-        Client.hi.ecrireChat("lol");
+        //Client.hi.ecrireChat("lol");
         //Client.hi.executer(Action.Deconnecter);
 
         attendre();
@@ -218,7 +218,7 @@ class ClientFSM {
                PL1, PL2, PL3, PL4, PL5, PL6, PL7, PL8, PL9, PL10, A2};
                                          // A2 rajouté, voir listeObjets()
 
-    Etat etat; // l'état actuel du Client
+    private Etat etat; // l'état actuel du Client
 
     ClientFSM() {
         // démarrage en mode attente de Login...
@@ -231,6 +231,10 @@ class ClientFSM {
     void reset() {
         Logger.log("ClientFSM", 1, "Remise à zéro FSM");
         this.etat = Etat.L1;
+    }
+
+    Etat getEtat() {
+        return this.etat;
     }
 
     /* les fonctions de vérification des requêtes */

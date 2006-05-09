@@ -5,6 +5,9 @@ import javax.swing.SwingUtilities;
 
 public class HI {  //doit être public si on veut un main... donc a gicler en temps voulu
 
+    private Window mw;
+    private LoginWindow lw;
+
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(
@@ -17,6 +20,39 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
         }); // pask on s'la pète!!!
 
     }
+    
+    /* le constructeur pour démarrer la GUI comme il faut, vé */
+    public HI()
+    {
+        SwingUtilities.invokeLater(
+                new Runnable()
+                {
+                    public void run()
+        {
+            lw = new LoginWindow();
+        }
+        }); // pask on s'la pète!!!
+
+    }
+
+    /** Afficher la fenêtre principale et cacher la fenêtre de login.
+     * En fonction du résultat du login (Utilisateur est Modérateur, ou non)
+     */
+    void mainWindow(final boolean moderateur) {
+
+			SwingUtilities.invokeLater(
+			new Runnable()
+			{
+				public void run()
+				{
+					mw = new Window(moderateur, lw);
+				}
+			});
+        lw.setVisible(false);
+
+    }
+			
+    /* méthodes du Design */
 
     void accepterProposition(int i) {
         if(Client.fsm.accepterProposition()) {

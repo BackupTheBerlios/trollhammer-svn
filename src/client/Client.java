@@ -375,7 +375,8 @@ class ClientFSM {
     }
 
     boolean chat() {
-        return transition(Etat.HV13, Etat.HV4);
+        return transition(Etat.HV13, Etat.HV4)
+            || transition(Etat.HV4, Etat.HV4);
     }
 
     boolean detailsVente() {

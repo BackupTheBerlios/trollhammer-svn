@@ -33,11 +33,34 @@ public class Serveur {
         // CECI EST UN TEST
         
         Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("tefal", "", "", "tefal")
+                new ModerateurServeur("tefal", "", "", "tefal")
                 );
-
         Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("falte", "", "", "falte")
+                new ModerateurServeur("deneo", "", "", "deneo")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new ModerateurServeur("mithrandir", "", "", "mithrandir")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new ModerateurServeur("dolarcles", "", "", "dolarcles")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new ModerateurServeur("spitfire", "", "", "spitfire")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("jruffin", "", "", "jruffin")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("becholey", "", "", "becholey")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("sambuc", "", "", "sambuc")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("cfrey", "", "", "cfrey")
+                );
+        Serveur.usermanager.addUtilisateur(
+                new UtilisateurServeur("richon", "", "", "richon")
                 );
         
         // FIN DU TEST

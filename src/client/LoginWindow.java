@@ -1,6 +1,8 @@
 package trollhammer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusAdapter;
 import javax.swing.*;
 import java.awt.*;
 
@@ -64,6 +66,28 @@ class LoginWindow implements ActionListener {
 		//insertion de l'image
 		//imgLabel = new JLabel(new ImageIcon(img));
 		
+        // faire en sorte que tout le texte des champs soit sélectionné
+        // quand on essaie de taper quelque chose dans le champ
+
+        nomField.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                nomField.selectAll();
+            }
+            public void focusLost(FocusEvent e) {
+                nomField.setSelectionStart(0);
+                nomField.setSelectionEnd(0);
+            }
+        });
+        passwordField.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                passwordField.selectAll();
+            }
+            public void focusLost(FocusEvent e) {
+                passwordField.setSelectionStart(0);
+                passwordField.setSelectionEnd(0);
+            }
+        });
+
 	}
 	private JComponent buildPanel()
 	{
@@ -102,6 +126,13 @@ class LoginWindow implements ActionListener {
 			name = nomField.getText();
 			passwd = String.copyValueOf(passwordField.getPassword());
             serveur = (String) srvBox.getSelectedItem();
+            // ajouté le serveur utilisé pour la connexion dans la liste !
+            // (en l'enlevant d'abord pour être sûr de ne pas le dupliquer)
+            // on le met au début de la liste, ça fait 'historique'
+            Object selected = srvBox.getSelectedItem();
+            srvBox.removeItem(selected);
+            srvBox.insertItemAt(selected, 0);
+            srvBox.setSelectedItem(selected);
 
             Client.hi.connecter(name, passwd, serveur);
             

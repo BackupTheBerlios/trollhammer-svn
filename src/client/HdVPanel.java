@@ -174,6 +174,6 @@ class HdVPanel extends JComponent implements ActionListener
     /* relai (partiel) des méthodes de HI */
 
     void affichageChat(String m, String i) {
-        logArea.append(i+" : "+m+"\n");
+        logArea.append("<"+i+"> "+m+"\n");
     }
 }

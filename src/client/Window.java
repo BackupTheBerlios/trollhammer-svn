@@ -20,7 +20,7 @@ class Window implements ActionListener
 	private boolean modo = false;
 	private JFrame frame = null;  //  @jve:decl-index=0:visual-constraint="0,0"
 	private JMenuBar menuBar = null;
-	private JMenu fileMenu = null;
+	private JMenu fichierMenu = null;
 	private JMenu helpMenu = null;
 	private JTabbedPane tabbedPane = null;
 	//Panels de l'onglets HDV
@@ -94,22 +94,29 @@ class Window implements ActionListener
 	private JMenuBar getMenuBar() {
 		if (menuBar == null) {
 			menuBar = new JMenuBar();
-			menuBar.add(getFileMenu());
+			menuBar.add(getFichierMenu());
 			menuBar.add(getHelpMenu());
+
+            final Window w = this;
+            getFichierMenu().add(new JMenuItem(new javax.swing.AbstractAction("Déconnexion"){
+                public void actionPerformed(ActionEvent e) {
+                    w.doLogout();
+                }
+            }));
 		}
 		return menuBar;
 	}
 
 	/**
-	 * This method initializes fileMenu	
+	 * This method initializes fichierMenu	
 	 * 	
 	 * @return javax.swing.JMenu	
 	 */
-	private JMenu getFileMenu() {
-		if (fileMenu == null) {
-			fileMenu = new JMenu("File");
+	private JMenu getFichierMenu() {
+		if (fichierMenu == null) {
+			fichierMenu = new JMenu("Fichier");
 		}
-		return fileMenu;
+		return fichierMenu;
 	}
 	/**
 	 * This method initializes helpMenu	

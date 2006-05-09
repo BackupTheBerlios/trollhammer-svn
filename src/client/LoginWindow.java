@@ -161,6 +161,15 @@ class LoginWindow implements ActionListener {
 			menuBar = new JMenuBar();
 			menuBar.add(getFichierMenu());
 			menuBar.add(getAideMenu());
+
+            final LoginWindow w = this;
+            getFichierMenu().add(new JMenuItem(
+                        new javax.swing.AbstractAction("Quitter"){
+                public void actionPerformed(ActionEvent e) {
+                    w.setVisible(false);
+                    System.exit(0);
+                }
+            }));
 		}
 		return menuBar;
 	}

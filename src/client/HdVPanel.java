@@ -100,6 +100,11 @@ class HdVPanel extends JComponent implements ActionListener
 		//Chat
 		chatPanel = new CoolPanel("fill:pref","pref, pref");
 		chatField = new JTextField(15);
+        chatField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                chatButton.doClick();
+            }
+        });
 		chatButton = new JButton("Envoyer");
         chatButton.setActionCommand("sendchat");
         chatButton.addActionListener(this);
@@ -161,6 +166,7 @@ class HdVPanel extends JComponent implements ActionListener
             mw.doLogout();
         } else if(event.getActionCommand().equals("sendchat")) {
             Client.hi.ecrireChat(chatField.getText());
+            chatField.setText("");
         }
             
 	}

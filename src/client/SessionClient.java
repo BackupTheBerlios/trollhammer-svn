@@ -4,6 +4,15 @@ import java.net.*;
 
 class SessionClient {
 
+    // jr : socket actif sur le port 1777.
+    // choix arbitraire, mais 1777 est un
+    // nombre premier.
+    //
+    // Je suis ouvert à tout changement,
+    // particulièrement si le nombre
+    // est un symbole très obscur.
+    public static final int PORT = 1777;
+
     Socket s;
     ObjectOutputStream oos;
 
@@ -23,8 +32,8 @@ class SessionClient {
     static SessionClient login(String i, String m, String s) {
         try {
             Logger.log("SessionClient", 1, "[net] Tentative de connexion sur "+s
-                       +", port 4662...");
-            Socket socket = new Socket(s, 4662);
+                       +", port "+PORT+"...");
+            Socket socket = new Socket(s, PORT);
             Logger.log("SessionClient", 1, "[net] Connecté sur le serveur "+s+
                     " ("+socket.getInetAddress()+")");
             return new SessionClient(i, m, s, socket);

@@ -152,12 +152,21 @@ class ServeurEntryListener extends Thread {
 
     ServerSocket ss;
 
+    // jr : socket actif sur le port 1777.
+    // choix arbitraire, mais 1777 est un
+    // nombre premier.
+    //
+    // Je suis ouvert à tout changement,
+    // particulièrement si le nombre
+    // est un symbole très obscur.
+    public static final int PORT = 1777;
+
     public void run() {
         try {
 
-            // jr : socket actif sur le port 4662. choix demi-arbitraire (ed2k)
-            ss = new ServerSocket(4662); 
-            Logger.log("ServeurEntry", 0, "[net] Serveur actif sur le port 4662");
+            ss = new ServerSocket(PORT); 
+            Logger.log("ServeurEntry", 0, "[net] Serveur actif sur le port "
+                    +PORT);
             Socket s; // le socket d'une nouvelle connexion
 
             while(true) {

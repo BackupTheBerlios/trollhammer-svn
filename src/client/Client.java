@@ -299,7 +299,12 @@ class ClientFSM {
         // déconnexion ou une enchère.
         switch(a) {
             case Deconnecter:
-            return changementPhase(Etat.TR2);
+            //return changementPhase(Etat.TR2);
+                // c'est mieux si c'est inconditionnel.
+                // en effet, on peut vouloir se déconnecter
+                // de force, même si l'on attend la réponse
+                // à une requête (p.ex. gros lag, ou timeout)
+                return true;
             case Encherir:
             return transition(Etat.HV4, Etat.HV8);
             default:

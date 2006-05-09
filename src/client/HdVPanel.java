@@ -119,6 +119,8 @@ class HdVPanel extends JComponent implements ActionListener
 		if(modo)
 		{
 			cdmButton = new JButton("Coup de Marteau");
+            cdmButton.setActionCommand("trollhammer");
+            cdmButton.addActionListener(this);
 			kickButton = new JButton("Expulser");
 			cmdPanel.add(cdmButton, new CellConstraints(2,1));
 			cmdPanel.add(kickButton, new CellConstraints(3,1));
@@ -167,6 +169,8 @@ class HdVPanel extends JComponent implements ActionListener
         } else if(event.getActionCommand().equals("sendchat")) {
             Client.hi.ecrireChat(chatField.getText());
             chatField.setText("");
+        } else if(event.getActionCommand().equals("trollhammer")) {
+            Client.hi.executerModo(ActionModo.CoupDeMassePAF);
         }
             
 	}

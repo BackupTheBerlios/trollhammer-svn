@@ -11,6 +11,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Vector;
 
+/* à cause du relais des méthodes de HI */
+import java.util.Set;
+import java.util.List;
+
 class Window implements ActionListener
 {
 	private boolean modo = false;
@@ -61,6 +65,7 @@ class Window implements ActionListener
             frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
 
             // ce que l'on décide de faire ici...
+            
             
             {
                 /* juste pour garder la référence et l'utiliser dans l'Adapter
@@ -165,4 +170,57 @@ class Window implements ActionListener
         lw.setVisible(true);
     }
 
+    /* les méthodes de HI sont relayées ici ! */
+
+    void affichage(Evenement e) {
+
+    }
+
+    void affichageChat(String m, String i) {
+        hdv.affichageChat(m, i);
+    }
+
+    void affichageEnchere(Integer prix, String i) {
+
+    }
+
+    void affichageObjet(Objet o) {
+
+    }
+
+    void affichageListeObjets(Set<Objet> ol) {
+
+    }
+
+    void affichageUtilisateur(Utilisateur i) {
+
+    }
+
+    void affichageListeUtilisateurs(Set<Utilisateur> ul) {
+
+    }
+
+    void affichageListeParticipants(Set<Participant> pl) {
+
+    }
+
+    /* modif p.r. au design : argument change de int i => Vente v, sinon,
+     * je ne comprends pas à quoi ça sert ! (jr)
+     */
+    void affichageVente(Vente v) {
+
+    }
+
+    /* rajouté du design : oublié pendant la rédaction du DCD !!! (jr) */
+    void affichageListeVentes(Set<Vente> vl) {
+
+    }
+
+    void message(Notification n) {
+
+    }
+
+    void messageErreur(Erreur e) {
+
+    }
 }

@@ -101,11 +101,15 @@ class HdVPanel extends JComponent implements ActionListener
 		chatPanel = new CoolPanel("fill:pref","pref, pref");
 		chatField = new JTextField(15);
 		chatButton = new JButton("Envoyer");
+        chatButton.setActionCommand("sendchat");
+        chatButton.addActionListener(this);
 		chatPanel.add(chatField, new CellConstraints(1,1));
 		chatPanel.add(chatButton, new CellConstraints(1,2));
 		//Panel des commandes
 		cmdPanel = new CoolPanel("left:pref,pref,fill:pref:grow, right:pref","pref");
 		logOutButton = new JButton("Déconnecter");
+        logOutButton.setActionCommand("disconnect");
+        logOutButton.addActionListener(this);
 		cmdPanel.add(logOutButton, new CellConstraints(1,1));
 		if(modo)
 		{
@@ -143,13 +147,6 @@ class HdVPanel extends JComponent implements ActionListener
 		builder.add(chatPanel, cc.xy(4,6));
 		builder.add(cmdPanel, cc.xyw(2,7,3));
 		
-        /* action pour le bouton de logout */
-        logOutButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                mw.doLogout();
-            }
-        });
-		
 		return builder.getPanel();
 	}
 	public JComponent getComponent()
@@ -159,7 +156,18 @@ class HdVPanel extends JComponent implements ActionListener
 
 	public void actionPerformed(ActionEvent event)
 	{
-		
-		
+        Logger.log("Window", 2, event.getActionCommand());
+        if(event.getActionCommand().equals("disconnect")) {
+            mw.doLogout();
+        } else if(event.getActionCommand().equals("sendchat")) {
+            Client.hi.ecrireChat(chatField.getText());
+        }
+            
 	}
+
+    /* relai (partiel) des méthodes de HI */
+
+    void affichageChat(String m, String i) {
+        logArea.append(i+" : "+m+"\n");
+    }
 }

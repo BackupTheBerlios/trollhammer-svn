@@ -126,7 +126,7 @@ class LoginWindow implements ActionListener {
 			name = nomField.getText();
 			passwd = String.copyValueOf(passwordField.getPassword());
             serveur = (String) srvBox.getSelectedItem();
-            // ajouté le serveur utilisé pour la connexion dans la liste !
+            // ajouter le serveur utilisé pour la connexion dans la liste !
             // (en l'enlevant d'abord pour être sûr de ne pas le dupliquer)
             // on le met au début de la liste, ça fait 'historique'
             Object selected = srvBox.getSelectedItem();

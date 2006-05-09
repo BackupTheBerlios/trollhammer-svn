@@ -183,10 +183,11 @@ class ClientEntryHandler extends Thread {
     */
     public void run() {
         Logger.log("ClientEntryHandler", 1, "[net] Ecoute des réponses Serveur lancée");
-        Object o; // l'objet qui va être lu du Socket.
+        Object o = null; // l'objet qui va être lu du Socket.
+        ObjectInputStream ois = null; // le stream qui reçoit les objets.
 
         try {
-            ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+            ois = new ObjectInputStream(s.getInputStream());
             do {
                 o = ois.readObject(); // lire le message.
 
@@ -203,8 +204,9 @@ class ClientEntryHandler extends Thread {
             // tant qu'on ne reçoit pas de StatutLogin(Déconnecté), on boucle.
             // sinon, on ferme le stream. La fermeture de Socket et autres est fait
             // lors du traitement par ClientEntry.
+            //
+            // en pratique, on finit toujours par être interrompu...
 
-            ois.close();
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
@@ -215,12 +217,16 @@ class ClientEntryHandler extends Thread {
             e.printStackTrace();
             Client.fsm.reset(); // on repart à zéro niveau FSM.
         } finally {
-            /*// de toute façon, on ferme le Socket.
-              try {
-              s.close();
-              } catch (IOException ioeagain) {
-              System.out.println("[net] EXCEPTION : socket déjà fermé : "+ioeagain.getMessage());
-              }*/
+            // dans tous les cas, on ferme l'ObjectInputStream.
+            // (s'il existe).
+            if(ois != null)
+                try {
+                    ois.close();
+                } catch (IOException ioe) {
+                    // ne devrait pas arriver...
+                    Logger.log("ClientEntryHandler", 1, "Erreur de fermeture"
+                            +" d'ObjectInputStream - NE DEVRAIT PAS ARRIVER");
+                }
         }
 
     }

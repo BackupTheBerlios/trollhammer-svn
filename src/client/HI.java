@@ -65,7 +65,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageChat(String m, String i) {
-
+        mw.affichageChat(m, i);
     }
 
     void affichageEnchere(Integer prix, String i) {
@@ -258,8 +258,8 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
                 case Vente:
                     Client.session.obtenirListeObjets(quoi); break;
                 case HotelDesVentes:
-                    Client.session.obtenirProchaineVente();
                     Client.session.obtenirListeParticipants();
+                    Client.session.obtenirProchaineVente();
                     break;
             }
         }

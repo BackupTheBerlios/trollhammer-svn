@@ -11,11 +11,25 @@ import java.util.Vector;
 
 class VentePanel implements ActionListener
 {
-	private JPanel rightPanel = null;
+	//éléments du Panel de gauche
 	private CoolPanel leftPanel = null;
-	private boolean modo = false;
+	private JLabel imgLabel = null;
+	private JButton parcourir = null;
+	private JTextField objTitre = null;
+	private JTextArea objDescr = null;
+	private JScrollPane objDescrPane = null;
+	private JTextField objPrix = null;
+	private JButton proposer = null;
+	private JButton raz = null;
+	
+	//éléments du Panel de droite
+	private JPanel rightPanel = null;
 	private String titre = null;
 	private JTextPane titrePane = null;
+	private Vector listObjets = null;
+	
+	//autres éléments
+	private boolean modo = false;
 	private JSplitPane splitPane = null;
 	
 	public VentePanel(boolean modo)
@@ -28,20 +42,48 @@ class VentePanel implements ActionListener
 	}
 	private void initComponents()
 	{
+		//éléments du Panel de gauche
+		imgLabel = new JLabel();
+		imgLabel.setPreferredSize(new Dimension(150,150));
+		imgLabel.setBorder(BorderFactory.createEtchedBorder());
+		parcourir = new JButton("Parcourir");
+		objTitre = new JTextField();
+		objDescr = new JTextArea();
+		objDescr.setRows(7);
+		objDescr.setLineWrap(true);
+		objDescr.setWrapStyleWord(true);
+		objDescrPane = new JScrollPane(objDescr, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		objPrix = new JTextField();
+		objPrix.setHorizontalAlignment(JTextField.RIGHT);
+		proposer = new JButton("Proposer");
+		raz = new JButton("RàZ");
+		//éléments du Panel de droite
+		rightPanel = new JPanel();
+		rightPanel.setBorder(BorderFactory.createEtchedBorder());
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		titrePane = new JTextPane();
 		titrePane.setText(titre);
+		
 		
 	}
 	private JComponent buildVentePanel()
 	{
 		initComponents();
 		//Left Panel
-		leftPanel = new CoolPanel("fill:pref:grow","pref, pref, pref, pref, pref, pref, pref, pref, pref, pref");
-		leftPanel.addLabel("Proposer un\nobjet à vendre: ", new CellConstraints(1,1));
+		leftPanel = new CoolPanel("pref, pref","pref, 100dlu, pref, pref, pref, pref, pref, pref, pref, pref");
+		leftPanel.addLabel("Proposer un\nobjet à vendre: ", new CellConstraints(1,1,2,1));
+		leftPanel.add(imgLabel, new CellConstraints(1,2,2,1));
+		leftPanel.add(parcourir, new CellConstraints(1,3,2,1));
+		leftPanel.addLabel("Titre: ", new CellConstraints(1,4,2,1));
+		leftPanel.add(objTitre, new CellConstraints(1,5,2,1));
+		leftPanel.addLabel("Description: ", new CellConstraints(1,6,2,1));
+		leftPanel.add(objDescrPane, new CellConstraints(1,7,2,1));
+		leftPanel.addLabel("Prix de base: ", new CellConstraints(1,8,2,1));
+		leftPanel.add(objPrix, new CellConstraints(1,9,2,1));
+		leftPanel.add(proposer, new CellConstraints(1,10));
+		leftPanel.add(raz, new CellConstraints(2,10));
 		
 		//right Panel
-		rightPanel = new JPanel();
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.add(titrePane);
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		return splitPane;

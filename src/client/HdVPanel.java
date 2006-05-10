@@ -69,10 +69,12 @@ class HdVPanel extends JComponent implements ActionListener
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("left:pref:grow","pref,pref,pref,fill:pref:grow");
 		imgLabel = new JLabel("image non\ndisponible");
-		imgLabel.setBorder(BorderFactory.createBevelBorder(0));
+		imgLabel.setPreferredSize(new Dimension(150,150));
+		imgLabel.setBorder(BorderFactory.createEtchedBorder());
 		descrObjetPanel = new CoolPanel("fill:pref","fill:pref:grow");
 		//descrObjet = "Bonjour je m'appelle Monsieur Pougnasse et j'aime les noix... pas vous??";
 		descrObjetTextArea = new JTextArea(descrObjet);
+		descrObjetTextArea.setRows(7);
 		descrObjetTextArea.setEditable(false);
 		descrObjetTextArea.setWrapStyleWord(true);
 		descrObjetTextArea.setLineWrap(true);

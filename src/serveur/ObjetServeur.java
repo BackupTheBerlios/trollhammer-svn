@@ -10,7 +10,7 @@ class ObjetServeur {
 
     Objet objet;
 
-    ObjetServeur(Objet o) {
+    public ObjetServeur(Objet o) {
         this.objet = o;
     }
 

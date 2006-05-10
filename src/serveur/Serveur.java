@@ -198,7 +198,7 @@ public class Serveur {
 	// tard.
     void envoyerProposition(Objet o, String sender) {
 		o.setStatut(StatutObjet.Propose);
-		Serveur.objectmanager.add(o, sender);
+		Serveur.objectmanager.add(new ObjetServeur(o), sender);
 		Serveur.usermanager.getUtilisateur(sender).resultatEdition(StatutEdition.Reussi);
 		Serveur.objectmanager.obtenirListeObjets(Onglet.Vente, sender);
     }

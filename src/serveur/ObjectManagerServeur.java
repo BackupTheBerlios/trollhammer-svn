@@ -23,6 +23,7 @@ class ObjectManagerServeur {
 				return o;
 			}
         }
+		return null;
 	}
 	
 	

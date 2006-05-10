@@ -18,14 +18,15 @@ class HdVPanel extends JComponent implements ActionListener
 	private JTextPane nbCoupDeMasse = null;
 	private CoolPanel selectPanel = null;
 	private JLabel imgLabel = null;
+	private CoolPanel descrObjetPanel = null;
 	private JScrollPane descrObjetPane = null;
-	private JTextArea descrObjetTextArea = null;
+	private JTextArea descrObjetTextArea = null; //avant JTextArea
 	private String descrObjet = null;
 	private CoolPanel sallePanel = null;
 	private CoolPanel logPanel = null;
 	private JScrollPane logPane = null; //inside Pane
 	private String log = null;
-	private JTextArea logArea = null;
+	private JTextArea logArea = null; //avant JTextArea
 	private CoolPanel adjPanel = null;
 	private CoolPanel encherePanel = null;
 	private JButton enchereButton = null;
@@ -66,37 +67,47 @@ class HdVPanel extends JComponent implements ActionListener
 		infoAdjPanel.add(nbCoupDeMasse,new CellConstraints(1,2));
 		
 		//Informations sur l'objets sélectionné
-		selectPanel = new CoolPanel("left:pref","pref,pref,pref,fill:pref:grow");
+		selectPanel = new CoolPanel("left:pref:grow","pref,pref,pref,fill:pref:grow");
 		imgLabel = new JLabel("image non\ndisponible");
 		imgLabel.setBorder(BorderFactory.createBevelBorder(0));
-		descrObjet = "Bonjour je m'appelle Monsieur Pougnasse et j'aime les noix... pas vous??";
-		descrObjetTextArea = new JTextArea(descrObjet,10,15);
-		//descrObjetTextArea.setLineWrap(true);
-		descrObjetPane = new JScrollPane(descrObjetTextArea);
-		//System.out.println("before: "+descrObjetTextArea.getWrapStyleWord());
+		descrObjetPanel = new CoolPanel("fill:pref","fill:pref:grow");
+		//descrObjet = "Bonjour je m'appelle Monsieur Pougnasse et j'aime les noix... pas vous??";
+		descrObjetTextArea = new JTextArea(descrObjet);
+		descrObjetTextArea.setEditable(false);
 		descrObjetTextArea.setWrapStyleWord(true);
-		//System.out.println("after: "+descrObjetTextArea.getWrapStyleWord());
+		descrObjetTextArea.setLineWrap(true);
+		descrObjetPane = new JScrollPane(descrObjetTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		descrObjetPane.setWheelScrollingEnabled(true);
+		descrObjetPanel.add(descrObjetPane, new CellConstraints(1,1));
 		selectPanel.addLabel("Image: ", new CellConstraints(1,1));
 		selectPanel.add(imgLabel, new CellConstraints(1,2));
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3));
 		selectPanel.add(descrObjetPane, new CellConstraints(1,4));
+		
 		//Salle
 		sallePanel = new CoolPanel();
+		
 		//Log
 		logPanel = new CoolPanel("fill:pref","fill:pref:grow");
-		logArea = new JTextArea(log,10,15);
-		logPane = new JScrollPane(logArea);
+		logArea = new JTextArea(log);
+		logArea.setEditable(false);
+		logArea.setWrapStyleWord(true);
+		logArea.setLineWrap(true);
+		logPane = new JScrollPane(logArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		logPane.setWheelScrollingEnabled(true);
 		logPanel.add(logPane, new CellConstraints(1,1));
+		
 		//Adjudication en cours
 		adjPanel = new CoolPanel("pref","pref,pref");
 		
 		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
+		
 		//enchère
 		encherePanel = new CoolPanel("pref:grow,pref,pref","pref");
 		enchereButton = new JButton("Enchérir!");
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
 		encherePanel.add(enchereButton, new CellConstraints(3,1));
+		
 		//Chat
 		chatPanel = new CoolPanel("fill:pref","pref, pref");
 		chatField = new JTextField(15);
@@ -110,6 +121,7 @@ class HdVPanel extends JComponent implements ActionListener
         chatButton.addActionListener(this);
 		chatPanel.add(chatField, new CellConstraints(1,1));
 		chatPanel.add(chatButton, new CellConstraints(1,2));
+		
 		//Panel des commandes
 		cmdPanel = new CoolPanel("left:pref,pref,fill:pref:grow, right:pref","pref");
 		logOutButton = new JButton("Déconnecter");

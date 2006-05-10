@@ -58,8 +58,9 @@ class Window implements ActionListener
 			frame = new JFrame("Trollhammer");
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 			frame.setBounds(dim.width/2-400,dim.height/2-300,800,600);
+			frame.setMinimumSize(new Dimension(800,600));
+			frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 
-			//frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
             // on veut détruire la fenêtre Trollhammer, mais certainement pas
             // tout quitter quand on la ferme : il faut faire un logout !
             frame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
@@ -78,7 +79,6 @@ class Window implements ActionListener
                     }
                 });
             }
-
 			frame.setVisible(true);
 			frame.setJMenuBar(getMenuBar());
 			frame.setContentPane(getTabbedPane());
@@ -138,14 +138,12 @@ class Window implements ActionListener
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
-			Logger.log("Window", 2, "Après création: "+(tabbedPane == null));
 			hdv = new HdVPanel(modo, this);
 			vente = new VentePanel(modo);
 			achat = new AchatPanel(modo);
 			tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
 			tabbedPane.addTab("Vente", null, vente.getComponent(), null);
 			tabbedPane.addTab("Achat", null, achat.getComponent(), null);
-			Logger.log("Window", 2, "Avant if modo: "+(tabbedPane == null));
 			if(modo)
 			{
 				valider = new ValiderPanel(modo);
@@ -156,8 +154,6 @@ class Window implements ActionListener
 				tabbedPane.addTab("Gestion des utilisateurs", null, gestion.getComponent(), null);
 			}
 		}
-		
-		Logger.log("Window", 2, "Avant le return: "+(tabbedPane == null));
 		return tabbedPane;
 	}
 

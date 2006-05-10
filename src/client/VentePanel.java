@@ -11,11 +11,12 @@ import java.util.Vector;
 
 class VentePanel implements ActionListener
 {
-	private CoolPanel rightPanel = null;
+	private JPanel rightPanel = null;
 	private CoolPanel leftPanel = null;
 	private boolean modo = false;
 	private String titre = null;
-	private JSplitFrame splitFrame = null;
+	private JTextPane titrePane = null;
+	private JSplitPane splitPane = null;
 	
 	public VentePanel(boolean modo)
 	{
@@ -27,7 +28,8 @@ class VentePanel implements ActionListener
 	}
 	private void initComponents()
 	{
-		
+		titrePane = new JTextPane();
+		titrePane.setText(titre);
 		
 	}
 	private JComponent buildVentePanel()
@@ -37,11 +39,11 @@ class VentePanel implements ActionListener
 		leftPanel.addLabel("Proposer un\nobjet à vendre: ", new CellConstraints(1,1));
 		
 		//right Panel
-		rightPanel = new CoolPanel();
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLAyout.Y_AXIS));
-		rightPanel.addLabel(titre);
-		splitFrame = new JSplitFrame(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-		return splitFrame;
+		rightPanel = new JPanel();
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel.add(titrePane);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+		return splitPane;
 	}
 	public JComponent getComponent()
 	{

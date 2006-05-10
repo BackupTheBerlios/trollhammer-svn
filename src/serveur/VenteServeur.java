@@ -1,4 +1,6 @@
 package trollhammer;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Sous-classe Adaptateur côté Serveur pour Vente.
@@ -36,12 +38,21 @@ class VenteServeur extends Vente {
         return null;
     }
 
-    void insertObject(Objet o, int p, Utilisateur u, long date) {
-
+    void insertObject(int o, int p, String u, long date) {
+		// NB: modifié les types du 1er et du 3ème paramètre => que des ID
     }
 
     void removeObject(Objet o, Utilisateur c) {
 
     }
+    
+    // cfrey: eheh
+	List<Objet> getObjets() {
+		List<Objet> r = new ArrayList<Objet>();
+		for (Integer oid : this.getOIds()) {
+			r.add(Serveur.objectmanager.getObjet(oid).getObjet());
+		}
+		return r;
+	}
 
 }

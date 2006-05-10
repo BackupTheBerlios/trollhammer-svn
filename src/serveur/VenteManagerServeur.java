@@ -18,9 +18,79 @@ class VenteManagerServeur {
         ventes = new HashSet<VenteServeur>();
     }
 
-    void insererObjetVente(int o, int v, int p, String i) {
-
-    }
+	/**
+	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
+	 * fie qu'il faut ajouter l'objet à la fin de la liste. Les changements sont
+	 * répercutés chez le sender et chez tout le monde si la vente est la pro-
+	 * aine. On ne peut pas assigner un objet à une vente en cours.
+	 *
+	 * @param 	o 	identifiant de l'objet
+	 * @param 	v 	identifiant de la vente
+	 * @param 	p 	position d'insertion de l'objet dans la liste
+	 * @param 	i 	identifiant de l'utilisateur sender
+	 * @author 	cfrey
+	 */
+	void insererObjetVente(int o, int v, int p, String i) {
+		VenteServeur vte = getVente(v);
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(i);
+		long dateCourante = Serveur.serveur.getDate();
+		
+		if (vte != null) {
+			// la vente existe
+			if (vte.getDate() >= dateCourante) {
+				// vente courante, prochaine ou à venir ?
+				VenteServeur venteEnCours = getVenteEnCours();
+				
+				if (venteEnCours != null
+					&& venteEnCours.getId() == vte.getId()) {
+					// vte est la vente en cours, pas de modification possible !
+					u.resultatEdition(StatutEdition.NonTrouve);
+				} else {
+					// pas de vente en cours ou vente en cours mais != vte
+					ObjetServeur obj = Serveur.objectmanager.getObjet(o);
+					VenteServeur prochaineVente = getStarting(); // != null ...
+					
+					if (obj != null) {
+						// obj existe
+						StatutObjet s = obj.getObjet().getStatut();
+						
+						if (s == StatutObjet.Accepte) {
+							// il est important de changer le statut d'abord,
+							// puis de faire l'insertion, pour des raisons de
+							// concurrence ...
+							obj.getObjet().setStatut(StatutObjet.EnVente);
+							// /!\ je propose que ce soit Vente.insertObject
+							// qui s'occupe des histoires de position ...
+							vte.insertObject(o, p, i, dateCourante);
+							u.resultatEdition(StatutEdition.Reussi);
+						} else {
+							// obj est Vendu, Proposé, Refusé ou EnVente
+							u.resultatEdition(StatutEdition.NonTrouve);
+						}
+					} else {
+						// obj n'existe pas
+						u.resultatEdition(StatutEdition.NonTrouve);
+					}
+					
+					if (prochaineVente.getId() == vte.getId()) {
+						// vte est la prochaine, changements -> broadcast
+						Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+					} else {
+						// vte pas la prochaine, changements -> sender
+						u.detailsVente(vte, vte.getObjets());
+					}
+				}
+			} else {
+				// vente passée, pas de modification possible !
+				u.resultatEdition(StatutEdition.NonTrouve);
+// ??? pas dans la spéc: renvoyer la liste des ventes ???
+			}
+		} else {
+			// la vente n'existe pas !
+			u.resultatEdition(StatutEdition.NonTrouve);
+// ??? pas dans la spéc: renvoyer la liste des ventes ???
+		}
+	}
 
     void enleverObjetVente(int o, int v, String i) {
 
@@ -43,8 +113,8 @@ class VenteManagerServeur {
 		u.listeVentes(liste);
     }
 
-    void obtenirProchaineVente(String s) {
-
+    void obtenirProchaineVente(String sender) {
+		
     }
 
     boolean checkEncherisseur(String i) {

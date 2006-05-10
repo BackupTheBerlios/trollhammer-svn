@@ -23,7 +23,17 @@ class CoolPanel extends JPanel
 		builder.setDefaultDialogBorder();
 		cc = new CellConstraints();
 		this.add(builder.getPanel());
-		this.setBackground(Color.WHITE);
+		//this.setBackground(Color.WHITE);
+		this.setBorder(BorderFactory.createEtchedBorder());
+	}
+	public CoolPanel(String col, String row, Color bg)
+	{
+		layout = new FormLayout(col,row);
+		builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		cc = new CellConstraints();
+		this.add(builder.getPanel());
+		this.setBackground(bg);
 		this.setBorder(BorderFactory.createEtchedBorder());
 	}
 	public void add(Component c, CellConstraints cc)
@@ -34,4 +44,8 @@ class CoolPanel extends JPanel
 	{
 		builder.addLabel(s, cc);
 	}
+	/*public void setBackground(Color bg)
+	{
+		this.setBackground(bg);
+	}*/
 }

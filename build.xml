@@ -37,6 +37,7 @@
     <property name="clientClass" value="trollhammer.Client"/>
     <property name="serveurClass" value="trollhammer.Serveur"/>
     <property name="guiClass" value="trollhammer.HI"/>
+    <property name="guiTestClass" value="trollhammer.TestGUI"/>
     
     <property name="encodage" value="UTF-8"/>
     <property name="mysound" value="ant"/>
@@ -215,6 +216,13 @@
         <java classname="${guiClass}" fork="true" failonerror="true">
 				<classpath refid="cclasspath"/>
 				
+        </java>
+    </target>
+    
+    <target name="testGUI" depends="buildClient" description="Test de la GUI">
+        <echo>Test de l'interface!</echo>
+        <java classname="${guiTestClass}" fork="true" failonerror="true">
+                <classpath refid="cclasspath"/>
         </java>
     </target>
 

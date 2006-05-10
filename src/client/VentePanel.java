@@ -23,9 +23,10 @@ class VentePanel implements ActionListener
 	private JButton raz = null;
 	
 	//éléments du Panel de droite
+	private JScrollPane rightPane = null;
 	private JPanel rightPanel = null;
 	private String titre = null;
-	private JTextPane titrePane = null;
+	private JLabel titreLabel = null;
 	private Vector listObjets = null;
 	
 	//autres éléments
@@ -61,8 +62,8 @@ class VentePanel implements ActionListener
 		rightPanel = new JPanel();
 		rightPanel.setBorder(BorderFactory.createEtchedBorder());
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-		titrePane = new JTextPane();
-		titrePane.setText(titre);
+		titreLabel = new JLabel(titre);
+		rightPane = new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		
 	}
@@ -84,8 +85,10 @@ class VentePanel implements ActionListener
 		leftPanel.add(raz, new CellConstraints(2,10));
 		
 		//right Panel
-		rightPanel.add(titrePane);
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+		rightPanel.add(titreLabel);
+		
+		//autres éléments
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPane);
 		return splitPane;
 	}
 	public JComponent getComponent()

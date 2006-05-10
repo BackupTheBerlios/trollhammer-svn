@@ -4,29 +4,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import java.util.Vector;
 
 class AchatPanel implements ActionListener
 {
-	private FormLayout layout = null;
 	private boolean modo = false;
+	private JScrollPane jsp = null;
+	private JPanel pan = null;
+	private JLabel titreLabel = null;
+	private String titre = null;
 	public AchatPanel(boolean modo)
 	{
 		this.modo = modo;
+		if(modo)
+			titre = "Liste des objets qui ont été adjugés: ";
+		else
+			titre = "Liste des objets qui vous ont été adjugés: ";
 	}
 	private JComponent buildAchatPanel()
 	{
-		layout = new FormLayout("","");
-		
-		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setDefaultDialogBorder();
-		CellConstraints cc = new CellConstraints();
-		
-		
-		return builder.getPanel();
+		pan = new JPanel();
+		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+		titreLabel = new JLabel(titre);
+		pan.add(titreLabel);
+		jsp = new JScrollPane(pan, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		return jsp;
 	}
 	public JComponent getComponent()
 	{

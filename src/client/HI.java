@@ -8,19 +8,6 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     private Window mw;
     private LoginWindow lw;
 
-    public static void main(String[] args)
-    {
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-        {
-            new LoginWindow();
-        }
-        }); // pask on s'la pète!!!
-
-    }
-    
     /* le constructeur pour démarrer la GUI comme il faut, vé */
     public HI()
     {
@@ -238,6 +225,9 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
 
     void voir(Onglet quoi) {
         if(Client.fsm.voir(quoi)) {
+            // oublié dans le Design, mais si on passe d'un onglet à l'autre,
+            // on tient à garder l'état - le champ 'mode' du Client - à jour.
+            Client.client.setMode(quoi);
             switch(quoi) {
                 case Planification:
                 case Validation:

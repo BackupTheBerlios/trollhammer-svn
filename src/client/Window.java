@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -141,6 +143,9 @@ class Window implements ActionListener
 			hdv = new HdVPanel(modo, this);
 			vente = new VentePanel(modo);
 			achat = new AchatPanel(modo);
+            // ATTENTION : SI MODIFICATION DE L'ORDRE DES ONGLETS,
+            //             ALORS LE REPERCUTER DANS LE LISTENER
+            //             CI-DESSOUS !
 			tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
 			tabbedPane.addTab("Vente", null, vente.getComponent(), null);
 			tabbedPane.addTab("Achat", null, achat.getComponent(), null);
@@ -153,6 +158,40 @@ class Window implements ActionListener
 				tabbedPane.addTab("Planifier", null, planifier.getComponent(), null);
 				tabbedPane.addTab("Gestion des utilisateurs", null, gestion.getComponent(), null);
 			}
+
+            /* Listener s'occupant de gérer les changements dans la barre d'onglets.
+             * Lors d'un changement de tab sélectionné, le Listener va voir lequel
+             * est effectivement actif et lance un HI.voir() avec le bon argument.
+             * C'est à moitié contraire au design, où voir() peut _diriger_
+             * quel tab afficher. En pratique, comme la fonction 'directrice' de
+             * voir() n'est utilisée qu'à l'affichage de la fenêtre principale,
+             * il est possible de la rendre implicite en faisant cet affichage
+             * dans la transition de la fenêtre de Login à la fenêtre principale,
+             * et de ne pas implémenter la fonction "voir() change les tabs", ce qui
+             * serait en soi particulièrement bizarre à faire...
+             */
+            tabbedPane.addChangeListener(new ChangeListener(){
+                public void stateChanged(ChangeEvent e) {
+                    // récupération de l'index de l'Onglet fraîchement sélectionné
+                    // (il serait possible de le faire en fonction de son titre aussi)
+                    int onglet = tabbedPane.getSelectedIndex();
+
+                    switch(onglet) {
+                        case 0: // hôtel des ventes
+                            Client.hi.voir(Onglet.HotelDesVentes); break;
+                        case 1: // vente
+                            Client.hi.voir(Onglet.Vente); break;
+                        case 2: // achat
+                            Client.hi.voir(Onglet.Achat); break;
+                        case 3: // valider
+                            Client.hi.voir(Onglet.Validation); break;
+                        case 4: // planifier
+                            Client.hi.voir(Onglet.Planification); break;
+                        case 5: // gestion des utilisateurs
+                            Client.hi.voir(Onglet.GestionUtilisateurs); break;
+                    }
+                }
+            });
 		}
 		return tabbedPane;
 	}

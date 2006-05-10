@@ -13,7 +13,7 @@ class CoolPanel extends JPanel
 	
 	public CoolPanel()
 	{
-		this.setBackground(Color.WHITE);
+		//this.setBackground(Color.WHITE);
 		this.setBorder(BorderFactory.createEtchedBorder());
 	}
 	public CoolPanel(String col, String row)
@@ -44,8 +44,4 @@ class CoolPanel extends JPanel
 	{
 		builder.addLabel(s, cc);
 	}
-	/*public void setBackground(Color bg)
-	{
-		this.setBackground(bg);
-	}*/
 }

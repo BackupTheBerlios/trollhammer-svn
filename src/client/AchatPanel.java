@@ -17,15 +17,13 @@ class AchatPanel implements ActionListener
 	{
 		this.modo = modo;
 		if(modo)
-			titre = "Liste des objets qui ont été adjugés: ";
-		else
-			titre = "Liste des objets qui vous ont été adjugés: ";
+			titre = "vous ";
 	}
 	private JComponent buildAchatPanel()
 	{
 		pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
-		titreLabel = new JLabel(titre);
+		titreLabel = new JLabel("Liste des objets qui "+titre+"ont été adjugés: ");
 		pan.add(titreLabel);
 		jsp = new JScrollPane(pan, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		return jsp;

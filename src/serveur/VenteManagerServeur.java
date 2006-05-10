@@ -31,7 +31,16 @@ class VenteManagerServeur {
     }
 
     void obtenirListeVentes(String sender) {
-
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		//ls : Oui, je dois quand même le faire, il semble que java ne gère pas 
+		// aussi bien les règle de sous-typage sur des classes paramétrées que 
+		// Scala.
+		// NB : c'est quand meme plus simple avec le casting implicite, non?
+		Set<Vente> liste = new HashSet<Vente>();
+		for(VenteServeur v : ventes) {
+			liste.add(v);
+		}
+		u.listeVentes(liste);
     }
 
     void obtenirProchaineVente(String s) {

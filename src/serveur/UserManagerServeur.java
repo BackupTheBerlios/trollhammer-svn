@@ -122,7 +122,25 @@ class UserManagerServeur {
     }
 
     void obtenirListeUtilisateurs(String sender) {
+		UtilisateurServeur u = this.getUtilisateur(sender);
+		//ls : C'est une horreur CA, si on avait du sous-typage, je n'aurais pas à le faire...
+		Set<Utilisateur> liste = new HashSet<Utilisateur>();
+		for (UtilisateurServeur t : utilisateurs) {
+			liste.add(t.getUtilisateur());
+		}
+		u.listeUtilisateurs(liste);
+    }
 
+    void obtenirListeParticipants(String sender) {
+		UtilisateurServeur u = this.getUtilisateur(sender);
+		//ls : C'est une horreur CA, si on avait du sous-typage, je n'aurais pas à le faire...
+		// a noter que les relations objet me permettent de passer des Utilisateurs qui se 
+		// voient castés en leur sur class Participant...
+		Set<Participant> liste = new HashSet<Participant>();
+		for (UtilisateurServeur t : utilisateurs) {
+			liste.add(t.getUtilisateur());
+		}
+		u.listeParticipants(liste);
     }
 
     void obtenirUtilisateur(String i, String sender) {

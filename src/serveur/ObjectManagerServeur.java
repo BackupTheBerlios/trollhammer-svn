@@ -32,8 +32,42 @@ class ObjectManagerServeur {
 
     }
 
+	
     void obtenirListeObjets(Onglet t, String sender) {
-
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		Set<Objet> liste = new HashSet<Objet>();
+		switch (t) {
+		case Vente:
+			for (ObjetServeur o : objets) {
+				if (o.getObjet().getVendeur() == sender) {
+					liste.add(o.getObjet());
+				}
+			}
+			break;
+		case Achat:
+			for (ObjetServeur o : objets) {
+				if (o.getObjet().getAcheteur() == sender) {
+					liste.add(o.getObjet());
+				}
+			}
+			break;
+		case Validation:
+			for (ObjetServeur o : objets) {
+				if (o.getObjet().getStatut() == StatutObjet.Propose) {
+					liste.add(o.getObjet());
+				}
+			}
+			break;
+		case Planification:
+			for (ObjetServeur o : objets) {
+				if (o.getObjet().getStatut() == StatutObjet.Accepte) {
+					liste.add(o.getObjet());
+				}
+			}
+			break;
+		default : 
+		}
+		u.listeObjets(t, liste);
     }
 
     void validerProposition(int oid, String sender) {

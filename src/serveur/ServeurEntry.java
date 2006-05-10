@@ -86,9 +86,9 @@ class ServeurEntry {
         }
     }
 
-    void obtenirUtilisateur(String u, String sender) {
+    void obtenirUtilisateur(String i, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-			Serveur.usermanager.obtenirUtilisateur(u, sender);
+			Serveur.usermanager.obtenirUtilisateur(i, sender);
         }
     }
 
@@ -98,27 +98,40 @@ class ServeurEntry {
         }
     }
 
+	//ls : Modif : suivant l'onglet, le sender DOIT être modérateur
+	// pour que l'on lui réponde.
     void obtenirListeObjets(Onglet type, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
-
-        }
+        switch (type) {
+		case Vente:
+		case Achat:
+			if(Serveur.usermanager.isConnected(sender)) {
+				Serveur.objectmanager.obtenirListeObjets(type, sender);
+			}
+			break;
+		case Planification:
+		case Validation:
+			if(Serveur.usermanager.isModo(sender)) {
+				Serveur.objectmanager.obtenirListeObjets(type, sender);
+			}
+			break;			
+		}
     }
 
     void obtenirListeUtilisateurs(String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.usermanager.obtenirListeUtilisateurs(sender);
         }
     }
 
     void obtenirListeVentes(String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.ventemanager.obtenirListeVentes(sender);
         }
     }
 
     void obtenirListeParticipants(String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
-
+			Serveur.usermanager.obtenirListeParticipants(sender);
         }
     }
 

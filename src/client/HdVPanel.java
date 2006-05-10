@@ -97,7 +97,8 @@ class HdVPanel extends JComponent implements ActionListener
 		logArea.setLineWrap(true);
 		logPane = new JScrollPane(logArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		logPane.setWheelScrollingEnabled(true);
-		logPanel.add(logPane, new CellConstraints(1,1));
+
+    	logPanel.add(logPane, new CellConstraints(1,1));
 		
 		//Adjudication en cours
 		adjPanel = new CoolPanel("pref","pref,pref");
@@ -107,6 +108,8 @@ class HdVPanel extends JComponent implements ActionListener
 		//enchère
 		encherePanel = new CoolPanel("pref:grow,pref,pref","pref");
 		enchereButton = new JButton("Enchérir!");
+        enchereButton.setActionCommand("encherir");
+        enchereButton.addActionListener(this);
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
 		encherePanel.add(enchereButton, new CellConstraints(3,1));
 		
@@ -185,13 +188,34 @@ class HdVPanel extends JComponent implements ActionListener
             chatField.setText("");
         } else if(event.getActionCommand().equals("trollhammer")) {
             Client.hi.executerModo(ActionModo.CoupDeMassePAF);
+        } else if(event.getActionCommand().equals("encherir")) {
+            Client.hi.executer(Action.Encherir);
         }
-            
 	}
 
-    /* relai (partiel) des méthodes de HI */
+    /** Ajoute du texte à la fin du contenu du panneau de log.
+     * Généralisation de ce qui se faisait au départ uniquement pour le chat,
+     * cette méthode permet d'avoir l'autoscrolling du texte pour tous les messages
+     * rajoutés dans le panneau de log.
+     */
+    void texteLog(String texte) {
+        // jr : autoscroll pour le log. Cet autoscroll ne s'active que si
+        // le texte est déjà scrollé tout en bas, sinon, il ne se passe rien.
+        // technique trouvée sur les forums Java de Sun.
 
+        // est-ce que la scrollbar est déjà tout en bas ?
+        JScrollBar vbar = logPane.getVerticalScrollBar();
+        boolean autoScroll = ((vbar.getValue() + vbar.getVisibleAmount()) == vbar.getMaximum());
+        
+        // rajouter le texte qui vient d'arriver
+        logArea.append(texte);
+       
+        // scroller si déjà en bas.
+        if( autoScroll ) logArea.setCaretPosition( logArea.getDocument().getLength() );
+    }
+
+    /* relai (partiel) des méthodes de HI */
     void affichageChat(String m, String i) {
-        logArea.append("<"+i+"> "+m+"\n");
+        this.texteLog("<"+i+"> "+m+"\n");
     }
 }

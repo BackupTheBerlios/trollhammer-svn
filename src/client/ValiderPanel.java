@@ -36,8 +36,12 @@ class ValiderPanel implements ActionListener
 		basPanel = new CoolPanel();
 		basPanel.setLayout(new BoxLayout(basPanel, BoxLayout.X_AXIS));
 		accepter = new JButton("Accepter");
+        accepter.setActionCommand("accepter");
+        accepter.addActionListener(this);
 		basPanel.add(accepter);
 		refuser = new JButton("Refuser");
+        refuser.setActionCommand("refuser");
+        refuser.addActionListener(this);
 		basPanel.add(refuser);
 		
 		
@@ -53,7 +57,15 @@ class ValiderPanel implements ActionListener
 	}
 	public void actionPerformed(ActionEvent event)
 	{
-		
-		
+        String commande = event.getActionCommand();
+        Logger.log("ValiderPanel", 2, commande);
+
+        if(commande.equals("accepter")) {
+            Objet o = null; // TODO : prendre l'objet sélectionné dans la liste
+            Client.hi.accepterProposition(o.getId());
+        } else if (commande.equals("refuser")) {
+            Objet o = null; // TODO : prendre l'objet sélectionné dans la liste
+            Client.hi.refuserProposition(o.getId());
+        }
 	}
 }

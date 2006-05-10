@@ -168,7 +168,7 @@ class Window implements ActionListener
              * il est possible de la rendre implicite en faisant cet affichage
              * dans la transition de la fenêtre de Login à la fenêtre principale,
              * et de ne pas implémenter la fonction "voir() change les tabs", ce qui
-             * serait en soi particulièrement bizarre à faire...
+             * serait en soi particulièrement bizarre à implémenter...
              */
             tabbedPane.addChangeListener(new ChangeListener(){
                 public void stateChanged(ChangeEvent e) {

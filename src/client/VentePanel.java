@@ -34,6 +34,7 @@ class VentePanel implements ActionListener
 	}
 	private JComponent buildVentePanel()
 	{
+		initComponents();
 		//Left Panel
 		leftPanel = new CoolPanel("fill:pref:grow","pref, pref, pref, pref, pref, pref, pref, pref, pref, pref");
 		leftPanel.addLabel("Proposer un\nobjet à vendre: ", new CellConstraints(1,1));

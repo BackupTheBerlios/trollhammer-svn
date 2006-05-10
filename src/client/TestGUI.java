@@ -1,6 +1,6 @@
 //J'aime tester ma GUI sans devoir tjs me connecter au serveur!
 package trollhammer;
-
+import javax.swing.SwingUtilities;
 public class TestGUI
 {
 	public static void main(String[]args)
@@ -9,7 +9,7 @@ public class TestGUI
 								   {
 										public void run()
 										{
-											new Window(true);
+											new Window(true,null);
 										}
 								   });
 	}

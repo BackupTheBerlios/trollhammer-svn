@@ -57,7 +57,11 @@ class VentePanel implements ActionListener
 		objPrix = new JTextField();
 		objPrix.setHorizontalAlignment(JTextField.RIGHT);
 		proposer = new JButton("Proposer");
+        proposer.setActionCommand("proposer");
+        proposer.addActionListener(this);
 		raz = new JButton("RàZ");
+        raz.setActionCommand("raz");
+        raz.addActionListener(this);
 		//éléments du Panel de droite
 		rightPanel = new JPanel();
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -98,7 +102,43 @@ class VentePanel implements ActionListener
 	
 	public void actionPerformed(ActionEvent event)
 	{
-		
-		
+        Logger.log("VentePanel", 2, event.getActionCommand());
+        if(event.getActionCommand().equals("proposer")) {
+            try {
+                // CREATION DE L'OBJET A PROPOSER
+                Objet o = new Objet();
+                // NB : l'ID de l'objet nouvellement créé vaut par défaut 0.
+                // Au Serveur de corriger le tir en attribuant une ID réelle.
+                o.setId(0);
+                o.setNom(objTitre.getText());
+                o.setDescription(objDescr.getText());
+                o.setPrixDeBase(Integer.parseInt(objPrix.getText()));
+                // normalement pas réglé à ce stade, mais c'est préférable,
+                // surtout si la valeur par défaut est zéro, ce qui dans cet
+                // enum se traduit par Statuto.Vendu !
+                o.setStatut(StatutObjet.Propose);
+                // le vendeur de l'objet est celui qui le propose, par définition
+                o.setVendeur(Client.session.getLogin());
+
+                // EXPEDITION DE L'OBJET A PROPOSER
+                Client.hi.proposerObjet(o);
+
+                // vider les champs de la proposition d'objet
+                objTitre.setText("");
+                objDescr.setText("");
+                // champ de prix mis à zéro seulement si tout se passe bien,
+                // sinon il indique l'erreur.
+                objPrix.setText("");
+                // a terme, il faudra aussi enlever l'image sélectionnée ici
+            } catch(java.lang.NumberFormatException nfe) {
+                Logger.log("VentePanel", 1, nfe.getMessage()+" (prix incorrect)");
+                objPrix.setText("prix invalide");
+            }
+        } else if(event.getActionCommand().equals("raz")) {
+            objTitre.setText("");
+            objDescr.setText("");
+            objPrix.setText("");
+            // a faire : déselectionner l'image...
+        }
 	}
 }

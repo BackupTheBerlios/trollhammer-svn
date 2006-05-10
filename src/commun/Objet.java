@@ -64,11 +64,11 @@ class Objet implements java.io.Serializable {
         this.moderateur = moderateur;
     }
 
-    void setPrixDeBase() {
+    void setPrixDeBase(int prix_de_base) {
         this.prix_de_base = prix_de_base;
     }
 
-    void setPrixDeVente() {
+    void setPrixDeVente(int prix_de_vente) {
         this.prix_de_vente = prix_de_vente;
     }
 
@@ -76,11 +76,11 @@ class Objet implements java.io.Serializable {
         this.statut = statut;
     }
 
-    void setAcheteur() {
+    void setAcheteur(String acheteur) {
         this.acheteur = acheteur;
     }
 
-    void setVendeur() {
+    void setVendeur(String vendeur) {
         this.vendeur = vendeur;
     }
 

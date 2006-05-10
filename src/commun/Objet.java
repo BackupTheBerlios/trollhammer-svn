@@ -3,9 +3,10 @@ package trollhammer;
 class Objet implements java.io.Serializable {
     
     private int id;
-    private int nom;
-    private int description;
-    private int prix_de_base;
+    private String nom;
+    private String description;
+    private String moderateur;
+	private int prix_de_base;
     private int prix_de_vente;
     private StatutObjet statut;
     private String acheteur;
@@ -15,12 +16,16 @@ class Objet implements java.io.Serializable {
         return this.id;
     }
 
-    int getNom() {
+    String getNom() {
         return this.nom;
     }
 
-    int getDescription() {
+    String getDescription() {
         return this.description;
+    }
+
+    String getModerateur() {
+        return this.moderateur;
     }
 
     int getPrixDeBase() {
@@ -43,16 +48,20 @@ class Objet implements java.io.Serializable {
         return this.vendeur;
     }
 
-    void setId() {
+    void setId(int id) {
         this.id = id;
     }
 
-    void setNom() {
+    void setNom(String nom) {
         this.nom = nom;
     }
 
-    void setDescription() {
+    void setDescription(String description) {
         this.description = description;
+    }
+
+    void setModerateur(String moderateur) {
+        this.moderateur = moderateur;
     }
 
     void setPrixDeBase() {
@@ -63,7 +72,7 @@ class Objet implements java.io.Serializable {
         this.prix_de_vente = prix_de_vente;
     }
 
-    void setStatut() {
+    void setStatut(StatutObjet statut) {
         this.statut = statut;
     }
 

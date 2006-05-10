@@ -19,10 +19,21 @@ class ObjetServeur {
     }
 
     boolean valider(String i) {
-        return false;
+		if (objet.getStatut() == StatutObjet.Propose) {
+			objet.setStatut(StatutObjet.Accepte);
+			objet.setModerateur(i);
+			return true;
+		}
+		else {
+			return false;
+		}
     }
 
     void sell(String i, Integer prix) {
 
     }
+	
+	Objet getObjet() {
+		return objet;
+	}
 }

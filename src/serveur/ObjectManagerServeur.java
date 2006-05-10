@@ -1,5 +1,6 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
 
 /** Classe Manager des Objets du Serveur.
  * Regroupe et gère tous les Objets (au sens Trollhammer, pas Java).
@@ -7,9 +8,25 @@ import java.util.Set;
  * @author squelette : Julien Ruffin
  */
 class ObjectManagerServeur {
+	int lastID = -1;
 
-    Set<Object> objets;
-
+    Set<ObjetServeur> objets;
+	
+	/* Constructeur qui initalise une base d'objet vide. */
+	public ObjectManagerServeur() {
+		objets = new HashSet<ObjetServeur>();
+	}
+	
+	ObjetServeur getObjet(int oid) {
+        for(ObjetServeur o : objets) {
+            if (o.getObjet().getId() == oid) {
+				return o;
+			}
+        }
+	}
+	
+	
+    /* méthodes du design */
     void invaliderProposition(int i, String sender) {
 
     }
@@ -18,12 +35,20 @@ class ObjectManagerServeur {
 
     }
 
-    void validerProposition(int i, String sender) {
+    void validerProposition(int oid, String sender) {
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		ObjetServeur o = Serveur.objectmanager.getObjet(oid);
+		boolean r = false;
+		
+		if (o != null) {
+			
+		}
+	}
 
-    }
-
-    void add(Objet o, String i) {
-
+	// ls : probleme de concurrence, faudra a faire gaffe que ce soit synchro
+    void add(ObjetServeur o, String i) {
+		o.getObjet().setId(++lastID);
+		objets.add(o);
     }
 
     void listeObjets(Onglet t, Set<Objet> ol) {
@@ -37,5 +62,5 @@ class ObjectManagerServeur {
     void update(Objet o) {
 
     }
-
+	
 }

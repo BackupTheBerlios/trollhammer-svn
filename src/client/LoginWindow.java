@@ -139,7 +139,7 @@ class LoginWindow implements ActionListener {
 		}
 		else if(event.getActionCommand().equals("RaZ"))
 		{
-			Logger.log("LoginWindow", 2, "mouhahaha utlime remise à ZERO!!!");
+			Logger.log("LoginWindow", 2, "mouhahaha ultime remise à ZERO!!!");
 			nomField.setText("");
 			passwordField.setText("");
 			

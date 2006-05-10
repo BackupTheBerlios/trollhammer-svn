@@ -39,37 +39,38 @@ class ServeurEntry {
 
     void envoyerCoupdeMASSE(String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.serveur.envoyerCoupdeMASSE(sender);
         }
     }
 
     void kickerUtilisateur(String u, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.serveur.usermanager.kickerUtilisateur(u, sender);
         }
     }
 
     void encherir(int prix, String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
-
+			Serveur.serveur.encherir(prix, sender);
         }
     }
 
     void envoyerProposition(Objet proposition, String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
+			Serveur.serveur.envoyerProposition(proposition, sender);
 
         }
     }
 
-    void validerProposition(int objet, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
-
+    void validerProposition(int oid, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
+			Serveur.objectmanager.validerProposition(oid, sender);
         }
     }
 
-    void invaliderProposition(int objet, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
-
+    void invaliderProposition(int oid, String sender) {
+        if(Serveur.usermanager.isModo(sender)) {
+			Serveur.objectmanager.invaliderProposition(oid, sender);
         }
     }
 
@@ -87,7 +88,7 @@ class ServeurEntry {
 
     void obtenirUtilisateur(String u, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.usermanager.obtenirUtilisateur(u, sender);
         }
     }
 

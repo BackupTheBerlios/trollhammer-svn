@@ -10,7 +10,7 @@ package trollhammer;
 class ChatSystem {
 
     void envoyerChat(String message, String sender) {
-        Logger.log("ChatSystem", 0, "[chat] "+sender+" dit : "+message);
+        Logger.log("ChatSystem", 2, "[chat] " + sender + " dit : \"" + message + "\"");
         Serveur.broadcaster.chat(message, sender);
     }
 

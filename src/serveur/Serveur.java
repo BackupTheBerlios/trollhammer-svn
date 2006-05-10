@@ -93,7 +93,7 @@ public class Serveur {
         /* le thread démarreur de ventes ! */
         new VenteStarter().start();
 
-        Logger.log("Serveur", 0, "[sys] Serveur démarré, passage en boucle d'attente");
+        Logger.log("Serveur", 0, "[sys] Serveur démarré, passage en boucle d'attente.");
     }
 
     /* jr : attendre en acceptant, éventuellement, des commandes simples.
@@ -115,7 +115,7 @@ public class Serveur {
             
             lr.close();
         } catch (Exception e) {
-            Logger.log("Serveur", 0, "[sys] utilisateur mauvais : exception sur stdin : "+e.getMessage());
+            Logger.log("Serveur", 0, "[sys] utilisateur mauvais : exception sur stdin : " + e.getMessage());
         }
     }
 
@@ -152,24 +152,55 @@ public class Serveur {
     
     /* méthodes du design */
 
-    void envoyerCoupdeMASSE() {
-
+	// retrait de l'appel à la fonction checkPAF(s) à voir, quelle est son utilité?
+    void envoyerCoupdeMASSE(String sender) {
+		VenteServeur vc = ventemanager.getVenteEnCours();
+		boolean sup = false;
+		boolean ok = false;
+		if (vc != null) {
+			sup = vc.isSuperviseur(sender);
+			if (sup) {
+				ok = vc.checkPAF(sender); // LS : BEEP??
+				//switch (marteau)
+			}
+		}
     }
 
     boolean checkEnchere(int prix, String i) {
-        return false;
+        if (Serveur.ventemanager.checkEncherisseur(i) 
+			&& i != dernier_encherisseur 
+			&& prix > prix_courant) {
+			return true;
+		}
+		else {
+			return false;
+		}
     }
 
     void doEnchere(int prix, String i) {
-
+		prix_courant = prix;
+		dernier_encherisseur = i;
+		marteau = 0; 
     }
 
+	//ls : Modification par rapport au Design model : 
+	// checkEnchere appelle directement checkEncherisseur, vu que l'on utilise
+	// qu'à cet endroit le retour de celle-ci, donc il est inutile de le stocker
+	// et de le transmettre... (variable "c" du design model)
     void encherir(int prix, String i) {
-
+		if (checkEnchere(prix, i)) {
+			doEnchere(prix, i);
+			Serveur.broadcaster.enchere(prix, i);
+		}
     }
 
+	// ls : on devrait vérifier la validité des champs de o, à effectuer plus
+	// tard.
     void envoyerProposition(Objet o, String sender) {
-
+		o.setStatut(StatutObjet.Propose);
+		Serveur.objectmanager.add(o, sender);
+		Serveur.usermanager.getUtilisateur(sender).resultatEdition(StatutEdition.Reussi);
+		Serveur.objectmanager.obtenirListeObjets(Onglet.Vente, sender);
     }
 
     /* fin méthodes du design */

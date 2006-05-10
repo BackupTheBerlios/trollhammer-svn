@@ -83,30 +83,38 @@ class UserManagerServeur {
     }
 
     void kickerUtilisateur(String i, String sender) {
-
+		UtilisateurServeur victime = this.getUtilisateur(i);
+		victime.notification(Notification.Kicke);
+		victime.disconnect();
+		Serveur.broadcaster.etatParticipant((Participant) victime.getUtilisateur());
     }
 
     // modif p.r. au design : passage du Socket en argument,
     // histoire de savoir à quoi la Session se connecte
     void login(Socket s, String i, String mdp) {
-        Logger.log("Serveur", 0, "[login] tentative de login : "+i);
+        Logger.log("UserManagerServeur", 1, "[login] tentative de login : " + i);
         SessionServeur sess = new SessionServeur(s);
         UtilisateurServeur u = this.getUtilisateur(i);
 
         if(u != null) {
-            Logger.log("Serveur", 0, "[login] Utilisateur "+i+" trouvé");
+            Logger.log("UserManagerServeur", 2, "[login] Utilisateur " + i + " trouvé");
             u.doLogin(sess, mdp);
         } else {
-            Logger.log("Serveur", 0, "[login] Utilisateur "+i+" non trouvé");
+            Logger.log("UserManagerServeur", 0, "[login] Utilisateur " + i + " non trouvé");
             sess.resultatLogin(StatutLogin.Invalide);
             // jr : et on suppose que le Garbage Collector
             // passe après que la variable locale sess
             // n'existe plus à la sortie de login()...
+			// ls : C'est une évidence, ici tu n'as pas encore quitté
+			// le corps de la fonction, par conséquent la variable est toujours
+			// en utilisation (référencée) par la fonction, et donc le GC ne 
+			// peut virer la variable... (commentaires à effacer au premier 
+			// prétexte trouvé (valable ou non))
         }
     }
 
     void logout(String sender) {
-        Logger.log("UserManagerServeur", 0, "Logout de "+sender);
+        Logger.log("UserManagerServeur", 1, "[logout] Utilisateur " + sender);
         UtilisateurServeur u = this.getUtilisateur(sender);
         u.notification(Notification.Deconnexion);
         u.disconnect();
@@ -118,7 +126,9 @@ class UserManagerServeur {
     }
 
     void obtenirUtilisateur(String i, String sender) {
-
+		UtilisateurServeur s = this.getUtilisateur(sender);
+		UtilisateurServeur u = this.getUtilisateur(i);
+		s.detailsUtilisateur(u.getUtilisateur());
     }
 
     void utilisateur(Edition e, Utilisateur u, String sender) {

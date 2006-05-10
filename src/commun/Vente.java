@@ -25,6 +25,11 @@ class Vente implements java.io.Serializable {
 
     /* getters-setters and BLAH BLAH BLAH */
 
+	// cfrey: accès au truc private
+	ArrayList<Integer> getOIds() {
+		return this.objets;
+	}
+
     int getId() {
         return this.id;
     }

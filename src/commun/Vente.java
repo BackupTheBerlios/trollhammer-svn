@@ -1,4 +1,5 @@
 package trollhammer;
+import java.util.List;
 import java.util.ArrayList;
 
 class Vente implements java.io.Serializable {
@@ -13,7 +14,14 @@ class Vente implements java.io.Serializable {
     // une liste de POINTEURS sur des objets. Leurs IDs.
     // risque d'incohérences monstrueuses si on prend les objets
     // avec alors même qu'on fournit la liste dans les messages d'update. (jr)
-    private ArrayList<Integer> objets;
+    private List<Integer> objets;
+
+    /** Constructeur par defaut.
+    * Se contente d'initialiser la liste d'objets avec une ArrayList d'Integer.
+    */
+    Vente() {
+        objets = new ArrayList<Integer>();
+    }
 
     int getFirst() {
         return objets.get(0);
@@ -26,9 +34,13 @@ class Vente implements java.io.Serializable {
     /* getters-setters and BLAH BLAH BLAH */
 
 	// cfrey: accès au truc private
-	ArrayList<Integer> getOIds() {
+	List<Integer> getOIds() {
 		return this.objets;
 	}
+
+    void setOIds(List<Integer> objs) {
+        this.objets = objs;
+    }
 
     int getId() {
         return this.id;

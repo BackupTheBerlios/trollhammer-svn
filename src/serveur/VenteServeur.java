@@ -80,8 +80,14 @@ class VenteServeur extends Vente {
 // se passe rien ici ...
     }
 
+	/**
+	 * Coupe la tête de la liste des objets d'une vente.
+	 *
+	 * @return	l'objet qui était en tête de la liste
+	 * @author	cfrey
+	 */
     Objet removeHead() {
-        return null;
+        return Serveur.objectmanager.getObjet(this.removeFirst()).getObjet();
     }
 
     void insertObject(int o, int p, String u, long date) {
@@ -92,7 +98,13 @@ class VenteServeur extends Vente {
 
     }
     
-    // cfrey: eheh
+    /**
+     * Retourne la liste des objets de la vente, qui sont au niveau de la vente
+     * stockés sous forme d'une liste d'identifiants.
+     *
+     * @return	la liste des objets de la vente
+     * @author	cfrey
+     */
 	List<Objet> getObjets() {
 		List<Objet> r = new ArrayList<Objet>();
 		for (Integer oid : this.getOIds()) {

@@ -47,8 +47,16 @@ class VenteServeur extends Vente {
 		}
     }
 
+	/**
+	 * Vérifie si un utilisateur est un superviseur de la vente ou pas.
+	 *
+	 * @param	s	identifiant utilisateur
+	 * @return	True si l'utilisateur est un superviseur de la vente, False 
+	 * 			sinon.
+	 * @author	cfrey
+	 */
     boolean isSuperviseur(String s) {
-        return false;
+        return this.getSuperviseur() == s;
     }
 	
     void sellObject(String i, int prix) {

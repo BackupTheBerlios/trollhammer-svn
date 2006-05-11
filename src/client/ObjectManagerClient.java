@@ -1,5 +1,7 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Vector;
 
 class ObjectManagerClient {
 
@@ -7,6 +9,13 @@ class ObjectManagerClient {
     private Set<Objet> vendu;
     private Set<Objet> achete;
     private Set<Objet> propositions;
+
+    ObjectManagerClient() {
+        objets = new HashSet<Objet>();
+        vendu = new HashSet<Objet>();
+        achete = new HashSet<Objet>();
+        propositions = new HashSet<Objet>();
+    }
 
     Objet getObject(int i) {
         for(Objet o : objets) {
@@ -29,12 +38,23 @@ class ObjectManagerClient {
 
         // pour mettre à jour un objet, on enlève
         // sa précédente instance de la liste
+
+        Vector <Objet> a_enlever = new Vector<Objet>();
+
+        // on planifie d'abord le retrait
         for(Objet obj : liste) {
             if(obj.getId() == o.getId()) {
-                liste.remove(obj);
+                a_enlever.add(obj);
             }
         }
-        // puis on rajoute la nouvelle.
+        
+        // ensuite on effectue le retrait
+
+        for(Objet doublon : a_enlever) {
+            liste.remove(doublon);
+        }
+        
+        // puis on rajoute la nouvelle instance.
         liste.add(o);
     }
 

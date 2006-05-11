@@ -1,6 +1,7 @@
 package trollhammer;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Vector;
 
 class ParticipantManagerClient {
 
@@ -11,11 +12,18 @@ class ParticipantManagerClient {
     }
 
     void etatParticipant(Participant p) {
+        Vector<Participant> a_enlever = new Vector<Participant>();
+
         for(Participant pr : participants) {
             if(pr.getLogin() == p.getLogin()) {
-                participants.remove(pr);
+                a_enlever.add(pr);
             }
         }
+
+        for(Participant doublon : a_enlever) {
+            participants.remove(doublon);
+        }
+
         participants.add(p);
     }
 

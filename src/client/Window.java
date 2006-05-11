@@ -231,7 +231,10 @@ class Window implements ActionListener
     }
 
     void affichageListeObjets(Set<Objet> ol) {
-
+        switch(Client.client.getMode()) {
+            case Vente:
+                this.vente.affichageListeObjets(ol);
+        }
     }
 
     void affichageUtilisateur(Utilisateur i) {

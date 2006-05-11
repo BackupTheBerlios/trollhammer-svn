@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.Set;
 import java.util.Vector;
 
 class VentePanel implements ActionListener
@@ -27,7 +28,6 @@ class VentePanel implements ActionListener
 	private FreshPanel rightPanel = null;
 	private String titre = null;
 	private JLabel titreLabel = null;
-	private Vector listObjets = null;
 	
 	//autres éléments
 	private boolean modo = false;
@@ -145,4 +145,43 @@ class VentePanel implements ActionListener
 			//blabla
 		}
 	}
+
+    /* relai de m�thode de HI, affiche la liste des objets de l'onglet Vente ! */
+    void affichageListeObjets(Set<Objet> ol) {
+        Vector <VenteObjet> liste = new Vector<VenteObjet>();
+        for(Objet o : ol) {
+            VenteObjet element = null;
+            switch(o.getStatut()) {
+                case Propose:
+                    element = new VenteObjetPropose(o); break;
+                case Accepte:
+                    element = new VenteObjetAccepte(o); break;
+                case EnVente:
+                    element = new VenteObjetEnVente(o); break;
+                case Vendu:
+                    element = new VenteObjetVendu(o); break;
+                case Refuse:
+                    element = new VenteObjetRefuse(o); break;
+            }
+            liste.add(element);
+        }
+
+        JList vue = new JList(liste);
+        vue.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((VenteObjet) value).selectionne(isSelected);
+                return (VenteObjet) value;
+                }
+                });
+        rightPane.setViewportView(vue);
+    }
 }

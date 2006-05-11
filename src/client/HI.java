@@ -64,7 +64,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageListeObjets(Set<Objet> ol) {
-
+        this.mw.affichageListeObjets(ol);
     }
 
     void affichageUtilisateur(Utilisateur i) {

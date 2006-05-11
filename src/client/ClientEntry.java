@@ -103,9 +103,11 @@ class ClientEntry {
     void chat(String m, String i) {
         Logger.log("ClientEntry", 2, "[chat] "+i+" dit : "+m);
 
-        if(Client.fsm.chat()) {
-            Client.hi.affichageChat(m, i);
-        }
+        // inconditionnel, que ça s'affiche meme hors-onglet
+        //et que le log l'aie note
+        Client.fsm.chat();
+
+        Client.hi.affichageChat(m, i);
     }
 
     void detailsVente(Vente v, List<Objet> liste) {

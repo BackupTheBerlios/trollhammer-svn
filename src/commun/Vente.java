@@ -57,6 +57,15 @@ class Vente implements java.io.Serializable {
 		this.objets.add(elt);
 	}
 
+	// cfrey: enlève un objet de la liste par son id
+	//		  si l'oid n'est pas dans la liste, on fait rien.
+	void removeOId(int oid) {
+		int p = this.getOIds().indexOf(oid);
+		if (p != -1) {
+			this.objets.remove(p);
+		}
+	}
+
 	// probablement inutile, cf ci-dessus
     void setOIds(List<Integer> objs) {
         this.objets = objs;

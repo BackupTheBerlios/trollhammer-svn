@@ -116,12 +116,22 @@ class VenteServeur extends Vente {
 		// l'insertion ne peut pas échouer, on modifier des propriétés de
 		// l'objet, mais pour l'instant ça n'existe pas ...
 		// ObjetServeur o = Serveur.objectmanager.getObjet(oid);
-		// o.setDateInsertion = date;
-		// o.setModérateurQuiAAjoutéL'ObjetALaVente = u;
+		// if (o != null) {
+		// 	o.setDateInsertion = date;
+		// 	o.setModérateurQuiAAjoutéL'ObjetALaVente = u;
+		// }
     }
 
-    void removeObject(Objet o, Utilisateur c) {
-
+	/**
+	 * Enlève de la liste des objets d'une vente un objet identifié par son 
+	 * identifiant (pas sa position).
+	 *
+	 * @param	oid		identifiant de l'objet
+	 * @param	u		identifiant de l'utilisateur ??? pas utilisé ici, à voir
+	 * @author	cfrey
+	 */
+    void removeObject(int oid, String u) {
+		this.removeOId(oid);
     }
     
     /**

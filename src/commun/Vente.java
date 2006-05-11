@@ -15,6 +15,15 @@ class Vente implements java.io.Serializable {
     // risque d'incohérences monstrueuses si on prend les objets
     // avec alors même qu'on fournit la liste dans les messages d'update. (jr)
     private List<Integer> objets;
+	
+	public Vente(int id, String nom, String description, long date, Mode mode, String superviseur) {
+		this.id = id;
+		this.nom = nom;
+		this.description = description;
+		this.date = date;
+		this.mode = mode;
+		this.superviseur = superviseur;
+	}
 
     /** Constructeur par defaut.
     * Se contente d'initialiser la liste d'objets avec une ArrayList d'Integer.

@@ -7,6 +7,7 @@ import java.net.*;
  * Chaque requête d'un client passe par cette classe qui redirige la requête
  * à l'objet qui est chargé de traiter la requête.
  *
+ * @author CorrectionS Lionel Sambuc & Charles François Rey
  * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
  */
 class ServeurEntry {
@@ -26,76 +27,113 @@ class ServeurEntry {
 
     void logout(String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
-            Logger.log("ServeurEntry", 0, "Logout de "+sender);
+			//ls : Aucun intérêt de le faire ici, vu que l'on n'effectue aucun
+			// travail ici...
+            //Logger.log("ServeurEntry", 1, LogType.INF, "[net] User " + sender + " sent a \"logout\" msg.");
             Serveur.usermanager.logout(sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"logout\" ignored.");
+		}
     }
 
     void envoyerChat(String msg, String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
             Serveur.chatsystem.envoyerChat(msg, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"envoyerChat\" ignored.");
+		}
     }
 
     void envoyerCoupdeMASSE(String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.serveur.envoyerCoupdeMASSE(sender);
         }
-    }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"envoyerCoupdeMASSE\" ignored.");
+		}
+	}
 
     void kickerUtilisateur(String u, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.serveur.usermanager.kickerUtilisateur(u, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"kickerUtilisateur\" ignored.");
+		}
     }
 
     void encherir(int prix, String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
 			Serveur.serveur.encherir(prix, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"encherir\" ignored.");
+		}
     }
 
     void envoyerProposition(Objet proposition, String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
 			Serveur.serveur.envoyerProposition(proposition, sender);
-
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"envoyerProposition\" ignored.");
+		}
     }
 
     void validerProposition(int oid, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.objectmanager.validerProposition(oid, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"validerProposition\" ignored.");
+		}
     }
 
     void invaliderProposition(int oid, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.objectmanager.invaliderProposition(oid, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"invaliderProposition\" ignored.");
+		}
     }
 
     void insererObjetVente(int objet, int vente, int pos, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.insererObjetVente(objet, vente, pos, sender);			
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"insererObjetVente\" ignored.");
+		}
     }
 
     void enleverObjetVente(int objet, int vente, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.ventemanager.enleverObjetVente(objet, vente, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"enleverObjetVente\" ignored.");
+		}
     }
 
     void obtenirUtilisateur(String i, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.usermanager.obtenirUtilisateur(i, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirUtilisateur\" ignored.");
+		}
     }
 
     void utilisateur(Edition e, Utilisateur u, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.usermanager.utilisateur(e, u, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"utilisateur\" ignored.");
+		}
     }
 
 	//ls : Modif : suivant l'onglet, le sender DOIT être modérateur
@@ -107,11 +145,17 @@ class ServeurEntry {
 			if(Serveur.usermanager.isConnected(sender)) {
 				Serveur.objectmanager.obtenirListeObjets(type, sender);
 			}
+			else {
+				Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirListeObjets\" [Onglet = Vente|Achat] ignored.");
+			}
 			break;
 		case Planification:
 		case Validation:
 			if(Serveur.usermanager.isModo(sender)) {
 				Serveur.objectmanager.obtenirListeObjets(type, sender);
+			}
+			else {
+				Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirListeObjets\" [Onglet = Planification|Validation] ignored.");
 			}
 			break;			
 		}
@@ -121,36 +165,56 @@ class ServeurEntry {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.usermanager.obtenirListeUtilisateurs(sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirListeUtilisateurs\" ignored.");
+		}
     }
 
     void obtenirListeVentes(String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.obtenirListeVentes(sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirListeVentes\" ignored.");
+		}
     }
 
     void obtenirListeParticipants(String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
 			Serveur.usermanager.obtenirListeParticipants(sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirListeParticipants\" ignored.");
+		}
     }
 
     void obtenirVente(int v, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.obtenirVente(v, sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirVente\" ignored.");
+		}
     }
 
     void obtenirProchaineVente(String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
 			Serveur.ventemanager.obtenirProchaineVente(sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirProchaineVente\" ignored.");
+		}
     }
 
     void vente(Edition e, Vente v, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(),
+									   v.getDescription(), v.getDate(),
+									   v.getMode(), v.getSuperviseur()), sender);
         }
+		else {
+			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"vente\" ignored.");
+		}
     }
 
     /* fin des méthodes du design */
@@ -179,8 +243,7 @@ class ServeurEntryListener extends Thread {
         try {
 
             ss = new ServerSocket(PORT); 
-            Logger.log("ServeurEntry", 0, "[net] Serveur actif sur le port "
-                    +PORT);
+            Logger.log("ServeurEntry", 0, LogType.INF, "[net] Serveur actif sur le port : " + PORT);
             Socket s; // le socket d'une nouvelle connexion
 
             while(true) {
@@ -190,13 +253,13 @@ class ServeurEntryListener extends Thread {
                 new ServeurEntryHandler(s).start();
             }
         } catch (Exception e) {
-            Logger.log("ServeurEntry", 0, "[net] exception thread listener :");
+            Logger.log("ServeurEntry", 0, LogType.ERR, "[net] Exception thread listener : ");
             e.printStackTrace();
             try {
                 // on balaie après soi, vé.
                 ss.close();
             } catch (Exception ebis) {
-                Logger.log("ServeurEntry", 0, "[net] exception sur la fermeture thread listener. La vie est rude.");
+                Logger.log("ServeurEntry", 0, LogType.ERR, "[net] Exception sur la fermeture thread listener. La vie est rude.");
             }
         } 
     }
@@ -222,7 +285,7 @@ class ServeurEntryHandler extends Thread {
     ServeurEntryHandler(Socket socket) {
         this.s = socket;
         this.etat = Etat.L1;
-        Logger.log("ServeurEntry", 0, "[net] connexion de "+s.getInetAddress());
+        Logger.log("ServeurEntry", 1, LogType.INF, "[net] Connexion de " + s.getInetAddress());
     }
 
     /** Boucle de lecture des objets sérialisés reçus du socket.
@@ -237,10 +300,10 @@ class ServeurEntryHandler extends Thread {
 
                 if(o instanceof MessageClientServeur) {
                     MessageClientServeur m = (MessageClientServeur) o;
-                    Logger.log("ServeurEntryHandler", 1, "[net] reçu requête : "+m+" de "+m.sender);
+                    Logger.log("ServeurEntryHandler", 1, LogType.INF, "[net] Reçu requête : " + m + " de " + m.sender + ".");
                     this.execute(m);
                 } else {
-                    Logger.log("ServeurEntryHandler", 1, "[net] objet invalide de "+s.getInetAddress()+" : ignoré");
+                    Logger.log("ServeurEntryHandler", 1, LogType.WRN, "[net] Requête invalide de " + s.getInetAddress() + " : ignoré.");
                 }
             } while (!(o instanceof logout));
 
@@ -248,7 +311,7 @@ class ServeurEntryHandler extends Thread {
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
-            Logger.log("ServeurEntryHandler", 0, "[net] déconnexion de "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("ServeurEntryHandler", 1, LogType.INF, "[net] Déconnexion de " + s.getInetAddress() + " : " + ioe.getMessage());
 
             /* on essaie de savoir si la connexion venait réellement
              * de la session d'un Utilisateur, et si oui,
@@ -260,24 +323,23 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.logout(u.getLogin());
             }
         } catch (Exception e) {
-            Logger.log("ServeurEntryHandler", 0, "[net] EXCEPTION : déconnexion de "+s.getInetAddress());
+            Logger.log("ServeurEntryHandler", 0, LogType.ERR, "[net] Exception : déconnexion de " + s.getInetAddress());
             e.printStackTrace();
         } finally {
             // de toute façon, on ferme le Socket.
             try {
                 s.close();
             } catch (IOException ioeagain) {
-                Logger.log("ServeurEntryHandler", 0, "[net] EXCEPTION : fermeture du socket impossible : "+ioeagain.getMessage());
+                Logger.log("ServeurEntryHandler", 0, LogType.ERR, "[net] Exception : fermeture du socket impossible : " + ioeagain.getMessage());
             }
         }
 
-        Logger.log("ServeurEntryHandler", 1, "[net] Terminaison thread pour "+
-                this.s.getInetAddress());
+        Logger.log("ServeurEntryHandler", 1, LogType.INF, "[net] Terminaison thread pour " + this.s.getInetAddress());
     }
 
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
     private void execute(MessageClientServeur m) {
-        Logger.log("ServeurEntryHandler",2,"Etat precedent : "+etat);
+        Logger.log("ServeurEntryHandler", 2, LogType.DBG, "Etat precedent : " + etat);
         if(m instanceof login) {
             if(etat == Etat.L1) {
                 etat = Etat.TR1;
@@ -435,9 +497,9 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.vente(v.e, v.v, v.sender);
             }
         } else {
-            Logger.log("ServeurEntryHandler", 0, "[net] message de type non reconnu : "+m);
+            Logger.log("ServeurEntryHandler", 1, LogType.WRN, "[net] Message de type non reconnu : " + m);
         }
-        Logger.log("ServeurEntryHandler",2,"Nouvel etat : "+etat);
+        Logger.log("ServeurEntryHandler", 2, LogType.DBG, "Nouvel état : " + etat);
     }
 
     /** Retourne true si l'état actuel est un état duquel on peut changer de

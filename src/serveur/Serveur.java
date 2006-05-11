@@ -103,9 +103,8 @@ public class Serveur {
     private static void attendre() {
         try {
             String commande;
-            java.io.BufferedReader lr = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(System.in));
-
+            java.io.BufferedReader lr =
+				new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
             do {
                 commande = lr.readLine();
                 // faire quelque chose de la commande

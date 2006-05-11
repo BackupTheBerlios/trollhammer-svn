@@ -15,8 +15,4 @@ class VenteStarter extends Thread {
 
     }
 
-    /* si c'est le cas, on la démarre ! */
-    private void demarrerVente() {
-
-    }
 }

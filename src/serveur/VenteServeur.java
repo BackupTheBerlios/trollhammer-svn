@@ -31,6 +31,10 @@ import java.util.ArrayList;
  
 class VenteServeur extends Vente {
 
+	public VenteServeur(int id, String nom, String description, long date, Mode mode, String superviseur) {
+		super(id, nom, description, date, mode, superviseur);
+	}
+	
 	/**
 	 * Utilisé lors de la déconnection d'un modérateur. Le VenteManager nous
 	 * indique qu'un modérateur se déconnecte de la <b>vente en cours</b>.

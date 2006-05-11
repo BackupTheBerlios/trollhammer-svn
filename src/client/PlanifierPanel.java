@@ -56,9 +56,14 @@ class PlanifierPanel implements ActionListener
 		titrePan1 = "Planifier une nouveau vente: ";
 		nomBox = new JComboBox();
 		nomBox.setEditable(true);
+		modeAuto = true;
 		auto = new JRadioButton("Automatique");
 		auto.setSelected(true);
+		auto.setActionCommand("auto");
+		auto.addActionListener(this);
 		manuel = new JRadioButton("Manuel");
+		manuel.setActionCommand("manuel");
+		manuel.addActionListener(this);
 		butGroup = new ButtonGroup();
 		butGroup.add(auto);
 		butGroup.add(manuel);
@@ -172,6 +177,14 @@ class PlanifierPanel implements ActionListener
 		else if(event.getActionCommand().equals("remove"))
 		{
 			
+		}
+		else if(event.getActionCommand().equals("auto"))
+		{
+			modeAuto = true;
+		}
+		else if(event.getActionCommand().equals("manuel"))
+		{
+			modeAuto = false;
 		}
 		
 	}

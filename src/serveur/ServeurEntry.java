@@ -167,7 +167,7 @@ class ServeurEntry {
 
     void obtenirListeParticipants(String sender) {
         if (Serveur.usermanager.isConnected(sender)) {
-			Serveur.usermanager.obtenirListeParticipants(sender);
+			Serveur.participantmanager.obtenirListeParticipants(sender);
         } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirListeParticipants\" ignored.");
 		}

@@ -257,7 +257,6 @@ class HdVPanel extends JComponent implements ActionListener
                 sallePanel.add(u);
                 // update graphique
                 sallePanel.validate();
-                System.out.println(p.getLogin()+" en ligne");
             }
         }
     }

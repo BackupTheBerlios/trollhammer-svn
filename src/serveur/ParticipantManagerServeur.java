@@ -12,28 +12,31 @@ import java.util.HashSet;
  */
 class ParticipantManagerServeur {
 
-    /* il y a peut-être confusion entre getParticipants() et getConnected() ici
+    /* jr : il y a peut-être confusion entre getParticipants() et getConnected() ici
      * getParticipants() renvoie-t-il la liste des Participants connectés,
-     * ou tous ?
+     * ou tous ? Celui-ci renvoie tous, getConnected() seulement les connectés,
+     * mais c'est mon interprétation.
      */
     Set<Participant> getParticipants() {
-        Set<Participant> pl = new HashSet<Participant>();
-        Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
-        for(UtilisateurServeur u : ul) {
-            if(u.getStatut() == StatutLogin.Connecte_Utilisateur
-            || u.getStatut() == StatutLogin.Connecte_Moderateur) {
-                pl.add((Participant) u.getUtilisateur());
-            }
-        }
-        return pl;
+        return utilisateurToParticipant(Serveur.usermanager.getUtilisateurs());
     }
 
     void obtenirListeParticipants(String sender) {
-
+        Set<Participant> liste = this.getConnected();
+        Serveur.usermanager.getUtilisateur(sender).listeParticipants(liste);
     }
 
     Set<Participant> getConnected() {
-        return null;
+        return utilisateurToParticipant(Serveur.usermanager.getConnected());
     }
 
+    // jr : généralisation de la conversion de Set faite par les deux méthodes,
+    // getParticipants() et getConnected() (rétrospectivement, oui, c'est moche.)
+    Set<Participant> utilisateurToParticipant(Set<UtilisateurServeur> s) {
+        Set<Participant> pl = new HashSet<Participant>();
+        for(UtilisateurServeur u : s) {
+            pl.add((Participant) u.getUtilisateur());
+        }
+        return pl;
+    }
 }

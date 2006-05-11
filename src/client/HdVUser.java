@@ -1,10 +1,8 @@
 package trollhammer;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class HdVUser extends JRadioButton /*implements ActionListener*/
+public class HdVUser extends JRadioButton
 {
 	private String login;
 	private boolean modo;

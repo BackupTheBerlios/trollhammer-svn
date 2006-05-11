@@ -154,7 +154,7 @@ class SessionClient {
     }
 
     void utilisateur(Edition e, Utilisateur u) {
-        envoyer(new utilisateur(login, e, u));
+        envoyer(new MessageUtilisateur(login, e, u));
     }
 
     void validerProposition(int i) {
@@ -162,7 +162,7 @@ class SessionClient {
     }
 
     void vente(Edition e, Vente v) {
-        envoyer(new vente(login, e, v));
+        envoyer(new MessageVente(login, e, v));
     }
 
     /* fin méthodes du design */

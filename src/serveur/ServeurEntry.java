@@ -365,10 +365,10 @@ class ServeurEntryHandler extends Thread {
         } else if (m instanceof obtenirUtilisateur) {
             obtenirUtilisateur ou = (obtenirUtilisateur) m;
             Serveur.serveurentry.obtenirUtilisateur(ou.u, ou.sender);
-        } else if (m instanceof utilisateur) {
+        } else if (m instanceof MessageUtilisateur) {
             if(etat == Etat.GU2) {
                 etat = Etat.GU2;
-                utilisateur u = (utilisateur) m;
+                MessageUtilisateur u = (MessageUtilisateur) m;
                 Serveur.serveurentry.utilisateur(u.e, u.u, u.sender);
             }
         } else if (m instanceof obtenirListeObjets) {
@@ -428,10 +428,10 @@ class ServeurEntryHandler extends Thread {
                 obtenirProchaineVente ov = (obtenirProchaineVente) m;
                 Serveur.serveurentry.obtenirProchaineVente(ov.sender);
             }
-        } else if (m instanceof vente) {
+        } else if (m instanceof MessageVente) {
             if(etat == Etat.PL4) {
                 etat = Etat.PL3;
-                vente v = (vente) m;
+                MessageVente v = (MessageVente) m;
                 Serveur.serveurentry.vente(v.e, v.v, v.sender);
             }
         } else {

@@ -236,11 +236,11 @@ class ClientEntryHandler extends Thread {
         if(m instanceof resultatLogin) {
             resultatLogin rl = (resultatLogin) m;
             Client.cliententry.resultatLogin(rl.s);
-        } else if (m instanceof notification) {
-            notification n = (notification) m;
+        } else if (m instanceof MessageNotification) {
+            MessageNotification n = (MessageNotification) m;
             Client.cliententry.notification(n.n);
-        } else if (m instanceof evenement) {
-            evenement e = (evenement) m;
+        } else if (m instanceof MessageEvenement) {
+            MessageEvenement e = (MessageEvenement) m;
             Client.cliententry.evenement(e.e);
         } else if (m instanceof enchere) {
             enchere e = (enchere) m;

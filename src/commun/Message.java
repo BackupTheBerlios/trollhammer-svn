@@ -163,12 +163,12 @@ class obtenirUtilisateur extends MessageClientServeur {
 
 }
 
-class utilisateur extends MessageClientServeur {
+class MessageUtilisateur extends MessageClientServeur {
 
     Edition e;
     Utilisateur u;
 
-    utilisateur(String sender, Edition e, Utilisateur u) {
+    MessageUtilisateur(String sender, Edition e, Utilisateur u) {
         super(sender);
         this.e = e;
         this.u = u;
@@ -230,12 +230,12 @@ class obtenirProchaineVente extends MessageClientServeur {
 
 }
 
-class vente extends MessageClientServeur {
+class MessageVente extends MessageClientServeur {
 
     Edition e;
     Vente v;
 
-    vente(String sender, Edition e, Vente v) {
+    MessageVente(String sender, Edition e, Vente v) {
         super(sender);
         this.e = e;
         this.v = v;
@@ -255,21 +255,21 @@ class resultatLogin extends Message {
 
 }
 
-class notification extends Message {
+class MessageNotification extends Message {
 
     Notification n;
 
-    notification(Notification n) {
+    MessageNotification(Notification n) {
         this.n = n;
     }
 
 }
 
-class evenement extends Message {
+class MessageEvenement extends Message {
 
     Evenement e;
 
-    evenement(Evenement e) {
+    MessageEvenement(Evenement e) {
         this.e = e;
     }
 

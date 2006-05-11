@@ -47,11 +47,11 @@ class SessionServeur {
     }
 
     void notification(Notification n) {
-        envoyer(new notification(n));
+        envoyer(new MessageNotification(n));
     }
 
     void evenement(Evenement e) {
-        envoyer(new evenement(e));
+        envoyer(new MessageEvenement(e));
     }
 
     void enchere(int prix, String i) {

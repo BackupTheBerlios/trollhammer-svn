@@ -19,6 +19,7 @@ class ValiderPanel implements ActionListener
 	private FreshPanel hautPanel = null;
 	private JScrollPane jsp = null;
     private JList liste = null;
+    Vector <ValiderObjet> objs = null;
 	//Panel du bas
 	private CoolPanel basPanel = null;
 	private JButton accepter = null;
@@ -59,8 +60,8 @@ class ValiderPanel implements ActionListener
                     boolean isSelected,      // is the cell selected
                     boolean cellHasFocus)    // the list and the cell have the focus
                 {
-                    ((VenteObjet) value).selectionne(isSelected);
-                return (VenteObjet) value;
+                    ((ObjetElementListe) value).selectionne(isSelected);
+                return (ObjetElementListe) value;
                 }
                 });
 
@@ -85,10 +86,10 @@ class ValiderPanel implements ActionListener
 	}
 
     void affichageListeObjets(Set<Objet> ol) {
-        Vector <ValidationObjet> objs = new Vector<ValidationObjet>();
+        objs = new Vector<ValiderObjet>();
 
         for(Objet o : ol) {
-            objs.add(new ValidationObjet(o));
+            objs.add(new ValiderObjet(o));
         }
 
         liste.setListData(objs);
@@ -100,11 +101,15 @@ class ValiderPanel implements ActionListener
         Logger.log("ValiderPanel", 2, commande);
 
         if(commande.equals("accepter")) {
-            Objet o = null;
-            Client.hi.accepterProposition(o.getId());
+            // okay chums I'm back. Let's do this.
+            int oid = objs.get(liste.getSelectedIndex()).getId();
+            // LEEEEEEROOOOY NGNGNGNJEEEEENKIIIIINS!!!!!
+            Client.hi.accepterProposition(oid);
         } else if (commande.equals("refuser")) {
-            Objet o = null; // TODO : prendre l'objet sélectionné dans la liste
-            Client.hi.refuserProposition(o.getId());
+            // it's not my fault !
+            int oid = objs.get(liste.getSelectedIndex()).getId();
+            // at least I have chicken.
+            Client.hi.refuserProposition(oid);
         }
 	}
 }

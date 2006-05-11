@@ -2,7 +2,7 @@ package trollhammer;
 import javax.swing.*;
 import java.awt.*;
 
-abstract class VenteObjet extends JPanel
+abstract class ObjetElementListe extends JPanel
 {
 	protected Objet obj;
 	protected int id;
@@ -18,7 +18,7 @@ abstract class VenteObjet extends JPanel
     protected Color couleur_selectionne;
 
 	
-	public VenteObjet(Objet obj)
+	public ObjetElementListe(Objet obj)
 	{
 		super();
 		id = obj.getId();
@@ -44,9 +44,13 @@ abstract class VenteObjet extends JPanel
             this.setBackground(couleur_fond);
         }
     }
+
+    int getId() {
+        return this.id;
+    }
 }
 
-class VenteObjetAccepte extends VenteObjet
+class VenteObjetAccepte extends ObjetElementListe
 {
 	public VenteObjetAccepte(Objet obj)
 	{
@@ -68,7 +72,7 @@ class VenteObjetEnVente extends VenteObjetAccepte
 	}
 }
 
-class VenteObjetPropose extends VenteObjet
+class VenteObjetPropose extends ObjetElementListe
 {
 	private JButton retirer = null;
 	public VenteObjetPropose(Objet obj)
@@ -82,7 +86,7 @@ class VenteObjetPropose extends VenteObjet
 	}
 }
 
-class VenteObjetRefuse extends VenteObjet
+class VenteObjetRefuse extends ObjetElementListe
 {
 	public VenteObjetRefuse(Objet obj)
 	{
@@ -94,7 +98,7 @@ class VenteObjetRefuse extends VenteObjet
 	}
 }
 
-class VenteObjetVendu extends VenteObjet
+class VenteObjetVendu extends ObjetElementListe
 {
 	public VenteObjetVendu(Objet obj)
 	{
@@ -104,12 +108,22 @@ class VenteObjetVendu extends VenteObjet
 	}
 }
 
-class ValidationObjet extends VenteObjet {
+class ValiderObjet extends ObjetElementListe {
     
-    public ValidationObjet(Objet obj) {
+    public ValiderObjet(Objet obj) {
         super(obj);
 
-        this.add(new JLabel(description));
-        this.add(new JLabel("Prix de base : "+prix_de_base));
+		this.add(new JLabel(nom+": "+description));
+		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
+    }
+}
+
+class AchatObjet extends ObjetElementListe {
+
+    public AchatObjet(Objet obj) {
+        super(obj);
+
+		this.add(new JLabel(nom));
+		this.add(new JLabel("Acheté "+String.valueOf(prix_de_vente)+".-"));
     }
 }

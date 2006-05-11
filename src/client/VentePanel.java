@@ -28,6 +28,8 @@ class VentePanel implements ActionListener
 	private FreshPanel rightPanel = null;
 	private String titre = null;
 	private JLabel titreLabel = null;
+    private JList liste = null;
+    private Vector <ObjetElementListe> objs = null;
 	
 	//autres éléments
 	private boolean modo = false;
@@ -66,10 +68,29 @@ class VentePanel implements ActionListener
         raz.addActionListener(this);
 		//éléments du Panel de droite
 		rightPanel = new FreshPanel('y',false);
-		titreLabel = new JLabel(titre);
+        // a mettre dans leur propre panel, la liste les écrase
+		//titreLabel = new JLabel(titre);
 		rightPane = new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		rightPane.setBorder(BorderFactory.createEtchedBorder());
-		
+
+        liste = new JList();
+        liste.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        liste.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((ObjetElementListe) value).selectionne(isSelected);
+                return (ObjetElementListe) value;
+                }
+                });
+        rightPane.setViewportView(liste);
 	}
 	private JComponent buildVentePanel()
 	{
@@ -90,7 +111,8 @@ class VentePanel implements ActionListener
 		leftPanel.add(raz, new CellConstraints(2,11));
 		
 		//right Panel
-		rightPanel.add(titreLabel);
+        //le titre se fait écrabouiller
+		//rightPanel.add(titreLabel);
 		
 		//autres éléments
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPane);
@@ -148,9 +170,9 @@ class VentePanel implements ActionListener
 
     /* relai de methode de HI, affiche la liste des objets de l'onglet Vente ! */
     void affichageListeObjets(Set<Objet> ol) {
-        Vector <VenteObjet> liste = new Vector<VenteObjet>();
+        objs = new Vector<ObjetElementListe>();
         for(Objet o : ol) {
-            VenteObjet element = null;
+            ObjetElementListe element = null;
             switch(o.getStatut()) {
                 case Propose:
                     element = new VenteObjetPropose(o); break;
@@ -163,25 +185,9 @@ class VentePanel implements ActionListener
                 case Refuse:
                     element = new VenteObjetRefuse(o); break;
             }
-            liste.add(element);
+            objs.add(element);
         }
 
-        JList vue = new JList(liste);
-        vue.setCellRenderer(new ListCellRenderer() {
-                // This is the only method defined by ListCellRenderer.
-                // We just reconfigure the JLabel each time we're called.
-
-                public Component getListCellRendererComponent(
-                    JList list,
-                    Object value,            // value to display
-                    int index,               // cell index
-                    boolean isSelected,      // is the cell selected
-                    boolean cellHasFocus)    // the list and the cell have the focus
-                {
-                    ((VenteObjet) value).selectionne(isSelected);
-                return (VenteObjet) value;
-                }
-                });
-        rightPane.setViewportView(vue);
+        liste.setListData(objs);
     }
 }

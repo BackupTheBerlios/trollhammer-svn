@@ -46,6 +46,25 @@ class ValiderPanel implements ActionListener
         refuser.addActionListener(this);
 		basPanel.add(refuser);
 		
+        liste = new JList();
+        liste.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        liste.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((VenteObjet) value).selectionne(isSelected);
+                return (VenteObjet) value;
+                }
+                });
+
+        jsp.setViewportView(liste);
 	}
 	private JComponent buildValiderPanel()
 	{
@@ -72,24 +91,7 @@ class ValiderPanel implements ActionListener
             objs.add(new ValidationObjet(o));
         }
 
-        liste = new JList(objs);
-        liste.setCellRenderer(new ListCellRenderer() {
-                // This is the only method defined by ListCellRenderer.
-                // We just reconfigure the JLabel each time we're called.
-
-                public Component getListCellRendererComponent(
-                    JList list,
-                    Object value,            // value to display
-                    int index,               // cell index
-                    boolean isSelected,      // is the cell selected
-                    boolean cellHasFocus)    // the list and the cell have the focus
-                {
-                    ((VenteObjet) value).selectionne(isSelected);
-                return (VenteObjet) value;
-                }
-                });
-
-        jsp.setViewportView(liste);
+        liste.setListData(objs);
     }
 
 	public void actionPerformed(ActionEvent event)
@@ -98,7 +100,7 @@ class ValiderPanel implements ActionListener
         Logger.log("ValiderPanel", 2, commande);
 
         if(commande.equals("accepter")) {
-            Objet o = null; // TODO : prendre l'objet sélectionné dans la liste
+            Objet o = null;
             Client.hi.accepterProposition(o.getId());
         } else if (commande.equals("refuser")) {
             Objet o = null; // TODO : prendre l'objet sélectionné dans la liste

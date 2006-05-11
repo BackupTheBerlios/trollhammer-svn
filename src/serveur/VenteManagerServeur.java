@@ -190,8 +190,15 @@ class VenteManagerServeur {
         }
 	}
 
-    boolean checkEncherisseur(String i) {
-        return false;
+	/**
+	 * Teste si un utiliseur peut enchérir ou pas. Un superviseur ne peut pas 
+	 * enchérir.
+	 *
+	 * @param	uid		identifiant utilisateur
+	 * @author	cfrey
+	 */
+    boolean checkEncherisseur(String uid) {
+        return !uid.equals(this.getVenteEnCours().getSuperviseur());
     }
 
     void vente(Edition e, VenteServeur v, String sender) {

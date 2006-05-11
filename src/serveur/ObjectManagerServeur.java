@@ -46,7 +46,7 @@ class ObjectManagerServeur {
 			break;
 		case Achat:
 			for (ObjetServeur o : objets) {
-				if (o.getAcheteur != null && o.getAcheteur().equals(sender)) {
+				if (o.getAcheteur() != null && o.getAcheteur().equals(sender)) {
 					liste.add(o.getObjet());
 				}
 			}

@@ -28,7 +28,7 @@ class ModerateurServeur extends UtilisateurServeur {
      */
 
     void disconnect() {
-        Logger.log("ModérateurServeur", 0, "[logout] déconnexion : login "+u.getLogin());
+        Logger.log("ModerateurServeur", 0, LogType.INF, "[logout] déconnexion : login "+u.getLogin());
         u.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
         this.session = null;

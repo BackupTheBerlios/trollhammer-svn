@@ -17,6 +17,9 @@ class VenteManagerServeur {
     VenteManagerServeur() {
         ventes = new HashSet<VenteServeur>();
     }
+	
+	//ls : fix tmp, d'ici que chaois mette a jour
+	void demarrerVente() {}
 
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
@@ -252,7 +255,7 @@ class VenteManagerServeur {
      * et dans le passé, null s'il n'y en a pas.
      */
     VenteServeur getVenteEnCours() {
-        /* on commence par prendre la vente la plus proche dans le temps */
+        // on commence par prendre la vente la plus proche dans le temps
         VenteServeur encours = getStarting();
 
         /* puis on vérifie si elle a démarré ! Si pas,

@@ -92,15 +92,15 @@ class UserManagerServeur {
     // modif p.r. au design : passage du Socket en argument,
     // histoire de savoir à quoi la Session se connecte
     void login(Socket s, String i, String mdp) {
-        Logger.log("UserManagerServeur", 1, "[login] tentative de login : " + i);
+        Logger.log("UserManagerServeur", 1, LogType.INF, "[login] tentative de login : " + i);
         SessionServeur sess = new SessionServeur(s);
         UtilisateurServeur u = this.getUtilisateur(i);
 
         if(u != null) {
-            Logger.log("UserManagerServeur", 2, "[login] Utilisateur " + i + " trouvé");
+            Logger.log("UserManagerServeur", 2, LogType.INF, "[login] Utilisateur " + i + " trouvé");
             u.doLogin(sess, mdp);
         } else {
-            Logger.log("UserManagerServeur", 0, "[login] Utilisateur " + i + " non trouvé");
+            Logger.log("UserManagerServeur", 1, LogType.WRN, "[login] Utilisateur " + i + " non trouvé");
             sess.resultatLogin(StatutLogin.Invalide);
             // jr : et on suppose que le Garbage Collector
             // passe après que la variable locale sess
@@ -114,7 +114,7 @@ class UserManagerServeur {
     }
 
     void logout(String sender) {
-        Logger.log("UserManagerServeur", 1, "[logout] Utilisateur " + sender);
+        Logger.log("UserManagerServeur", 1, LogType.INF, "[logout] Utilisateur " + sender);
         UtilisateurServeur u = this.getUtilisateur(sender);
         u.notification(Notification.Deconnexion);
         u.disconnect();

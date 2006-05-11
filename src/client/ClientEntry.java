@@ -137,6 +137,9 @@ class ClientEntry {
     void listeParticipants(Set<Participant> liste) {
         if(Client.fsm.listeParticipants()) {
             Client.participantmanager.listeParticipants(liste);
+            // modif P.R. Design : passage à HI pour que la liste
+            // soit affichée dans l'Hôtel des Ventes.
+            Client.hi.affichageListeParticipants(liste);
         }
     }
 
@@ -154,18 +157,16 @@ class ClientEntry {
 
     void etatParticipant(Participant p) {
         // inconditionnel pour raisons de cohérence
-        //if(Client.fsm.etatParticipant()) {
+        Client.fsm.etatParticipant();
         Client.participantmanager.etatParticipant(p);
-        //}
     }
 
     void superviseur(String u) {
         // inconditionnel pour raisons de cohérence
-        //if(Client.fsm.superviseur()) {
+        Client.fsm.superviseur();
         Client.client.setSuperviseur(u);
         Vente v = Client.humain.getVente();
         v.setMode(Mode.Manuel);
-        //}
     }
 
 }

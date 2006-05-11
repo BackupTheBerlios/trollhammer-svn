@@ -76,7 +76,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageListeParticipants(Set<Participant> pl) {
-
+        mw.affichageListeParticipants(pl);
     }
 
     /* modif p.r. au design : argument change de int i => Vente v, sinon,

@@ -248,7 +248,7 @@ class Window implements ActionListener
     }
 
     void affichageListeParticipants(Set<Participant> pl) {
-
+        hdv.affichageListeParticipants(pl);
     }
 
     /* modif p.r. au design : argument change de int i => Vente v, sinon,

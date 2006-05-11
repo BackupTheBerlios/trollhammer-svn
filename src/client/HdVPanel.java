@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.Set;
 import java.util.Vector;
 
 class HdVPanel extends JComponent implements ActionListener
@@ -42,9 +43,9 @@ class HdVPanel extends JComponent implements ActionListener
 	private double prochaineEnchere = 0.;
 	private Vector lstObjVect = null;
 	//test
-	private HdVUser sup = null;
-	private HdVUser l1 = null;
-	private HdVUser l2 = null;
+	//private HdVUser sup = null;
+	//private HdVUser l1 = null;
+	//private HdVUser l2 = null;
 	private ButtonGroup grpl = null;
 
     private Window mw;
@@ -87,17 +88,17 @@ class HdVPanel extends JComponent implements ActionListener
 		selectPanel.add(descrObjetPane, new CellConstraints(1,4));
 		
 		//Salle//test...
-		sup = new HdVUser("Mr.Smith",true,true);
-		l1 = new HdVUser("BOFH",true);
-		l2 = new HdVUser("FredFooBar",false);
+		//sup = new HdVUser("Mr.Smith",true,true);
+		//l1 = new HdVUser("BOFH",true);
+		//l2 = new HdVUser("FredFooBar",false);
 		grpl = new ButtonGroup();
-		grpl.add(sup);
-		grpl.add(l1);
-		grpl.add(l2);
+		//grpl.add(sup);
+		//grpl.add(l1);
+		//grpl.add(l2);
 		sallePanel = new FreshPanel('y',true);
-		sallePanel.add(sup);
-		sallePanel.add(l1);
-		sallePanel.add(l2);
+		//sallePanel.add(sup);
+		//sallePanel.add(l1);
+		//sallePanel.add(l2);
 		
 		//Log
 		logPanel = new CoolPanel("fill:pref","fill:pref:grow");
@@ -236,5 +237,28 @@ class HdVPanel extends JComponent implements ActionListener
     /* relai (partiel) des méthodes de HI */
     void affichageChat(String m, String i) {
         this.texteLog("<"+i+"> "+m+"\n");
+    }
+
+    void affichageListeParticipants(Set<Participant> pl) {
+        grpl = new ButtonGroup();
+        sallePanel.removeAll();
+        for(Participant p : pl) {
+            HdVUser u = null;
+            if(p.getStatut() == StatutLogin.Connecte_Utilisateur) {
+                // false == utilisateur pas modo
+                u = new HdVUser(p.getLogin(), false);
+            } else if(p.getStatut() == StatutLogin.Connecte_Moderateur) {
+                // true == utilisateur modo
+                u = new HdVUser(p.getLogin(), true); 
+            }
+
+            if(u != null) {
+                grpl.add(u);
+                sallePanel.add(u);
+                // update graphique
+                sallePanel.validate();
+                System.out.println(p.getLogin()+" en ligne");
+            }
+        }
     }
 }

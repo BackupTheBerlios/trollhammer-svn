@@ -146,7 +146,7 @@ class VentePanel implements ActionListener
 		}
 	}
 
-    /* relai de méthode de HI, affiche la liste des objets de l'onglet Vente ! */
+    /* relai de methode de HI, affiche la liste des objets de l'onglet Vente ! */
     void affichageListeObjets(Set<Objet> ol) {
         Vector <VenteObjet> liste = new Vector<VenteObjet>();
         for(Objet o : ol) {

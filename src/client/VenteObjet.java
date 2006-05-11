@@ -14,6 +14,9 @@ abstract class VenteObjet extends JPanel
     protected StatutObjet statut;
     protected String acheteur;
     protected String vendeur;
+    protected Color couleur_fond;
+    protected Color couleur_selectionne;
+
 	
 	public VenteObjet(Objet obj)
 	{
@@ -29,7 +32,18 @@ abstract class VenteObjet extends JPanel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //à modifier quand il y aura l'image
 		this.setBorder(BorderFactory.createEtchedBorder());
 		this.add(new JLabel(nom));
-	}
+
+        couleur_fond = this.getBackground();
+        couleur_selectionne = Color.LIGHT_GRAY;
+    }
+
+    void selectionne(boolean estSelectionne) {
+        if(estSelectionne) {
+            this.setBackground(couleur_selectionne);
+        } else {
+            this.setBackground(couleur_fond);
+        }
+    }
 }
 
 class VenteObjetAccepte extends VenteObjet
@@ -95,7 +109,7 @@ class ValidationObjet extends VenteObjet {
     public ValidationObjet(Objet obj) {
         super(obj);
 
-        this.add(new JLabel(description);
+        this.add(new JLabel(description));
         this.add(new JLabel("Prix de base : "+prix_de_base));
     }
 }

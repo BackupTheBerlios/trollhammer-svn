@@ -76,7 +76,7 @@ class ServeurEntry {
 
     void insererObjetVente(int objet, int vente, int pos, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.ventemanager.insererObjetVente(objet, vente, pos, sender);			
         }
     }
 
@@ -137,13 +137,13 @@ class ServeurEntry {
 
     void obtenirVente(int v, String sender) {
         if(Serveur.usermanager.isModo(sender)) {
-
+			Serveur.ventemanager.obtenirVente(v, sender);
         }
     }
 
     void obtenirProchaineVente(String sender) {
         if(Serveur.usermanager.isConnected(sender)) {
-
+			Serveur.ventemanager.obtenirProchaineVente(sender);
         }
     }
 

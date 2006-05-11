@@ -96,8 +96,12 @@ class VenteManagerServeur {
 
     }
 
+	// ls : A corriger?? : aucune gestion d'erreur...
     void obtenirVente(int v, String sender) {
-
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		VenteServeur vs = this.getVente(v);
+		List<Objet> lo = vs.getObjets();
+		u.detailsVente(vs, lo);
     }
 
     void obtenirListeVentes(String sender) {
@@ -106,6 +110,7 @@ class VenteManagerServeur {
 		// aussi bien les règle de sous-typage sur des classes paramétrées que 
 		// Scala.
 		// NB : c'est quand meme plus simple avec le casting implicite, non?
+		// Et surtout ca évite un appel de fonction par itération... 
 		Set<Vente> liste = new HashSet<Vente>();
 		for(VenteServeur v : ventes) {
 			liste.add(v);
@@ -113,9 +118,21 @@ class VenteManagerServeur {
 		u.listeVentes(liste);
     }
 
+	//ls : modif, le teste concernant le mode et imbriqué dans le if sur la
+	// date, plutôt qu'à côté avec le test a double (sur la date). 
+	//ls : modif, pour envoyer le message detailsVente, fais appel a la méthode
+	// qui le fait, plutot que copier son code...
     void obtenirProchaineVente(String sender) {
-		
-    }
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		VenteServeur vs = this.getProchaineVente();
+		this.obtenirVente(vs.getId(), sender);
+		if(vs.getDate() < Serveur.serveur.getDate()) {
+			u.notification(Notification.VenteEnCours);
+			if (vs.getMode() == Mode.Manuel) {
+				u.superviseur(vs.getSuperviseur());
+			}
+		}
+	}
 
     boolean checkEncherisseur(String i) {
         return false;
@@ -139,11 +156,13 @@ class VenteManagerServeur {
         }
     }
 
+	//ls : A VERIFIER : NE DEVRAIT PAS ETRE LA
     void detailsVente(VenteServeur v, List<Objet> ol) {
 
     }
 
-    /** Cherche une vente par son identifiant et la retourne,
+    /**
+	 * Cherche une vente par son identifiant et la retourne,
      * ou null si non trouvée.
      */
     VenteServeur getVente(int i) {
@@ -154,8 +173,16 @@ class VenteManagerServeur {
         }
         return null;
     }
+	
+	/**
+	 * Retourne la prochaine vente, qu'elle soit en cours ou non.
+	 */
+	VenteServeur getProchaineVente() {
+        return  getStarting();
+	}
 
-    /** Retourne la Vente à la date de début la plus proche dans le temps.
+    /**
+	 * Retourne la Vente à la date de début la plus proche dans le temps.
      */
     VenteServeur getStarting() {
         long min = Long.MAX_VALUE;
@@ -174,7 +201,8 @@ class VenteManagerServeur {
         return starting;
     }
 
-    /** Retourne la Vente à la date de début la plus proche dans le temps
+    /**
+	 * Retourne la Vente à la date de début la plus proche dans le temps
      * et dans le passé, null s'il n'y en a pas.
      */
     VenteServeur getVenteEnCours() {

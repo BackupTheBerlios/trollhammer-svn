@@ -14,6 +14,19 @@ import java.util.ArrayList;
  * - selon moi - 
  * meilleure pour l'Utilisateur.
  * Surtout par rapport au Modérateur.
+ *
+ * LS : je ne vois absolument pas ce que ça change pour toi.. car de toute 
+ * façons tu créer un objet de ta classe adapter, non? de plus dans tout les cas 
+ * tu dois sauvegarder d'abord le utilisateurs, puis les modérateurs... Le seul
+ * truc que ça change c'est que moi derrière je me retrouve avec des boucles
+ * qui font des appels de fonction inutils pour chaque objet / utilisateur de
+ * la liste... et vu que l'on traite que ça... ça va être super efficace...
+ * dans le genre
+ * - selon moi -
+ * en plus si on parle de faire des adapter selon les notions de
+ * "Design patterns", et bien comment dire... je sais!!
+ * __no comment__
+ *
  */
  
 class VenteServeur extends Vente {

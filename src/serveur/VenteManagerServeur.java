@@ -122,16 +122,20 @@ class VenteManagerServeur {
 	// date, plutôt qu'à côté avec le test a double (sur la date). 
 	//ls : modif, pour envoyer le message detailsVente, fais appel a la méthode
 	// qui le fait, plutot que copier son code...
+    // jr : exception si aucune vente en cours : ne rien renvoyer.
+    // (sans le fix : NullPointerException pour trouver la prochaine vente inexistante.)
     void obtenirProchaineVente(String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		VenteServeur vs = this.getProchaineVente();
-		this.obtenirVente(vs.getId(), sender);
-		if(vs.getDate() < Serveur.serveur.getDate()) {
-			u.notification(Notification.VenteEnCours);
-			if (vs.getMode() == Mode.Manuel) {
-				u.superviseur(vs.getSuperviseur());
-			}
-		}
+        if(vs != null) {
+            this.obtenirVente(vs.getId(), sender);
+            if(vs.getDate() < Serveur.serveur.getDate()) {
+                u.notification(Notification.VenteEnCours);
+                if (vs.getMode() == Mode.Manuel) {
+                    u.superviseur(vs.getSuperviseur());
+                }
+            }
+        }
 	}
 
     boolean checkEncherisseur(String i) {

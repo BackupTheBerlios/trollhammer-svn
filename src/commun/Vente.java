@@ -47,6 +47,17 @@ class Vente implements java.io.Serializable {
 		return this.objets;
 	}
 
+	// cfrey: add "public" pour objets
+	void addOId(int index, int elt) {
+		this.objets.add(index, elt);
+	}
+	
+	// cfrey: append "public" pour objets
+	void addOId(int elt) {
+		this.objets.add(elt);
+	}
+
+	// probablement inutile, cf ci-dessus
     void setOIds(List<Integer> objs) {
         this.objets = objs;
     }

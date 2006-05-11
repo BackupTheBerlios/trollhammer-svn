@@ -90,8 +90,34 @@ class VenteServeur extends Vente {
         return Serveur.objectmanager.getObjet(this.removeFirst()).getObjet();
     }
 
-    void insertObject(int o, int p, String u, long date) {
-		// NB: modifié les types du 1er et du 3ème paramètre => que des ID
+	/**
+	 * Ajoute un objet (id) dans la liste des objets (ids) d'une vente. Si la
+	 * position d'insertion vaut -1, cela signifie insertion à la fin de la
+	 * liste.
+	 *
+	 * @param	oid		identifiant de l'objet à insérer
+	 * @param	p		position dans la liste
+	 * @param	u		identifiant du modérateur qui veut insérer l'objet ???
+	 *					pas utilisé ici, à voir, je sais pas ce qu'on avait bu
+	 *					quand on faisait les schémas ...
+	 * @param	date	date de l'insertion (dateCourante dans 
+	 *					insérerObjetVente) ??? pas utilisé ici, à voir
+	 * @author	cfrey
+	 */
+    void insertObject(int oid, int p, String u, long date) {
+		if (-1 < p && p < this.getOIds().size()) {
+			this.addOId(p, oid);
+		} else {
+			// à la place d'avoir un index out of bound, on insère implicitement
+			// à la fin de la liste et ça gère donc le comportement spécifié 
+			// pour p == -1
+			this.addOId(oid);
+		}
+		// l'insertion ne peut pas échouer, on modifier des propriétés de
+		// l'objet, mais pour l'instant ça n'existe pas ...
+		// ObjetServeur o = Serveur.objectmanager.getObjet(oid);
+		// o.setDateInsertion = date;
+		// o.setModérateurQuiAAjoutéL'ObjetALaVente = u;
     }
 
     void removeObject(Objet o, Utilisateur c) {

@@ -24,7 +24,7 @@ class VentePanel implements ActionListener
 	
 	//éléments du Panel de droite
 	private JScrollPane rightPane = null;
-	private JPanel rightPanel = null;
+	private FreshPanel rightPanel = null;
 	private String titre = null;
 	private JLabel titreLabel = null;
 	private Vector listObjets = null;
@@ -65,10 +65,9 @@ class VentePanel implements ActionListener
         raz.setActionCommand("raz");
         raz.addActionListener(this);
 		//éléments du Panel de droite
-		rightPanel = new JPanel();
-		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+		rightPanel = new FreshPanel('y',false);
 		titreLabel = new JLabel(titre);
-		rightPane = new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		rightPane = new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		rightPane.setBorder(BorderFactory.createEtchedBorder());
 		
 	}

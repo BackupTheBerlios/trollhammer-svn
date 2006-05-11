@@ -15,7 +15,7 @@ class ValiderPanel implements ActionListener
 	private FormLayout layout = null;
 	//private CoolPanel pan = null;
 	//Panel du haut
-	private JPanel hautPanel = null;
+	private FreshPanel hautPanel = null;
 	private JScrollPane jsp = null;
 	//Panel du bas
 	private CoolPanel basPanel = null;
@@ -29,9 +29,8 @@ class ValiderPanel implements ActionListener
 	private void initComponents()
 	{
 		//Panel du haut
-		hautPanel = new JPanel();
-		hautPanel.setLayout(new BoxLayout(hautPanel, BoxLayout.Y_AXIS));
-		jsp = new JScrollPane(hautPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		hautPanel = new FreshPanel('y',false);
+		jsp = new JScrollPane(hautPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		jsp.setBorder(BorderFactory.createEtchedBorder());
 		//Panel du bas
 		basPanel = new CoolPanel();

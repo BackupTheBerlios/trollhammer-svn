@@ -8,7 +8,7 @@ class AchatPanel
 {
 	private boolean modo = false;
 	private JScrollPane jsp = null;
-	private JPanel pan = null;
+	private FreshPanel pan = null;
 	private JLabel titreLabel = null;
 	private String titre = null;
 	public AchatPanel(boolean modo)
@@ -19,11 +19,10 @@ class AchatPanel
 	}
 	private JComponent buildAchatPanel()
 	{
-		pan = new JPanel();
-		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+		pan = new FreshPanel('y',false);
 		titreLabel = new JLabel("Liste des objets qui "+titre+"ont été adjugés: ");
 		pan.add(titreLabel);
-		jsp = new JScrollPane(pan, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		jsp = new JScrollPane(pan, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		return jsp;
 	}
 	public JComponent getComponent()

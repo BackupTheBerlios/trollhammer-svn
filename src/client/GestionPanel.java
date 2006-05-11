@@ -24,7 +24,7 @@ class GestionPanel implements ActionListener
 	private JButton bannir = null;
 	//panel de droite
 	private JScrollPane droitePane = null;
-	private JPanel droitePanel = null;
+	private FreshPanel droitePanel = null;
 	
 	public GestionPanel(boolean modo)
 	{
@@ -62,9 +62,9 @@ class GestionPanel implements ActionListener
 		gauchePanel.add(bannir, new CellConstraints(3,8));
 		
 		//DROITE
-		droitePanel = new JPanel();
+		droitePanel = new FreshPanel('y',false);
 		
-		droitePane = new JScrollPane(droitePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		droitePane = new JScrollPane(droitePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		droitePane.setBorder(BorderFactory.createEtchedBorder());
 	}
 	private JComponent buildGestionPanel()

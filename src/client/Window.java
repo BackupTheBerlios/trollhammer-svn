@@ -59,7 +59,7 @@ class Window implements ActionListener
 		if (frame == null) {
 			frame = new JFrame("Trollhammer");
 			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			frame.setBounds(dim.width/2-400,dim.height/2-300,800,600);
+			frame.setBounds(dim.width/2-500,0,1000,800);
 			frame.setMinimumSize(new Dimension(800,600));
 			frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 

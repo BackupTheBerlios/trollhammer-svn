@@ -36,16 +36,16 @@ class PlanifierPanel implements ActionListener
 	
 	//pan2
 	private JScrollPane jspPan2 = null;
-	private JPanel pan2 = null;
+	private FreshPanel pan2 = null;
 	
 	//pan3
-	private JPanel pan3 = null;
+	private FreshPanel pan3 = null;
 	private JButton add = null;
 	private JButton remove = null;
 	
 	//pan4
 	private JScrollPane jspPan4 = null;
-	private JPanel pan4 = null;
+	private FreshPanel pan4 = null;
 	
 	public PlanifierPanel(boolean modo)
 	{
@@ -121,7 +121,7 @@ class PlanifierPanel implements ActionListener
 		
 		
 		//pan2
-		jspPan2 = new JScrollPane(pan2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		jspPan2 = new JScrollPane(pan2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		//pan3
 		add = new JButton(">>");
@@ -130,13 +130,13 @@ class PlanifierPanel implements ActionListener
 		remove = new JButton("<<");
 		remove.setActionCommand("remove");
 		remove.addActionListener(this);
-		pan3 = new JPanel();
+		pan3 = new FreshPanel('y',true);
 		pan3.setLayout(new BorderLayout());
 		pan3.add(add, BorderLayout.NORTH);
 		pan3.add(remove, BorderLayout.SOUTH);
 		
 		//pan4
-		jspPan4 = new JScrollPane(pan4, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		jspPan4 = new JScrollPane(pan4, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 	}
 	private JComponent buildPlanifierPanel()

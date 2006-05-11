@@ -20,7 +20,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private JScrollPane descrObjetPane = null;
 	private JTextArea descrObjetTextArea = null; //avant JTextArea
 	private String descrObjet = null;
-	private CoolPanel sallePanel = null;
+	private FreshPanel sallePanel = null;
 	private CoolPanel logPanel = null;
 	private JScrollPane logPane = null; //inside Pane
 	private String log = null;
@@ -41,6 +41,11 @@ class HdVPanel extends JComponent implements ActionListener
 	private double prixEnCours = 0.;
 	private double prochaineEnchere = 0.;
 	private Vector lstObjVect = null;
+	//test
+	private HdVUser sup = null;
+	private HdVUser l1 = null;
+	private HdVUser l2 = null;
+	private ButtonGroup grpl = null;
 
     private Window mw;
 
@@ -51,6 +56,7 @@ class HdVPanel extends JComponent implements ActionListener
 	}
 	private void initHdVComponents()
 	{
+		
 		//Liste des objets
 		listeObjetsPanel = new CoolPanel();
 		lstObjVect = new Vector(5,1);
@@ -80,8 +86,18 @@ class HdVPanel extends JComponent implements ActionListener
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3));
 		selectPanel.add(descrObjetPane, new CellConstraints(1,4));
 		
-		//Salle
-		sallePanel = new CoolPanel();
+		//Salle//test...
+		sup = new HdVUser("Mr.Smith",true,true);
+		l1 = new HdVUser("BOFH",true);
+		l2 = new HdVUser("FredFooBar",false);
+		grpl = new ButtonGroup();
+		grpl.add(sup);
+		grpl.add(l1);
+		grpl.add(l2);
+		sallePanel = new FreshPanel('y',true);
+		sallePanel.add(sup);
+		sallePanel.add(l1);
+		sallePanel.add(l2);
 		
 		//Log
 		logPanel = new CoolPanel("fill:pref","fill:pref:grow");

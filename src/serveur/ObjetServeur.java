@@ -29,9 +29,10 @@ class ObjetServeur {
 		}
     }
 
-    void sell(String i, Integer prix) {
-
-    }
+// cfrey: ça se passe au niveau de ObjectManagerServeur
+//    void sell(String i, Integer prix) {
+//
+//    }
 	
 	Objet getObjet() {
 		return objet;

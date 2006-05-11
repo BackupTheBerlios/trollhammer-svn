@@ -97,5 +97,25 @@ class ObjectManagerServeur {
     void update(Objet o) {
 
     }
+    
+    /**
+     * "Vend" l'objet, c-à-d affecte son prix de vente, l'acheteur, et change 
+     * son statut.
+     *
+     * @param	i		acheteur
+     * @param	prix	prix
+     * @param	oid		identifiant de l'objet
+     * @author	cfrey
+     */
+    void sell(String i, int prix, int oid) {
+    	ObjetServeur o = this.getObjet(oid);
+    	
+    	if (o != null) {
+    		o.setPrixDeVente(prix);
+    		o.setAcheteur(i);
+    		o.setStatut(StatutObjet.Vendu);
+    	}
+// là on a un problème si o == null mais que faire ?
+    }
 	
 }

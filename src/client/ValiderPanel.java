@@ -17,6 +17,7 @@ class ValiderPanel implements ActionListener
 	//Panel du haut
 	private FreshPanel hautPanel = null;
 	private JScrollPane jsp = null;
+    private JList liste = null;
 	//Panel du bas
 	private CoolPanel basPanel = null;
 	private JButton accepter = null;

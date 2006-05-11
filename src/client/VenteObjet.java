@@ -31,3 +31,71 @@ abstract class VenteObjet extends JPanel
 		this.add(new JLabel(nom));
 	}
 }
+
+class VenteObjetAccepte extends VenteObjet
+{
+	public VenteObjetAccepte(Objet obj)
+	{
+		super(obj);
+		
+		this.add(new JLabel("Accepté"));
+	}
+}
+
+class VenteObjetEnVente extends VenteObjetAccepte
+{
+	public VenteObjetEnVente(Objet obj)
+	{
+		super(obj);
+		/**
+		*TODO comment faire pour savoir quand l'objet sera vendu...
+		*/
+		this.add(new JLabel("Sera vendu le ..."+"à partir de ..."));
+	}
+}
+
+class VenteObjetPropose extends VenteObjet
+{
+	private JButton retirer = null;
+	public VenteObjetPropose(Objet obj)
+	{
+		super(obj);
+		retirer = new JButton("Retirer");
+		
+		this.add(new JLabel("En attente de validation"));
+		this.add(retirer);
+		
+	}
+}
+
+class VenteObjetRefuse extends VenteObjet
+{
+	public VenteObjetRefuse(Objet obj)
+	{
+		super(obj);
+		/**
+		* TODO cause du refus?
+		*/
+		this.add(new JLabel("Cet Objet à été refusé"));
+	}
+}
+
+class VenteObjetVendu extends VenteObjet
+{
+	public VenteObjetVendu(Objet obj)
+	{
+		super(obj);
+		
+		this.add(new JLabel("Vendu à "+prix_de_vente));
+	}
+}
+
+class ValidationObjet extends VenteObjet {
+    
+    public ValidationObjet(Objet obj) {
+        super(obj);
+
+        this.add(new JLabel(description);
+        this.add(new JLabel("Prix de base : "+prix_de_base));
+    }
+}

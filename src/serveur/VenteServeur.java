@@ -31,18 +31,26 @@ import java.util.ArrayList;
  
 class VenteServeur extends Vente {
 
+	/**
+	 * Utilisé lors de la déconnection d'un modérateur. Le VenteManager nous
+	 * indique qu'un modérateur se déconnecte de la <b>vente en cours</b>.
+	 *
+	 * @param 	i	id modérateur qui se déconnecte de la vente en cours
+	 * @author	cfrey
+	 */
     void modoLeaving(String i) {
-
+		// si le modérateur qui se déconnecte de la vente en cours est le
+		// superviseur ...
+		if (this.getSuperviseur() == i) {
+			this.setSuperviseur(null);
+			this.setMode(Mode.Automatique);
+		}
     }
 
     boolean isSuperviseur(String s) {
         return false;
     }
-
-    boolean checkPAF(String s) {
-        return false;
-    }
-
+	
     void sellObject(String i, int prix) {
 
     }

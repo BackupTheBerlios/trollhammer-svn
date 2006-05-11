@@ -160,7 +160,7 @@ public class Serveur {
 		if (vc != null) {
 			sup = vc.isSuperviseur(sender);
 			if (sup) {
-				ok = vc.checkPAF(sender); // LS : BEEP??
+				//ok = vc.checkPAF(sender); // LS : BEEP??
 				//switch (marteau)
 			}
 		}

@@ -48,6 +48,8 @@ class VentePanel implements ActionListener
 		imgLabel.setPreferredSize(new Dimension(150,150));
 		imgLabel.setBorder(BorderFactory.createEtchedBorder());
 		parcourir = new JButton("Parcourir");
+		parcourir.setActionCommand("browse");
+		parcourir.addActionListener(this);
 		objTitre = new JTextField();
 		objDescr = new JTextArea();
 		objDescr.setRows(7);
@@ -139,6 +141,9 @@ class VentePanel implements ActionListener
             objDescr.setText("");
             objPrix.setText("");
             // a faire : déselectionner l'image...
-        }
+        } else if(event.getActionCommand().equals("browse"))
+		{
+			//blabla
+		}
 	}
 }

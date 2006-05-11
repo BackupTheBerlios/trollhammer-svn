@@ -83,8 +83,14 @@ class PlanifierPanel implements ActionListener
 		descrArea.setWrapStyleWord(true);
 		descrPane = new JScrollPane(descrArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		nouveau = new JButton("Nouveau"); //va falloir faire qu'on puisse le modifier si on séléctionne une vente déjà existante
+		nouveau.setActionCommand("new");
+		nouveau.addActionListener(this);
 		valider = new JButton("Valider");
+		valider.setActionCommand("ok");
+		valider.addActionListener(this);
 		supprimer = new JButton("Supprimer");
+		supprimer.setActionCommand("del");
+		supprimer.addActionListener(this);
 		
 		pan1 = new CoolPanel("pref:grow, pref:grow, pref:grow","pref, 3dlu, pref, pref, pref, pref, pref, pref, pref, 5dlu, pref");
 		pan1.addLabel(titrePan1, new CellConstraints(1,1,3,1));
@@ -113,7 +119,11 @@ class PlanifierPanel implements ActionListener
 		
 		//pan3
 		add = new JButton(">>");
+		add.setActionCommand("add");
+		add.addActionListener(this);
 		remove = new JButton("<<");
+		remove.setActionCommand("remove");
+		remove.addActionListener(this);
 		pan3 = new JPanel();
 		pan3.setLayout(new BorderLayout());
 		pan3.add(add, BorderLayout.NORTH);
@@ -143,7 +153,26 @@ class PlanifierPanel implements ActionListener
 	}
 	public void actionPerformed(ActionEvent event)
 	{
-		
+		if(event.getActionCommand().equals("new"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("ok"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("del"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("add"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("remove"))
+		{
+			
+		}
 		
 	}
 }

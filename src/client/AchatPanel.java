@@ -2,11 +2,9 @@ package trollhammer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
-class AchatPanel implements ActionListener
+class AchatPanel
 {
 	private boolean modo = false;
 	private JScrollPane jsp = null;
@@ -31,11 +29,5 @@ class AchatPanel implements ActionListener
 	public JComponent getComponent()
 	{
 		return buildAchatPanel();
-	}
-	
-	public void actionPerformed(ActionEvent event)
-	{
-		
-		
 	}
 }

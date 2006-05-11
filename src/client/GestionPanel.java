@@ -39,8 +39,14 @@ class GestionPanel implements ActionListener
 		nomField = new JTextField();
 		prenomField = new JTextField();
 		ajouter = new JButton("Ajouter");
+		ajouter.setActionCommand("add");
+		ajouter.addActionListener(this);
 		supprimer = new JButton("Supprimer");
+		ajouter.setActionCommand("del");
+		ajouter.addActionListener(this);
 		bannir = new JButton("Bannir");
+		ajouter.setActionCommand("bann");
+		ajouter.addActionListener(this);
 		
 		gauchePanel.addLabel("Propriétés: ", new CellConstraints(1,1));
 		gauchePanel.addLabel("Nom d'utilisateur: ", new CellConstraints(1,3));
@@ -79,7 +85,18 @@ class GestionPanel implements ActionListener
 	}
 	public void actionPerformed(ActionEvent event)
 	{
-		
+		if(event.getActionCommand().equals("add"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("del"))
+		{
+			
+		}
+		else if(event.getActionCommand().equals("bann"))
+		{
+			
+		}
 		
 	}
 }

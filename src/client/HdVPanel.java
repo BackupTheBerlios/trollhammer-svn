@@ -14,8 +14,6 @@ class HdVPanel extends JComponent implements ActionListener
 	private FormLayout layout = null;
 	private CoolPanel listeObjetsPanel = null;
 	private CoolPanel infoAdjPanel = null;
-	private JTextPane prixAdj = null;
-	private JTextPane nbCoupDeMasse = null;
 	private CoolPanel selectPanel = null;
 	private JLabel imgLabel = null;
 	private CoolPanel descrObjetPanel = null;
@@ -59,12 +57,8 @@ class HdVPanel extends JComponent implements ActionListener
 		
 		//Informations adjudications
 		infoAdjPanel = new CoolPanel("pref:grow, pref","pref, pref");
-		prixAdj = new JTextPane();
-		prixAdj.setText("Prix d'adjudication: ");
-		nbCoupDeMasse = new JTextPane();
-		nbCoupDeMasse.setText("Nombres de coups de marteau: ");
-		infoAdjPanel.add(prixAdj, new CellConstraints(1,1));
-		infoAdjPanel.add(nbCoupDeMasse,new CellConstraints(1,2));
+		infoAdjPanel.addLabel("Prix d'adjudication: ", new CellConstraints(1,1));
+		infoAdjPanel.addLabel("Nombres de coups de marteau: ",new CellConstraints(1,2));
 		
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("left:pref:grow","pref,pref,pref,fill:pref:grow");
@@ -139,6 +133,8 @@ class HdVPanel extends JComponent implements ActionListener
             cdmButton.setActionCommand("trollhammer");
             cdmButton.addActionListener(this);
 			kickButton = new JButton("Expulser");
+			kickButton.setActionCommand("kick");
+			kickButton.addActionListener(this);
 			cmdPanel.add(cdmButton, new CellConstraints(2,1));
 			cmdPanel.add(kickButton, new CellConstraints(3,1));
 		}
@@ -181,16 +177,23 @@ class HdVPanel extends JComponent implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
         Logger.log("Window", 2, event.getActionCommand());
-        if(event.getActionCommand().equals("disconnect")) {
+        if(event.getActionCommand().equals("disconnect"))
+		{
             mw.doLogout();
-        } else if(event.getActionCommand().equals("sendchat")) {
+        } else if(event.getActionCommand().equals("sendchat"))
+		{
             Client.hi.ecrireChat(chatField.getText());
             chatField.setText("");
-        } else if(event.getActionCommand().equals("trollhammer")) {
+        } else if(event.getActionCommand().equals("trollhammer"))
+		{
             Client.hi.executerModo(ActionModo.CoupDeMassePAF);
-        } else if(event.getActionCommand().equals("encherir")) {
+        } else if(event.getActionCommand().equals("encherir"))
+		{
             Client.hi.executer(Action.Encherir);
-        }
+        } else if(event.getActionCommand().equals("kick"))
+		{
+			//ben il faut kicker ^^
+		}
 	}
 
     /** Ajoute du texte à la fin du contenu du panneau de log.

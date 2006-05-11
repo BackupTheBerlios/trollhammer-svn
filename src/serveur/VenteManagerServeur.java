@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Classe Manager pour les Ventes.
  * Regroupe et gère les Ventes du Serveur.
  *
- * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
+ * @author jruffin
  */
 class VenteManagerServeur {
 
@@ -92,8 +92,57 @@ class VenteManagerServeur {
 		}
 	}
 
-    void enleverObjetVente(int o, int v, String i) {
-
+// spéc étrange: la vente est en cours, on insère un objet en position 0 ...
+// donc ça veut dire qu'on vend le 2ème. problème quand l'objet est adjugé, on
+// supprime la tête de la liste des objets d'une vente ... donc est-ce qu'on
+// ferait pas mieux de bloquer l'ajout/suppression d'objets à une vente en
+// cours, tout simplement ? NB: pour l'instant c'est fait comme dans la spéc.
+	/**
+	 * Suppression d'un objet d'une vente. Les changements sont répercutés chez
+	 * le client qui effectue la modification et chez tout le monde si la vente
+	 * est en cours. On ne peut pas enlever un objet qui est entrain d'être
+	 * vendu. NB: les pre sont checkées au niveau de l'Entry.
+	 *
+	 * @param	oid		identifiant de l'objet
+	 * @param	vid		identifiant de la vente
+	 * @param	uid		identifiant utilisateur
+	 * @author	cfrey
+	 */
+    void enleverObjetVente(int oid, int vid, String uid) {
+		VenteServeur vte = this.getVente(vid);
+// c'est pas la première fois que ça arrive, mais si u est null, et après je
+// fais un u.resultatEdition ... problème. alors soit on modifie
+// usermanager.getUtilisateur(uid) de telle sorte qu'il ne renvoie pas un null
+// si l'uid ne correpond plus à qqch mais plutôt renvoie un truc non null bidon
+// ou alors (mais ça requiert pas mal de changements), modifier resultatEdition
+// pour qu'elle prenne en paramètre uid et qu'elle gère le cas null (donc ce
+// serait plus une méthode de Utilisateur) ...
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
+		
+		if (vte != null) {
+			// la vente existe
+			if (vte.getFirst() == oid) {
+				// l'objet n'est pas entrain d'être vendu
+				vte.removeOId(oid);
+				u.resultatEdition(StatutEdition.Reussi);
+			} else {
+				// l'objet est entrain d'être vendu
+// c'est pas la première fois, mais des résultatsEdition plus variés seraient
+// souhaitables ...
+				u.resultatEdition(StatutEdition.NonTrouve);
+			}
+			
+			if (getVenteEnCours().getId() == vte.getId()) {
+				// vte en cours, changements -> broadcast
+				Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+			} else {
+				// vte pas en cours, changements -> sender
+				u.detailsVente(vte, vte.getObjets());
+			}
+		} else {
+			// la vente n'existe pas
+			u.resultatEdition(StatutEdition.NonTrouve);
+		}
     }
 
 	// ls : A corriger?? : aucune gestion d'erreur...
@@ -126,7 +175,7 @@ class VenteManagerServeur {
     // (sans le fix : NullPointerException pour trouver la prochaine vente inexistante.)
     void obtenirProchaineVente(String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
-		VenteServeur vs = this.getProchaineVente();
+		VenteServeur vs = this.getStarting();
         if(vs != null) {
             this.obtenirVente(vs.getId(), sender);
             if(vs.getDate() < Serveur.serveur.getDate()) {
@@ -177,13 +226,6 @@ class VenteManagerServeur {
         }
         return null;
     }
-	
-	/**
-	 * Retourne la prochaine vente, qu'elle soit en cours ou non.
-	 */
-	VenteServeur getProchaineVente() {
-        return  getStarting();
-	}
 
     /**
 	 * Retourne la Vente à la date de début la plus proche dans le temps.
@@ -223,5 +265,7 @@ class VenteManagerServeur {
         }
 
     }
+    
+	// ajouter demarrerVente() ...
 
 }

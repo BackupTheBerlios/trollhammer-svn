@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.Set;
 import java.util.Vector;
 
 class ValiderPanel implements ActionListener
@@ -63,6 +64,34 @@ class ValiderPanel implements ActionListener
 	{
 		return buildValiderPanel();
 	}
+
+    void affichageListeObjets(Set<Objet> ol) {
+        Vector <ValidationObjet> objs = new Vector<ValidationObjet>();
+
+        for(Objet o : ol) {
+            objs.add(new ValidationObjet(o));
+        }
+
+        liste = new JList(objs);
+        liste.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((VenteObjet) value).selectionne(isSelected);
+                return (VenteObjet) value;
+                }
+                });
+
+        jsp.setViewportView(liste);
+    }
+
 	public void actionPerformed(ActionEvent event)
 	{
         String commande = event.getActionCommand();

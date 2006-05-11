@@ -19,7 +19,7 @@ class ObjectManagerServeur {
 	
 	ObjetServeur getObjet(int oid) {
         for(ObjetServeur o : objets) {
-            if (o.getObjet().getId() == oid) {
+            if (o.getId() == oid) {
 				return o;
 			}
         }
@@ -39,28 +39,28 @@ class ObjectManagerServeur {
 		switch (t) {
 		case Vente:
 			for (ObjetServeur o : objets) {
-				if (o.getObjet().getVendeur() == sender) {
+				if (o.getVendeur().equals(sender)) {
 					liste.add(o.getObjet());
 				}
 			}
 			break;
 		case Achat:
 			for (ObjetServeur o : objets) {
-				if (o.getObjet().getAcheteur() == sender) {
+				if (o.getAcheteur().equals(sender)) {
 					liste.add(o.getObjet());
 				}
 			}
 			break;
 		case Validation:
 			for (ObjetServeur o : objets) {
-				if (o.getObjet().getStatut() == StatutObjet.Propose) {
+				if (o.getStatut() == StatutObjet.Propose) {
 					liste.add(o.getObjet());
 				}
 			}
 			break;
 		case Planification:
 			for (ObjetServeur o : objets) {
-				if (o.getObjet().getStatut() == StatutObjet.Accepte) {
+				if (o.getStatut() == StatutObjet.Accepte) {
 					liste.add(o.getObjet());
 				}
 			}
@@ -82,7 +82,7 @@ class ObjectManagerServeur {
 
 	// ls : probleme de concurrence, faudra a faire gaffe que ce soit synchro
     void add(ObjetServeur o, String i) {
-		o.getObjet().setId(++lastID);
+		o.setId(++lastID);
 		objets.add(o);
     }
 

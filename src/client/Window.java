@@ -234,6 +234,8 @@ class Window implements ActionListener
         switch(Client.client.getMode()) {
             case Vente:
                 this.vente.affichageListeObjets(ol);
+            case Validation:
+                this.valider.affichageListeObjets(ol);
         }
     }
 

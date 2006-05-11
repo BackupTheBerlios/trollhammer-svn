@@ -14,6 +14,7 @@ class PlanifierPanel implements ActionListener
 {
 	private FormLayout layout = null;
 	private boolean modo = false;
+	private boolean modeAuto = true;
 	//pan1
 	private String titrePan1 = "";
 	private CoolPanel pan1 = null;

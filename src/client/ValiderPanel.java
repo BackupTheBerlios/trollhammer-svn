@@ -12,7 +12,8 @@ import java.util.Vector;
 class ValiderPanel implements ActionListener
 {
 	private boolean modo = false;
-	private CoolPanel pan = null;
+	private FormLayout layout = null;
+	//private CoolPanel pan = null;
 	//Panel du haut
 	private JPanel hautPanel = null;
 	private JScrollPane jsp = null;
@@ -25,7 +26,7 @@ class ValiderPanel implements ActionListener
 	{
 		this.modo = modo;
 	}
-	private JComponent buildValiderPanel()
+	private void initComponents()
 	{
 		//Panel du haut
 		hautPanel = new JPanel();
@@ -44,12 +45,19 @@ class ValiderPanel implements ActionListener
         refuser.addActionListener(this);
 		basPanel.add(refuser);
 		
+	}
+	private JComponent buildValiderPanel()
+	{
+		initComponents();
+		layout = new FormLayout("fill:pref:grow","fill:pref:grow, fill:pref");
+		PanelBuilder builder = new PanelBuilder(layout);
+		builder.setDefaultDialogBorder();
+		CellConstraints cc = new CellConstraints();
 		
-		pan = new CoolPanel("pref:grow","fill:pref:grow, pref");
-		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS)); //ne me demandez pas pourquoi...
-		pan.add(jsp, new CellConstraints(1,1));
-		pan.add(basPanel, new CellConstraints(1,2));
-		return pan;
+		builder.add(jsp, cc.xy(1,1));
+		builder.add(basPanel, cc.xy(1,2));
+		
+		return builder.getPanel();
 	}
 	public JComponent getComponent()
 	{

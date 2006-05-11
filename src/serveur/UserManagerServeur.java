@@ -149,8 +149,70 @@ class UserManagerServeur {
 		s.detailsUtilisateur(u.getUtilisateur());
     }
 
+	//ls : plein de truck a checker en plus.. a revoir..
     void utilisateur(Edition e, Utilisateur u, String sender) {
-
+		UtilisateurServeur t = Serveur.usermanager.getUtilisateur(u.getLogin());
+		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
+		
+		switch (e) {
+		case Creer:
+			if (t == null) {
+				utilisateurs.add(new UtilisateurServeur(u)); // ls  : genre ici.. quid de j'ajoute un user qui existe déjà??
+				s.resultatEdition(StatutEdition.Reussi);
+			} else {
+				s.resultatEdition(StatutEdition.ExisteDeja);
+			}
+			break;
+		case Modifier:
+			if (t != null) {
+				for(UtilisateurServeur us : utilisateurs) {
+					if (us.getUtilisateur().getLogin().equals(u.getLogin())) {
+						utilisateurs.remove(us);
+						utilisateurs.add(new UtilisateurServeur(u));
+						s.resultatEdition(StatutEdition.Reussi);
+					}
+				}
+			} else {
+				s.resultatEdition(StatutEdition.NonTrouve);
+			}
+			break;
+		case Supprimer:
+			if (t != null) {
+				for(UtilisateurServeur us : utilisateurs) {
+					if (us.getUtilisateur().getLogin().equals(u.getLogin())) {
+						utilisateurs.remove(us);
+						s.resultatEdition(StatutEdition.Reussi);
+					}
+				}
+			} else {
+				s.resultatEdition(StatutEdition.NonTrouve);
+			}
+			break;
+		default: 
+		}
+		
+		Set<Utilisateur> lu = new HashSet<Utilisateur>();
+		switch (e) {
+		case Creer:
+		case Supprimer:
+			for(UtilisateurServeur us : utilisateurs) {
+				lu.add(us.getUtilisateur());
+			}
+			s.listeUtilisateurs(lu);
+			break;
+		case Modifier:
+			if (t == null) {
+				for(UtilisateurServeur us : utilisateurs) {
+					lu.add(us.getUtilisateur());
+				}
+				s.listeUtilisateurs(lu);
+			} else {
+				s.detailsUtilisateur(u);
+			}
+			break;
+		default: 
+		}
+		
     }
 
     Set<UtilisateurServeur> getUtilisateurs() {

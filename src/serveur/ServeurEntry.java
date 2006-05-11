@@ -26,112 +26,100 @@ class ServeurEntry {
     }
 
     void logout(String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
 			//ls : Aucun intérêt de le faire ici, vu que l'on n'effectue aucun
 			// travail ici...
             //Logger.log("ServeurEntry", 1, LogType.INF, "[net] User " + sender + " sent a \"logout\" msg.");
             Serveur.usermanager.logout(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"logout\" ignored.");
 		}
     }
 
     void envoyerChat(String msg, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
             Serveur.chatsystem.envoyerChat(msg, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"envoyerChat\" ignored.");
 		}
     }
 
     void envoyerCoupdeMASSE(String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.serveur.envoyerCoupdeMASSE(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"envoyerCoupdeMASSE\" ignored.");
 		}
 	}
 
     void kickerUtilisateur(String u, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.serveur.usermanager.kickerUtilisateur(u, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"kickerUtilisateur\" ignored.");
 		}
     }
 
     void encherir(int prix, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
 			Serveur.serveur.encherir(prix, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"encherir\" ignored.");
 		}
     }
 
     void envoyerProposition(Objet proposition, String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
 			Serveur.serveur.envoyerProposition(proposition, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"envoyerProposition\" ignored.");
 		}
     }
 
     void validerProposition(int oid, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.objectmanager.validerProposition(oid, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"validerProposition\" ignored.");
 		}
     }
 
     void invaliderProposition(int oid, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.objectmanager.invaliderProposition(oid, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"invaliderProposition\" ignored.");
 		}
     }
 
     void insererObjetVente(int objet, int vente, int pos, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.insererObjetVente(objet, vente, pos, sender);			
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"insererObjetVente\" ignored.");
 		}
     }
 
     void enleverObjetVente(int objet, int vente, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.enleverObjetVente(objet, vente, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"enleverObjetVente\" ignored.");
 		}
     }
 
     void obtenirUtilisateur(String i, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.usermanager.obtenirUtilisateur(i, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirUtilisateur\" ignored.");
 		}
     }
 
     void utilisateur(Edition e, Utilisateur u, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.usermanager.utilisateur(e, u, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"utilisateur\" ignored.");
 		}
     }
@@ -142,7 +130,7 @@ class ServeurEntry {
         switch (type) {
 		case Vente:
 		case Achat:
-			if(Serveur.usermanager.isConnected(sender)) {
+			if (Serveur.usermanager.isConnected(sender)) {
 				Serveur.objectmanager.obtenirListeObjets(type, sender);
 			}
 			else {
@@ -151,7 +139,7 @@ class ServeurEntry {
 			break;
 		case Planification:
 		case Validation:
-			if(Serveur.usermanager.isModo(sender)) {
+			if (Serveur.usermanager.isModo(sender)) {
 				Serveur.objectmanager.obtenirListeObjets(type, sender);
 			}
 			else {
@@ -162,57 +150,51 @@ class ServeurEntry {
     }
 
     void obtenirListeUtilisateurs(String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.usermanager.obtenirListeUtilisateurs(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirListeUtilisateurs\" ignored.");
 		}
     }
 
     void obtenirListeVentes(String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.obtenirListeVentes(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirListeVentes\" ignored.");
 		}
     }
 
     void obtenirListeParticipants(String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
 			Serveur.usermanager.obtenirListeParticipants(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirListeParticipants\" ignored.");
 		}
     }
 
     void obtenirVente(int v, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.obtenirVente(v, sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"obtenirVente\" ignored.");
 		}
     }
 
     void obtenirProchaineVente(String sender) {
-        if(Serveur.usermanager.isConnected(sender)) {
+        if (Serveur.usermanager.isConnected(sender)) {
 			Serveur.ventemanager.obtenirProchaineVente(sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not connected, msg \"obtenirProchaineVente\" ignored.");
 		}
     }
 
     void vente(Edition e, Vente v, String sender) {
-        if(Serveur.usermanager.isModo(sender)) {
+        if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(),
 									   v.getDescription(), v.getDate(),
 									   v.getMode(), v.getSuperviseur()), sender);
-        }
-		else {
+        } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"vente\" ignored.");
 		}
     }
@@ -298,7 +280,7 @@ class ServeurEntryHandler extends Thread {
             do {
                 o = ois.readObject(); // lire le message.
 
-                if(o instanceof MessageClientServeur) {
+                if (o instanceof MessageClientServeur) {
                     MessageClientServeur m = (MessageClientServeur) o;
                     Logger.log("ServeurEntryHandler", 1, LogType.INF, "[net] Reçu requête : " + m + " de " + m.sender + ".");
                     this.execute(m);
@@ -317,7 +299,7 @@ class ServeurEntryHandler extends Thread {
              * de la session d'un Utilisateur, et si oui,
              * on déconnecte ce dernier */
             UtilisateurServeur u = Serveur.usermanager.getUserForSocket(s);
-            if(u != null) {
+            if (u != null) {
                 // cela ne passe pas par les checks d'état, mais comme
                 // le thread va se terminer après, on s'en fiche
                 Serveur.serveurentry.logout(u.getLogin());
@@ -340,8 +322,8 @@ class ServeurEntryHandler extends Thread {
     /** Agit sur le système via ServeurEntry en fonction du Message reçu. */
     private void execute(MessageClientServeur m) {
         Logger.log("ServeurEntryHandler", 2, LogType.DBG, "Etat precedent : " + etat);
-        if(m instanceof login) {
-            if(etat == Etat.L1) {
+        if (m instanceof login) {
+            if (etat == Etat.L1) {
                 etat = Etat.TR1;
                 login l = (login) m;
                 Serveur.serveurentry.login(s, l.u, l.motdepasse, l.sender);
@@ -349,37 +331,37 @@ class ServeurEntryHandler extends Thread {
         } else if (m instanceof logout) {
             // modif p.r. Protocol Model : on aimerait pouvoir faire
             // un Logout inconditionnellement, oui
-            //if(changementPhase()) {
+            //if (changementPhase()) {
             etat = Etat.L1;
             logout l = (logout) m;
             Serveur.serveurentry.logout(l.sender);
             //}
         } else if (m instanceof envoyerChat) {
-            if(etat == Etat.HV3) {
+            if (etat == Etat.HV3) {
                 etat = Etat.HV3;
                 envoyerChat ec = (envoyerChat) m;
                 Serveur.serveurentry.envoyerChat(ec.msg, ec.sender);
             }
         } else if (m instanceof envoyerCoupdeMASSE) {
-            if(etat == Etat.HV3) {
+            if (etat == Etat.HV3) {
                 etat = Etat.HV3;
                 envoyerCoupdeMASSE ecdm = (envoyerCoupdeMASSE) m;
                 Serveur.serveurentry.envoyerCoupdeMASSE(ecdm.sender);
             }
         } else if (m instanceof kickerUtilisateur) {
-            if(etat == Etat.HV3) {
+            if (etat == Etat.HV3) {
                 etat = Etat.HV3;
                 kickerUtilisateur ku = (kickerUtilisateur) m;
                 Serveur.serveurentry.kickerUtilisateur(ku.u, ku.sender);
             }
         } else if (m instanceof encherir) {
-            if(etat == Etat.HV3) {
+            if (etat == Etat.HV3) {
                 etat = Etat.HV3;
                 encherir e = (encherir) m;
                 Serveur.serveurentry.encherir(e.prix, e.sender);
             }
         } else if (m instanceof envoyerProposition) {
-            if(etat == Etat.V2) {
+            if (etat == Etat.V2) {
                 etat = Etat.V2;
                 envoyerProposition ep = (envoyerProposition) m;
                 Serveur.serveurentry.envoyerProposition(ep.proposition, ep.sender);
@@ -388,14 +370,14 @@ class ServeurEntryHandler extends Thread {
             // pour les mêmes raisons que les modifications sur la phase 'Planifier'
             // ci-dessous, on supprime l'état VA3 pour faire boucler directement
             // la transition sur VA2.
-            if(etat == Etat.VA2) {
+            if (etat == Etat.VA2) {
                 etat = Etat.VA2;
                 validerProposition vp = (validerProposition) m;
                 Serveur.serveurentry.validerProposition(vp.objet, vp.sender);
             }
         } else if (m instanceof invaliderProposition) {
             // même remarque que directement ci-dessus.
-            if(etat == Etat.VA2) {
+            if (etat == Etat.VA2) {
                 etat = Etat.VA2;
                 invaliderProposition ip = (invaliderProposition) m;
                 Serveur.serveurentry.invaliderProposition(ip.objet, ip.sender);
@@ -412,14 +394,14 @@ class ServeurEntryHandler extends Thread {
             // première. Sur le graphe du proto model, cela équivaut à
             // supprimer PL5 et à faire boucler les transitions
             // "insérerObjetVente" et "enleverObjetVente".
-            if(etat == Etat.PL4) {
+            if (etat == Etat.PL4) {
                 etat = Etat.PL4;
                 insererObjetVente iov = (insererObjetVente) m;
                 Serveur.serveurentry.insererObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
             }
         } else if (m instanceof enleverObjetVente) {
             // même remarque que ci-dessus.
-            if(etat == Etat.PL4) {
+            if (etat == Etat.PL4) {
                 etat = Etat.PL4;
                 enleverObjetVente eov = (enleverObjetVente) m;
                 Serveur.serveurentry.enleverObjetVente(eov.objet, eov.vente, eov.sender);
@@ -428,18 +410,18 @@ class ServeurEntryHandler extends Thread {
             obtenirUtilisateur ou = (obtenirUtilisateur) m;
             Serveur.serveurentry.obtenirUtilisateur(ou.u, ou.sender);
         } else if (m instanceof MessageUtilisateur) {
-            if(etat == Etat.GU2) {
+            if (etat == Etat.GU2) {
                 etat = Etat.GU2;
                 MessageUtilisateur u = (MessageUtilisateur) m;
                 Serveur.serveurentry.utilisateur(u.e, u.u, u.sender);
             }
         } else if (m instanceof obtenirListeObjets) {
             // trans. dans la phase de planification
-            if(etat == Etat.PL2) {
+            if (etat == Etat.PL2) {
                 etat = Etat.PL3;
                 obtenirListeObjets olo = (obtenirListeObjets) m;
                 Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
-            } else if(changementPhase()) { // trans. spontanée d'une autre phase
+            } else if (changementPhase()) { // trans. spontanée d'une autre phase
                 obtenirListeObjets olo = (obtenirListeObjets) m;
                 // l'état suivant va dépendre des paramètres du message.
                 switch(olo.type) {
@@ -457,41 +439,41 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.obtenirListeObjets(olo.type, olo.sender);
             }
         } else if (m instanceof obtenirListeUtilisateurs) {
-            if(changementPhase()) {
+            if (changementPhase()) {
                 etat = Etat.GU2;
                 obtenirListeUtilisateurs olu = (obtenirListeUtilisateurs) m;
                 Serveur.serveurentry.obtenirListeUtilisateurs(olu.sender);
             }
         } else if (m instanceof obtenirListeVentes) {
-            if(changementPhase()) {
+            if (changementPhase()) {
                 etat = Etat.PL2;
                 obtenirListeVentes olv = (obtenirListeVentes) m;
                 Serveur.serveurentry.obtenirListeVentes(olv.sender);
             }
         } else if (m instanceof obtenirListeParticipants) {
-            if(changementPhase()) {
+            if (changementPhase()) {
                 etat = Etat.HV2;
                 obtenirListeParticipants olp = (obtenirListeParticipants) m;
                 Serveur.serveurentry.obtenirListeParticipants(olp.sender);
             }
         } else if (m instanceof obtenirVente) {
-            if(etat == Etat.PL3) {
+            if (etat == Etat.PL3) {
                 etat = Etat.PL4;
                 obtenirVente ov = (obtenirVente) m;
                 Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
-            } else if(etat == Etat.PL4) {
+            } else if (etat == Etat.PL4) {
                 etat = Etat.PL4;
                 obtenirVente ov = (obtenirVente) m;
                 Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
             }
         } else if (m instanceof obtenirProchaineVente) {
-            if(etat == Etat.HV2) {
+            if (etat == Etat.HV2) {
                 etat = Etat.HV3;
                 obtenirProchaineVente ov = (obtenirProchaineVente) m;
                 Serveur.serveurentry.obtenirProchaineVente(ov.sender);
             }
         } else if (m instanceof MessageVente) {
-            if(etat == Etat.PL4) {
+            if (etat == Etat.PL4) {
                 etat = Etat.PL3;
                 MessageVente v = (MessageVente) m;
                 Serveur.serveurentry.vente(v.e, v.v, v.sender);

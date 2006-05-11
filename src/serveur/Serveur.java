@@ -65,7 +65,7 @@ public class Serveur {
         
         // FIN DU TEST
         
-        attendre();
+		new CLI().interprete();
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */
@@ -81,7 +81,7 @@ public class Serveur {
 
     /* constructeur du Serveur, à son propre usage uniquement */
     private Serveur() {
-        Logger.log("Serveur", 0, "[sys] Démarrage serveur.");
+        Logger.log("Serveur", 0, LogType.INF, "[sys] Démarrage serveur.");
         Serveur.serveurentry = new ServeurEntry();
         Serveur.broadcaster = new Broadcaster();
         Serveur.objectmanager = new ObjectManagerServeur();
@@ -93,60 +93,7 @@ public class Serveur {
         /* le thread démarreur de ventes ! */
         new VenteStarter().start();
 
-        Logger.log("Serveur", 0, "[sys] Serveur démarré, passage en boucle d'attente.");
-    }
-
-    /* jr : attendre en acceptant, éventuellement, des commandes simples.
-     * Permet un peu de contrôle sur les autres threads.
-     */
-
-    private static void attendre() {
-        try {
-            String commande;
-            java.io.BufferedReader lr =
-				new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
-            do {
-                commande = lr.readLine();
-                // faire quelque chose de la commande
-                // (si ce n'est pas celle pour quitter)
-                interpreter(commande);
-            } while(!commande.equals("q"));
-            
-            lr.close();
-        } catch (Exception e) {
-            Logger.log("Serveur", 0, "[sys] utilisateur mauvais : exception sur stdin : " + e.getMessage());
-        }
-    }
-
-    private static void interpreter(String commande) {
-        // on découpe la commande en tokens. WOOOSH.
-        String tokens[] = commande.split("\\s");
-
-        // puis on interprète.
-        
-        if(tokens[0].equals("nu")) {
-            if(tokens.length != 5) {
-                System.out.println("nu - créer un nouvel Utilisateur.\nSyntaxe : "+
-                        "nu LOGIN NOM PRENOM MOTDEPASSE");
-            } else {
-                Serveur.usermanager.addUtilisateur(
-                        new UtilisateurServeur(tokens[1],
-                            tokens[2], tokens[3], tokens[4])
-                        );
-                System.out.println("Nouveal Utilisateur créé : "+tokens[1]);
-            }
-        } else if(tokens[0].equals("nm")) {
-            if(tokens.length != 5) {
-                System.out.println("nm : créer un nouveau Modérateur.\nSyntaxe : "+
-                        "nm LOGIN NOM PRENOM MOTDEPASSE");
-            } else {
-                Serveur.usermanager.addUtilisateur(
-                        new ModerateurServeur(tokens[1],
-                            tokens[2], tokens[3], tokens[4])
-                        );
-                System.out.println("Nouveau Modérateur créé : "+tokens[1]);
-            }
-        }
+        Logger.log("Serveur", 0, LogType.INF, "[sys] Serveur démarré, passage en boucle d'attente.");
     }
     
     /* méthodes du design */

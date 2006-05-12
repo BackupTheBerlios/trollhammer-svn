@@ -69,6 +69,7 @@ public class Serveur {
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */
+        Logger.log("Serveur", 0, LogType.INF, "[sys] Terminaison du serveur.");
         System.exit(0);
     }
 

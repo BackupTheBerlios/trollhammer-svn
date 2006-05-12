@@ -29,9 +29,36 @@ class ObjectManagerServeur {
 	
     /* méthodes du design */
     void invaliderProposition(int i, String sender) {
-
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		ObjetServeur o = Serveur.objectmanager.getObjet(i);
+		
+		if (o != null) {
+			if (o.invalider(sender)) {
+				u.resultatEdition(StatutEdition.Reussi);
+			} else {
+				u.resultatEdition(StatutEdition.DejaEffectue);
+			}
+		} else {
+			u.resultatEdition(StatutEdition.NonTrouve);
+		}
+		this.obtenirListeObjets(Onglet.Validation, sender);
     }
 
+    void validerProposition(int oid, String sender) {
+		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
+		ObjetServeur o = Serveur.objectmanager.getObjet(oid);
+		
+		if (o != null) {
+			if (o.valider(sender)) {
+				u.resultatEdition(StatutEdition.Reussi);
+			} else {
+				u.resultatEdition(StatutEdition.DejaEffectue);
+			}
+		} else {
+			u.resultatEdition(StatutEdition.NonTrouve);
+		}		
+		this.obtenirListeObjets(Onglet.Validation, sender);
+	}
 	
     void obtenirListeObjets(Onglet t, String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
@@ -70,34 +97,12 @@ class ObjectManagerServeur {
 		u.listeObjets(t, liste);
     }
 
-    void validerProposition(int oid, String sender) {
-		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
-		ObjetServeur o = Serveur.objectmanager.getObjet(oid);
-		boolean r = false;
-		
-		if (o != null) {
-			
-		}
-	}
-
 	// ls : probleme de concurrence, faudra a faire gaffe que ce soit synchro
     void add(ObjetServeur o, String i) {
 		o.setId(++lastID);
 		objets.add(o);
     }
 
-    void listeObjets(Onglet t, Set<Objet> ol) {
-
-    }
-
-    void updateListe(Set<Objet> ol) {
-
-    }
-
-    void update(Objet o) {
-
-    }
-    
     /**
      * "Vend" l'objet, c-à-d affecte son prix de vente, l'acheteur, et change 
      * son statut.

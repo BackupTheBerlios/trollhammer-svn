@@ -4,6 +4,7 @@ package trollhammer;
  * Encapsule un Objet, en ajoutant les méthodes Objet spécifiques au Serveur.
  * Permet d'utiliser les mêmes getters/setters qu'une instance d'Objet.
  *
+ * @author Lionel Sambuc
  * @author squelette : Julien Ruffin
  */
 class ObjetServeur {
@@ -14,8 +15,16 @@ class ObjetServeur {
         this.objet = o;
     }
 
+	//ls : modif on garde tout de même trace de qui a refusé l'objet...
     boolean invalider(String i) {
-        return false;
+		if (objet.getStatut() == StatutObjet.Propose) {
+			objet.setStatut(StatutObjet.Refuse);
+			objet.setModerateur(i);
+			return true;
+		}
+		else {
+			return false;
+		}
     }
 
     boolean valider(String i) {

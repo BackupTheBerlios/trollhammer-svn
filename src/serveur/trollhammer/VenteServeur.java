@@ -40,7 +40,6 @@ class VenteServeur extends Vente {
 	 * indique qu'un modérateur se déconnecte de la <b>vente en cours</b>.
 	 *
 	 * @param 	i	id modérateur qui se déconnecte de la vente en cours
-	 * @author	cfrey
 	 */
     void modoLeaving(String i) {
 		// si le modérateur qui se déconnecte de la vente en cours est le
@@ -57,7 +56,6 @@ class VenteServeur extends Vente {
 	 * @param	s	identifiant utilisateur
 	 * @return	True si l'utilisateur est un superviseur de la vente, False 
 	 * 			sinon.
-	 * @author	cfrey
 	 */
     boolean isSuperviseur(String s) {
         return this.getSuperviseur().equals(s);
@@ -70,7 +68,6 @@ class VenteServeur extends Vente {
 	 * @param	i		identifiant du dernier enchérisseur (donc acheteur)
 	 * @param	prix	prix courant
 	 * @param	oid		identifiant de l'objet
-	 * @author	cfrey
 	 */
     void sellObject(String i, int prix, int oid) {
 		if (i != this.getSuperviseur()) {
@@ -84,7 +81,6 @@ class VenteServeur extends Vente {
 	 * Coupe la tête de la liste des objets d'une vente.
 	 *
 	 * @return	l'objet qui était en tête de la liste
-	 * @author	cfrey
 	 */
     Objet removeHead() {
         return Serveur.objectmanager.getObjet(this.removeFirst()).getObjet();
@@ -102,7 +98,6 @@ class VenteServeur extends Vente {
 	 *					quand on faisait les schémas ...
 	 * @param	date	date de l'insertion (dateCourante dans 
 	 *					insérerObjetVente) ??? pas utilisé ici, à voir
-	 * @author	cfrey
 	 */
     void insertObject(int oid, int p, String u, long date) {
 		if (-1 < p && p < this.getOIds().size()) {
@@ -128,7 +123,6 @@ class VenteServeur extends Vente {
 	 *
 	 * @param	oid		identifiant de l'objet
 	 * @param	u		identifiant de l'utilisateur ??? pas utilisé ici, à voir
-	 * @author	cfrey
 	 */
     void removeObject(int oid, String u) {
 		this.removeOId(oid);
@@ -139,7 +133,6 @@ class VenteServeur extends Vente {
      * stockés sous forme d'une liste d'identifiants.
      *
      * @return	la liste des objets de la vente
-     * @author	cfrey
      */
 	List<Objet> getObjets() {
 		List<Objet> r = new ArrayList<Objet>();

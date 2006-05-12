@@ -50,7 +50,7 @@ class Logger {
 *
 * @param who	String contenant le nom de la classe qui fait l'appel.
 * @param lvl	Level minimum à partir duquel le message doit être loggé.
-* @param what	Prend une valeur de l'énumeration LOGTYPE.
+* @param lgt	Prend une valeur de l'énumeration LOGTYPE.
 * @param msg	String qui est le message à logger.
 */
 	static void log(String who, int lvl, LogType lgt, String msg) {

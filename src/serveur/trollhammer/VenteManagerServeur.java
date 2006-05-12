@@ -36,7 +36,6 @@ class VenteManagerServeur {
 	 * @param 	v 	identifiant de la vente
 	 * @param 	p 	position d'insertion de l'objet dans la liste
 	 * @param 	i 	identifiant de l'utilisateur sender
-	 * @author 	cfrey
 	 */
 	void insererObjetVente(int o, int v, int p, String i) {
 		VenteServeur vte = getVente(v);
@@ -114,7 +113,6 @@ class VenteManagerServeur {
 	 * @param	oid		identifiant de l'objet
 	 * @param	vid		identifiant de la vente
 	 * @param	uid		identifiant utilisateur
-	 * @author	cfrey
 	 */
     void enleverObjetVente(int oid, int vid, String uid) {
 		VenteServeur vte = this.getVente(vid);
@@ -200,7 +198,6 @@ class VenteManagerServeur {
 	 * enchérir.
 	 *
 	 * @param	uid		identifiant utilisateur
-	 * @author	cfrey
 	 */
     boolean checkEncherisseur(String uid) {
     	// venteEnCours ne devrait pas être nul à ce stade
@@ -225,7 +222,6 @@ class VenteManagerServeur {
 	 * @param	e		opération d'édition
 	 * @param	vte		Objet vente
 	 * @param	uid		identifiant du sender
-	 * @author	cfrey
 	 */
     void vente(Edition e, VenteServeur vte, String uid) {
     	UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
@@ -392,8 +388,6 @@ class VenteManagerServeur {
     /**
 	 * Retourne la vente en cours. S'il en existe déjà une elle ne change pas,
 	 * et si on en a une en retard, on la balance, autrement reste null.
-	 *
-	 * @author	cfrey
      */
     VenteServeur getVenteEnCours() {
 		return this.venteEnCours;
@@ -415,7 +409,6 @@ class VenteManagerServeur {
 	 * cf VenteStarter. S'il y en a une, envoi de notification et événement, set
 	 * Superviseur à null et mode automatique, pour être sûr.
 	 * 
-	 * @author	cfrey
 	 */
 	void demarrerVente() {
 		if (this.venteEnCours == null) {

@@ -110,7 +110,6 @@ class ObjectManagerServeur {
      * @param	i		acheteur
      * @param	prix	prix
      * @param	oid		identifiant de l'objet
-     * @author	cfrey
      */
     void sell(String i, int prix, int oid) {
     	ObjetServeur o = this.getObjet(oid);

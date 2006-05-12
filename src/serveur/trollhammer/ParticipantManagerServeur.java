@@ -18,7 +18,6 @@ class ParticipantManagerServeur {
 	 * dans l'onglet HdV.
 	 *
 	 * @param sender	IDUtilisateur de l'émetteur de la requête.
-	 * @author	Julien Ruffin
 	 */
     void obtenirListeParticipants(String sender) {
         UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
@@ -41,7 +40,6 @@ class ParticipantManagerServeur {
 	 * transiter sur le réseau des information sensible inutilement, tel que le MdP.</p>
 	 *
 	 * @param sender	IDUtilisateur de l'émetteur de la requête.
-	 * @author	Lionel Sambuc
 	 */
     void obtenirListeUtilisateurs(String sender) {
         UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);

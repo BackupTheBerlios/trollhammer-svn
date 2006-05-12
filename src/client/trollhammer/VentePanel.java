@@ -99,16 +99,16 @@ class VentePanel implements ActionListener
 		leftPanel = new CoolPanel("pref, pref","pref, pref, 100dlu, pref, pref, pref, pref, pref, pref, pref, pref");
 		leftPanel.addLabel("Proposer un", new CellConstraints(1,1,2,1));
 		leftPanel.addLabel("objet à vendre: ", new CellConstraints(1,2,2,1));
-		leftPanel.add(imgLabel, new CellConstraints(1,3,2,1));
-		leftPanel.add(parcourir, new CellConstraints(1,4,2,1));
+		leftPanel.addC(imgLabel, new CellConstraints(1,3,2,1));
+		leftPanel.addC(parcourir, new CellConstraints(1,4,2,1));
 		leftPanel.addLabel("Titre: ", new CellConstraints(1,5,2,1));
-		leftPanel.add(objTitre, new CellConstraints(1,6,2,1));
+		leftPanel.addC(objTitre, new CellConstraints(1,6,2,1));
 		leftPanel.addLabel("Description: ", new CellConstraints(1,7,2,1));
-		leftPanel.add(objDescrPane, new CellConstraints(1,8,2,1));
+		leftPanel.addC(objDescrPane, new CellConstraints(1,8,2,1));
 		leftPanel.addLabel("Prix de base: ", new CellConstraints(1,9,2,1));
-		leftPanel.add(objPrix, new CellConstraints(1,10,2,1));
-		leftPanel.add(proposer, new CellConstraints(1,11));
-		leftPanel.add(raz, new CellConstraints(2,11));
+		leftPanel.addC(objPrix, new CellConstraints(1,10,2,1));
+		leftPanel.addC(proposer, new CellConstraints(1,11));
+		leftPanel.addC(raz, new CellConstraints(2,11));
 		
 		//right Panel
         //le titre se fait écrabouiller

@@ -82,9 +82,9 @@ class HdVPanel extends JComponent implements ActionListener
 		descrObjetPane.setWheelScrollingEnabled(true);
 		descrObjetPanel.add(descrObjetPane, new CellConstraints(1,1));
 		selectPanel.addLabel("Image: ", new CellConstraints(1,1));
-		selectPanel.add(imgLabel, new CellConstraints(1,2));
+		selectPanel.addC(imgLabel, new CellConstraints(1,2));
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3));
-		selectPanel.add(descrObjetPane, new CellConstraints(1,4));
+		selectPanel.addC(descrObjetPane, new CellConstraints(1,4));
 		
 		//Salle//test...
 		//sup = new HdVUser("Mr.Smith",true,true);
@@ -108,7 +108,7 @@ class HdVPanel extends JComponent implements ActionListener
 		logPane = new JScrollPane(logArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		logPane.setWheelScrollingEnabled(true);
 
-    	logPanel.add(logPane, new CellConstraints(1,1));
+    	logPanel.addC(logPane, new CellConstraints(1,1));
 		
 		//Adjudication en cours
 		adjPanel = new CoolPanel("pref","pref,pref");
@@ -121,7 +121,7 @@ class HdVPanel extends JComponent implements ActionListener
         enchereButton.setActionCommand("encherir");
         enchereButton.addActionListener(this);
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
-		encherePanel.add(enchereButton, new CellConstraints(3,1));
+		encherePanel.addC(enchereButton, new CellConstraints(3,1));
 		
 		//Chat
 		chatPanel = new CoolPanel("fill:pref","pref, pref");
@@ -134,15 +134,15 @@ class HdVPanel extends JComponent implements ActionListener
 		chatButton = new JButton("Envoyer");
         chatButton.setActionCommand("sendchat");
         chatButton.addActionListener(this);
-		chatPanel.add(chatField, new CellConstraints(1,1));
-		chatPanel.add(chatButton, new CellConstraints(1,2));
+		chatPanel.addC(chatField, new CellConstraints(1,1));
+		chatPanel.addC(chatButton, new CellConstraints(1,2));
 		
 		//Panel des commandes
 		cmdPanel = new CoolPanel("left:pref,pref,fill:pref:grow, right:pref","pref");
 		logOutButton = new JButton("Déconnecter");
         logOutButton.setActionCommand("disconnect");
         logOutButton.addActionListener(this);
-		cmdPanel.add(logOutButton, new CellConstraints(1,1));
+		cmdPanel.addC(logOutButton, new CellConstraints(1,1));
 		if(modo)
 		{
 			cdmButton = new JButton("Coup de Marteau");
@@ -151,8 +151,8 @@ class HdVPanel extends JComponent implements ActionListener
 			kickButton = new JButton("Expulser");
 			kickButton.setActionCommand("kick");
 			kickButton.addActionListener(this);
-			cmdPanel.add(cdmButton, new CellConstraints(2,1));
-			cmdPanel.add(kickButton, new CellConstraints(3,1));
+			cmdPanel.addC(cdmButton, new CellConstraints(2,1));
+			cmdPanel.addC(kickButton, new CellConstraints(3,1));
 		}
 	}
 

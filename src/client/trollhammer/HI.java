@@ -76,7 +76,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageListeParticipants(Set<Participant> pl) {
-        mw.affichageListeParticipants(pl);
+        //mw.affichageListeParticipants(pl);
     }
 
     /* modif p.r. au design : argument change de int i => Vente v, sinon,
@@ -224,6 +224,8 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void voir(Onglet quoi) {
+		try
+		{
         if(Client.fsm.voir(quoi)) {
             // oublié dans le Design, mais si on passe d'un onglet à l'autre,
             // on tient à garder l'état - le champ 'mode' du Client - à jour.
@@ -253,6 +255,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
                     break;
             }
         }
+		} catch(Exception e) {Logger.log("HI",0,"ben ça merde.... "+e.getMessage()); e.printStackTrace();}
     }
 
 }

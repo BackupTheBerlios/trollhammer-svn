@@ -50,16 +50,16 @@ class GestionPanel implements ActionListener
 		
 		gauchePanel.addLabel("Propriétés: ", new CellConstraints(1,1));
 		gauchePanel.addLabel("Nom d'utilisateur: ", new CellConstraints(1,3));
-		gauchePanel.add(loginField, new CellConstraints(2,3,2,1));
+		gauchePanel.addC(loginField, new CellConstraints(2,3,2,1));
 		gauchePanel.addLabel("Mot de passe: ", new CellConstraints(1,4));
-		gauchePanel.add(passwdField, new CellConstraints(2,4,2,1));
+		gauchePanel.addC(passwdField, new CellConstraints(2,4,2,1));
 		gauchePanel.addLabel("Nom: ", new CellConstraints(1,5));
-		gauchePanel.add(nomField, new CellConstraints(2,5,2,1));
+		gauchePanel.addC(nomField, new CellConstraints(2,5,2,1));
 		gauchePanel.addLabel("Prénom; ", new CellConstraints(1,6));
-		gauchePanel.add(prenomField, new CellConstraints(2,6,2,1));
-		gauchePanel.add(ajouter, new CellConstraints(1,8));
-		gauchePanel.add(supprimer, new CellConstraints(2,8));
-		gauchePanel.add(bannir, new CellConstraints(3,8));
+		gauchePanel.addC(prenomField, new CellConstraints(2,6,2,1));
+		gauchePanel.addC(ajouter, new CellConstraints(1,8));
+		gauchePanel.addC(supprimer, new CellConstraints(2,8));
+		gauchePanel.addC(bannir, new CellConstraints(3,8));
 		
 		//DROITE
 		droitePanel = new FreshPanel('y',false);

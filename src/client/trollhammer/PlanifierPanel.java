@@ -111,22 +111,22 @@ class PlanifierPanel implements ActionListener
 		pan1 = new CoolPanel("pref:grow, pref:grow, pref:grow","pref, 3dlu, pref, pref, pref, pref, pref, pref, pref, 5dlu, pref");
 		pan1.addLabel(titrePan1, new CellConstraints(1,1,3,1));
 		pan1.addLabel("Nom: ", new CellConstraints(1,3));
-		pan1.add(nomBox, new CellConstraints(2,3,2,1));
+		pan1.addC(nomBox, new CellConstraints(2,3,2,1));
 		pan1.addLabel("Mode: ", new CellConstraints(1,4));
-		pan1.add(auto, new CellConstraints(2,4,2,1));
-		pan1.add(manuel, new CellConstraints(2,5,2,1));
+		pan1.addC(auto, new CellConstraints(2,4,2,1));
+		pan1.addC(manuel, new CellConstraints(2,5,2,1));
 		pan1.addLabel("Ouverture: ", new CellConstraints(1,6));
 		//pan1.add(ouvDate, new CellConstraints(3,6));
 		//pan1.add(ouvHeure, new CellConstraints(5,6));
-		pan1.add(ouvertureFTF, new CellConstraints(2,6,2,1));
+		pan1.addC(ouvertureFTF, new CellConstraints(2,6,2,1));
 		pan1.addLabel("Lancement: ", new CellConstraints(1,7));
-		pan1.add(lanceDate, new CellConstraints(2,7));
-		pan1.add(lanceHeure, new CellConstraints(3,7));
+		pan1.addC(lanceDate, new CellConstraints(2,7));
+		pan1.addC(lanceHeure, new CellConstraints(3,7));
 		pan1.addLabel("Description: ", new CellConstraints(1,8,3,1));
-		pan1.add(descrPane, new CellConstraints(1,9,3,1));
-		pan1.add(nouveau, new CellConstraints(1,11));
-		pan1.add(valider, new CellConstraints(2,11));
-		pan1.add(supprimer, new CellConstraints(3,11));
+		pan1.addC(descrPane, new CellConstraints(1,9,3,1));
+		pan1.addC(nouveau, new CellConstraints(1,11));
+		pan1.addC(valider, new CellConstraints(2,11));
+		pan1.addC(supprimer, new CellConstraints(3,11));
 		
 		
 		
@@ -140,11 +140,12 @@ class PlanifierPanel implements ActionListener
 		remove = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/remove.png"));
 		remove.setActionCommand("remove");
 		remove.addActionListener(this);
-		pan3 = new FreshPanel('y',false);
-		internPan3 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref:grow");
+		pan3 = new FreshPanel('y',true);
+		internPan3 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref,pref:grow");
+		internPan3.setRowGroups(new int[][]{{1,4}});
 		pan3.setLayout(new BorderLayout());
-		internPan3.add(add, new CellConstraints(2,2));
-		internPan3.add(remove, new CellConstraints(2,3));
+		internPan3.addC(add, new CellConstraints(2,2));
+		internPan3.addC(remove, new CellConstraints(2,3));
 		pan3.add(internPan3, BorderLayout.CENTER);
 		
 		//pan4
@@ -157,10 +158,12 @@ class PlanifierPanel implements ActionListener
 		bottom = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/bottom.png"));
 		internPan5 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref,pref,pref,pref:grow");
 		pan5 = new FreshPanel('y',true);
-		pan5.add(top, new CellConstraints(2,2));
-		pan5.add(up, new CellConstraints(2,3));
-		pan5.add(down, new CellConstraints(2,4));
-		pan5.add(bottom, new CellConstraints(2,5));
+		pan5.setLayout(new BorderLayout());
+		internPan5.addC(top, new CellConstraints(2,2));
+		internPan5.addC(up, new CellConstraints(2,3));
+		internPan5.addC(down, new CellConstraints(2,4));
+		internPan5.addC(bottom, new CellConstraints(2,5));
+		pan5.add(internPan5, BorderLayout.CENTER);
 	}
 	private JComponent buildPlanifierPanel()
 	{

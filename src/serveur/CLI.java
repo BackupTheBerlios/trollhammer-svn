@@ -73,11 +73,14 @@ class CLI {
 						help();
 				}
 				void help() {
-					String msg = "Liste des commandes disponible : \n"
-							   + "nu - Créé un nouvel Uilisateur\n"
-							   + "nw - Créé un nouveau Modérateur\n"
-							   + "q ou Q - Termine le serveur.";
+					String msg = "Liste des commandes disponible : \n";
 					Logger.log("CLI", 1, LogType.INF, "[help] " + msg);
+					for(CMD p : commandes) {
+						if (p != this) {
+							p.help();
+						}
+					}
+					Logger.log("CLI", 1, LogType.INF, "[help] " + "q ou Q - Quitte le serveur.\n");
 				}
 			}
 		);
@@ -99,7 +102,7 @@ class CLI {
 					Logger.log("CMD", 1, LogType.INF, "Modérateur créé : " + parameters[1]);
 				}
 				void help(){
-					this.helpStd("nu - Créé un nouveau modérateur.", "nw LOGIN NOM PRENOM MOTDEPASSE");
+					this.helpStd("nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE");
 				}
 			}
 		);

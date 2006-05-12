@@ -51,9 +51,20 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
             Client.session.validerProposition(i);
         }
     }
-
+	//ls : Jule a toi de travailler sur ce truc... j'ai pas la moindre idée de
+	// ce que je dois faire pour que cela s'affiche..
     void affichage(Evenement e) {
-
+		switch (e) {
+		case CoupDeMassePAF1:
+			break;
+		case CoupDeMassePAF2:
+			break;
+		case Adjuge: 
+			break;
+		case VenteAutomatique: 
+			break;
+		default : 
+		}
     }
 
     void affichageChat(String m, String i) {

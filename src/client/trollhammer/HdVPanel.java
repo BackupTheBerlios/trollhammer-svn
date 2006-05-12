@@ -267,10 +267,6 @@ class HdVPanel extends JComponent implements ActionListener
 			if(o.getStatut() == StatutObjet.EnVente)
 				lstObjVect.add(new HdVObjet(o));
         }
-		for(HdVObjet hdVObj: lstObjVect)
-		{
-			listeObjetsPanel.add(hdVObj);
-		}
-        
+		listeObjetsPanel.setListData(hdVObj);
 	}
 }

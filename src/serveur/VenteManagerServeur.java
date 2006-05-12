@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 class VenteManagerServeur {
 
+	int lastId = -1;
+
     private Set<VenteServeur> ventes;
 
     VenteManagerServeur() {
@@ -201,8 +203,126 @@ class VenteManagerServeur {
         return !uid.equals(this.getVenteEnCours().getSuperviseur());
     }
 
-    void vente(Edition e, VenteServeur v, String sender) {
+	Set<Integer> getVIds() {
+		Set<Integer> r = new HashSet<Integer>();
+		for(VenteServeur v : ventes) {
+			r.add(v.getId());
+		}
+		return r;
+	}
 
+	/**
+	 * Edition d'une vente. Création, modification ou suppression. Les
+	 * changements sont transmis à l'éditeur, et à tout le monde si la vente
+	 * est la prochaine. Il n'est pas possible de modifier une vente en cours
+	 * ou de modifier une vente de telle sorte qu'elle ait lieu dans le passé.
+	 * (NB: permis de scheduler une vente alors qu'une vente en cours)
+	 *
+	 * @param	e		opération d'édition
+	 * @param	vte		Objet vente
+	 * @param	uid		identifiant du sender
+	 * @author	cfrey
+	 */
+    void vente(Edition e, VenteServeur vte, String uid) {
+    	UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
+    	VenteServeur v = this.getVente(vte.getId());
+    	
+		switch (e) {
+			case Creer:
+				// vérifie si vte existe déjà ou pas
+				if (v == null) {
+					// peut créer si date pas dans le passé
+					if (vte.getDate() > Serveur.serveur.getDate()) {
+						ventes.add(vte);
+						vte.setId(++this.lastId);
+						u.resultatEdition(StatutEdition.Reussi);
+					} else {
+						// dans le passé
+// il faudrait vraiment un StatutEdition "Impossible" + message non ?
+						u.resultatEdition(StatutEdition.NonTrouve);
+					}
+				} else {
+					u.resultatEdition(StatutEdition.ExisteDeja);
+				}
+				break;
+				
+			case Modifier:
+				// peut modifier que les ventes existantes à venir
+				
+				if (v != null) {
+					// il y a donc une v avec le même id que vte
+					if (vte.getDate() > Serveur.serveur.getDate()) {
+						// on remplace v par vte
+						this.ventes.remove(v);
+						this.ventes.add(vte);
+					} else {
+						u.resultatEdition(StatutEdition.NonTrouve);
+					}
+				} else {
+					u.resultatEdition(StatutEdition.NonTrouve);
+				}
+				break;
+				
+			case Supprimer:
+				// peut supprimer si vte pas en cours
+				VenteServeur encours = this.getVenteEnCours();
+				
+				if (encours != null && encours.getId() == vte.getId()) {
+					u.resultatEdition(StatutEdition.NonTrouve);
+				} else {
+					// pas en cours ou en cours mais pas vte => suppression
+					this.ventes.remove(this.getVente(vte.getId()));
+					u.resultatEdition(StatutEdition.Reussi);
+				}
+				break;
+				
+			default:
+		}
+		
+		// important que ça soit là et pas au début du bloc
+		VenteServeur prochaineVente = getStarting();
+		
+		Set<Vente> l = new HashSet<Vente>();
+		for(VenteServeur vi : this.ventes) {
+			l.add(vi);
+		}
+		
+// ----
+		if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
+			// vte est la prochaine, changements -> broadcast
+			switch (e) {
+				case Creer:
+					if (v == null) {
+						Serveur.broadcaster.listeVentes(l);
+					}
+					break;
+				case Modifier:
+					if (v != null) {
+						Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+					}
+					break;
+				case Supprimer:
+					if (v != null) {
+						Serveur.broadcaster.listeVentes(l);
+					}
+					break;
+				default:
+			}
+		} else {
+			// vte pas la prochaine, changements -> sender
+			switch (e) {
+				case Creer:
+					break;
+				case Modifier:
+					if (v == null) {
+						u.listeVentes(l);
+					}
+					break;
+				case Supprimer:
+					break;
+				default:
+			}
+		}
     }
 
     void modoLeaving(String sender) {

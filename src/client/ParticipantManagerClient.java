@@ -15,7 +15,7 @@ class ParticipantManagerClient {
         Vector<Participant> a_enlever = new Vector<Participant>();
 
         for(Participant pr : participants) {
-            if(pr.getLogin() == p.getLogin()) {
+            if(pr.getLogin().equals(p.getLogin())) {
                 a_enlever.add(pr);
             }
         }

@@ -45,7 +45,7 @@ class VenteServeur extends Vente {
     void modoLeaving(String i) {
 		// si le modérateur qui se déconnecte de la vente en cours est le
 		// superviseur ...
-		if (this.getSuperviseur() == i) {
+		if (this.getSuperviseur().equals(i)) {
 			this.setSuperviseur(null);
 			this.setMode(Mode.Automatique);
 		}
@@ -60,7 +60,7 @@ class VenteServeur extends Vente {
 	 * @author	cfrey
 	 */
     boolean isSuperviseur(String s) {
-        return this.getSuperviseur() == s;
+        return this.getSuperviseur().equals(s);
     }
 	
 	/**

@@ -12,31 +12,44 @@ import java.util.HashSet;
  */
 class ParticipantManagerServeur {
 
-    /* jr : il y a peut-être confusion entre getParticipants() et getConnected() ici
-     * getParticipants() renvoie-t-il la liste des Participants connectés,
-     * ou tous ? Celui-ci renvoie tous, getConnected() seulement les connectés,
-     * mais c'est mon interprétation.
-     */
-    Set<Participant> getParticipants() {
-        return utilisateurToParticipant(Serveur.usermanager.getUtilisateurs());
-    }
-
+	/**
+	 * <p>Retourne la liste des participants (Utilisateur actuellement connecté).
+	 * Réponds au message envoyer par le client pour remplir la liste affichée
+	 * dans l'onglet HdV.
+	 *
+	 * @param sender	IDUtilisateur de l'émetteur de la requête.
+	 * @author	Julien Ruffin
+	 */
     void obtenirListeParticipants(String sender) {
-        Set<Participant> liste = this.getConnected();
-        Serveur.usermanager.getUtilisateur(sender).listeParticipants(liste);
-    }
-
-    Set<Participant> getConnected() {
-        return utilisateurToParticipant(Serveur.usermanager.getConnected());
-    }
-
-    // jr : généralisation de la conversion de Set faite par les deux méthodes,
-    // getParticipants() et getConnected() (rétrospectivement, oui, c'est moche.)
-    Set<Participant> utilisateurToParticipant(Set<UtilisateurServeur> s) {
-        Set<Participant> pl = new HashSet<Participant>();
-        for(UtilisateurServeur u : s) {
-            pl.add((Participant) u.getUtilisateur());
+        UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
+		Set<Participant> pl = new HashSet<Participant>();
+        Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
+        for(UtilisateurServeur u : ul) {
+            if(u.getStatut() == StatutLogin.Connecte_Utilisateur
+            || u.getStatut() == StatutLogin.Connecte_Moderateur) {
+                pl.add(u.getUtilisateur()); //cast inutile, utilisateur est un sous-type... c'est automatique
+            }
         }
-        return pl;
-    }
+        s.listeParticipants(pl);
+	}
+	
+	/**
+	 * <p>Retourne la liste des utilisateurs (sous forme de participant) inscrits.
+	 * Réponds au message envoyer par le client pour remplir la liste affichée
+	 * dans l'onglet GestionUtilisateurs, on renvoye tous les utilisateurs défini
+	 * dans le système, mais sous la forme de participants, afin de ne pas faire
+	 * transiter sur le réseau des information sensible inutilement, tel que le MdP.</p>
+	 *
+	 * @param sender	IDUtilisateur de l'émetteur de la requête.
+	 * @author	Lionel Sambuc
+	 */
+    void obtenirListeUtilisateurs(String sender) {
+        UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
+        Set<Participant> pl = new HashSet<Participant>();
+        Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
+        for(UtilisateurServeur u : ul) {
+			pl.add(u.getUtilisateur()); // cf ci-dessus, nous ne somme pas en C++
+        }
+        s.listeParticipants(pl);
+	}
 }

@@ -119,9 +119,9 @@ class UtilisateurServeur {
             // la session est valide, on la fixe pour l'Utilisateur
             this.session = sess;
             u.setStatut(reponse_login_correct);
-            Set<Participant> pl = Serveur.participantmanager.getParticipants();
             Logger.log("UtilisateurServeur", 2, LogType.INF, "[login] envoi de la liste des Participants connectés");
-            sess.listeParticipants(pl);
+			//ls : pourquoi refaire le travail, alors qu'il est fait par une opération?
+            Serveur.participantmanager.obtenirListeParticipants(this.getLogin());
             Logger.log("UtilisateurServeur", 2, LogType.INF, "[login] broadcast du login");
             Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (!mdp.equals(mot_de_passe)) {
@@ -202,6 +202,4 @@ class UtilisateurServeur {
     void setMotDePasse(String mot_de_passe) {
         u.setMotDePasse(mot_de_passe);
     }
-
-
 }

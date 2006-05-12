@@ -97,19 +97,11 @@ class UserManagerServeur {
         UtilisateurServeur u = this.getUtilisateur(i);
 
         if(u != null) {
-            Logger.log("UserManagerServeur", 2, LogType.INF, "[login] Utilisateur " + i + " trouvé");
+            Logger.log("UserManagerServeur", 2, LogType.DBG, "[login] Utilisateur " + i + " trouvé");
             u.doLogin(sess, mdp);
         } else {
             Logger.log("UserManagerServeur", 1, LogType.WRN, "[login] Utilisateur " + i + " non trouvé");
             sess.resultatLogin(StatutLogin.Invalide);
-            // jr : et on suppose que le Garbage Collector
-            // passe après que la variable locale sess
-            // n'existe plus à la sortie de login()...
-			// ls : C'est une évidence, ici tu n'as pas encore quitté
-			// le corps de la fonction, par conséquent la variable est toujours
-			// en utilisation (référencée) par la fonction, et donc le GC ne 
-			// peut virer la variable... (commentaires à effacer au premier 
-			// prétexte trouvé (valable ou non))
         }
     }
 
@@ -165,25 +157,27 @@ class UserManagerServeur {
 			break;
 		case Modifier:
 			if (t != null) {
-				for(UtilisateurServeur us : utilisateurs) {
+			// ls : Quand on réfléchi pas on pond une horreur comme ça :
+			/*	for(UtilisateurServeur us : utilisateurs) {
 					if (us.getUtilisateur().getLogin().equals(u.getLogin())) {
 						utilisateurs.remove(us);
 						utilisateurs.add(new UtilisateurServeur(u));
 						s.resultatEdition(StatutEdition.Reussi);
 					}
 				}
+			*/
+			//plutôt que ca : 
+				utilisateurs.remove(t);
+				utilisateurs.add(new UtilisateurServeur(u));
+				s.resultatEdition(StatutEdition.Reussi);
 			} else {
 				s.resultatEdition(StatutEdition.NonTrouve);
 			}
 			break;
 		case Supprimer:
 			if (t != null) {
-				for(UtilisateurServeur us : utilisateurs) {
-					if (us.getUtilisateur().getLogin().equals(u.getLogin())) {
-						utilisateurs.remove(us);
-						s.resultatEdition(StatutEdition.Reussi);
-					}
-				}
+				utilisateurs.remove(t);
+				s.resultatEdition(StatutEdition.Reussi);
 			} else {
 				s.resultatEdition(StatutEdition.NonTrouve);
 			}
@@ -191,20 +185,20 @@ class UserManagerServeur {
 		default: 
 		}
 		
+		//ls : question code, c'est plus propre, mais je calcul dans un cas pour
+		// rien la liste... car je ne la renvoie pas.
 		Set<Utilisateur> lu = new HashSet<Utilisateur>();
+		for(UtilisateurServeur us : utilisateurs) {
+			lu.add(us.getUtilisateur());
+		}
+
 		switch (e) {
 		case Creer:
 		case Supprimer:
-			for(UtilisateurServeur us : utilisateurs) {
-				lu.add(us.getUtilisateur());
-			}
 			s.listeUtilisateurs(lu);
 			break;
 		case Modifier:
 			if (t == null) {
-				for(UtilisateurServeur us : utilisateurs) {
-					lu.add(us.getUtilisateur());
-				}
 				s.listeUtilisateurs(lu);
 			} else {
 				s.detailsUtilisateur(u);

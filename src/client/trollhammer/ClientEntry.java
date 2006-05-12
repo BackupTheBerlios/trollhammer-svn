@@ -75,7 +75,7 @@ class ClientEntry {
 
         if (v != null && e == Evenement.Adjuge) {
             v.removeFirst();
-            VenteClientAdapter.setPrices(v);
+            Client.ventemanager.getVenteEnCours().setPrices();
         } else if (v != null && e == Evenement.VenteAutomatique) {
             v.setMode(Mode.Automatique);
         }
@@ -90,7 +90,9 @@ class ClientEntry {
         // Fix de l'incrément du prix lors d'une enchère
         Objet o = Client.objectmanager.getObject(
                 Client.humain.getVente().getFirst());
-        Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1 * o.getPrixDeBase()));
+        //Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1 * o.getPrixDeBase()));
+		Client.client.setPrixCourant((int) Client.ventemanager.getVenteEnCours().newPrice());
+
 
         Client.client.setDernierEncherisseur(i);
 

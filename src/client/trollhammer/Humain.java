@@ -10,9 +10,6 @@ class Humain {
 
     void setVente(Vente vente) {
         this.vente = vente;
-        if(vente != null) {
-            //vente.setPrices();
-        }
     }
 
 }

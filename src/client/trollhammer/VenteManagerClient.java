@@ -38,7 +38,7 @@ class VenteManagerClient {
         return null;
     }
 
-    Vente getVenteEnCours() {
+    VenteClient getVenteEnCours() {
         long min = Long.MAX_VALUE;
         long prevmin = 0;
         Vente encours = null;
@@ -56,7 +56,7 @@ class VenteManagerClient {
          * alors on retourne null (ie. aucune vente n'est en cours)
          */
         if(encours.getDate() < Client.client.getDate()) {
-            return encours;
+            return new VenteClient(encours.getId(), encours.getNom(), encours.getDescription(), encours.getDate(), encours.getMode(), encours.getSuperviseur());
         } else {
             return null;
         }

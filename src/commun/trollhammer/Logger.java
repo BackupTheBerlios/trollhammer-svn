@@ -73,5 +73,4 @@ class Logger {
 	}
 }
 
-
 enum LogType { INF, ERR, WRN, DBG }

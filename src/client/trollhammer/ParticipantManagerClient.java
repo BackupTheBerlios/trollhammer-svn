@@ -1,7 +1,6 @@
 package trollhammer;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Vector;
 
 class ParticipantManagerClient {
 
@@ -12,8 +11,8 @@ class ParticipantManagerClient {
     }
 
     void etatParticipant(Participant p) {
-        Vector<Participant> a_enlever = new Vector<Participant>();
-
+        Set<Participant> a_enlever = new HashSet<Participant>();
+/*
         for(Participant pr : participants) {
             if(pr.getLogin().equals(p.getLogin())) {
                 a_enlever.add(pr);
@@ -22,17 +21,20 @@ class ParticipantManagerClient {
 
         for(Participant doublon : a_enlever) {
             participants.remove(doublon);
+        }*/
+		// Et pourquoi pas comme ca?? si ca te conviens, efface le commentaire.
+        for(Participant pr : participants) {
+            if(pr.getLogin().equals(p.getLogin())) {
+				participants.remove(pr);
+             }
         }
-
-        participants.add(p);
+		participants.add(p);
     }
 
     void listeParticipants(Set<Participant> pl) {
         participants = pl;
-        Onglet m = Client.client.getMode();
-        if(m == Onglet.HotelDesVentes) {
+        if(Client.client.getMode() == Onglet.HotelDesVentes) {
             Client.hi.affichageListeParticipants(pl);
         }
     }
-
 }

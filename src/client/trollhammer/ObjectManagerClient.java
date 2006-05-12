@@ -19,7 +19,7 @@ class ObjectManagerClient {
 
     Objet getObject(int i) {
         for(Objet o : objets) {
-            if(o.getId() == i) {
+            if (o.getId() == i) {
                 return o;
             }
         }
@@ -28,8 +28,7 @@ class ObjectManagerClient {
 
     void listeObjets(Onglet t, Set<Objet> ol) {
         this.updateListe(t, ol);
-        Onglet mode = Client.client.getMode();
-        if(mode == t) {
+        if (Client.client.getMode() == t) {
             Client.hi.affichageListeObjets(ol);
         }
     }
@@ -39,11 +38,11 @@ class ObjectManagerClient {
         // pour mettre à jour un objet, on enlève
         // sa précédente instance de la liste
 
-        Vector <Objet> a_enlever = new Vector<Objet>();
+/*        Vector <Objet> a_enlever = new Vector<Objet>();
 
         // on planifie d'abord le retrait
         for(Objet obj : liste) {
-            if(obj.getId() == o.getId()) {
+            if (obj.getId() == o.getId()) {
                 a_enlever.add(obj);
             }
         }
@@ -53,7 +52,14 @@ class ObjectManagerClient {
         for(Objet doublon : a_enlever) {
             liste.remove(doublon);
         }
-        
+*/
+		//ls : et pourquoi ne pas faire comme ca?
+        for(Objet obj : liste) {
+            if (obj.getId() == o.getId()) {
+                liste.remove(obj);
+            }
+        }
+
         // puis on rajoute la nouvelle instance.
         liste.add(o);
     }
@@ -82,7 +88,7 @@ class ObjectManagerClient {
     Objet getObjet(int i) {
         // ceci est une boucle foreach !!!
         for(Objet obj : objets) {
-            if(obj.getId() == i) {
+            if (obj.getId() == i) {
                 return obj;
             }
         }

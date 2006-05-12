@@ -13,15 +13,18 @@ import java.util.ArrayList;
 class VenteManagerServeur {
 
 	int lastId = -1;
+	
+	private VenteServeur venteEnCours;
+	
+	private List<VenteServeur> ventes;
 
-    private Set<VenteServeur> ventes;
+    //private Set<VenteServeur> ventes;
 
     VenteManagerServeur() {
-        ventes = new HashSet<VenteServeur>();
+    	ventes = new ArrayList<VenteServeur>();
+    	venteEnCours = null;
+        //ventes = new HashSet<VenteServeur>();
     }
-	
-	//ls : fix tmp, d'ici que chaois mette a jour
-	void demarrerVente() {}
 
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
@@ -44,7 +47,7 @@ class VenteManagerServeur {
 			// la vente existe
 			if (vte.getDate() >= dateCourante) {
 				// vente courante, prochaine ou à venir ?
-				VenteServeur venteEnCours = getVenteEnCours();
+				//VenteServeur venteEnCours = getVenteEnCours();
 				
 				if (venteEnCours != null
 					&& venteEnCours.getId() == vte.getId()) {
@@ -77,7 +80,7 @@ class VenteManagerServeur {
 						u.resultatEdition(StatutEdition.NonTrouve);
 					}
 					
-					if (prochaineVente.getId() == vte.getId()) {
+					if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
 						// vte est la prochaine, changements -> broadcast
 						Serveur.broadcaster.detailsVente(vte, vte.getObjets());
 					} else {
@@ -137,7 +140,7 @@ class VenteManagerServeur {
 				u.resultatEdition(StatutEdition.NonTrouve);
 			}
 			
-			if (getVenteEnCours().getId() == vte.getId()) {
+			if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
 				// vte en cours, changements -> broadcast
 				Serveur.broadcaster.detailsVente(vte, vte.getObjets());
 			} else {
@@ -183,7 +186,7 @@ class VenteManagerServeur {
 		VenteServeur vs = this.getStarting();
         if(vs != null) {
             this.obtenirVente(vs.getId(), sender);
-            if(vs.getDate() < Serveur.serveur.getDate()) {
+            if(vs.getId() == venteEnCours.getId()) {
                 u.notification(Notification.VenteEnCours);
                 if (vs.getMode() == Mode.Manuel) {
                     u.superviseur(vs.getSuperviseur());
@@ -200,7 +203,8 @@ class VenteManagerServeur {
 	 * @author	cfrey
 	 */
     boolean checkEncherisseur(String uid) {
-        return !uid.equals(this.getVenteEnCours().getSuperviseur());
+    	// venteEnCours ne devrait pas être nul à ce stade
+        return !uid.equals(venteEnCours.getSuperviseur());
     }
 
 	Set<Integer> getVIds() {
@@ -265,9 +269,7 @@ class VenteManagerServeur {
 				
 			case Supprimer:
 				// peut supprimer si vte pas en cours
-				VenteServeur encours = this.getVenteEnCours();
-				
-				if (encours != null && encours.getId() == vte.getId()) {
+				if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
 					u.resultatEdition(StatutEdition.NonTrouve);
 				} else {
 					// pas en cours ou en cours mais pas vte => suppression
@@ -326,22 +328,15 @@ class VenteManagerServeur {
     }
 
     void modoLeaving(String sender) {
-        VenteServeur v = this.getVenteEnCours();
-
         /* si une vente est en cours et que le modo la supervise,
          * prévenir et passer en mode auto. */
-        if(v != null && sender == v.getSuperviseur()) {
-            v.setSuperviseur(null);
-            v.setMode(Mode.Automatique);
+        if(venteEnCours != null && sender.equals(venteEnCours.getSuperviseur())) {
+            venteEnCours.setSuperviseur(null);
+            venteEnCours.setMode(Mode.Automatique);
             // à vérifier : est-ce que la Vente fait un broadcast de son
             // Mode aux participants présents ? Sinon, il faut penser à
             // le faire ici...
         }
-    }
-
-	//ls : A VERIFIER : NE DEVRAIT PAS ETRE LA
-    void detailsVente(VenteServeur v, List<Objet> ol) {
-
     }
 
     /**
@@ -358,44 +353,104 @@ class VenteManagerServeur {
     }
 
     /**
-	 * Retourne la Vente à la date de début la plus proche dans le temps.
+	 * Retourne la prochaine vente: c'est celle qui est en cours si elle existe,
+	 * autrement c'est la première de la liste.
      */
     VenteServeur getStarting() {
-        long min = Long.MAX_VALUE;
-        long prevmin = 0;
-        VenteServeur starting = null;
-
-        /* on prend la vente la plus proche dans le temps */
-        for(VenteServeur v : ventes) {
-            prevmin = min;
-            min = Math.min(min, v.getDate());
-            if(min < prevmin) {
-                starting = v;
-            }
-        }
-
-        return starting;
+    	if (this.venteEnCours == null) {
+    		return ventes.get(0);
+    	} else {
+    		// != null, il y en a une en cours, on la retourne
+    		// (même comportement qu'avant avec la comparaison des dates)
+    		return this.venteEnCours;
+    	}
     }
+    	
+//        long min = Long.MAX_VALUE;
+//        long prevmin = 0;
+//        VenteServeur starting = null;
+//
+//        /* on prend la vente la plus proche dans le temps */
+//        for(VenteServeur v : ventes) {
+//            prevmin = min;
+//            min = Math.min(min, v.getDate());
+//            if(min < prevmin) {
+//                starting = v;
+//            }
+//        }
+//
+//        return starting;
 
     /**
-	 * Retourne la Vente à la date de début la plus proche dans le temps
-     * et dans le passé, null s'il n'y en a pas.
+	 * Retourne la vente en cours. S'il en existe déjà une elle ne change pas,
+	 * et si on en a une en retard, on la balance, autrement reste null.
+	 *
+	 * @author	cfrey
      */
     VenteServeur getVenteEnCours() {
-        // on commence par prendre la vente la plus proche dans le temps
-        VenteServeur encours = getStarting();
-
-        /* puis on vérifie si elle a démarré ! Si pas,
-         * alors on retourne null (ie. aucune vente n'est en cours)
-         */
-        if(encours != null && encours.getDate() < Serveur.serveur.getDate()) {
-            return encours;
-        } else {
-            return null;
-        }
-
-    }
+		return this.venteEnCours;
+	}
+//        // on commence par prendre la vente la plus proche dans le temps
+//        VenteServeur encours = getStarting();
+//
+//        /* puis on vérifie si elle a démarré ! Si pas,
+//         * alors on retourne null (ie. aucune vente n'est en cours)
+//         */
+//        if(encours != null && encours.getDate() < Serveur.serveur.getDate()) {
+//            return encours;
+//        } else {
+//            return null;
+//        }
     
-	// ajouter demarrerVente() ...
+	/**
+	 * Exécuté périodiquement pour vérifier s'il n'y a pas une vente à démarrer,
+	 * cf VenteStarter. S'il y en a une, envoi de notification et événement, set
+	 * Superviseur à null et mode automatique, pour être sûr.
+	 * 
+	 * @author	cfrey
+	 */
+	void demarrerVente() {
+		if (this.venteEnCours == null) {
+    		// aucune actuellement, on vérifie s'il y en a pas une en retard.
+    		// on va de toute façon pas en lancer une dans l'avenir par rapport
+    		// à la date courante ...
+    		if (ventes.get(0).getDate() <= Serveur.serveur.getDate()) {
+    			this.venteEnCours = ventes.remove(0);
+    			this.venteEnCours.setSuperviseur(null);
+    			Serveur.broadcaster.notification(Notification.DebutVente);
+    			Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
+			}
+			// aucune en retard, rien ne change
+		}
+		// s'il y en a une en cours, on fait exactement rien
+	}
+	
+	// devra être utilisé par coupDeMASSE, il faut bien que quelqu'un signale
+	// à VenteManagerServeur que la vente est finie (liste objets vide après
+	// dernière adjudication).
+	void targetVenteEnCoursForTermination() {
+		this.venteEnCours = null;
+	}
+	
+	// ajoute une vente à la liste de ventes, à la bonne position suivant la
+	// date dans l'ordre croissant (ventes est tout le temps triée).
+	private void addVente(VenteServeur v) {
+		int lastId = this.ventes.size()-1;
+		VenteServeur lastV = null;
+		
+		if (lastId > -1) lastV = this.ventes.get(lastId);
+		
+		if (lastV == null
+			|| (lastV != null && v.getDate() >= lastV.getDate())) {
+			this.ventes.add(v);
+		} else {
+			for(int i = 0; i <= lastId; i++) {
+				if (v.getDate() < this.ventes.get(i).getDate()) {
+					this.ventes.add(i, v);
+					return;
+				}
+			}
+		}
+	}
 
 }

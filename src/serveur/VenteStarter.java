@@ -13,7 +13,7 @@ class VenteStarter extends Thread {
 
     // check périodique pour voir si une vente démarre
 	// ls : modif : on envoye pas démarrerVente sur ObjectManager, mais sur
-	// VentManager directement...
+	// VenteManager directement...
     public void run() {
 		VenteServeur vs = null;
 		while (true) {

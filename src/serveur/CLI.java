@@ -21,20 +21,24 @@ class CLI {
 		String nom;
 		int nb = 0;
 		String params[];
+		String helpSum = "default message.";
+		String helpSyntax = "none";
 
 		abstract void apply(String parameters[]);
 		
-		void help() {
-			helpStd("default message.", "none");
+		String helpStr() {
+			return this.helpSum + "\n\t\tSyntax : " + this.helpSyntax;
 		}
 		
-		protected void helpStd(String msg, String msg2) {
-			Logger.log("CLI", 1, LogType.INF, "[help] " + msg + "\nSyntax : " + msg2);
+		void helpPrint() {
+			Logger.log("CLI", 1, LogType.INF, "[help] " + this.helpSum + "\n\t\tSyntax : " + this.helpSyntax);
 		}
 		
-		public CMD(String nom, int nb) {
+		public CMD(String nom, int nb, String hsum, String hsyn) {
 			this.nb = nb;
 			this.nom = nom;
+			this.helpSum = hsum;
+			this.helpSyntax = hsyn;
 		} 
 	}
 	
@@ -54,7 +58,7 @@ class CLI {
 						if (tokens.length == c.nb) {
 							c.apply(tokens);
 						} else {
-							c.help();
+							c.helpPrint();
 						}
 					}
 				}
@@ -68,50 +72,39 @@ class CLI {
 	public CLI() {
 		//En premier, quelques commandes déjà implémentée : 
 		commandes.add(
-			new CMD("help", 0) {
-				void apply(String parameters[]){
-						help();
-				}
-				void help() {
+			new CMD("help", 1, "help - affiche l'aide ainsi que toutes les commandes disponibles.", "help") {
+				void apply(String parameters[]) {
 					String msg = "Liste des commandes disponible : \n";
-					Logger.log("CLI", 1, LogType.INF, "[help] " + msg);
 					for(CMD p : commandes) {
 						if (p != this) {
-							p.help();
+							msg = msg + "\n\t" + p.helpStr();
 						}
 					}
-					Logger.log("CLI", 1, LogType.INF, "[help] " + "q ou Q - Quitte le serveur.\n");
+					Logger.log("CLI", 1, LogType.INF, "[help] " + msg + "\n\tq ou Q - Quitte le serveur.\n\n[help] END.");
 				}
 			}
 		);
 		commandes.add(
-			new CMD("nu", 5) {
+			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {
 				void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new UtilisateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
 					Logger.log("CMD", 1, LogType.INF, "Utilisateur créé : " + parameters[1]);
 				}
-				void help(){
-					this.helpStd("nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE");
-				}
 			}
 		);
 		commandes.add(
-			new CMD("nm", 5) {
+			new CMD("nm", 5, "nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE") {
 				void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
 					Logger.log("CMD", 1, LogType.INF, "Modérateur créé : " + parameters[1]);
-				}
-				void help(){
-					this.helpStd("nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE");
 				}
 			}
 		);
 /*		commandes.add(
 			new CMD(, ) {
+				String helpSum = ;
+				String helpSyntax = ;
 				void apply(String parameters[]){
-					
-				}
-				void help(){
 					
 				}
 			}

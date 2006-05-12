@@ -44,4 +44,12 @@ class CoolPanel extends JPanel
 	{
 		builder.addLabel(s, cc);
 	}
+	public void setRowGroups(int[][] g)
+	{
+		layout.setRowGroups(g);
+	}
+	public void setColumnGroups(int [][] g)
+	{
+		layout.setColumnGroups(g);
+	}
 }

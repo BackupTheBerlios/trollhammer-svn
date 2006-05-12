@@ -323,7 +323,7 @@
     
     <target name="javadoc" description="Javadoc banane!">
     
-		<javadoc sourcepathref="javadocpath" packagenames="trollhammer.*" destdir="${doc.dir}"/>
+		<javadoc classpathref="classpath" sourcepathref="javadocpath" packagenames="trollhammer.*" destdir="${doc.dir}" Private="true"/>
 	</target>
     
     

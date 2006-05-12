@@ -254,10 +254,18 @@ class HdVPanel extends JComponent implements ActionListener
             if(u != null) {
                 grpl.add(u);
                 sallePanel.add(u);
-                // update graphique
-                sallePanel.validate();
             }
         }
+
+        // update graphique (en differe pour eviter les problemes de synchro)
+        SwingUtilities.invokeLater(
+                new Runnable()
+                {
+                    public void run()
+        {
+            sallePanel.validate();
+        }
+        }); // pask on s'la pète!!!
     }
 	void affichageListeObjets(Set<Objet> ol)
 	{

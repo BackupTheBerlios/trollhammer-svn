@@ -149,9 +149,9 @@ class Window implements ActionListener
 			try
 			{
 				tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
-				SwingUtilities.invokeLater(new Runnable() {public void run() {hdv = new HdVPanel(modo, getWindow());tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);}});
-				SwingUtilities.invokeLater(new Runnable() {public void run() {vente = new VentePanel(modo);tabbedPane.addTab("Vente", null, vente.getComponent(), null);}});
-				SwingUtilities.invokeLater(new Runnable() {public void run() {achat = new AchatPanel(modo);tabbedPane.addTab("Achat", null, achat.getComponent(), null);}});
+				hdv = new HdVPanel(modo, getWindow());tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
+				vente = new VentePanel(modo);tabbedPane.addTab("Vente", null, vente.getComponent(), null);
+				achat = new AchatPanel(modo);tabbedPane.addTab("Achat", null, achat.getComponent(), null);
 			} catch (Exception e) {Logger.log("Window",0,"Initialisation et Ajout des Tabs au tabbedPane... "+e.getMessage()); e.printStackTrace();}
 			// ATTENTION : SI MODIFICATION DE L'ORDRE DES ONGLETS,
 			//             ALORS LE REPERCUTER DANS LE LISTENER
@@ -159,9 +159,9 @@ class Window implements ActionListener
 				
 			if(modo)
 			{
-				SwingUtilities.invokeLater(new Runnable() {public void run() {valider = new ValiderPanel(modo);tabbedPane.addTab("Valider", null, valider.getComponent(), null);}});
-				SwingUtilities.invokeLater(new Runnable() {public void run() {planifier = new PlanifierPanel(modo);tabbedPane.addTab("Planifier", null, planifier.getComponent(), null);}});
-				SwingUtilities.invokeLater(new Runnable() {public void run() {gestion = new GestionPanel(modo);tabbedPane.addTab("Gestion des utilisateurs", null, gestion.getComponent(), null);}});
+				valider = new ValiderPanel(modo);tabbedPane.addTab("Valider", null, valider.getComponent(), null);
+				planifier = new PlanifierPanel(modo);tabbedPane.addTab("Planifier", null, planifier.getComponent(), null);
+				gestion = new GestionPanel(modo);tabbedPane.addTab("Gestion des utilisateurs", null, gestion.getComponent(), null);
 			}
 			
 			/* Listener s'occupant de gérer les changements dans la barre d'onglets.

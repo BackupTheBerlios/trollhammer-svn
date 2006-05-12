@@ -85,6 +85,12 @@
 			<include name="**/*.jar"/>
 		</fileset>
 	</path>
+	
+	<path id="javadocpath">
+		<pathelement path="${src.client}"/>
+		<pathelement path="${src.serveur}"/>
+		<pathelement path="${src.commun}"/>
+	</path>
 
     <target name="help" description="Affiche l'aide des differentes target disponibles">
     		<echo> Syntaxe du fichier build du projet Trollhammer</echo>
@@ -314,7 +320,13 @@
 
     
     </target>
-      
+    
+    <target name="javadoc" description="Javadoc banane!">
+    
+		<javadoc sourcepathref="javadocpath" packagenames="trollhammer.*" destdir="${doc.dir}"/>
+	</target>
+    
+    
     
     <target name="clean" depends="putz" description="Nettoyage des fichiers .class">
     </target>
@@ -358,9 +370,6 @@
     </target>
 	
 
-	<target name="javadoc" depends="build" description="Genere la javadoc du projet">
-		<echo>Ne fait rien pour l'instant</echo>
-	</target>
 
 	<target name="jar" depends="build" description="Genere les fichiers jar du projet">
 		<echo>Ne fait rien pour l'instant</echo>

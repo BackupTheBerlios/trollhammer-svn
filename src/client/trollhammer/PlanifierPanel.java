@@ -15,7 +15,7 @@ class PlanifierPanel implements ActionListener
 	private FormLayout layout = null;
 	private boolean modo = false;
 	private boolean modeAuto = true;
-	//pan1
+	//pan1 champs d'une vente
 	private String titrePan1 = "";
 	private CoolPanel pan1 = null;
 	private JComboBox nomBox = null;
@@ -34,18 +34,28 @@ class PlanifierPanel implements ActionListener
 	private JButton valider = null;
 	private JButton supprimer = null;
 	
-	//pan2
+	//pan2 objets accepte
 	private JScrollPane jspPan2 = null;
 	private FreshPanel pan2 = null;
 	
-	//pan3
+	//pan3 boutons ajouter enlever des objets
 	private FreshPanel pan3 = null;
+	private CoolPanel internPan3 = null;
 	private JButton add = null;
 	private JButton remove = null;
 	
-	//pan4
+	//pan4 objets en vente
 	private JScrollPane jspPan4 = null;
 	private FreshPanel pan4 = null;
+	
+	//pan5 boutons de gestions du placement des objets en vente
+	private FreshPanel pan5 = null;
+	private CoolPanel internPan5 = null;
+	private JButton up = null;		//déplace un Objet vers le haut
+	private JButton down= null;		//déplace un Objet vers le bas
+	private JButton top= null;	//déplace un Objet en tête de liste
+	private JButton bottom= null;	//déplace un Objet en fin de liste
+	
 	
 	public PlanifierPanel(boolean modo)
 	{
@@ -53,7 +63,7 @@ class PlanifierPanel implements ActionListener
 	}
 	private void initComponents()
 	{
-		//pan1
+		//pan1 
 		titrePan1 = "Planifier une nouveau vente: ";
 		nomBox = new JComboBox();
 		nomBox.setEditable(true);
@@ -124,24 +134,37 @@ class PlanifierPanel implements ActionListener
 		jspPan2 = new JScrollPane(pan2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		//pan3
-		add = new JButton(">>");
+		add = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/add.png"));
 		add.setActionCommand("add");
 		add.addActionListener(this);
-		remove = new JButton("<<");
+		remove = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/remove.png"));
 		remove.setActionCommand("remove");
 		remove.addActionListener(this);
-		pan3 = new FreshPanel('y',true);
+		pan3 = new FreshPanel('y',false);
+		internPan3 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref:grow");
 		pan3.setLayout(new BorderLayout());
-		pan3.add(add, BorderLayout.NORTH);
-		pan3.add(remove, BorderLayout.SOUTH);
+		internPan3.add(add, new CellConstraints(2,2));
+		internPan3.add(remove, new CellConstraints(2,3));
+		pan3.add(internPan3, BorderLayout.CENTER);
 		
 		//pan4
 		jspPan4 = new JScrollPane(pan4, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
+		//pan5
+		up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));
+		down = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/down.png"));
+		top = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/top.png"));
+		bottom = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/bottom.png"));
+		internPan5 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref,pref,pref,pref:grow");
+		pan5 = new FreshPanel('y',true);
+		pan5.add(top, new CellConstraints(2,2));
+		pan5.add(up, new CellConstraints(2,3));
+		pan5.add(down, new CellConstraints(2,4));
+		pan5.add(bottom, new CellConstraints(2,5));
 	}
 	private JComponent buildPlanifierPanel()
 	{
-		layout = new FormLayout("pref, pref:grow, pref, pref:grow","fill:pref:grow");
+		layout = new FormLayout("fill:pref, pref:grow, pref, pref:grow,pref","fill:pref:grow");
 		initComponents();
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.setDefaultDialogBorder();
@@ -150,6 +173,7 @@ class PlanifierPanel implements ActionListener
 		builder.add(jspPan2, new CellConstraints(2,1));
 		builder.add(pan3, new CellConstraints(3,1));
 		builder.add(jspPan4, new CellConstraints(4,1));
+		builder.add(pan5, new CellConstraints(5,1));
 		
 		return builder.getPanel();
 	}

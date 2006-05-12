@@ -13,7 +13,7 @@ import java.util.Vector;
 class HdVPanel extends JComponent implements ActionListener
 {
 	private FormLayout layout = null;
-	private CoolPanel listeObjetsPanel = null;
+	private FreshPanel listeObjetsPanel = null;
 	private CoolPanel infoAdjPanel = null;
 	private CoolPanel selectPanel = null;
 	private JLabel imgLabel = null;
@@ -41,7 +41,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private byte nbCdM = 0;
 	private double prixEnCours = 0.;
 	private double prochaineEnchere = 0.;
-	private Vector lstObjVect = null;
+	private Vector<HdVObjet> lstObjVect = null;
 	//test
 	//private HdVUser sup = null;
 	//private HdVUser l1 = null;
@@ -59,8 +59,7 @@ class HdVPanel extends JComponent implements ActionListener
 	{
 		
 		//Liste des objets
-		listeObjetsPanel = new CoolPanel();
-		lstObjVect = new Vector(5,1);
+		listeObjetsPanel = new FreshPanel('x', true);
 		
 		//Informations adjudications
 		infoAdjPanel = new CoolPanel("pref:grow, pref","pref, pref");
@@ -260,4 +259,18 @@ class HdVPanel extends JComponent implements ActionListener
             }
         }
     }
+	void affichageListeObjets(Set<Objet> ol)
+	{
+		lstObjVect = new Vector<HdVObjet>();
+		for(Objet o : ol)
+		{
+			if(o.getStatut() == StatutObjet.EnVente)
+				lstObjVect.add(new HdVObjet(o));
+        }
+		for(HdVObjet hdVObj: lstObjVect)
+		{
+			listeObjetsPanel.add(hdVObj);
+		}
+        
+	}
 }

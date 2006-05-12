@@ -11,7 +11,7 @@ import java.util.HashSet;
  * vous laisser prendre exemplesur les deux déjà fournies...</p>
  *
  * <p>IMPORTANT : A l'heure actuelle n'implemente pas une commande par message,
- * et par conséquent cette classe n'estz pas terminée...</p>
+ * et par conséquent cette classe n'est pas terminée...</p>
  *
  * @author Lionel Sambuc, inspired by previous work by Julien Ruffin
  */

@@ -27,14 +27,19 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
      */
     void mainWindow(final boolean moderateur) {
 
-			SwingUtilities.invokeLater(
+			/* jr : ceci est la cause des NullPointerExceptions lors de affichageListeObjets() au Login.
+            En effet, l'affichage essaye d'acceder a une variable mw qui ne pointe pas encore sur la bonne Window,
+            mais sur null, parce que mettre ca dans un invokeLater() renvoie l'operation a trop tard
+            pour que affichageListeObjets() l'utilise.
+            
+            SwingUtilities.invokeLater(
 			new Runnable()
 			{
 				public void run()
-				{
+				{*/
 					mw = new Window(moderateur, lw);
-				}
-			});
+			/*	}
+			});*/
         lw.setVisible(false);
 
     }
@@ -76,7 +81,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageListeParticipants(Set<Participant> pl) {
-        //mw.affichageListeParticipants(pl);
+        mw.affichageListeParticipants(pl);
     }
 
     /* modif p.r. au design : argument change de int i => Vente v, sinon,

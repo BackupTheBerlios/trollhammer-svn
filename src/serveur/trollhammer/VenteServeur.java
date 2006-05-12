@@ -141,5 +141,4 @@ class VenteServeur extends Vente {
 		}
 		return r;
 	}
-
 }

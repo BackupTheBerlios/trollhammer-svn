@@ -28,7 +28,6 @@ class SessionClient {
      * retourne la Session y correspondant si la connexion est possible,
      * null sinon.
      */
-
     static SessionClient login(String i, String m, String s) {
         try {
             Logger.log("SessionClient", 1, LogType.INF, "[net] Tentative de connexion sur " + s + ", port " + PORT + "...");

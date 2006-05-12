@@ -10,21 +10,21 @@ class ClientEntry {
         if(Client.fsm.resultatLogin()) {
             switch(s) {
                 case Connecte_Utilisateur:
-                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Utilisateur");
+                    Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Utilisateur");
                     Client.hi.mainWindow(false);
                     Client.hi.voir(Onglet.HotelDesVentes);
                     Client.session.setModerateur(false);
                     Client.session.setConnecte(true);
                     break;
                 case Connecte_Moderateur:
-                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Connecté Modérateur");
+                    Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Modérateur");
                     Client.hi.mainWindow(true);
                     Client.hi.voir(Onglet.HotelDesVentes);
                     Client.session.setModerateur(true);
                     Client.session.setConnecte(true);
                     break;
                 case Banni:
-                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Banni");
+                    Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Banni");
                     Client.hi.messageErreur(Erreur.Banni);
                     // mod p.r. design : pas de destroy() (impossible en Java),
                     // mais on tient quand même à fermer la connexion!
@@ -32,7 +32,7 @@ class ClientEntry {
                     Client.session = null;
                     break;
                 case Invalide:
-                    Logger.log("ClientEntry", 1, "[login] reçu réponse : Invalide");
+                    Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Invalide");
                     Client.hi.messageErreur(Erreur.Invalide);
                     // mod p.r. design : pas de destroy() (impossible en Java),
                     // mais on tient quand même à fermer la connexion!
@@ -90,7 +90,7 @@ class ClientEntry {
         // Fix de l'incrément du prix lors d'une enchère
         Objet o = Client.objectmanager.getObject(
                 Client.humain.getVente().getFirst());
-        Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1*o.getPrixDeBase()));
+        Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1 * o.getPrixDeBase()));
 
         Client.client.setDernierEncherisseur(i);
 
@@ -101,7 +101,7 @@ class ClientEntry {
     }
 
     void chat(String m, String i) {
-        Logger.log("ClientEntry", 2, "[chat] "+i+" dit : "+m);
+        Logger.log("ClientEntry", 2, LogType.INF, "[chat] " + i + " dit : " + m);
 
         // inconditionnel, que ca s'affiche meme hors-onglet
         //et que le log l'aie note
@@ -185,7 +185,7 @@ class ClientEntryHandler extends Thread {
     /** Boucle de lecture des objets sérialisés reçus du socket.
     */
     public void run() {
-        Logger.log("ClientEntryHandler", 1, "[net] Ecoute des réponses Serveur lancée");
+        Logger.log("ClientEntryHandler", 1, LogType.INF, "[net] Ecoute des réponses Serveur lancée");
         Object o = null; // l'objet qui va être lu du Socket.
         ObjectInputStream ois = null; // le stream qui reçoit les objets.
 
@@ -196,13 +196,13 @@ class ClientEntryHandler extends Thread {
 
                 if(o instanceof Message) {
                     Message m = (Message) o;
-                    Logger.log("ClientEntryHandler", 2, "[net] reçu message : "+m);
+                    Logger.log("ClientEntryHandler", 2, LogType.INF, "[net] reçu message : " + m);
                     this.execute(m);
                 } else {
-                    Logger.log("ClientEntryHandler", 1, "[net] objet invalide du serveur "+s.getInetAddress()+" : ignoré");
+                    Logger.log("ClientEntryHandler", 1, LogType.WRN, "[net] objet invalide du serveur " + s.getInetAddress() + " : ignoré");
                 }
             } while ( !((o instanceof resultatLogin)
-                        && (((resultatLogin) o).s == StatutLogin.Deconnecte)) );
+                        && (((resultatLogin) o).s == StatutLogin.Deconnecte)));
 
             // tant qu'on ne reçoit pas de StatutLogin(Déconnecté), on boucle.
             // sinon, on ferme le stream. La fermeture de Socket et autres est fait
@@ -213,10 +213,10 @@ class ClientEntryHandler extends Thread {
 
         } catch (IOException ioe) {
             // connexion fermée, ou interrompue d'une autre façon.
-            Logger.log("ClientEntryHandler", 0, "[net] Listener déconnecté du serveur "+s.getInetAddress()+" : "+ioe.getMessage());
+            Logger.log("ClientEntryHandler", 0, LogType.ERR, "[net] Listener déconnecté du serveur " + s.getInetAddress() + " : " + ioe.getMessage());
             Client.fsm.reset(); // on repart à zéro niveau FSM.
         } catch (Exception e) {
-            Logger.log("ClientEntryHandler", 0, "[net] EXCEPTION : déconnexion du serveur "+s.getInetAddress());
+            Logger.log("ClientEntryHandler", 0, LogType.ERR, "[net] Exception : déconnexion du serveur " + s.getInetAddress());
             e.printStackTrace();
             Client.fsm.reset(); // on repart à zéro niveau FSM.
         } finally {
@@ -227,8 +227,7 @@ class ClientEntryHandler extends Thread {
                     ois.close();
                 } catch (IOException ioe) {
                     // ne devrait pas arriver...
-                    Logger.log("ClientEntryHandler", 1, "Erreur de fermeture"
-                            +" d'ObjectInputStream - NE DEVRAIT PAS ARRIVER");
+                    Logger.log("ClientEntryHandler", 1, LogType.ERR, "Erreur de fermeture" + " d'ObjectInputStream - NE DEVRAIT PAS ARRIVER");
                 }
         }
 
@@ -279,7 +278,7 @@ class ClientEntryHandler extends Thread {
             superviseur s = (superviseur) m;
             Client.cliententry.superviseur(s.id);
         } else {
-            Logger.log("ClientEntryHandler", 2, "[net] message de type non reconnu.");
+            Logger.log("ClientEntryHandler", 2, LogType.WRN, "[net] message de type non reconnu.");
         }
     }
 }

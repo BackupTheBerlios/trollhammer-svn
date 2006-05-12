@@ -39,7 +39,7 @@
     <property name="guiClass" value="trollhammer.HI"/>
     <property name="guiTestClass" value="trollhammer.TestGUI"/>
     
-    <property name="encodage" value="UTF-8"/>
+    <property name="encodage" value="UTF8"/>
     <property name="mysound" value="ant"/>
     
     
@@ -117,7 +117,7 @@
 			<echo></echo>
 			<echo> AFAIREjar - cree les fichiers jar</echo>
 			<echo></echo>
-			<echo> AFAIREjavadoc - cree la javadoc</echo>
+			<echo> javadoc - cree la javadoc</echo>
 			<echo></echo>
 
 			<echo> putz (= clean) - nettoie le repertoire "${build.dir}"</echo>
@@ -176,8 +176,10 @@
     <target name="buildClient" depends="prepare" description="Construit le client uniquement">
 		<echo>Forge en cours pour... le client</echo>
         <javac 	srcdir="${src.client}" 
-			destdir="${build.client}" >
+			destdir="${build.client}"
+			encoding="${encodage}" >
 			<classpath refid="classpath"/>
+			
 		</javac>
     </target>    
 
@@ -186,10 +188,10 @@
 
     <target name="buildServeur" depends="prepare" description="Construit le serveur uniquement">
         <echo>Forge en cours pour... le serveur</echo>
-        <javac encoding="${encodage}" 
-			srcdir="${src.serveur}" 
-			destdir="${build.serveur}" >
-			<classpath refid="classpath"/>
+        <javac 	srcdir="${src.serveur}" 
+				destdir="${build.serveur}"
+				encoding="${encodage}" >
+				<classpath refid="classpath"/>
 		</javac>
     </target>   
 
@@ -321,7 +323,7 @@
     
     </target>
     
-    <target name="javadoc" description="Javadoc banane!">
+    <target name="javadoc" depends="prepare" description="Javadoc banane!">
     
 		<javadoc classpathref="classpath" sourcepathref="javadocpath" packagenames="trollhammer.*" destdir="${doc.dir}" Private="true"/>
 	</target>

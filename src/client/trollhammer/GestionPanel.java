@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -88,6 +90,20 @@ class GestionPanel implements ActionListener
                 }
                 });
 
+        // gérer l'affichage des propriétés de l'Utilisateur à sa sélection
+        liste.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e) {
+                // implicitement, la sélection est toujours de taille un,
+                // donc on peut ne prendre que l'index du début de la sélection
+                int index = liste.getSelectedIndex(); 
+                if(utilisateurs.size() > 0) {
+                    GestionUtilisateur u = utilisateurs.get(index);
+                    if(u != GestionUtilisateur.nouvel_utilisateur)
+                    Client.hi.choisirUtilisateur(utilisateurs.get(index).getLogin());
+                } else if(index == 0 && utilisateurs.get
+            }
+        });
+
         droitePane.setViewportView(liste);
 	}
 	private JComponent buildGestionPanel()
@@ -109,6 +125,8 @@ class GestionPanel implements ActionListener
 
     void affichageListeUtilisateurs(Set<Utilisateur> ul) {
         utilisateurs = new Vector<GestionUtilisateur>();
+        // le fameux 'nouvel utilisateur' en tête de liste
+        utilisateurs.add(GestionUtilisateur.nouvel_utilisateur);
 
         for(Utilisateur u : ul) {
             GestionUtilisateur gu = null;
@@ -129,6 +147,13 @@ class GestionPanel implements ActionListener
                 liste.repaint();
             }
         });
+    }
+
+    void affichageUtilisateur(Utilisateur i) {
+        loginField.setText(i.getLogin());
+        passwdField.setText(i.getMotDePasse());
+        nomField.setText(i.getNom());
+        prenomField.setText(i.getPrenom());
     }
 
 	public void actionPerformed(ActionEvent event)

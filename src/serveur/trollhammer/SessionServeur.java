@@ -31,6 +31,7 @@ class SessionServeur {
         try {
             Logger.log("SessionServeur", 2, LogType.DBG, "[net] envoi de " + m);
             oos.writeObject(m);
+            oos.reset(); // pour ne pas renvoyer deux fois la meme chose !!!
         } catch (IOException ioe) {
             Logger.log("SessionServeur", 1, LogType.WRN, "[net] Incapable d'envoyer le message : "+ioe.getMessage());
         }

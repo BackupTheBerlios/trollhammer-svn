@@ -264,6 +264,7 @@ class HdVPanel extends JComponent implements ActionListener
                     public void run()
         {
             sallePanel.validate();
+            sallePanel.repaint();
         }
         }); // pask on s'la pète!!!
     }

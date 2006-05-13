@@ -166,6 +166,7 @@ class SessionClient {
         try {
             Logger.log("SessionClient", 2, LogType.INF, "[net] Envoi de la requête : " + m);
             oos.writeObject(m);
+            oos.reset(); // pour ne pas renvoyer deux fois le même objet !!!
         } catch (IOException ioe) {
             Logger.log("SessionClient", 1, LogType.WRN, "[net] Incapable d'envoyer la requête : " + ioe.getMessage());
         }

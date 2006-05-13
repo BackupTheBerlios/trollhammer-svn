@@ -8,6 +8,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Vector;
+import java.util.Set;
 
 class GestionPanel implements ActionListener
 {
@@ -25,6 +26,8 @@ class GestionPanel implements ActionListener
 	//panel de droite
 	private JScrollPane droitePane = null;
 	private FreshPanel droitePanel = null;
+    private Vector<GestionUtilisateur> utilisateurs = null;
+    private JList liste = null;
 	
 	public GestionPanel(boolean modo)
 	{
@@ -66,6 +69,26 @@ class GestionPanel implements ActionListener
 		
 		droitePane = new JScrollPane(droitePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		droitePane.setBorder(BorderFactory.createEtchedBorder());
+
+        liste = new JList();
+        liste.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        liste.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((GestionUtilisateur) value).selectionne(isSelected);
+                return (GestionUtilisateur) value;
+                }
+                });
+
+        droitePane.setViewportView(liste);
 	}
 	private JComponent buildGestionPanel()
 	{
@@ -83,6 +106,31 @@ class GestionPanel implements ActionListener
 	{
 		return buildGestionPanel();
 	}
+
+    void affichageListeUtilisateurs(Set<Utilisateur> ul) {
+        utilisateurs = new Vector<GestionUtilisateur>();
+
+        for(Utilisateur u : ul) {
+            GestionUtilisateur gu = null;
+            if(u instanceof Moderateur) {
+                gu = new GestionModerateur((Moderateur) u);
+            } else {
+                gu = new GestionUtilisateur(u);
+            }
+            utilisateurs.add(gu);
+        }
+
+        liste.setListData(utilisateurs);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                droitePane.validate();
+                droitePane.repaint();
+                liste.validate();
+                liste.repaint();
+            }
+        });
+    }
+
 	public void actionPerformed(ActionEvent event)
 	{
 		if(event.getActionCommand().equals("add"))

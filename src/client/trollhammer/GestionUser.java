@@ -2,6 +2,7 @@ package trollhammer;
 import javax.swing.*;
 import java.awt.*;
 
+/* jr : remplacé par GestionUtilisateur. (mes excuses, Alex)
 class GestionUser extends JPanel
 {
 	private String login;
@@ -24,4 +25,4 @@ class GestionUser extends JPanel
 		this.add(new JLabel(login));
 		this.add(new JLabel("("+nom+", "+prenom+")"));
 	}
-}
+}*/

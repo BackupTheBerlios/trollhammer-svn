@@ -98,7 +98,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageListeUtilisateurs(Set<Utilisateur> ul) {
-
+        this.mw.affichageListeUtilisateurs(ul);
     }
 
     void affichageListeParticipants(Set<Participant> pl) {

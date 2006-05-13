@@ -258,7 +258,7 @@ class Window implements ActionListener
     }
 	
     void affichageListeUtilisateurs(Set<Utilisateur> ul) {
-		
+        this.gestion.affichageListeUtilisateurs(ul);
     }
 	
     void affichageListeParticipants(Set<Participant> pl) {

@@ -1,16 +1,28 @@
 package trollhammer;
 import java.util.Set;
+import java.util.HashSet;
 
 class UserManagerClient {
 
     private Set<Utilisateur> utilisateurs;
 
+    UserManagerClient() {
+        utilisateurs = new HashSet<Utilisateur>();
+    }
+
     void detailsUtilisateur(Utilisateur u) {
+        HashSet<Utilisateur> a_enlever = new HashSet<Utilisateur>();
+
         for(Utilisateur util : utilisateurs) {
             if(u.getLogin().equals(util.getLogin())) {
-                utilisateurs.remove(util);
+                a_enlever.add(util);
             }
         }
+
+        for(Utilisateur util : a_enlever) {
+            utilisateurs.remove(util);
+        }
+
         utilisateurs.add(u);
     }
 
@@ -32,5 +44,15 @@ class UserManagerClient {
             }
         }
         return null;
+    }
+
+    /** Retourne la liste des Utilisateurs du Manager.
+     * Utilisé par HI pour force l'affichage de cette liste
+     * lors d'une modification minime d'Utilisateur (qui ne
+     * fait pas renvoyer une liste complète du Serveur
+     * automatiquement affichée, elle)
+     */
+    Set<Utilisateur> getUtilisateurs() {
+        return utilisateurs;
     }
 }

@@ -25,6 +25,8 @@ class GestionPanel implements ActionListener
 	private JButton ajouter = null;
 	private JButton supprimer = null;
 	private JButton bannir = null;
+
+    private Utilisateur utilisateur_selectionne = null;
 	//panel de droite
 	private JScrollPane droitePane = null;
 	private FreshPanel droitePanel = null;
@@ -47,20 +49,20 @@ class GestionPanel implements ActionListener
 		ajouter.setActionCommand("add");
 		ajouter.addActionListener(this);
 		supprimer = new JButton("Supprimer");
-		ajouter.setActionCommand("del");
-		ajouter.addActionListener(this);
+		supprimer.setActionCommand("del");
+		supprimer.addActionListener(this);
 		bannir = new JButton("Bannir");
-		ajouter.setActionCommand("bann");
-		ajouter.addActionListener(this);
+		bannir.setActionCommand("ban");
+		bannir.addActionListener(this);
 		
 		gauchePanel.addLabel("Propriétés: ", new CellConstraints(1,1));
-		gauchePanel.addLabel("Nom d'utilisateur: ", new CellConstraints(1,3));
+		gauchePanel.addLabel("Nom d'utilisateur ", new CellConstraints(1,3));
 		gauchePanel.addC(loginField, new CellConstraints(2,3,2,1));
-		gauchePanel.addLabel("Mot de passe: ", new CellConstraints(1,4));
+		gauchePanel.addLabel("Mot de passe ", new CellConstraints(1,4));
 		gauchePanel.addC(passwdField, new CellConstraints(2,4,2,1));
-		gauchePanel.addLabel("Nom: ", new CellConstraints(1,5));
+		gauchePanel.addLabel("Nom ", new CellConstraints(1,5));
 		gauchePanel.addC(nomField, new CellConstraints(2,5,2,1));
-		gauchePanel.addLabel("Prénom; ", new CellConstraints(1,6));
+		gauchePanel.addLabel("Prénom ", new CellConstraints(1,6));
 		gauchePanel.addC(prenomField, new CellConstraints(2,6,2,1));
 		gauchePanel.addC(ajouter, new CellConstraints(1,8));
 		gauchePanel.addC(supprimer, new CellConstraints(2,8));
@@ -91,16 +93,28 @@ class GestionPanel implements ActionListener
                 });
 
         // gérer l'affichage des propriétés de l'Utilisateur à sa sélection
+        final GestionPanel gp = this;
         liste.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e) {
                 // implicitement, la sélection est toujours de taille un,
                 // donc on peut ne prendre que l'index du début de la sélection
                 int index = liste.getSelectedIndex(); 
-                if(utilisateurs.size() > 0) {
-                    GestionUtilisateur u = utilisateurs.get(index);
-                    if(u != GestionUtilisateur.nouvel_utilisateur)
-                    Client.hi.choisirUtilisateur(utilisateurs.get(index).getLogin());
-                } else if(index == 0 && utilisateurs.get
+                if(index > -1) { // index < 0 => invalide (-1 == non trouvé)
+                    if(utilisateurs.size() > 0
+                        && utilisateurs.get(index) !=
+                        GestionUtilisateur.nouvel_utilisateur) {
+                        GestionUtilisateur u = utilisateurs.get(index);
+                        // mettre le bouton ajouter en mode 'modifier'
+                        gp.boutonModifier();
+                        Client.hi.choisirUtilisateur(utilisateurs.get(index).getLogin());
+                    } else if(utilisateurs.get(index) == GestionUtilisateur.nouvel_utilisateur) {
+                        // pas besoin d'aller farfouiller dans HI pour afficher
+                        // le 'template' nouvel_utilisateur. Déclenchons directement
+                        // l'affichage de celui-ci.
+                        gp.razChamps();
+                        gp.boutonAjouter();
+                    }
+                }
             }
         });
 
@@ -150,26 +164,101 @@ class GestionPanel implements ActionListener
     }
 
     void affichageUtilisateur(Utilisateur i) {
+        utilisateur_selectionne = i;
         loginField.setText(i.getLogin());
         passwdField.setText(i.getMotDePasse());
         nomField.setText(i.getNom());
         prenomField.setText(i.getPrenom());
+
+        // en fonction que l'utilisateur est banni ou pas.
+        // le bouton 'Bannir' va se changer en 'Débannir'.
+        if(utilisateur_selectionne.getStatut() == StatutLogin.Banni) {
+            boutonDebannir();
+        } else {
+            boutonBannir();
+        }
     }
 
 	public void actionPerformed(ActionEvent event)
 	{
+        Logger.log("GestionPanel", 2, event.getActionCommand());
 		if(event.getActionCommand().equals("add"))
 		{
-			
+            Utilisateur u = new Utilisateur(loginField.getText(),
+                    nomField.getText(), prenomField.getText(),
+                    passwdField.getText());
+
+            Client.hi.editerUtilisateur(Edition.Creer, u);
+		}
+		else if(event.getActionCommand().equals("mod"))
+		{
+            // le login n'est pas modifiable.
+            //utilisateur_selectionne.setLogin(loginField.getText());
+            utilisateur_selectionne.setNom(nomField.getText());
+            utilisateur_selectionne.setPrenom(prenomField.getText());
+            utilisateur_selectionne.setMotDePasse(passwdField.getText());
+
+            Client.hi.editerUtilisateur(Edition.Modifier, utilisateur_selectionne);
 		}
 		else if(event.getActionCommand().equals("del"))
 		{
-			
+            // houlà, c'est sérieux ça.
+            Client.hi.editerUtilisateur(Edition.Supprimer, utilisateur_selectionne);
 		}
-		else if(event.getActionCommand().equals("bann"))
+		else if(event.getActionCommand().equals("ban"))
 		{
-			
+            // jr : modif p.r. Design : kicker l'Utilisateur avant de le marquer
+            // banni. En effet, être banni et connecté est contradictoire.
+            // Gros kick seulement si l'utilisateur est actuellement connecté,
+            // bien sûr.
+            if(utilisateur_selectionne.getStatut() == StatutLogin.Connecte_Utilisateur
+            || utilisateur_selectionne.getStatut() == StatutLogin.Connecte_Moderateur) {
+
+                Client.hi.kicker(utilisateur_selectionne.getLogin());
+            }
+            utilisateur_selectionne.setStatut(StatutLogin.Banni);
+            Client.hi.editerUtilisateur(Edition.Modifier, utilisateur_selectionne);
+
+            // switch du bouton bannir sur 'débannir'
+            boutonDebannir();
+		} else if(event.getActionCommand().equals("unban"))
+		{
+            // unban, ou le salut du pénitent.
+            utilisateur_selectionne.setStatut(StatutLogin.Deconnecte);
+            Client.hi.editerUtilisateur(Edition.Modifier, utilisateur_selectionne);
+
+            // switch du bouton débannir sur 'bannir'
+            boutonBannir();
 		}
 		
 	}
+
+    void razChamps() {
+        loginField.setText("");
+        passwdField.setText("");
+        nomField.setText("");
+        prenomField.setText("");
+    }
+
+    void boutonModifier() {
+        loginField.setEditable(false);
+        ajouter.setText("Modifier");
+        ajouter.setActionCommand("mod");
+    }
+
+    void boutonAjouter() {
+        loginField.setEditable(true);
+        ajouter.setText("Ajouter");
+        ajouter.setActionCommand("add");
+    }
+
+    void boutonBannir() {
+        bannir.setText("Bannir");
+        bannir.setActionCommand("ban");
+    }
+
+    void boutonDebannir() {
+        bannir.setText("Débannir");
+        bannir.setActionCommand("unban");
+    }
 }

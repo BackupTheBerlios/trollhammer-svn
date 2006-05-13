@@ -349,8 +349,10 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.envoyerCoupdeMASSE(ecdm.sender);
             }
         } else if (m instanceof kickerUtilisateur) {
-            if (etat == Etat.HV3) {
-                etat = Etat.HV3;
+            // modif p.r. Design : permettre le kick
+            // lors d'un kick-ban dans GestionUtilisateurs
+            if (etat == Etat.HV3 || etat == Etat.GU2) {
+                //etat = Etat.HV3; tout ce qu'on veut c'est rester au même état
                 kickerUtilisateur ku = (kickerUtilisateur) m;
                 Serveur.serveurentry.kickerUtilisateur(ku.u, ku.sender);
             }

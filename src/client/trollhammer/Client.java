@@ -319,7 +319,10 @@ class ClientFSM {
     }
 
     boolean kicker() {
-        return transition(Etat.HV4, Etat.HV9);
+        return transition(Etat.HV4, Etat.HV9)
+            // modif p.r. Design : permettre le kick
+            // lors d'un kick-ban dans GestionUtilisateurs
+            || transition(Etat.GU4, Etat.GU4);
     }
 
     boolean proposerObjet() {
@@ -414,7 +417,9 @@ class ClientFSM {
     }
 
     boolean listeUtilisateurs() {
-        return transition(Etat.GU2, Etat.GU4);
+        // modif p.r. Design : voir commentaire dans resultatEdition()
+        return transition(Etat.GU4, Etat.GU4)
+            || transition(Etat.GU2, Etat.GU4);
     }
 
     boolean listeParticipants() {
@@ -432,7 +437,15 @@ class ClientFSM {
             || transition(Etat.PL6, Etat.PL7)
             || transition(Etat.VA6, Etat.VA3)
             || transition(Etat.V5, Etat.V6)
-            || transition(Etat.GU3, Etat.GU2);
+            || transition(Etat.GU3, Etat.GU4);
+            // modif p.r. Design : on ne peut pas faire un branchement
+            // sur le bon état de GestionUtilisateurs sans savoir quelle
+            // édition a été faite. Comme on ne peut pas savoir ici,
+            // modification : résultatEdition revient toujours sur GU4,
+            //                et listeUtilisateurs est permis dans
+            //                une transition GU4 -> GU4 en plus de
+            //                la précédente, GU2 -> GU4.
+            //|| transition(Etat.GU3, Etat.GU2);
     }
 
     boolean etatParticipant() {

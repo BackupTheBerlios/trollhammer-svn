@@ -121,6 +121,9 @@ class ClientEntry {
     void detailsUtilisateur(Utilisateur u) {
         if(Client.fsm.detailsUtilisateur()) {
             Client.usermanager.detailsUtilisateur(u);
+            // jr : modif p.r. Design : on aime actualiser la liste pour voir
+            // les changements, aussi minimes soient-ils
+            Client.hi.affichageListeUtilisateurs(Client.usermanager.getUtilisateurs());
         }
     }
 

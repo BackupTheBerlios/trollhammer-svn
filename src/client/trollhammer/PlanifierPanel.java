@@ -156,6 +156,7 @@ class PlanifierPanel implements ActionListener
                 });
 
         jspPan2.setViewportView(listeAccepte);
+        jspPan2.setPreferredSize(new Dimension(150, 150));
 		
 		//pan3
 		add = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/add.png"));
@@ -195,6 +196,7 @@ class PlanifierPanel implements ActionListener
                 });
 
         jspPan4.setViewportView(listeDansVente);
+        jspPan4.setPreferredSize(new Dimension(150, 150));
 		
 		//pan5
 		up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));
@@ -232,7 +234,6 @@ class PlanifierPanel implements ActionListener
 
     void affichageListeObjets(Set<Objet> ol) {
         Vector<PlanifierObjet> objs = new Vector<PlanifierObjet>();
-        System.out.println("liste de taille "+ol.size());
 
         for(Objet o : ol) {
             objs.add(new PlanifierObjet(o));

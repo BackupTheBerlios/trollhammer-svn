@@ -101,13 +101,17 @@ class HdVPanel extends JComponent implements ActionListener
 		//sallePanel.add(l2);
 		
 		//Log
-		logPanel = new CoolPanel("fill:pref","fill:pref:grow");
+		logPanel = new CoolPanel("fill:pref:grow","fill:pref:grow");
 		logArea = new JTextArea(log);
 		logArea.setEditable(false);
 		logArea.setWrapStyleWord(true);
 		logArea.setLineWrap(true);
 		logPane = new JScrollPane(logArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		logPane.setWheelScrollingEnabled(true);
+
+        // ceci évite que la fenêtre de chat modifie sa taille et fasse foirer
+        // le layout en poussant tout le bas de l'interface hors-fenêtre.
+        logPane.setPreferredSize(logPane.getSize());
 
     	logPanel.addC(logPane, new CellConstraints(1,1));
 		
@@ -137,7 +141,7 @@ class HdVPanel extends JComponent implements ActionListener
         chatButton.addActionListener(this);
 		chatPanel.addC(chatField, new CellConstraints(1,1));
 		chatPanel.addC(chatButton, new CellConstraints(1,2));
-		
+
 		//Panel des commandes
 		cmdPanel = new CoolPanel("left:pref,pref,fill:pref:grow, right:pref","pref");
 		logOutButton = new JButton("Déconnecter");
@@ -177,7 +181,7 @@ class HdVPanel extends JComponent implements ActionListener
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
 		builder.add(sallePanel, cc.xy(3,4));
-		builder.add(logPane, cc.xy(4,4));
+		builder.add(logPanel, cc.xy(4,4));
 		builder.addLabel("Chat: ", cc.xy(4,5));
 		builder.add(adjPanel, cc.xy(2,6));
 		builder.add(encherePanel, cc.xy(3,6));

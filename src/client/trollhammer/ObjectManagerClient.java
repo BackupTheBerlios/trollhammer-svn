@@ -38,7 +38,7 @@ class ObjectManagerClient {
         // pour mettre à jour un objet, on enlève
         // sa précédente instance de la liste
 
-/*        Vector <Objet> a_enlever = new Vector<Objet>();
+        Vector <Objet> a_enlever = new Vector<Objet>();
 
         // on planifie d'abord le retrait
         for(Objet obj : liste) {
@@ -52,13 +52,14 @@ class ObjectManagerClient {
         for(Objet doublon : a_enlever) {
             liste.remove(doublon);
         }
-*/
+
 		//ls : et pourquoi ne pas faire comme ca?
-        for(Objet obj : liste) {
+        //jr : pour les mêmes raisons que dans ParticipantManagerClient.
+        /*for(Objet obj : liste) {
             if (obj.getId() == o.getId()) {
                 liste.remove(obj);
             }
-        }
+        }*/
 
         // puis on rajoute la nouvelle instance.
         liste.add(o);

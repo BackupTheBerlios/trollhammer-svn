@@ -32,9 +32,16 @@ class ObjectManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		ObjetServeur o = Serveur.objectmanager.getObjet(i);
 		
-		this.obtenirListeObjets(Onglet.Validation, sender);
+        // jr : modifié un peu l'ordre des choses, car selon le Protocol Model,
+        // cette opération renvoie d'abord la liste des objets et ensuite
+        // le résultat de l'opération. Pour que la liste soit à jour,
+        // il faut déjà avoir effectué l'opération d'invalidation lorsqu'on
+        // l'envoie, sinon elle n'est pas à jour. C'est ensuite seulement
+        // que l'on regarde si elle a réussi, et envoie une réponse en fonction.
 		if (o != null) {
-			if (o.invalider(sender)) {
+            boolean invalidationok = o.invalider(sender);
+            this.obtenirListeObjets(Onglet.Validation, sender);
+			if (invalidationok) {
 				u.resultatEdition(StatutEdition.Reussi);
 			} else {
 				u.resultatEdition(StatutEdition.DejaEffectue);
@@ -48,9 +55,11 @@ class ObjectManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		ObjetServeur o = Serveur.objectmanager.getObjet(oid);
 		
-		this.obtenirListeObjets(Onglet.Validation, sender);
+        // jr : voir le commentaire ci-dessus, c'est la même modification.
 		if (o != null) {
-			if (o.valider(sender)) {
+            boolean validationok = o.valider(sender);
+            this.obtenirListeObjets(Onglet.Validation, sender);
+			if (validationok) {
 				u.resultatEdition(StatutEdition.Reussi);
 			} else {
 				u.resultatEdition(StatutEdition.DejaEffectue);

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.Set;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 
@@ -37,6 +38,7 @@ class PlanifierPanel implements ActionListener
 	//pan2 objets accepte
 	private JScrollPane jspPan2 = null;
 	private FreshPanel pan2 = null;
+    private JList listeAccepte = null;
 	
 	//pan3 boutons ajouter enlever des objets
 	private FreshPanel pan3 = null;
@@ -132,6 +134,27 @@ class PlanifierPanel implements ActionListener
 		
 		//pan2
 		jspPan2 = new JScrollPane(pan2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        listeAccepte = new JList();
+        jspPan2.add(listeAccepte);
+
+        listeAccepte.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listeAccepte.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((ObjetElementListe) value).selectionne(isSelected);
+                return (ObjetElementListe) value;
+                }
+                });
+
+        jspPan2.setViewportView(listeAccepte);
 		
 		//pan3
 		add = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/add.png"));
@@ -184,6 +207,26 @@ class PlanifierPanel implements ActionListener
 	{
 		return buildPlanifierPanel();
 	}
+
+    void affichageListeObjets(Set<Objet> ol) {
+        Vector<PlanifierObjet> objs = new Vector<PlanifierObjet>();
+        System.out.println("liste de taille "+ol.size());
+
+        for(Objet o : ol) {
+            objs.add(new PlanifierObjet(o));
+        }
+
+        listeAccepte.setListData(objs);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                jspPan2.validate();
+                jspPan2.repaint();
+                listeAccepte.validate();
+                listeAccepte.repaint();
+            }
+        });
+    }
+
 	public void actionPerformed(ActionEvent event)
 	{
 		if(event.getActionCommand().equals("new"))
@@ -216,4 +259,5 @@ class PlanifierPanel implements ActionListener
 		}
 		
 	}
+
 }

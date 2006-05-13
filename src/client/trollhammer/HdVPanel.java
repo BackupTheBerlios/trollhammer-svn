@@ -47,6 +47,7 @@ class HdVPanel extends JComponent implements ActionListener
 	//private HdVUser l1 = null;
 	//private HdVUser l2 = null;
 	private ButtonGroup grpl = null;
+    private Vector<Participant> victimes = null;
 
     private Window mw;
 
@@ -209,6 +210,12 @@ class HdVPanel extends JComponent implements ActionListener
         } else if(event.getActionCommand().equals("kick"))
 		{
 			//ben il faut kicker ^^
+            //jr : et je vais le faire. MOUAHAHAH.
+            /*int index = grpl.getSelectedIndex();
+            if(index > -1) { // index == -1 => rien de sélectionné
+                Participant victime = victimes.get(index);
+                Client.hi.kickerUtilisateur(victime.getLogin());
+            }*/
 		}
 	}
 

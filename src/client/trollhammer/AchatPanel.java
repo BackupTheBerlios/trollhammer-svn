@@ -63,6 +63,12 @@ class AchatPanel
         }
 
         liste.setListData(objs);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                liste.validate();
+                liste.repaint();
+            }
+        });
     }
 
 }

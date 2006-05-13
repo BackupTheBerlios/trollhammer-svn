@@ -37,4 +37,8 @@ public class HdVUser extends JRadioButton
 		this.setForeground(new Color(217,217,25));	//Gold
 			
 	}
+
+    String getLogin() {
+        return this.login;
+    }
 }

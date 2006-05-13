@@ -93,6 +93,14 @@ class ValiderPanel implements ActionListener
         }
 
         liste.setListData(objs);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                jsp.validate();
+                jsp.repaint();
+                liste.validate();
+                liste.repaint();
+            }
+        });
     }
 
 	public void actionPerformed(ActionEvent event)
@@ -101,15 +109,23 @@ class ValiderPanel implements ActionListener
         Logger.log("ValiderPanel", 2, commande);
 
         if(commande.equals("accepter")) {
-            // okay chums I'm back. Let's do this.
-            int oid = objs.get(liste.getSelectedIndex()).getId();
-            // LEEEEEEROOOOY NGNGNGNJEEEEENKIIIIINS!!!!!
-            Client.hi.accepterProposition(oid);
+            // un brin de sérieux : valider quelque chose alors que le
+            // quelque chose n'a pas été sélectionné dans la liste
+            // expédie des IndexArrayOutOfBoundsExceptions.
+            if(!liste.isSelectionEmpty()) {
+                // okay chums I'm back. Let's do this.
+                int oid = objs.get(liste.getSelectedIndex()).getId();
+                // LEEEEEEROOOOY NGNGNGNJEEEEENKIIIIINS!!!!!
+                Client.hi.accepterProposition(oid);
+            }
         } else if (commande.equals("refuser")) {
-            // it's not my fault !
-            int oid = objs.get(liste.getSelectedIndex()).getId();
-            // at least I have chicken.
-            Client.hi.refuserProposition(oid);
+            // voir ci-dessus.
+            if(!liste.isSelectionEmpty()) {
+                // it's not my fault !
+                int oid = objs.get(liste.getSelectedIndex()).getId();
+                // at least I have chicken.
+                Client.hi.refuserProposition(oid);
+            }
         }
 	}
 }

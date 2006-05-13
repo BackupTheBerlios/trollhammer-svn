@@ -32,6 +32,7 @@ class ObjectManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		ObjetServeur o = Serveur.objectmanager.getObjet(i);
 		
+		this.obtenirListeObjets(Onglet.Validation, sender);
 		if (o != null) {
 			if (o.invalider(sender)) {
 				u.resultatEdition(StatutEdition.Reussi);
@@ -41,13 +42,13 @@ class ObjectManagerServeur {
 		} else {
 			u.resultatEdition(StatutEdition.NonTrouve);
 		}
-		this.obtenirListeObjets(Onglet.Validation, sender);
     }
 
     void validerProposition(int oid, String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		ObjetServeur o = Serveur.objectmanager.getObjet(oid);
 		
+		this.obtenirListeObjets(Onglet.Validation, sender);
 		if (o != null) {
 			if (o.valider(sender)) {
 				u.resultatEdition(StatutEdition.Reussi);
@@ -57,7 +58,6 @@ class ObjectManagerServeur {
 		} else {
 			u.resultatEdition(StatutEdition.NonTrouve);
 		}		
-		this.obtenirListeObjets(Onglet.Validation, sender);
 	}
 	
     void obtenirListeObjets(Onglet t, String sender) {

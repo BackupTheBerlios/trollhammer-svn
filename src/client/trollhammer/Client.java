@@ -242,11 +242,12 @@ class ClientFSM {
     /* venant de HI */
 
     boolean accepterProposition() {
-        return transition(Etat.VA4, Etat.VA5);
+        //return transition(Etat.VA4, Etat.VA5);
+       return transition(Etat.VA3, Etat.VA5);
     }
 
     boolean ajouterObjetVente() {
-        return transition(Etat.PL4, Etat.PL5);
+       return transition(Etat.PL4, Etat.PL5);
     }
 
     boolean choisirObjet() {
@@ -326,7 +327,8 @@ class ClientFSM {
     }
 
     boolean refuserProposition() {
-        return transition(Etat.VA4, Etat.VA5);
+        //return transition(Etat.VA4, Etat.VA5);
+        return transition(Etat.VA3, Etat.VA5);
     }
     
     boolean retirerObjetVente() {

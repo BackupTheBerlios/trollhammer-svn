@@ -84,9 +84,11 @@ class UserManagerServeur {
 
     void kickerUtilisateur(String i, String sender) {
 		UtilisateurServeur victime = this.getUtilisateur(i);
-		victime.notification(Notification.Kicke);
-		victime.disconnect();
-		Serveur.broadcaster.etatParticipant((Participant) victime.getUtilisateur());
+		if (victime != null && (victime.getStatut() == StatutLogin.Connecte_Utilisateur || victime.getStatut() == StatutLogin.Connecte_Moderateur)) {
+			victime.notification(Notification.Kicke);
+			victime.disconnect();
+			Serveur.broadcaster.etatParticipant((Participant) victime.getUtilisateur());
+		}
     }
 
     // modif p.r. au design : passage du Socket en argument,

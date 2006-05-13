@@ -219,6 +219,10 @@ class Window implements ActionListener
         frame.setVisible(false);
         lw.setVisible(true);
     }
+
+    void setVisible(boolean visible) {
+        frame.setVisible(visible);
+    }
 	
     /* les méthodes de HI sont relayées ici ! */
 	

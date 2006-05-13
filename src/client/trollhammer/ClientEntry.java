@@ -217,10 +217,12 @@ class ClientEntryHandler extends Thread {
             // connexion fermée, ou interrompue d'une autre façon.
             Logger.log("ClientEntryHandler", 0, LogType.ERR, "[net] Listener déconnecté du serveur " + s.getInetAddress() + " : " + ioe.getMessage());
             Client.fsm.reset(); // on repart à zéro niveau FSM.
+            Client.hi.forcerFermeture(); // et on revient au Login.
         } catch (Exception e) {
             Logger.log("ClientEntryHandler", 0, LogType.ERR, "[net] Exception : déconnexion du serveur " + s.getInetAddress());
             e.printStackTrace();
             Client.fsm.reset(); // on repart à zéro niveau FSM.
+            Client.hi.forcerFermeture(); // et on revient au Login.
         } finally {
             // dans tous les cas, on ferme l'ObjectInputStream.
             // (s'il existe).

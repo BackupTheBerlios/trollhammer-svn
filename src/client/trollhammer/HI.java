@@ -43,6 +43,16 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
         lw.setVisible(false);
 
     }
+
+    /** Fermer la fenêtre principale et revenir à la fenêtre de Login.
+     * Utilisé lors des déconnexions forcées et autres kicks.
+     */
+    void forcerFermeture() {
+        if(mw != null && lw != null) {
+            mw.setVisible(false);
+            lw.setVisible(true);
+        }
+    }
 			
     /* méthodes du Design */
 

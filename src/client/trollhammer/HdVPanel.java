@@ -47,7 +47,7 @@ class HdVPanel extends JComponent implements ActionListener
 	//private HdVUser l1 = null;
 	//private HdVUser l2 = null;
 	private ButtonGroup grpl = null;
-    private Vector<Participant> victimes = null;
+    private String victime = null;
 
     private Window mw;
 
@@ -211,12 +211,21 @@ class HdVPanel extends JComponent implements ActionListener
 		{
 			//ben il faut kicker ^^
             //jr : et je vais le faire. MOUAHAHAH.
-            /*int index = grpl.getSelectedIndex();
-            if(index > -1) { // index == -1 => rien de sélectionné
-                Participant victime = victimes.get(index);
-                Client.hi.kickerUtilisateur(victime.getLogin());
-            }*/
-		}
+            //la sélection de victime se fait via le champ du même nom,
+            //mis à jour dès qu'un bouton d'utilisateur est sélectionné. 
+            //(par le ActionListener qu'est HdV, donne aux boutons).
+            //le reset de victime est assuré par l'update de la liste
+            //(car après un update plus rien n'est sélectionné)
+            if(victime != null) {
+                Client.hi.kicker(victime);
+            }
+		} else if(event.getActionCommand().equals("setvictime"))
+        {
+            // seulement les HdVUsers lancent ceci. On peut donc faire
+            // un cast sur l'objet déclencheur.
+            HdVUser selectionne = (HdVUser) event.getSource();
+            this.victime = selectionne.getLogin();
+        }
 	}
 
     /** Ajoute du texte à la fin du contenu du panneau de log.
@@ -248,6 +257,7 @@ class HdVPanel extends JComponent implements ActionListener
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();
         sallePanel.removeAll();
+        this.victime = null; // reset de la victime !
         for(Participant p : pl) {
             HdVUser u = null;
             if(p.getStatut() == StatutLogin.Connecte_Utilisateur) {
@@ -259,6 +269,9 @@ class HdVPanel extends JComponent implements ActionListener
             }
 
             if(u != null) {
+                // assurer la mise à jour de la victime du kick
+                u.addActionListener(this);
+                u.setActionCommand("setvictime");
                 grpl.add(u);
                 sallePanel.add(u);
             }

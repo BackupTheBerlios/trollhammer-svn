@@ -49,6 +49,7 @@ class PlanifierPanel implements ActionListener
 	//pan4 objets en vente
 	private JScrollPane jspPan4 = null;
 	private FreshPanel pan4 = null;
+    private JList listeDansVente = null;
 	
 	//pan5 boutons de gestions du placement des objets en vente
 	private FreshPanel pan5 = null;
@@ -173,6 +174,27 @@ class PlanifierPanel implements ActionListener
 		
 		//pan4
 		jspPan4 = new JScrollPane(pan4, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        listeDansVente = new JList();
+        jspPan4.add(listeDansVente);
+
+        listeDansVente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listeDansVente.setCellRenderer(new ListCellRenderer() {
+                // This is the only method defined by ListCellRenderer.
+                // We just reconfigure the JLabel each time we're called.
+
+                public Component getListCellRendererComponent(
+                    JList list,
+                    Object value,            // value to display
+                    int index,               // cell index
+                    boolean isSelected,      // is the cell selected
+                    boolean cellHasFocus)    // the list and the cell have the focus
+                {
+                    ((ObjetElementListe) value).selectionne(isSelected);
+                return (ObjetElementListe) value;
+                }
+                });
+
+        jspPan4.setViewportView(listeDansVente);
 		
 		//pan5
 		up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));

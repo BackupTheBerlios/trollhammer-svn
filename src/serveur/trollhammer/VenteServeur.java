@@ -47,6 +47,8 @@ class VenteServeur extends Vente {
 		if (this.getSuperviseur().equals(i)) {
 			this.setSuperviseur(null);
 			this.setMode(Mode.Automatique);
+// ??? envoyer un événement VenteAutomatique ???
+// Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
 		}
     }
 
@@ -58,7 +60,10 @@ class VenteServeur extends Vente {
 	 * 			sinon.
 	 */
     boolean isSuperviseur(String s) {
-        return this.getSuperviseur().equals(s);
+		// thou shall not follow the null pointer!
+		//return this.getSuperviseur().equals(s);
+		return this.getSuperviseur() != null ?
+			this.getSuperviseur().equals(s) : false;
     }
 	
 	/**

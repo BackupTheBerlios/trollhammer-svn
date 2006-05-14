@@ -79,7 +79,73 @@ public class Serveur {
     
     /* méthodes du design */
 
+<<<<<<< .mine
+	/**
+	 * Le superviseur donne un coup de marteau. Les utilisateurs sont avertis de
+	 * cet événement. Si c'est le troisième coup, vendre l'objet au dernier en-
+	 * chérisseur. Si la vente est en mode automatique et qu'un coup de marteau
+	 * est donné manuellement par un modérateur, la vente passe en mode manuel
+	 * et ce modérateur devient superviseur. S'il ne reste plus d'objets dans la
+	 * vente, terminer la vente et envoyer les informations sur la suivante.
+	 *
+	 * @param	sender	identifiant du modérateur qui donne le coup de marteau
+	 * author	cfrey
+	 */
+// mode automatique: problème ... qui envoie envoyerCoupdeMASSE ? il devrait y
+// avoir un timeout côté serveur qui génère des coups de marteau ...
+=======
+>>>>>>> .r207
     void envoyerCoupdeMASSE(String sender) {
+<<<<<<< .mine
+		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
+		
+		switch (venteEnCours.isSuperviseur(sender) ? 1 : 0) {
+			case 0:
+				if (venteEnCours.getMode() == Mode.Automatique) {
+					if (Serveur.usermanager.isModo(sender)) {
+						// promotion du modérateur en superviseur
+						venteEnCours.setSuperviseur(sender);
+						Serveur.broadcaster.superviseur(sender);
+						venteEnCours.setMode(Mode.Manuel);
+						// continue avec le cas où sender == superviseur
+					}
+				} else {
+					// mode Manuel => un superviseur existe déjà => rien
+					break; // (sort du switch)
+				}
+			case 1:
+				// sender est un superviseur ou null (mode automatique)
+				// NB: les questions de superviseur/enchérisseur devraient avoir
+				// été gérées par encherir(prix, user).
+				
+				switch (this.marteau) { // nombre de coups de marteau
+					case 0 :
+						this.marteau += 1;
+						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
+						break;
+					case 1 :
+						this.marteau += 1;
+						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
+						break;
+					case 2 :
+						this.marteau = 0;
+						Serveur.broadcaster.evenement(Evenement.Adjuge);
+						Serveur.objectmanager.sell(dernier_encherisseur, prix_courant, venteEnCours.getFirst());
+						// actualiser vue client
+						Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
+						
+						if (venteEnCours.getOIds().size() == 0) {
+							// c'est le dernier objet qu'on a adjugé
+							Serveur.broadcaster.notification(Notification.FinVente);
+							Serveur.ventemanager.terminateVenteEnCours();
+// envoyer nouvelle liste de ventes ? ici ou là ?
+						}
+						break;
+					default :
+						break;
+				}
+			default:
+=======
 		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
 		//1 m := isModérateur(s)
 		if (Serveur.usermanager.isModo(sender)) {
@@ -135,6 +201,7 @@ public class Serveur {
 					Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
 				}
 			}
+>>>>>>> .r207
 		}
     }
 

@@ -223,7 +223,7 @@ class VenteManagerServeur {
 	 * @param	uid		identifiant utilisateur
 	 */
     boolean checkEncherisseur(String uid) {
-    	// venteEnCours ne devrait pas être nul à ce stade
+    	// venteEnCours ne devrait pas être nul à ce stade, uid non plus
         return !uid.equals(venteEnCours.getSuperviseur());
     }
 
@@ -256,7 +256,8 @@ class VenteManagerServeur {
 				if (v == null) {
 					// peut créer si date pas dans le passé
 					if (vte.getDate() > Serveur.serveur.getDate()) {
-						ventes.add(vte);
+						addVente(vte);
+						//ventes.add(vte);
 						vte.setId(++this.lastId);
 						u.resultatEdition(StatutEdition.Reussi);
 					} else {
@@ -277,7 +278,8 @@ class VenteManagerServeur {
 					if (vte.getDate() > Serveur.serveur.getDate()) {
 						// on remplace v par vte
 						this.ventes.remove(v);
-						this.ventes.add(vte);
+						addVente(vte);
+						//this.ventes.add(vte);
 					} else {
 						u.resultatEdition(StatutEdition.NonTrouve);
 					}
@@ -308,7 +310,7 @@ class VenteManagerServeur {
 			l.add(vi);
 		}
 		
-// ----
+// ---- pas encore conforme à la spec ...
 		if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
 			// vte est la prochaine, changements -> broadcast
 			switch (e) {
@@ -352,8 +354,11 @@ class VenteManagerServeur {
         /* si une vente est en cours et que le modo la supervise,
          * prévenir et passer en mode auto. */
         if(venteEnCours != null && sender.equals(venteEnCours.getSuperviseur())) {
-            venteEnCours.setSuperviseur(null);
-            venteEnCours.setMode(Mode.Automatique);
+            //venteEnCours.setSuperviseur(null);
+            //venteEnCours.setMode(Mode.Automatique);
+// on va plutôt faire appel à la modoLeaving du Vente non ?            
+			venteEnCours.modoLeaving(sender);
+// même question dans VenteServeur.java
             // à vérifier : est-ce que la Vente fait un broadcast de son
             // Mode aux participants présents ? Sinon, il faut penser à
             // le faire ici...
@@ -453,8 +458,9 @@ class VenteManagerServeur {
 	
 	// devra être utilisé par coupDeMASSE, il faut bien que quelqu'un signale
 	// à VenteManagerServeur que la vente est finie (liste objets vide après
-	// dernière adjudication).
-	void targetVenteEnCoursForTermination() {
+	// dernière adjudication). et oui, terminate ça veut dire ce que ça veut
+	// dire.
+	void terminateVenteEnCours() {
 		this.venteEnCours = null;
 	}
 	

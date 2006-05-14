@@ -22,7 +22,10 @@ class UserManagerServeur {
     
     UtilisateurServeur getUtilisateur(String login) {
         for(UtilisateurServeur u : utilisateurs) {
-            if(login.equals(u.getLogin())) {
+// cfrey: thou shall not follow the null pointer!
+// login peut être null (à cause du mode auto, de isModo et envoyerCoupdeMASSE)
+// O4: on pourrait sortir le test null en dehors de la boucle
+            if(login != null && login.equals(u.getLogin())) {
                 return u;
             }
         }

@@ -109,12 +109,12 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
      * je ne comprends pas à quoi ça sert ! (jr)
      */
     void affichageVente(Vente v) {
-
+        mw.affichageVente(v);
     }
 
     /* rajouté du design : oublié pendant la rédaction du DCD !!! (jr) */
     void affichageListeVentes(Set<Vente> vl) {
-
+        mw.affichageListeVentes(vl);
     }
 
     void ajouterObjetVente(int o, int v, int p) {

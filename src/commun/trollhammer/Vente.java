@@ -17,6 +17,7 @@ class Vente implements java.io.Serializable {
     private List<Integer> objets;
 	
 	public Vente(int id, String nom, String description, long date, Mode mode, String superviseur) {
+        this(); // créer la liste d'objets vide !
 		this.id = id;
 		this.nom = nom;
 		this.description = description;
@@ -25,12 +26,25 @@ class Vente implements java.io.Serializable {
 		this.superviseur = superviseur;
 	}
 
+    /** Override du toString() par défaut, permet l'affichage du nom de la vente
+     * dans la combo box de l'onglet 'Planifier'.
+     * Implémenté de cette façon car d'autres solutions, notamment l'override du renderer, ne marchent pas.
+     */
+    public String toString() {
+        return this.nom;
+    }
+
     /** Constructeur par defaut.
     * Se contente d'initialiser la liste d'objets avec une ArrayList d'Integer.
     */
     Vente() {
         objets = new ArrayList<Integer>();
     }
+
+    /** Redéfinition de l'affichage de la Vente.
+     * Ainsi, l'affichage dans la liste des ventes du Client donne le nom
+     * et non le combo classe/hashcode.
+     */
 
     int getFirst() {
         return objets.get(0);

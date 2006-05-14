@@ -429,7 +429,9 @@ class ClientFSM {
     }
 
     boolean listeVentes() {
-        return transition(Etat.PL2, Etat.PL3);
+        return transition(Etat.PL2, Etat.PL3)
+            // modif p.r. Design : omis dans l'Analyse...
+            || transition(Etat.PL7, Etat.PL4);
     }
 
     boolean resultatEdition() {

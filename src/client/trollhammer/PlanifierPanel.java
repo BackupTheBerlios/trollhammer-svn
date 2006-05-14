@@ -10,6 +10,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 class PlanifierPanel implements ActionListener
 {
@@ -20,15 +24,22 @@ class PlanifierPanel implements ActionListener
 	private String titrePan1 = "";
 	private CoolPanel pan1 = null;
 	private JComboBox nomBox = null;
+    static private final String NOM_VIDE = "";
+
+    /* jr : pas de sélection du mode, et pas de date de lancement,
+     * juste une date d'ouverture, car ouverture == lancement.
+     * (ceci a changé depuis les screenshots du manuel qui ont
+     * servi a créer le panel). La suite a été enlevée.
 	private JRadioButton manuel = null;
 	private JRadioButton auto = null;
 	private ButtonGroup butGroup = null;
-	private JTextField ouvDate = null;
-	private JTextField ouvHeure = null;
-	private JTextField lanceDate = null;
-	private JTextField lanceHeure = null;
+    */
+	private JFormattedTextField ouvDateFTF = null;
+	private JFormattedTextField ouvHeureFTF = null;
+
 	private SimpleDateFormat dateFormat = null;
-	private JFormattedTextField ouvertureFTF = null;
+    private SimpleDateFormat heureFormat = null;
+    private SimpleDateFormat parseFormat = null;
 	private JScrollPane descrPane = null;
 	private JTextArea descrArea = null;
 	private JButton nouveau = null;
@@ -67,21 +78,53 @@ class PlanifierPanel implements ActionListener
 	private void initComponents()
 	{
 		//pan1 
-		titrePan1 = "Planifier une nouveau vente: ";
+		titrePan1 = "Planifier une vente: ";
 		nomBox = new JComboBox();
 		nomBox.setEditable(true);
-		modeAuto = true;
-		auto = new JRadioButton("Automatique");
-		auto.setSelected(true);
-		auto.setActionCommand("auto");
-		auto.addActionListener(this);
-		manuel = new JRadioButton("Manuel");
-		manuel.setActionCommand("manuel");
-		manuel.addActionListener(this);
-		butGroup = new ButtonGroup();
-		butGroup.add(auto);
-		butGroup.add(manuel);
-		dateFormat = new SimpleDateFormat("dd.MM.yyyy' 'HH:mm");
+        nomBox.addItem(NOM_VIDE);
+        nomBox.addItemListener(new ItemListener(){
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    if(e.getItem() instanceof Vente) {
+                        Client.hi.affichageVente((Vente) e.getItem());
+                    } else if(e.getItem() == NOM_VIDE) {
+                        razChamps();
+                    }
+                }
+            }
+        });
+        /*
+        // renderer dit 'du furieux', qui corrige à la volée
+        // le texte affiché pour les Ventes de son toString()
+        // par défaut pour y mettre son nom à la place !
+        //
+        // ne marche pas toujours, pas quand la vente est sélectionnée.
+        // remplacé par un simple override de toString() dans Vente...
+        //
+        nomBox.setRenderer(new DefaultListCellRenderer(){
+            public Component getListCellRendererComponent(
+                JList list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus)
+            {
+                JLabel label = (JLabel) super.getListCellRendererComponent(
+                    list, value, index, isSelected, cellHasFocus);
+                if(value instanceof Vente) {
+                    Vente v = (Vente) value;
+                    label.setText(v.getNom());
+                } 
+                return (Component) label;
+            }
+        });*/
+
+		dateFormat = new SimpleDateFormat("dd.MM.yy");
+        heureFormat = new SimpleDateFormat("HH:mm");
+        parseFormat = new SimpleDateFormat(dateFormat.toPattern()+"' '"+
+                heureFormat.toPattern());
+
+        /*
 		ouvertureFTF = new JFormattedTextField(dateFormat);
 		ouvertureFTF.setColumns(16);
 		ouvertureFTF.setInputVerifier(new InputVerifier() {
@@ -90,11 +133,11 @@ class PlanifierPanel implements ActionListener
 					return true; // give up focus
 				return ((JFormattedTextField) input).isEditValid();
 			}
-		});
-		ouvDate = new JTextField();
-		ouvHeure = new JTextField();
-		lanceDate = new JTextField();
-		lanceHeure = new JTextField();
+		});*/
+		ouvDateFTF = new JFormattedTextField(dateFormat);
+        ouvDateFTF.setColumns(10);
+		ouvHeureFTF = new JFormattedTextField(heureFormat);
+        ouvDateFTF.setColumns(5);
 		descrArea = new JTextArea();
 		descrArea.setRows(10);
 		descrArea.setColumns(16);
@@ -115,16 +158,11 @@ class PlanifierPanel implements ActionListener
 		pan1.addLabel(titrePan1, new CellConstraints(1,1,3,1));
 		pan1.addLabel("Nom: ", new CellConstraints(1,3));
 		pan1.addC(nomBox, new CellConstraints(2,3,2,1));
-		pan1.addLabel("Mode: ", new CellConstraints(1,4));
-		pan1.addC(auto, new CellConstraints(2,4,2,1));
-		pan1.addC(manuel, new CellConstraints(2,5,2,1));
 		pan1.addLabel("Ouverture: ", new CellConstraints(1,6));
-		//pan1.add(ouvDate, new CellConstraints(3,6));
-		//pan1.add(ouvHeure, new CellConstraints(5,6));
-		pan1.addC(ouvertureFTF, new CellConstraints(2,6,2,1));
-		pan1.addLabel("Lancement: ", new CellConstraints(1,7));
-		pan1.addC(lanceDate, new CellConstraints(2,7));
-		pan1.addC(lanceHeure, new CellConstraints(3,7));
+        pan1.addLabel("le (jj.mm.aa)", new CellConstraints(2,6));
+		pan1.add(ouvDateFTF, new CellConstraints(3,6));
+        pan1.addLabel("à (hh:mm)", new CellConstraints(2,7));
+		pan1.add(ouvHeureFTF, new CellConstraints(3,7));
 		pan1.addLabel("Description: ", new CellConstraints(1,8,3,1));
 		pan1.addC(descrPane, new CellConstraints(1,9,3,1));
 		pan1.addC(nouveau, new CellConstraints(1,11));
@@ -250,37 +288,135 @@ class PlanifierPanel implements ActionListener
         });
     }
 
+    void affichageListeVentes(Set<Vente> vl) {
+        Logger.log("PlanifierPanel", 2, LogType.DBG, "Reçu liste de Ventes de taille "+vl.size());
+        // reset de liste
+        nomBox.removeAllItems();
+        //nomBox.addItem(NOM_VIDE);
+
+        // reconstruction de liste
+        for(Vente v : vl) {
+            nomBox.addItem(v);
+        }
+
+        // tadaaaam !
+    }
+
+    void affichageVente(Vente v) {
+        // rien à sélectionner, déjà fait avant (puisqu'une sélection
+        // a appellé l'update)
+        //nomBox.setSelectedItem(NOM_VIDE);
+        GregorianCalendar date = new GregorianCalendar();
+        date.setTimeInMillis(v.getDate());
+
+        ouvDateFTF.setText(dateFormat.format(date.getTime()));
+        ouvHeureFTF.setText(heureFormat.format(date.getTime()));
+        descrArea.setText(v.getDescription());
+    }
+
+    /*
+	private JComboBox nomBox = null;
+	private JFormattedTextField ouvDateFTF = null;
+	private JFormattedTextField ouvHeureFTF = null;
+
+	private SimpleDateFormat dateFormat = null;
+    private SimpleDateFormat heureFormat = null;
+	private JTextArea descrArea = null;
+	private JButton nouveau = null;
+	private JButton valider = null;
+	private JButton supprimer = null;
+    */
 	public void actionPerformed(ActionEvent event)
 	{
 		if(event.getActionCommand().equals("new"))
 		{
-			
+            razChamps();
 		}
 		else if(event.getActionCommand().equals("ok"))
 		{
-			
-		}
-		else if(event.getActionCommand().equals("del"))
-		{
-			
-		}
-		else if(event.getActionCommand().equals("add"))
-		{
-			
-		}
-		else if(event.getActionCommand().equals("remove"))
-		{
-			
-		}
-		else if(event.getActionCommand().equals("auto"))
-		{
-			modeAuto = true;
-		}
-		else if(event.getActionCommand().equals("manuel"))
-		{
-			modeAuto = false;
-		}
-		
-	}
+            // parsing de la date. C'est joyeux.
+            
+            Object selectionne;
+            GregorianCalendar ouvDate = null; 
+            long date;
+            Vente v;
 
+            try {
+                ouvDate = new GregorianCalendar();
+                // parsing d'une date + heure à partir du contenu des champs
+                // y étant dédiés... concaténés. Le format de parsing est
+                // aussi une concaténation des deux formats des champs.
+                ouvDate.setTime(parseFormat.parse(ouvDateFTF.getText()+
+                            " "+ouvHeureFTF.getText())
+                        );
+
+                date = ouvDate.getTimeInMillis();
+
+                Logger.log("PlanifierPanel", 2, LogType.DBG, "Date comprise :"+
+                        ouvDate.getTime()+" ("+date+")");
+
+                // parsing éventuel du nom. Si le nom est en fait une Vente
+                // -- affichée -- alors c'est une modification,
+                // sinon, bonne grosse création des familles.
+
+                selectionne = nomBox.getSelectedItem();
+
+                if(selectionne instanceof Vente) {
+                    // cas modification
+                    // bug : nom devient à peu près comme ID,
+                    // immutable, puisqu'il sert à sélectionner!
+                    // s'il est changé, alors c'est une nouvelle vente
+                    // avec le nouveau nom qui est créée...
+                    v = (Vente) selectionne;
+                    v.setDescription(descrArea.getText());
+                    v.setDate(date);
+
+                    Logger.log("PlanifierPanel", 1, LogType.INF, "Modification Vente");
+                    Client.hi.editerVente(Edition.Modifier, v);
+                } else if(selectionne instanceof String
+                        && !((String) selectionne).equals("")) {
+                    // cas création
+                    v = new Vente();
+                    v.setNom((String) selectionne);
+                    v.setDescription(descrArea.getText());
+                    v.setDate(date);
+
+                    Logger.log("PlanifierPanel", 1, LogType.INF, "Creation Vente");
+                    Client.hi.editerVente(Edition.Creer, v);
+                }
+
+            } catch (Exception e) {
+                Logger.log("PlanifierPanel", 1, LogType.WRN, "Ne peut pas interpréter la date : "+e.getMessage());
+            }
+        }
+        else if(event.getActionCommand().equals("del"))
+        {
+            Object selectionne = nomBox.getSelectedItem();
+
+            if(selectionne instanceof Vente) {
+                // cas modification
+                // bug : nom devient à peu près comme ID,
+                // immutable, puisqu'il sert à sélectionner!
+                // s'il est changé, alors c'est une nouvelle vente
+                // avec le nouveau nom qui est créée...
+                Vente v = (Vente) selectionne;
+                Client.hi.editerVente(Edition.Supprimer, v);
+            }
+        }
+        else if(event.getActionCommand().equals("add"))
+        {
+
+        }
+        else if(event.getActionCommand().equals("remove"))
+        {
+
+        }
+    }
+
+    private void razChamps() {
+        nomBox.setSelectedItem(NOM_VIDE);
+        ouvDateFTF.setText("");
+        ouvHeureFTF.setText("");
+        descrArea.setText("");
+    }
 }

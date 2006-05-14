@@ -190,6 +190,7 @@ class ServeurEntry {
     }
 
     void vente(Edition e, Vente v, String sender) {
+        Logger.log("ServeurEntry", 2, LogType.DBG, "Appel de modification de Vente");
         if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(),
 									   v.getDescription(), v.getDate(),
@@ -475,7 +476,9 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.obtenirProchaineVente(ov.sender);
             }
         } else if (m instanceof MessageVente) {
-            if (etat == Etat.PL4) {
+            // modif p.r. design : on veut aussi pouvoir
+            // créer des ventes, ie. sans avoir obtenu de vente au préalable
+            if (etat == Etat.PL4 || etat == Etat.PL3) {
                 etat = Etat.PL3;
                 MessageVente v = (MessageVente) m;
                 Serveur.serveurentry.vente(v.e, v.v, v.sender);

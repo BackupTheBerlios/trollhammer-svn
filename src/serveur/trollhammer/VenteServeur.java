@@ -147,4 +147,19 @@ class VenteServeur extends Vente {
 		}
 		return r;
 	}
+
+    /**
+     * Retourne une copie du contenu de l'objet, sous la forme d'un objet
+     * de classe Vente.
+     * Utilisé pour la sérialisation : un simple cast, même explicite,
+     * de VenteServeur vers Vente pour l'expédier au Client ne marche
+     * pas (provoque une ClassNotFoundException, car le Client
+     * essaie de récupérer un objet VenteServeur 'planqué', casté en Vente)
+     */
+    Vente copieVente() {
+        Vente v = new Vente(this.getId(), this.getNom(), this.getDescription(),
+                this.getDate(), this.getMode(), this.getSuperviseur());
+        return v;
+    }
+
 }

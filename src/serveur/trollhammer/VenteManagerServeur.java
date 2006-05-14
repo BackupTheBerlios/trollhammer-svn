@@ -101,10 +101,10 @@ class VenteManagerServeur {
 					
 					if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
 						// vte est la prochaine, changements -> broadcast
-						Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+						Serveur.broadcaster.detailsVente(vte.copieVente(), vte.getObjets());
 					} else {
 						// vte pas la prochaine, changements -> sender
-						u.detailsVente(vte, vte.getObjets());
+						u.detailsVente(vte.copieVente(), vte.getObjets());
 					}
 				}
 			} else {
@@ -160,10 +160,10 @@ class VenteManagerServeur {
 			
 			if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
 				// vte en cours, changements -> broadcast
-				Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+				Serveur.broadcaster.detailsVente(vte.copieVente(), vte.getObjets());
 			} else {
 				// vte pas en cours, changements -> sender
-				u.detailsVente(vte, vte.getObjets());
+				u.detailsVente(vte.copieVente(), vte.getObjets());
 			}
 		} else {
 			// la vente n'existe pas
@@ -177,7 +177,7 @@ class VenteManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		VenteServeur vs = this.getVente(v);
 		if (u != null && vs != null) {
-			u.detailsVente(vs, vs.getObjets());
+			u.detailsVente(vs.copieVente(), vs.getObjets());
 		} // else message Log ?
     }
 
@@ -190,7 +190,7 @@ class VenteManagerServeur {
 		// Et surtout ca évite un appel de fonction par itération... 
 		Set<Vente> liste = new HashSet<Vente>();
 		for(VenteServeur v : ventes) {
-			liste.add(v);
+			liste.add(v.copieVente());
 		}
 		u.listeVentes(liste);
     }
@@ -207,7 +207,7 @@ class VenteManagerServeur {
 		VenteServeur vs = this.getStarting();
         if(vs != null) {
             this.obtenirVente(vs.getId(), sender);
-            if(vs.getId() == venteEnCours.getId()) {
+            if(venteEnCours != null && vs.getId() == venteEnCours.getId()) {
                 u.notification(Notification.VenteEnCours);
                 if (vs.getMode() == Mode.Manuel) {
                     u.superviseur(vs.getSuperviseur());
@@ -249,25 +249,42 @@ class VenteManagerServeur {
     void vente(Edition e, VenteServeur vte, String uid) {
     	UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
     	VenteServeur v = this.getVente(vte.getId());
-    	
+
 		switch (e) {
 			case Creer:
+                Logger.log("VenteManagerServeur", 2, LogType.DBG, "Tentative de création de vente");
 				// vérifie si vte existe déjà ou pas
-				if (v == null) {
+				/* jr : N'EXISTE PAS EN PRATIQUE.
+                 * En fin de compte, toutes les ventes que l'on crée
+                 * sont au début dotées d'une ID par défaut par le Client.
+                 * Si l'on vérifie l'unicité de l'ID avant de créer
+                 * la vente et de lui associer son ID correcte,
+                 * on peut à tout péter en créer une - celle dotée de l'ID
+                 * par défaut - et c'est tout ! La création est, au final,
+                 * inconditionnelle, ssi l'attribution des IDs se fait
+                 * par le Serveur et non pas par le Client.
+                 *
+                 * La distinction création/modification, pour éviter de créer
+                 * 2625 fois la même vente, se fait au niveau du Client.
+                 *
+                  if (v == null) {*/
 					// peut créer si date pas dans le passé
 					if (vte.getDate() > Serveur.serveur.getDate()) {
 						addVente(vte);
 						//ventes.add(vte);
 						vte.setId(++this.lastId);
 						u.resultatEdition(StatutEdition.Reussi);
+                        Logger.log("VenteManagerServeur", 2, LogType.DBG, "Création de vente OK");
 					} else {
 						// dans le passé
 // il faudrait vraiment un StatutEdition "Impossible" + message non ?
 						u.resultatEdition(StatutEdition.NonTrouve);
+                        Logger.log("VenteManagerServeur", 2, LogType.DBG, "Création de vente ratée : vente dans le passé");
 					}
-				} else {
+				/*} else {
 					u.resultatEdition(StatutEdition.ExisteDeja);
-				}
+                        Logger.log("VenteManagerServeur", 2, LogType.DBG, "Création de vente ratée : vente existe déjà");
+				}*/
 				break;
 				
 			case Modifier:
@@ -307,21 +324,22 @@ class VenteManagerServeur {
 		
 		Set<Vente> l = new HashSet<Vente>();
 		for(VenteServeur vi : this.ventes) {
-			l.add(vi);
+			l.add(vi.copieVente()) ;
 		}
-		
+
 // ---- pas encore conforme à la spec ...
 		if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
+            Logger.log("VenteManagerServeur", 2, LogType.DBG, "la vente est la prochaine, changements -> broadcast");
 			// vte est la prochaine, changements -> broadcast
 			switch (e) {
 				case Creer:
-					if (v == null) {
+					//if (v == null) {
 						Serveur.broadcaster.listeVentes(l);
-					}
+					//}
 					break;
 				case Modifier:
 					if (v != null) {
-						Serveur.broadcaster.detailsVente(vte, vte.getObjets());
+						Serveur.broadcaster.detailsVente(vte.copieVente(), vte.getObjets());
 					}
 					break;
 				case Supprimer:
@@ -332,11 +350,14 @@ class VenteManagerServeur {
 				default:
 			}
 		} else {
+            Logger.log("VenteManagerServeur", 2, LogType.DBG, "la vente n'est"
+                    +" pas la prochaine, changements -> sender");
 			// vte pas la prochaine, changements -> sender
 			//ls : ne faut-il pas renvoyerr la liste lors de la réussite de 
 			//     l'opération (Créer|Supprimer)? a revoir
 			switch (e) {
 				case Creer:
+                    u.listeVentes(l);
 					break;
 				case Modifier:
 					if (v == null) {
@@ -344,6 +365,7 @@ class VenteManagerServeur {
 					}
 					break;
 				case Supprimer:
+                    u.listeVentes(l);
 					break;
 				default:
 			}

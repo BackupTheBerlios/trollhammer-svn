@@ -8,6 +8,10 @@ class VenteManagerClient {
 
     private Set<Vente> ventes;
 
+    VenteManagerClient() {
+        ventes = new HashSet<Vente>();
+    }
+
     boolean isInVenteEnCours(long date) {
         Vente v = Client.humain.getVente();
         long d = v.getDate();

@@ -272,12 +272,12 @@ class Window implements ActionListener
 		* je ne comprends pas à quoi ça sert ! (jr)
 		*/
     void affichageVente(Vente v) {
-		
+        planifier.affichageVente(v);
     }
 	
     /* rajouté du design : oublié pendant la rédaction du DCD !!! (jr) */
     void affichageListeVentes(Set<Vente> vl) {
-		
+        planifier.affichageListeVentes(vl);
     }
 	
     void message(Notification n) {

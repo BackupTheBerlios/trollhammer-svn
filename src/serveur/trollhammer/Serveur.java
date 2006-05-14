@@ -79,7 +79,7 @@ public class Serveur {
     
     /* méthodes du design */
 
-<<<<<<< .mine
+//<<<<<<< .mine
 	/**
 	 * Le superviseur donne un coup de marteau. Les utilisateurs sont avertis de
 	 * cet événement. Si c'est le troisième coup, vendre l'objet au dernier en-
@@ -93,11 +93,11 @@ public class Serveur {
 	 */
 // mode automatique: problème ... qui envoie envoyerCoupdeMASSE ? il devrait y
 // avoir un timeout côté serveur qui génère des coups de marteau ...
-=======
->>>>>>> .r207
+//=======
+//>>>>>>> .r207
     void envoyerCoupdeMASSE(String sender) {
-<<<<<<< .mine
-		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
+//<<<<<<< .mine
+/*		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
 		
 		switch (venteEnCours.isSuperviseur(sender) ? 1 : 0) {
 			case 0:
@@ -146,6 +146,7 @@ public class Serveur {
 				}
 			default:
 =======
+*/
 		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
 		//1 m := isModérateur(s)
 		if (Serveur.usermanager.isModo(sender)) {
@@ -201,7 +202,7 @@ public class Serveur {
 					Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
 				}
 			}
->>>>>>> .r207
+//>>>>>>> .r207
 		}
     }
 

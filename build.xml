@@ -137,6 +137,7 @@
     
     
  	<target name="prepare" description="Construit les differents repertoires necessaires au projet">
+   		<splash imageurl="http://mediatheque.epfl.ch/albums-actualites2/albun66/6273_G.sized.jpg"/>
  	    <echo>Creation des repertoires</echo>
  	    <mkdir dir="${build.dir}"/>
  	    <mkdir dir="${build.client}"/>
@@ -202,6 +203,8 @@
 	</target>
 	
 	<target name="b" depends="build" description="Construit tout le projet (alias)">
+
+	
     </target>
 
   
@@ -243,21 +246,25 @@
     
     
     <target name="run" description="Execution du client et du serveur">
-		
+		<sound>
+			<success source="ressources/snd/activation.wav"/>
+		    <fail source=""/>
+
+		</sound>
 		<parallel>
 			<sequential>
 
 				<echo>Attente de 3 secondes avant le lancement du client</echo>
 				<sleep seconds="3"/>	
-				<exec executable="start" vmlauncher="false" os="Windows XP">
+				<exec executable="start" vmlauncher="false" os="Windows XP" spawn="true">
 					<arg line="ant client"/>
 				</exec>
 				
-				<exec executable="xterm" vmlauncher="false" os="Linux">
+				<exec executable="xterm" vmlauncher="false" os="Linux" spawn="true">
 					<arg line="-e ant client"/>
 				</exec>
 
-				<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+				<exec executable="xterm" vmlauncher="false" os="Mac OS X" spawn="true">
 					<arg line="-e ant client"/>
 				</exec>
 
@@ -265,15 +272,15 @@
 			
 
 			<echo>Lancement du serveur</echo>
-			<exec executable="start" vmlauncher="false" os="Windows XP">
+			<exec executable="start" vmlauncher="false" os="Windows XP" spawn="true">
 					<arg line="ant serveur"/>
 			</exec>
 			
-			<exec executable="xterm" vmlauncher="false" os="Linux">
+			<exec executable="xterm" vmlauncher="false" os="Linux" spawn="true">
 					<arg line="-e ant serveur"/>
 			</exec>
 
-			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
+			<exec executable="xterm" vmlauncher="false" os="Mac OS X" spawn="true">
 					<arg line="-e ant serveur"/>
 			</exec>
 	
@@ -281,45 +288,7 @@
 		<echo>Fini!</echo>
     </target>
     
-    <target name="brun" description="Execution du client et du serveur (apres compilation)">
-    
-    		<parallel>
-			<sequential>
-
-				<echo>Attente de 3 secondes avant le lancement du client</echo>
-				<sleep seconds="3"/>	
-				<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="ant bclient"/>
-				</exec>
-				
-				<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e ant bclient"/>
-				</exec>
-
-				<exec executable="xterm" vmlauncher="false" os="Mac OS X">
-					<arg line="-e ant bclient"/>
-				</exec>
-
-			</sequential>
-			
-
-			<echo>Lancement du serveur</echo>
-			<exec executable="start" vmlauncher="false" os="Windows XP">
-					<arg line="ant bserveur"/>
-			</exec>
-			
-			<exec executable="xterm" vmlauncher="false" os="Linux">
-					<arg line="-e ant bserveur"/>
-			</exec>
-			
-			<exec executable="xterm" vmlauncher="false" os="Mac OS X">
-				<arg line="-e ant bserveur"/>
-			</exec>
-		
-	
-		</parallel>
-		<echo>Fini!</echo>
-
+    <target name="brun" depends="b, run" description="Execution du client et du serveur (apres compilation)">
     
     </target>
     

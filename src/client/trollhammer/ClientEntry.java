@@ -45,9 +45,10 @@ class ClientEntry {
 
     void notification(Notification n) {
 
-        if(Client.fsm.notification()) {
+        //if(Client.fsm.notification()) {
+            Client.fsm.notification();
             Client.hi.message(n);
-        }
+        //}
 
         // peu importe réellement l'état de la FSM,
         // la réception de notifications & updates
@@ -213,9 +214,8 @@ class ClientEntryHandler extends Thread {
                         && (((resultatLogin) o).s == StatutLogin.Deconnecte)));
 
             // tant qu'on ne reçoit pas de StatutLogin(Déconnecté), on boucle.
-            // sinon, on ferme le stream. La fermeture de Socket et autres est fait
-            // lors du traitement par ClientEntry.
-            //
+            // sinon, on ferme le stream. La fermeture de Socket et autres est faite
+            // par le Serveur.
             // en pratique, on finit toujours par être interrompu...
 
 

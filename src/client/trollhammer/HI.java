@@ -64,17 +64,8 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
 	//ls : Jule a toi de travailler sur ce truc... j'ai pas la moindre idée de
 	// ce que je dois faire pour que cela s'affiche..
     void affichage(Evenement e) {
-		switch (e) {
-		case CoupDeMassePAF1:
-			break;
-		case CoupDeMassePAF2:
-			break;
-		case Adjuge: 
-			break;
-		case VenteAutomatique: 
-			break;
-		default : 
-		}
+        // jr : on délègue. ^^
+        mw.affichage(e);
     }
 
     void affichageChat(String m, String i) {
@@ -82,7 +73,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void affichageEnchere(Integer prix, String i) {
-
+        mw.affichageEnchere(prix, i);
     }
 
     void affichageObjet(Objet o) {
@@ -210,11 +201,15 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void message(Notification n) {
-
+        mw.message(n);
     }
 
     void messageErreur(Erreur e) {
-
+        if(mw != null) {
+            mw.messageErreur(e);
+        } else {
+            lw.messageErreur(e);
+        }
     }
 
     void proposerObjet(Objet o) {

@@ -14,9 +14,13 @@ class VenteManagerClient {
 
     boolean isInVenteEnCours(long date) {
         Vente v = Client.humain.getVente();
-        long d = v.getDate();
-        if(v != null && d < date) {
-            return true;
+        if(v != null) {
+            long d = v.getDate();
+            if(d < date) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

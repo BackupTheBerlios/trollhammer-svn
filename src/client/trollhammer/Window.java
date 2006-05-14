@@ -227,7 +227,7 @@ class Window implements ActionListener
     /* les méthodes de HI sont relayées ici ! */
 	
     void affichage(Evenement e) {
-		
+        hdv.affichage(e);
     }
 	
     void affichageChat(String m, String i) {
@@ -235,7 +235,7 @@ class Window implements ActionListener
     }
 	
     void affichageEnchere(Integer prix, String i) {
-		
+        hdv.affichageEnchere(prix, i);
     }
 	
     void affichageObjet(Objet o) {
@@ -281,10 +281,72 @@ class Window implements ActionListener
     }
 	
     void message(Notification n) {
-		
+        switch (n) {
+            // jr : j'ai pensé que c'eût été bien de logger aussi les démarrages/fins
+            // et ventes en cours, en plus de leur fenêtre de dialogue.
+            case DebutVente:
+                JOptionPane.showMessageDialog(this.frame, "Démarrage d'une vente.");
+                hdv.message(n);
+                break;
+            case VenteEnCours:
+                JOptionPane.showMessageDialog(this.frame, "Une vente est en cours.");
+                hdv.message(n);
+                break;
+            case FinVente:
+                JOptionPane.showMessageDialog(this.frame, "Fin de la vente.");
+                hdv.message(n);
+                break;
+            case LogOut:
+                // jr : n'arrive jamais, car la déconnexion côté client se
+                // fait avant même que la notification de logout n'arrive...
+                // j'ai vérifié, et le Client attend pourtant réellement
+                // que le Serveur interrompe la connexion, il ne fait rien
+                // lui-même !
+                // Il existe aussi le problème que si une déconnexion,
+                // forcée ou non (à part kick) se passe, la fenêtre est
+                // fermée de force, et la boîte de dialogue associée avec.
+                JOptionPane.showMessageDialog(this.frame, "Vous êtes déconnecté.");
+                break;
+            case Deconnexion:
+                // idem que ci-dessus.
+                JOptionPane.showMessageDialog(this.frame,
+                        "Vous avez été déconnecté du serveur.");
+                break;
+            case Kicke:
+                // ça, par contre, je vous jure que ça arrive.
+                JOptionPane.showMessageDialog(this.frame,
+                        "Vous avez été expulsé du serveur.");
+                break;
+        }
     }
 	
     void messageErreur(Erreur e) {
-		
+        switch (e) {
+            case Deconnecte:
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Déconnecté.");
+                break;
+            case Invalide:
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Invalide.");
+                break;
+            case Banni:
+                // pas sensé arriver ?
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Vous avez été banni de ce serveur.");
+                break;
+            case ExisteDeja:
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Existe déjà.");
+                break;
+            case NonTrouve:
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Non trouvé.");
+                break;
+            case DejaEffectue:
+                JOptionPane.showMessageDialog(this.frame,
+                        "Erreur : Déjà effectué.");
+                break;
+        }
     }
 }

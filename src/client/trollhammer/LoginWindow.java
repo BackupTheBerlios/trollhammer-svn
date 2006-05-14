@@ -199,4 +199,38 @@ class LoginWindow implements ActionListener {
 		}
 		return aideMenu;
 	}
+
+    JFrame getFrame() {
+        return loginFrame;
+    }
+
+    void messageErreur(Erreur e) {
+        switch (e) {
+            case Deconnecte:
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Déconnecté.");
+                break;
+            case Invalide:
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Invalide.");
+                break;
+            case Banni:
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Vous avez été banni de ce serveur.");
+                break;
+            case ExisteDeja:
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Existe déjà.");
+                break;
+            case NonTrouve:
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Non trouvé.");
+                break;
+            case DejaEffectue:
+                // pas sensé arriver ?
+                JOptionPane.showMessageDialog(this.loginFrame,
+                        "Erreur : Déjà effectué.");
+                break;
+        }
+    }
 }

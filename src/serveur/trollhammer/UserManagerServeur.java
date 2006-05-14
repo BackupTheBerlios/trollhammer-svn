@@ -74,6 +74,8 @@ class UserManagerServeur {
         }
     }
 
+//fonction a virer, qui ne date pas du design model, et qui ne font pas le boulot comme il faut
+//corrigerais ca après mardi, LS
     void addUtilisateur(UtilisateurServeur u) {
         utilisateurs.add(u);
     }

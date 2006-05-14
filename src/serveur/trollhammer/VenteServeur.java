@@ -67,11 +67,12 @@ class VenteServeur extends Vente {
 	 *
 	 * @param	i		identifiant du dernier enchérisseur (donc acheteur)
 	 * @param	prix	prix courant
-	 * @param	oid		identifiant de l'objet
 	 */
-    void sellObject(String i, int prix, int oid) {
+	 //ls : arrrg, encors ces foutu probleme OO...
+    void sellObject(String i, int prix) {
 		if (i != this.getSuperviseur()) {
-			Serveur.objectmanager.sell(i, prix, oid);
+			ObjetServeur o = new ObjetServeur(this.removeHead());
+			o.sell(i, prix);
 		}
 // si le dernier enchérisseur est le superviseur, pour l'instant il ne
 // se passe rien ici ...

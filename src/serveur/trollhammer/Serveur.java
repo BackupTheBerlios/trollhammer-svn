@@ -32,36 +32,16 @@ public class Serveur {
 
         // CECI EST UN TEST
         
-        Serveur.usermanager.addUtilisateur(
-                new ModerateurServeur("tefal", "", "", "tefal")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new ModerateurServeur("deneo", "", "", "deneo")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new ModerateurServeur("mithrandir", "", "", "mithrandir")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new ModerateurServeur("dolarcles", "", "", "dolarcles")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new ModerateurServeur("spitfire", "", "", "spitfire")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("jruffin", "", "", "jruffin")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("becholey", "", "", "becholey")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("sambuc", "", "", "sambuc")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("cfrey", "", "", "cfrey")
-                );
-        Serveur.usermanager.addUtilisateur(
-                new UtilisateurServeur("richon", "", "", "richon")
-                );
+        Serveur.usermanager.addUtilisateur(new ModerateurServeur("tefal", "", "", "tefal"));
+        Serveur.usermanager.addUtilisateur(new ModerateurServeur("deneo", "", "", "deneo"));
+        Serveur.usermanager.addUtilisateur(new ModerateurServeur("mithrandir", "", "", "mithrandir"));
+        Serveur.usermanager.addUtilisateur(new ModerateurServeur("dolarcles", "", "", "dolarcles"));
+        Serveur.usermanager.addUtilisateur(new ModerateurServeur("spitfire", "", "", "spitfire"));
+        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("jruffin", "", "", "jruffin"));
+        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("becholey", "", "", "becholey"));
+        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("sambuc", "", "", "sambuc"));
+        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("cfrey", "", "", "cfrey"));
+        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("richon", "", "", "richon"));
         
         // FIN DU TEST
         
@@ -99,16 +79,61 @@ public class Serveur {
     
     /* méthodes du design */
 
-	// retrait de l'appel à la fonction checkPAF(s) à voir, quelle est son utilité?
     void envoyerCoupdeMASSE(String sender) {
-		VenteServeur vc = ventemanager.getVenteEnCours();
-		boolean sup = false;
-		boolean ok = false;
-		if (vc != null) {
-			sup = vc.isSuperviseur(sender);
-			if (sup) {
-				//ok = vc.checkPAF(sender); // LS : BEEP??
-				//switch (marteau)
+		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
+		//1 m := isModérateur(s)
+		if (Serveur.usermanager.isModo(sender)) {
+			//2 [m]: vc :=getVenteEnCours()
+			VenteServeur vc = Serveur.ventemanager.getVenteEnCours();
+			//3 [m && vc != null]: sup := vc.isSuperviseur(s)
+			if (vc != null && vc.isSuperviseur(sender)) {
+				//4 [m && sup && vc != null]: ok := checkPAF(s)
+				//ls : Modif : CheckPAF retirée en tant que fonction a part, vu qu'elle
+				//     n'est utilisée qu'ici...
+				if (!vc.getObjets().isEmpty()) {
+					if (vc.getMode() == Mode.Automatique) {
+						vc.setMode(Mode.Manuel);
+						vc.setSuperviseur(sender);
+						Serveur.broadcaster.superviseur(sender);
+					}
+				}
+				//ls : modif étape "6 [marteau == X]" vers 
+				//     "6 [m && sup && vc != null && marteau == X]"
+				//	   afin de n'augmenter la velauer de marteau que lorsque 
+				//     l'on envoye l'événement aux clients risque de désynch 
+				//     autrement...
+				switch (marteau) {
+				case 0:
+					// 5a [m && sup && vc != null && marteau == 0]: événement(CoupDeMassePAF1)
+					Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
+					// 6a [m && sup && vc != null && marteau == 0]: marteau = 1
+					marteau = 1;
+					break;
+				case 1:
+					// 5b [m && sup && vc != null && marteau == 1]: événement(CoupDeMassePAF2)
+					Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
+					// 6b [m && sup && vc != null && marteau == 0]: marteau = 2
+					marteau = 2;
+					break;
+				case 2:
+					// 5c [m && sup && vc != null && marteau == 2]: événement(Adjugé)
+					Serveur.broadcaster.evenement(Evenement.Adjuge);
+					// 5c [m && sup && vc != null && marteau == 2]: sellObject(dernier_enchérisseur, prix_courant)
+					vc.sellObject(dernier_encherisseur, prix_courant);
+					if (vc.getObjets().isEmpty()) {
+						VenteServeur nv = Serveur.ventemanager.getStarting();
+						if (nv != null) {
+							Serveur.broadcaster.detailsVente(nv, nv.getObjets());
+						}
+						Serveur.ventemanager.remove(vc.getId());
+					}
+
+					// 6c [m && sup && vc != null && marteau == 0]: marteau = 0
+					marteau = 0;
+					break;
+				default:
+					Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
+				}
 			}
 		}
     }

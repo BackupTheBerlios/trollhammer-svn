@@ -8,6 +8,8 @@ import java.util.ArrayList;
  * Classe Manager pour les Ventes.
  * Regroupe et gère les Ventes du Serveur.
  *
+ * @author cfrey
+ * @author Lionel Sambuc
  * @author jruffin
  */
 class VenteManagerServeur {
@@ -25,7 +27,28 @@ class VenteManagerServeur {
     	venteEnCours = null;
         //ventes = new HashSet<VenteServeur>();
     }
-
+	
+	//ls : ajout de cette fonction Ô combien necessaire... car je vois mal un
+	//     objet (java) ce supprimer lui-même... enfin ca me parait plus logique
+	//     ce soit ici, utiliser un prototype // a enleverObjetVente(...)
+	/**
+	 * Supprime une vente. Ne propoage aucune erreur si la vente a supprimer
+	 * n'existe pas, car au final c'est la même chose, ie la vente n'existe plus.
+	 *
+	 * @param	iv	Id de la vente à supprimer.
+	 */
+	void remove(int iv) {
+		VenteServeur vs = null;
+		for(VenteServeur vt : ventes) {
+			if (vt.getId() == iv) {
+				vs = vt;
+			}
+		}
+		if (vs != null) {
+			ventes.remove(vs);
+		}
+	}
+	
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
 	 * fie qu'il faut ajouter l'objet à la fin de la liste. Les changements sont
@@ -308,6 +331,8 @@ class VenteManagerServeur {
 			}
 		} else {
 			// vte pas la prochaine, changements -> sender
+			//ls : ne faut-il pas renvoyerr la liste lors de la réussite de 
+			//     l'opération (Créer|Supprimer)? a revoir
 			switch (e) {
 				case Creer:
 					break;

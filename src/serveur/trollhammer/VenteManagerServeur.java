@@ -9,25 +9,21 @@ import java.util.ArrayList;
  * Regroupe et gère les Ventes du Serveur.
  *
  * @author cfrey
- * @author Lionel Sambuc
+ * @author sambuc
  * @author jruffin
  */
 class VenteManagerServeur {
 
 	int lastId = -1;
-	
 	private VenteServeur venteEnCours;
-	
 	private List<VenteServeur> ventes;
-
-    //private Set<VenteServeur> ventes;
 
     VenteManagerServeur() {
     	ventes = new ArrayList<VenteServeur>();
     	venteEnCours = null;
-        //ventes = new HashSet<VenteServeur>();
-    }
+	}
 	
+// begin cfrey: ??????
 	//ls : ajout de cette fonction Ô combien necessaire... car je vois mal un
 	//     objet (java) ce supprimer lui-même... enfin ca me parait plus logique
 	//     ce soit ici, utiliser un prototype // a enleverObjetVente(...)
@@ -48,7 +44,8 @@ class VenteManagerServeur {
 			ventes.remove(vs);
 		}
 	}
-	
+// end cfrey: ??????
+
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
 	 * fie qu'il faut ajouter l'objet à la fin de la liste. Les changements sont
@@ -175,11 +172,13 @@ class VenteManagerServeur {
     }
 
 	// ls : A corriger?? : aucune gestion d'erreur...
+	// cfrey: ajouté 1-2 petits checks
     void obtenirVente(int v, String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		VenteServeur vs = this.getVente(v);
-		List<Objet> lo = vs.getObjets();
-		u.detailsVente(vs, lo);
+		if (u != null && vs != null) {
+			u.detailsVente(vs, vs.getObjets());
+		} // else message Log ?
     }
 
     void obtenirListeVentes(String sender) {
@@ -202,6 +201,7 @@ class VenteManagerServeur {
 	// qui le fait, plutot que copier son code...
     // jr : exception si aucune vente en cours : ne rien renvoyer.
     // (sans le fix : NullPointerException pour trouver la prochaine vente inexistante.)
+// cfrey: commentaires out-of-date
     void obtenirProchaineVente(String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		VenteServeur vs = this.getStarting();
@@ -383,12 +383,13 @@ class VenteManagerServeur {
 	 * autrement c'est la première de la liste.
      */
     VenteServeur getStarting() {
-                                      // jr : ne pas essayer de renvoyer la première
-                                      // vente disponible s'il n'existe absolument
-                                      // aucune vente dans le manager. Source
-                                      // de IndexArrayOutOfBoundsException quand
-                                      // le premier modo qui va créer les ventes
-                                      // veut se connecter.
+		// jr : ne pas essayer de renvoyer la première
+		// vente disponible s'il n'existe absolument
+		// aucune vente dans le manager. Source
+		// de IndexArrayOutOfBoundsException quand
+		// le premier modo qui va créer les ventes
+		// veut se connecter.
+		// cfrey: ok :-)
     	if (this.venteEnCours == null && ventes.size() > 0) {
     		return ventes.get(0);
     	} else if(ventes.size() > 0) {
@@ -399,40 +400,13 @@ class VenteManagerServeur {
             return null;
         }
     }
-    	
-//        long min = Long.MAX_VALUE;
-//        long prevmin = 0;
-//        VenteServeur starting = null;
-//
-//        /* on prend la vente la plus proche dans le temps */
-//        for(VenteServeur v : ventes) {
-//            prevmin = min;
-//            min = Math.min(min, v.getDate());
-//            if(min < prevmin) {
-//                starting = v;
-//            }
-//        }
-//
-//        return starting;
 
     /**
-	 * Retourne la vente en cours. S'il en existe déjà une elle ne change pas,
-	 * et si on en a une en retard, on la balance, autrement reste null.
+	 * Retourne la vente en cours.
      */
     VenteServeur getVenteEnCours() {
 		return this.venteEnCours;
 	}
-//        // on commence par prendre la vente la plus proche dans le temps
-//        VenteServeur encours = getStarting();
-//
-//        /* puis on vérifie si elle a démarré ! Si pas,
-//         * alors on retourne null (ie. aucune vente n'est en cours)
-//         */
-//        if(encours != null && encours.getDate() < Serveur.serveur.getDate()) {
-//            return encours;
-//        } else {
-//            return null;
-//        }
     
 	/**
 	 * Exécuté périodiquement pour vérifier s'il n'y a pas une vente à démarrer,

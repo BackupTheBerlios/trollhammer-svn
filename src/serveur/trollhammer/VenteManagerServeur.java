@@ -62,6 +62,8 @@ class VenteManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(i);
 		long dateCourante = Serveur.serveur.getDate();
 		
+        Logger.log("VenteManagerServeur", 2, LogType.DBG, "Tentative d'insertion de"
+                +" l'OID "+o+" à la position "+p+" de la vente "+v);
 		if (vte != null) {
 			// la vente existe
 			if (vte.getDate() >= dateCourante) {
@@ -98,7 +100,7 @@ class VenteManagerServeur {
 						// obj n'existe pas
 						u.resultatEdition(StatutEdition.NonTrouve);
 					}
-					
+
 					if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
 						// vte est la prochaine, changements -> broadcast
 						Serveur.broadcaster.detailsVente(vte.copieVente(), vte.getObjets());
@@ -106,6 +108,11 @@ class VenteManagerServeur {
 						// vte pas la prochaine, changements -> sender
 						u.detailsVente(vte.copieVente(), vte.getObjets());
 					}
+
+                    // jr : oublié dans le Design, présent dans l'Analyse :
+                    // renvoyer la liste d'Objets 'Planification' à la fin
+                    // du mouvement pour mettre à jour sur le Client sender.
+                    Serveur.objectmanager.obtenirListeObjets(Onglet.Planification, i);
 				}
 			} else {
 				// vente passée, pas de modification possible !
@@ -136,6 +143,8 @@ class VenteManagerServeur {
 	 */
     void enleverObjetVente(int oid, int vid, String uid) {
 		VenteServeur vte = this.getVente(vid);
+        // jr : rajouté ceci, pour changer le statut de l'objet...
+        ObjetServeur obj = Serveur.objectmanager.getObjet(oid);
 // c'est pas la première fois que ça arrive, mais si u est null, et après je
 // fais un u.resultatEdition ... problème. alors soit on modifie
 // usermanager.getUtilisateur(uid) de telle sorte qu'il ne renvoie pas un null
@@ -145,17 +154,32 @@ class VenteManagerServeur {
 // serait plus une méthode de Utilisateur) ...
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
 		
-		if (vte != null) {
-			// la vente existe
-			if (vte.getFirst() == oid) {
+		if (vte != null && obj != null) {
+			// la vente existe (jr : et l'objet aussi)
+
+			if (vte != venteEnCours && (venteEnCours == null
+                    || venteEnCours.getFirst() != oid)) {
+                // jr : l'objet n'est PAS en train d'être vendu.
+                // donc ce n'est PAS le premier de la liste de la vente,
+                // de la vente EN COURS.
+                // le test précédent était (vte.getFirst() == oid) !
+
 				// l'objet n'est pas entrain d'être vendu
 				vte.removeOId(oid);
+
+                // jr : et on n'oublie pas de remettre son statut à "Accepté",
+                // oui ?
+                obj.getObjet().setStatut(StatutObjet.Accepte);
+
 				u.resultatEdition(StatutEdition.Reussi);
 			} else {
 				// l'objet est entrain d'être vendu
 // c'est pas la première fois, mais des résultatsEdition plus variés seraient
 // souhaitables ...
 				u.resultatEdition(StatutEdition.NonTrouve);
+                Logger.log("VenteManagerServeur", 2, LogType.WRN, "Objet "+oid+
+                        " en train d'être vendu : refusé de retirer de la vente "
+                        +vid);
 			}
 			
 			if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
@@ -165,8 +189,13 @@ class VenteManagerServeur {
 				// vte pas en cours, changements -> sender
 				u.detailsVente(vte.copieVente(), vte.getObjets());
 			}
+
+            // jr : oublié dans le Design, présent dans l'Analyse :
+            // renvoyer la liste d'Objets 'Planification' à la fin
+            // du mouvement pour mettre à jour sur le Client sender.
+            Serveur.objectmanager.obtenirListeObjets(Onglet.Planification, uid);
 		} else {
-			// la vente n'existe pas
+			// la vente n'existe pas (jr : ou l'objet)
 			u.resultatEdition(StatutEdition.NonTrouve);
 		}
     }
@@ -441,11 +470,13 @@ class VenteManagerServeur {
     		// aucune actuellement, on vérifie s'il y en a pas une en retard.
     		// on va de toute façon pas en lancer une dans l'avenir par rapport
     		// à la date courante ...
-    		if (ventes.get(0).getDate() <= Serveur.serveur.getDate()) {
+    		if (ventes.size() > 0
+                    && ventes.get(0).getDate() <= Serveur.serveur.getDate()) {
     			this.venteEnCours = ventes.remove(0);
     			this.venteEnCours.setSuperviseur(null);
     			Serveur.broadcaster.notification(Notification.DebutVente);
     			Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
+				Logger.log("VenteManagerServeur", 2, LogType.DBG, "Démarrage de vente!");
 			}
 			// aucune en retard, rien ne change
 		}

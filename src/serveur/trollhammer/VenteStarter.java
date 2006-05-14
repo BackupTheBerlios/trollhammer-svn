@@ -15,12 +15,18 @@ class VenteStarter extends Thread {
 	// ls : modif : on envoye pas démarrerVente sur ObjectManager, mais sur
 	// VenteManager directement...
     public void run() {
-		VenteServeur vs = null;
+		//VenteServeur vs = null;
 		while (true) {
-			if ((vs = Serveur.ventemanager.getVenteEnCours()) != null) {
+			//if ((vs = Serveur.ventemanager.getVenteEnCours()) != null) {
+            // jr : correction, parce que demarrerVente() effectue ses
+            // propres checks et le check ci-dessus est devenu invalide
+            // depuis une restructuration - que je ne comprends pas moi-même -
+            // qui fait que getVenteEnCours() renvoie le contenu d'un champ
+            // au lieu d'aller itérer sur sa liste.
+           
 				Serveur.ventemanager.demarrerVente();
-				Logger.log("VenteStarter", 2, LogType.DBG, "Démarrage de vente!");
-			}
+				//Logger.log("VenteStarter", 2, LogType.DBG, "Démarrage de vente!");
+			//}
 			try {
 				Thread.sleep(1000); //dodo pendant une seconde.
 			} catch (InterruptedException ie) {

@@ -50,6 +50,7 @@ class PlanifierPanel implements ActionListener
 	private JScrollPane jspPan2 = null;
 	private FreshPanel pan2 = null;
     private JList listeAccepte = null;
+    private Vector<PlanifierObjet> objs = null;
 	
 	//pan3 boutons ajouter enlever des objets
 	private FreshPanel pan3 = null;
@@ -86,7 +87,7 @@ class PlanifierPanel implements ActionListener
             public void itemStateChanged(ItemEvent e) {
                 if(e.getStateChange() == ItemEvent.SELECTED) {
                     if(e.getItem() instanceof Vente) {
-                        Client.hi.affichageVente((Vente) e.getItem());
+                        Client.hi.choisirVente(((Vente) e.getItem()).getId());
                     } else if(e.getItem() == NOM_VIDE) {
                         razChamps();
                     }
@@ -238,9 +239,17 @@ class PlanifierPanel implements ActionListener
 		
 		//pan5
 		up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));
+        up.setActionCommand("up");
+        up.addActionListener(this);
 		down = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/down.png"));
+        down.setActionCommand("down");
+        down.addActionListener(this);
 		top = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/top.png"));
+        top.setActionCommand("top");
+        top.addActionListener(this);
 		bottom = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/bottom.png"));
+        bottom.setActionCommand("bottom");
+        bottom.addActionListener(this);
 		internPan5 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref,pref,pref,pref:grow");
 		pan5 = new FreshPanel('y',true);
 		pan5.setLayout(new BorderLayout());
@@ -271,7 +280,7 @@ class PlanifierPanel implements ActionListener
 	}
 
     void affichageListeObjets(Set<Objet> ol) {
-        Vector<PlanifierObjet> objs = new Vector<PlanifierObjet>();
+        objs = new Vector<PlanifierObjet>();
 
         for(Objet o : ol) {
             objs.add(new PlanifierObjet(o));
@@ -312,6 +321,32 @@ class PlanifierPanel implements ActionListener
         ouvDateFTF.setText(dateFormat.format(date.getTime()));
         ouvHeureFTF.setText(heureFormat.format(date.getTime()));
         descrArea.setText(v.getDescription());
+
+        // les objets de la vente ! hé oui !
+
+        Vector<PlanifierObjet> vobjs = new Vector<PlanifierObjet>();
+
+        System.out.println("Ensemble IDs de taille "+v.getOIds().size());
+
+        for(int i : v.getOIds()) {
+            Objet o = Client.objectmanager.getObjet(i);
+            if(o != null) {
+                vobjs.add(new PlanifierObjet(o));
+            }
+        }
+        System.out.println("Créé ensemble de taille "+vobjs.size());
+
+        listeDansVente.setListData(vobjs);
+
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                jspPan4.validate();
+                jspPan4.repaint();
+                listeDansVente.validate();
+                listeDansVente.repaint();
+            }
+        });
+
     }
 
     /*
@@ -328,11 +363,13 @@ class PlanifierPanel implements ActionListener
     */
 	public void actionPerformed(ActionEvent event)
 	{
-		if(event.getActionCommand().equals("new"))
+        String commande = event.getActionCommand();
+        Logger.log("PlanifierPanel", 2, commande);
+		if(commande.equals("new"))
 		{
             razChamps();
 		}
-		else if(event.getActionCommand().equals("ok"))
+		else if(commande.equals("ok"))
 		{
             // parsing de la date. C'est joyeux.
             
@@ -389,7 +426,7 @@ class PlanifierPanel implements ActionListener
                 Logger.log("PlanifierPanel", 1, LogType.WRN, "Ne peut pas interpréter la date : "+e.getMessage());
             }
         }
-        else if(event.getActionCommand().equals("del"))
+        else if(commande.equals("del"))
         {
             Object selectionne = nomBox.getSelectedItem();
 
@@ -403,13 +440,99 @@ class PlanifierPanel implements ActionListener
                 Client.hi.editerVente(Edition.Supprimer, v);
             }
         }
-        else if(event.getActionCommand().equals("add"))
+        else if(commande.equals("add"))
         {
+            if(!listeAccepte.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeAccepte.getSelectedValue() instanceof PlanifierObjet) {
+                int oid = ((PlanifierObjet) listeAccepte.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
 
+                // ajouter l'objet en fin de liste dans la Vente
+                Client.hi.ajouterObjetVente(oid, vid, -1);
+            }
         }
-        else if(event.getActionCommand().equals("remove"))
+        else if(commande.equals("remove"))
         {
+            if(!listeDansVente.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
+                int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
 
+                // ajouter l'objet en fin de liste dans la Vente
+                Client.hi.retirerObjetVente(oid, vid);
+            }
+        } else if(commande.equals("up")) {
+// jr : aucune des commandes ci-dessous ne marche. envoyer deux messages
+// 'enlever' et 'ajouter' à la suite se fait juste trop vite pour que la
+// FSM du client accepte que ajouterObjetVente se fasse alors même
+// que la réponse du retirerObjetVente() n'est pas arrivée.
+// On pourrait résoudre ça par des... beau gros moniteurs !
+// (ma tentative naïve de le faire a profondément raté.)
+
+            // monter d'un cran dans la liste des ventes
+            if(!listeDansVente.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
+                int index = listeDansVente.getSelectedIndex();
+                int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
+
+                // si on garde l'index, retire l'objet puis l'insère à
+                // (index - 2), considérant que toute la liste aura été
+                // décalée de 1 après le retrait, alors replacer l'objet
+                // sur (index - 2) l'aura fait bouger d'un cran vers le haut.
+                Client.hi.retirerObjetVente(oid, vid);
+                // jr : idée : faire un wait() ici
+                // (mais c'est le notify() à faire ailleurs qui merde)
+                // (IllegalMonitorStateException)
+                Client.hi.ajouterObjetVente(oid, vid, index-2);
+            }
+        } else if(commande.equals("down")) {
+            // descendre d'un cran dans la liste des ventes
+            if(!listeDansVente.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
+                int index = listeDansVente.getSelectedIndex();
+                int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
+
+                // si on garde l'index, retire l'objet puis l'insère à
+                // ce même index, considérant que toute la liste aura été
+                // décalée de 1 après le retrait, alors replacer l'objet
+                // sur le même index l'aura fait bouger d'un cran vers le bas.
+                /*Client.hi.retirerObjetVente(oid, vid);
+                Client.hi.ajouterObjetVente(oid, vid, index);*/
+            }
+        } else if(commande.equals("top")) {
+            // insérer au tout début de la liste des ventes
+            if(!listeDansVente.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
+                int index = listeDansVente.getSelectedIndex();
+                int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
+
+                // no-brainer, duh
+                /*
+                Client.hi.retirerObjetVente(oid, vid);
+                Client.hi.ajouterObjetVente(oid, vid, 0);
+                */
+            }
+        } else if(commande.equals("bottom")) {
+            // insérer en queue de la liste des ventes
+            if(!listeDansVente.isSelectionEmpty()
+                    && nomBox.getSelectedItem() instanceof Vente
+                    && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
+                int index = listeDansVente.getSelectedIndex();
+                int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
+                int vid = ((Vente) nomBox.getSelectedItem()).getId();
+
+                // on a l'index spécial -1 pour ça, c'est pas beau la technique ?
+                /*Client.hi.retirerObjetVente(oid, vid);
+                Client.hi.ajouterObjetVente(oid, vid, -1);*/
+            }
         }
     }
 

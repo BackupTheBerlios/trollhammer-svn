@@ -397,14 +397,21 @@ class ServeurEntryHandler extends Thread {
             // première. Sur le graphe du proto model, cela équivaut à
             // supprimer PL5 et à faire boucler les transitions
             // "insérerObjetVente" et "enleverObjetVente".
-            if (etat == Etat.PL4) {
+            //
+            // SECOND AJOUT : on admet le 'raccourci' PL3 -> PL4,
+            // si on a déjà sélectionné la vente avant, est ressorti de l'Onglet
+            // Planifier, puis est revenu avec la vente déjà sélectionnée
+            // pour y mettre et/ou enlever des objets. C'est donc une
+            // implémentation de l'epsilon-transition PL3 -> PL4 présente
+            // sur le schéma PMs - Planifier impl.
+            if (etat == Etat.PL4 || etat == Etat.PL3) {
                 etat = Etat.PL4;
                 insererObjetVente iov = (insererObjetVente) m;
                 Serveur.serveurentry.insererObjetVente(iov.objet, iov.vente, iov.pos, iov.sender);
             }
         } else if (m instanceof enleverObjetVente) {
             // même remarque que ci-dessus.
-            if (etat == Etat.PL4) {
+            if (etat == Etat.PL4 || etat == Etat.PL3) {
                 etat = Etat.PL4;
                 enleverObjetVente eov = (enleverObjetVente) m;
                 Serveur.serveurentry.enleverObjetVente(eov.objet, eov.vente, eov.sender);

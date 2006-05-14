@@ -158,7 +158,7 @@ class VenteServeur extends Vente {
      */
     Vente copieVente() {
         Vente v = new Vente(this.getId(), this.getNom(), this.getDescription(),
-                this.getDate(), this.getMode(), this.getSuperviseur());
+                this.getDate(), this.getMode(), this.getSuperviseur(), this.getOIds());
         return v;
     }
 

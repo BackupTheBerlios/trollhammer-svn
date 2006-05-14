@@ -247,7 +247,7 @@ class ClientFSM {
     }
 
     boolean ajouterObjetVente() {
-       return transition(Etat.PL4, Etat.PL5);
+       return transition(Etat.PL4, Etat.PL8);
     }
 
     boolean choisirObjet() {
@@ -335,7 +335,7 @@ class ClientFSM {
     }
     
     boolean retirerObjetVente() {
-        return transition(Etat.PL4, Etat.PL5);
+        return transition(Etat.PL4, Etat.PL8);
     }
 
     // le prochain état va fortement dépendre de ce que

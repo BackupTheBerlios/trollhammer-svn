@@ -118,7 +118,9 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
     }
 
     void ajouterObjetVente(int o, int v, int p) {
-        Client.session.insererObjetVente(o, v, p);
+        if(Client.fsm.ajouterObjetVente()) {
+            Client.session.insererObjetVente(o, v, p);
+        }
     }
 
     void choisirObjet(int i) {

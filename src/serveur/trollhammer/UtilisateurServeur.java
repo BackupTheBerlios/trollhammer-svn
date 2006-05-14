@@ -126,7 +126,7 @@ class UtilisateurServeur {
             Serveur.broadcaster.etatParticipant((Participant) u);
         } else if (!mdp.equals(mot_de_passe)) {
             Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " refusé, mauvais mot de passe : login " + u.getLogin());
-            session.resultatLogin(StatutLogin.Invalide);
+            sess.resultatLogin(StatutLogin.Invalide);
             u.setStatut(StatutLogin.Deconnecte);
             sess.kaboom();
         } else if (statut == StatutLogin.Banni) {

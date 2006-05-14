@@ -26,6 +26,12 @@ class Vente implements java.io.Serializable {
 		this.superviseur = superviseur;
 	}
 
+    public Vente(int id, String nom, String description, long date, Mode mode,
+            String superviseur, List<Integer> oids) {
+        this(id, nom, description, date, mode, superviseur);
+        this.objets = oids;
+    }
+
     /** Override du toString() par défaut, permet l'affichage du nom de la vente
      * dans la combo box de l'onglet 'Planifier'.
      * Implémenté de cette façon car d'autres solutions, notamment l'override du renderer, ne marchent pas.
@@ -64,11 +70,15 @@ class Vente implements java.io.Serializable {
 	// cfrey: add "public" pour objets
 	void addOId(int index, int elt) {
 		this.objets.add(index, elt);
+        Logger.log("Vente", 2, LogType.DBG, "Insertion de l'OID "+elt
+                +" à la position "+index+" réussi");
 	}
 	
 	// cfrey: append "public" pour objets
 	void addOId(int elt) {
 		this.objets.add(elt);
+        Logger.log("Vente", 2, LogType.DBG, "Insertion de l'OID "+elt
+                +" en fin de liste réussi"); 
 	}
 
 	// cfrey: enlève un objet de la liste par son id

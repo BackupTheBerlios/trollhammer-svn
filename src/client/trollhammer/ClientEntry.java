@@ -115,6 +115,9 @@ class ClientEntry {
     void detailsVente(Vente v, List<Objet> liste) {
         if(Client.fsm.detailsVente()) {
             Client.ventemanager.detailsVente(v, liste);
+            // jr : ajout p.r. Design : affichage de la vente
+            // mis à jour ! *ding dong* !
+            Client.hi.affichageVente(v);
         }
     }
 

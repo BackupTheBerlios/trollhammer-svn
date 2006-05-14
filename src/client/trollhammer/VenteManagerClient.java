@@ -70,11 +70,18 @@ class VenteManagerClient {
     void detailsVente(Vente v, List<Objet> os) {
         // pour mettre à jour une vente, on enlève
         // sa précédente instance de la liste
+        Set<Vente> a_enlever = new HashSet<Vente>();
+
         for(Vente vte : ventes) {
             if(vte.getId() == v.getId()) {
-                ventes.remove(vte);
+                a_enlever.add(vte);
             }
         }
+
+        for(Vente doublon : a_enlever) {
+            ventes.remove(doublon);
+        }
+
         // puis on rajoute la nouvelle.
         ventes.add(v);
 

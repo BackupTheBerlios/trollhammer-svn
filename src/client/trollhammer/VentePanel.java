@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -90,6 +92,21 @@ class VentePanel implements ActionListener
                 return (ObjetElementListe) value;
                 }
                 });
+
+        liste.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e) {
+                // implicitement, la sélection est toujours de taille un,
+                // donc on peut ne prendre que l'index du début de la sélection
+                int index = liste.getSelectedIndex(); 
+
+                // index < 0 => invalide (-1 == non trouvé)
+                if(index > -1 && objs.size() > 0) {
+                    ObjetElementListe o = objs.get(index);
+                    Client.hi.choisirObjet(o.getId());
+                }
+            }
+        });
+
         rightPane.setViewportView(liste);
 	}
 	private JComponent buildVentePanel()
@@ -189,5 +206,11 @@ class VentePanel implements ActionListener
         }
 
         liste.setListData(objs);
+    }
+
+    void affichageObjet(Objet o) {
+        objTitre.setText(o.getNom());
+        objDescr.setText(o.getDescription());
+        objPrix.setText(Integer.toString(o.getPrixDeBase()));
     }
 }

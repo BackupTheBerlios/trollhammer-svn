@@ -74,14 +74,15 @@ class VenteObjetEnVente extends VenteObjetAccepte
 
 class VenteObjetPropose extends ObjetElementListe
 {
-	private JButton retirer = null;
+    //jr : on ne peut pas retirer une proposition, rien dans le Design pour.
+	//private JButton retirer = null;
 	public VenteObjetPropose(Objet obj)
 	{
 		super(obj);
-		retirer = new JButton("Retirer");
+		//retirer = new JButton("Retirer");
 		
 		this.add(new JLabel("En attente de validation"));
-		this.add(retirer);
+		//this.add(retirer);
 		
 	}
 }

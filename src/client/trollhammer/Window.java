@@ -239,17 +239,20 @@ class Window implements ActionListener
     }
 	
     void affichageObjet(Objet o) {
-		
+        switch(Client.client.getMode()) {
+            case Vente:
+                this.vente.affichageObjet(o); break;
+        }
     }
 	
     void affichageListeObjets(Set<Objet> ol) {
         switch(Client.client.getMode()) {
             case Vente:
-                this.vente.affichageListeObjets(ol);
+                this.vente.affichageListeObjets(ol); break;
             case Validation:
-                this.valider.affichageListeObjets(ol);
+                this.valider.affichageListeObjets(ol); break;
             case Planification:
-                this.planifier.affichageListeObjets(ol);
+                this.planifier.affichageListeObjets(ol); break;
         }
     }
 	

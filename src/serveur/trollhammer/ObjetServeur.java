@@ -42,6 +42,20 @@ class ObjetServeur {
 //    void sell(String i, Integer prix) {
 //
 //    }
+// ls : redéplacé ici, le fait que l'on le fasse sur l'objet lui-même garanti
+//      qu'il existe...
+    /**
+     * "Vend" l'objet, c-à-d affecte son prix de vente, l'acheteur, et change 
+     * son statut.
+     *
+     * @param	i		acheteur
+     * @param	prix	prix
+     */
+    void sell(String i, int prix) {
+		this.setPrixDeVente(prix);
+		this.setAcheteur(i);
+		this.setStatut(StatutObjet.Vendu);
+	}
 	
 	Objet getObjet() {
 		return objet;

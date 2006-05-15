@@ -9,6 +9,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class ValiderPanel implements ActionListener
 {

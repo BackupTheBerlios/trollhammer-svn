@@ -117,6 +117,7 @@ public class Client {
                 
                 if(v != null) {
                     Client.humain.setVente(v);
+                    Client.hi.affichageVente(v);
                 }
                 break;
             default:

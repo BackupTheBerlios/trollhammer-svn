@@ -30,7 +30,10 @@
 
 	
     <property name="dist.dir" value="dist"/>
-    <property name="res.dir" value="res"/>
+    <property name="dist.client" value="${dist.dir}/client"/>
+    <property name="dist.serveur" value="${dist.dir}/serveur"/>
+
+    <property name="res.dir" value="ressources"/>
     <property name="lib.dir" value="lib"/>
     
 
@@ -115,7 +118,7 @@
 			<echo></echo>
 			<echo> brun - (compile) et lance le soft en entier</echo>
 			<echo></echo>
-			<echo> AFAIREjar - cree les fichiers jar</echo>
+			<echo> jar - cree les fichiers jar</echo>
 			<echo></echo>
 			<echo> javadoc - cree la javadoc</echo>
 			<echo></echo>
@@ -137,19 +140,25 @@
     
     
  	<target name="prepare" description="Construit les differents repertoires necessaires au projet">
-   	<!--	<splash imageurl="http://mediatheque.epfl.ch/albums-actualites2/albun66/6273_G.sized.jpg"/> -->
+   	<splash imageurl="http://mediatheque.epfl.ch/albums-actualites2/albun66/6273_G.sized.jpg"/> 
  	    <echo>Creation des repertoires</echo>
  	    <mkdir dir="${build.dir}"/>
  	    <mkdir dir="${build.client}"/>
  	    <mkdir dir="${build.serveur}"/>
- 	    <mkdir dir="${build.commun}"/>
-    
+
  	    
  	    <mkdir dir="${doc.dir}"/>
  	    <mkdir dir="${doc.client}"/>
  	    <mkdir dir="${doc.serveur}"/>
  	    <mkdir dir="${doc.commun}"/>
  	    
+ 	    
+ 	    <mkdir dir="${dist.dir}"/>
+ 	    <mkdir dir="${dist.client}"/>
+ 	    <mkdir dir="${dist.serveur}"/>
+
+ 	    
+	    
  	    <!-- On copie ces rogntudjus de fichiers communs pour que ca compile chez les gens normaux -->
  	    
  	    <echo>Copie de ces fichiers communs baveux</echo>
@@ -330,7 +339,8 @@
             <delete dir="${build.client}"/>
             <delete dir="${build.serveur}"/>
             <delete dir="${doc.dir}"/>
-            <delete dir="${build.dir}"/>    
+            <delete dir="${build.dir}"/>   
+            <delete dir="${dist.dir}"/> 
         <delete verbose="true">
 			<fileset refid="communfile.client"/>
         </delete>
@@ -342,10 +352,37 @@
 	
 
 
-	<target name="jar" depends="build" description="Genere les fichiers jar du projet">
-		<echo>Ne fait rien pour l'instant</echo>
+	<target name="jar" depends="b" description="Genere les fichiers jar du projet">
+			
+			<copy file="${lib.dir}/forms.jar" todir="${dist.client}/lib/"/>
+
+			<copy todir="${dist.client}/ressources/"> 
+				<fileset dir="${res.dir}"/>
+			</copy>
+			
+			<jar jarfile="${dist.client}/client.jar"
+				basedir="${build.client}" >
+				<manifest>
+					<attribute name="Main-Class" value = "${clientClass}"/>
+					<attribute name="Class-Path" value = "lib/forms.jar"/>
+					<attribute name="Auteur" value = "${user.name}"/>
+					<attribute name="Date" value = "${TODAY}"/>
+				</manifest>
+			</jar>
+			
+			<jar jarfile="${dist.serveur}/serveur.jar"
+				basedir="${build.serveur}" >
+				<manifest>
+					<attribute name="Main-Class" value = "${serveurClass}"/>
+					<attribute name="Auteur" value = "${user.name}"/>
+					<attribute name="Date" value = "${TODAY}"/>
+				</manifest>
+			</jar>
+
+			
 	</target>
-    
+    <target name="rejar" depends="megaputz,jar" description="Genere les fichiers jar du projet">
+	</target>
   
     
 </project>

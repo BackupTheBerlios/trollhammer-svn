@@ -291,12 +291,59 @@ class HdVPanel extends JComponent implements ActionListener
     }
 	void affichageListeObjets(Set<Objet> ol)
 	{
-		lstObjVect = new Vector<HdVObjet>();
-		for(Objet o : ol)
-		{
-			if(o.getStatut() == StatutObjet.EnVente)
-				lstObjVect.add(new HdVObjet(o));
+        lstObjVect = new Vector<HdVObjet>();
+        for(Objet o : ol)
+        {
+            if(o.getStatut() == StatutObjet.EnVente)
+                lstObjVect.add(new HdVObjet(o));
         }
-		//listeObjetsPanel.setListData(lstObjVect); beuhaaaaah va pas
-	}
+        //listeObjetsPanel.setListData(lstObjVect); beuhaaaaah va pas
+    }
+
+    void affichage(Evenement e) {    
+        switch (e) {    
+            case CoupDeMassePAF1:      
+                texteLog("--- PREMIER COUP DE MARTEAU ---");      
+                break;   
+            case CoupDeMassePAF2:   
+                texteLog("--- SECOND COUP DE MARTEAU ---");     
+                break;     
+            case Adjuge:      
+                texteLog("--- ADJUDICATION ---\n"     
+                        +"Objet : "      
+                        //le nom de l'objet qui vient d'être vendu (ouf!)     
+                        +Client.objectmanager.getObjet(     
+                            Client.ventemanager.getVenteEnCours().getFirst()   
+                            ).getNom()+"\n"   
+                        +"Vendu à : "   
+                        +Client.client.getDernierEncherisseur()     
+                        +"Au prix de "     
+                        +Client.client.getPrixCourant()   
+                        );   
+                break;      
+            case VenteAutomatique:     
+                texteLog("--- Vente en mode automatique ---");    
+                break;   
+            default :   
+        }      
+    }     
+
+    void affichageEnchere(Integer prix, String i) {    
+        texteLog(i+" enchérit à "+prix);    
+    }    
+
+    void message(Notification n) {     
+        switch (n) {      
+            case DebutVente:     
+                texteLog("--- Vente en cours ---");     
+                break;     
+            case VenteEnCours:    
+                texteLog("--- Démarrage de la vente ---");      
+                break;      
+            case FinVente:     
+                texteLog("--- Fin de la vente ---");      
+                break;   
+        }   
+    }      
+
 }

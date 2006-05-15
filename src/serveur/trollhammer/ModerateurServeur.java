@@ -31,21 +31,11 @@ class ModerateurServeur extends UtilisateurServeur {
      */
 
 	/**
-	 * Déconnecte le modérateur.
+	 * <p>Déconnecte le modérateur.</p>
 	 */
     public void disconnect() {
-        Logger.log("ModerateurServeur", 0, LogType.INF, "[logout] déconnexion : login "+u.getLogin());
-        u.setStatut(StatutLogin.Deconnecte);
-        this.session.kaboom();
-        this.session = null;
-        // jr : j'ai dû 'aplatir' l'appel et le splitter,
-        // ce qui est différent du Design :
-        // faire un setStatut() et ensuite un appel direct
-        // à VenteManager.modoLeaving(), parce que faire
-        // un setStatut(Déconnecté) qui va spécifiquement
-        // prévenir le Manager est spécifique au Serveur.
-        // setStatut() ne devrait pas l'être.
-        // Oui, c'est une correction (minime?) à la volée.
+		//ls :  Vive l'OO, ca évite le copier-coller de code...
+		super.disconnect();
         Serveur.ventemanager.modoLeaving(u.getLogin());
     }
 	// Méthodes du design : END

@@ -2,6 +2,9 @@ package trollhammer;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * <p>Modèlise une vente aux enchères.</p>
+ */
 class Vente implements java.io.Serializable {
 
     private int id;
@@ -10,13 +13,10 @@ class Vente implements java.io.Serializable {
     private long date;
     private Mode mode;
     private String superviseur;
-
-    // une liste de POINTEURS sur des objets. Leurs IDs.
-    // risque d'incohérences monstrueuses si on prend les objets
-    // avec alors même qu'on fournit la liste dans les messages d'update. (jr)
     private List<Integer> objets;
 	
-	public Vente(int id, String nom, String description, long date, Mode mode, String superviseur) {
+	// Constructeurs : START
+	Vente(int id, String nom, String description, long date, Mode mode, String superviseur) {
         this(); // créer la liste d'objets vide !
 		this.id = id;
 		this.nom = nom;
@@ -26,11 +26,12 @@ class Vente implements java.io.Serializable {
 		this.superviseur = superviseur;
 	}
 
-    public Vente(int id, String nom, String description, long date, Mode mode,
+    Vente(int id, String nom, String description, long date, Mode mode,
             String superviseur, List<Integer> oids) {
         this(id, nom, description, date, mode, superviseur);
         this.objets = oids;
     }
+	// Constructeurs : END
 
     /** Override du toString() par défaut, permet l'affichage du nom de la vente
      * dans la combo box de l'onglet 'Planifier'.
@@ -40,18 +41,15 @@ class Vente implements java.io.Serializable {
         return this.nom;
     }
 
-    /** Constructeur par defaut.
-    * Se contente d'initialiser la liste d'objets avec une ArrayList d'Integer.
-    */
+    /**
+	 * <p>Constructeur par defaut. Se contente d'initialiser la liste d'objets
+	 * avec une ArrayList d'Integer.</p>
+     */
     Vente() {
         objets = new ArrayList<Integer>();
     }
 
-    /** Redéfinition de l'affichage de la Vente.
-     * Ainsi, l'affichage dans la liste des ventes du Client donne le nom
-     * et non le combo classe/hashcode.
-     */
-
+	// Méthodes du design : START
     int getFirst() {
         return objets.get(0);
     }
@@ -89,7 +87,9 @@ class Vente implements java.io.Serializable {
 			this.objets.remove(p);
 		}
 	}
-
+	// Méthodes du design : END
+	
+	// Setters & Getters : START
 	// probablement inutile, cf ci-dessus
     void setOIds(List<Integer> objs) {
         this.objets = objs;
@@ -142,5 +142,5 @@ class Vente implements java.io.Serializable {
     void setSuperviseur(String superviseur) {
         this.superviseur = superviseur;
     }
-
+   	// Setters & Getters : END
 }

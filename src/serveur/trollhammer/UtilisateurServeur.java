@@ -3,9 +3,9 @@ import java.util.Set;
 import java.util.List;
 
 /**
- * Adaptateur Serveur pour un Utilisateur.
- * Permet la mémorisation de sa Session associée ainsi que l'envoi de messages
- * à l'Utilisateur, plus quelques opérations spécifiques, notamment le login/logout.
+ * <p>Adaptateur Serveur pour un Utilisateur. Permet la mémorisation de sa 
+ * Session associée ainsi que l'envoi de messages à l'Utilisateur, plus quelques
+ * opérations spécifiques, notamment le login/logout.</p>
  *
  * @author Julien Ruffin
  */
@@ -15,6 +15,7 @@ class UtilisateurServeur {
     Utilisateur u;
     SessionServeur session;
 
+	// Constructeurs : START
     UtilisateurServeur(Utilisateur u) {
         this.u = u;
     }
@@ -22,74 +23,118 @@ class UtilisateurServeur {
     UtilisateurServeur(String login, String nom, String prenom, String motdepasse) {
         this(new Utilisateur(login, nom, prenom, motdepasse));
     }
+	// Constructeurs : END
 
-    Utilisateur getUtilisateur() {
-        return this.u;
-    }
-
-    void resultatLogin(StatutLogin s) {
+	// Méthodes du design : START
+	/**
+	 *
+	 */
+    public void resultatLogin(StatutLogin s) {
         session.resultatLogin(s);
     }
 
-    void chat(String m, String i) {
+	/**
+	 *
+	 */
+    public void chat(String m, String i) {
         session.chat(m, i);
     }
 
-    void notification(Notification n) {
+	/**
+	 *
+	 */
+    public void notification(Notification n) {
         session.notification(n);
     }
 
-    void evenement(Evenement e) {
+	/**
+	 *
+	 */
+    public void evenement(Evenement e) {
         session.evenement(e);
     }
 
-    void enchere(int prix, String i) {
+	/**
+	 *
+	 */
+    public void enchere(int prix, String i) {
         session.enchere(prix, i);
     }
 
-    void detailsVente(Vente v, List<Objet> o) {
+	/**
+	 *
+	 */
+    public void detailsVente(Vente v, List<Objet> o) {
         session.detailsVente(v, o);
     }
 
-    void detailsUtilisateur(Utilisateur u) {
+	/**
+	 *
+	 */
+    public void detailsUtilisateur(Utilisateur u) {
         session.detailsUtilisateur(u);
     }
 
-    void listeObjets(Onglet type, Set<Objet> lo) {
+	/**
+	 *
+	 */
+    public void listeObjets(Onglet type, Set<Objet> lo) {
         session.listeObjets(type, lo);
     }
 
-    void listeUtilisateurs(Set<Utilisateur> ul) {
+	/**
+	 *
+	 */
+    public void listeUtilisateurs(Set<Utilisateur> ul) {
         session.listeUtilisateurs(ul);
     }
 
-    void listeParticipants(Set<Participant> pl) {
+	/**
+	 *
+	 */
+    public void listeParticipants(Set<Participant> pl) {
         session.listeParticipants(pl);
     }
 
-    void listeVentes(Set<Vente> l) {
+	/**
+	 *
+	 */
+    public void listeVentes(Set<Vente> l) {
         session.listeVentes(l);
     }
 
-    void resultatEdition(StatutEdition s) {
+	/**
+	 *
+	 */
+    public void resultatEdition(StatutEdition s) {
         session.resultatEdition(s);
     }
 
-    void etatParticipant(Participant p) {
+	/**
+	 *
+	 */
+    public void etatParticipant(Participant p) {
         session.etatParticipant(p);
     }
 
-    void superviseur(String i) {
+	/**
+	 *
+	 */
+    public void superviseur(String i) {
         session.superviseur(i);
     }
 
-    /*
-	 * cette méthode a été généralisée. Elle gère aussi
-     * le cas du Modérateur. Au vu de la complexité relative des deux,
-     * et de leur similitude quasi-parfaite à part les réponses envoyées,
-     * c'est la meilleure manière de faire niveau compactitude.
+	//Ne serait-ce donc pas à implémenter au niveau de Utilisateur?
+    /**
+	 * <p>Effectue le login d'un utilisateur. Cette méthode a été généralisée.
+	 * Elle gère aussi le cas du Modérateur. Au vu de la complexité relative des
+	 * deux, et de leur similitude quasi-parfaite à part les réponses envoyées,
+	 * c'est la meilleure manière de faire niveau compactitude.</p>
+	 *
+	 * @param	sess	SessionServeur, l'objet qui contient la session réseau.
+	 * @param	mdp		Le mot de passe du client (sous forme de String).
 	 */
-    void doLogin(SessionServeur sess, String mdp) {
+    public void doLogin(SessionServeur sess, String mdp) {
         // modif p.r. au design : on rattache la Session
         // à l'Utilisateur, sinon ce dernier ne pourra
         // pas recevoir de messages du Serveur!
@@ -146,60 +191,68 @@ class UtilisateurServeur {
 
     }
 
-    void disconnect() {
+	/**
+	 *
+	 */
+    public void disconnect() {
         Logger.log("UtilisateurServeur", 0, LogType.INF, "[logout] déconnexion : login " + u.getLogin());
         u.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
         this.session = null;
     }
+	// Méthodes du design : END
+	
+	// Setters & Getters : START
+    public Utilisateur getUtilisateur() {
+        return this.u;
+    }
 
-    /* getters/setters, relaient l'appel à l'Utilisateur */
-
-    String getLogin() {
+    public String getLogin() {
         return u.getLogin();
     }
 
-    String getNom() {
+    public String getNom() {
         return u.getNom();
     }
 
-    String getPrenom() {
+    public String getPrenom() {
         return u.getPrenom();
     }
 
-    StatutLogin getStatut() {
+    public StatutLogin getStatut() {
         return u.getStatut();
     }
 
-    SessionServeur getSession() {
+    public SessionServeur getSession() {
         return this.session;
     }
 
-    void setLogin(String login) {
+    public void setLogin(String login) {
         u.setLogin(login);
     }
 
-    void setNom(String nom) {
+    public void setNom(String nom) {
         u.setNom(nom);
     }
 
-    void setPrenom(String prenom) {
+    public void setPrenom(String prenom) {
         u.setPrenom(prenom);
     }
 
-    void setStatut(StatutLogin statut) {
+    public void setStatut(StatutLogin statut) {
         u.setStatut(statut);
     }
 
-    void setSession(SessionServeur sess) {
+    public void setSession(SessionServeur sess) {
         this.session = sess;
     }
 
-    String getMotDePasse() {
+    public String getMotDePasse() {
         return u.getMotDePasse();
     }
 
-    void setMotDePasse(String mot_de_passe) {
+    public void setMotDePasse(String mot_de_passe) {
         u.setMotDePasse(mot_de_passe);
     }
+   	// Setters & Getters : END
 }

@@ -150,11 +150,13 @@ public class Serveur {
 
     boolean checkEnchere(int prix, String i) {
         if (Serveur.ventemanager.checkEncherisseur(i) 
-			&& i != dernier_encherisseur 
+			&& !i.equals(dernier_encherisseur)
 			&& prix > prix_courant) {
+			Logger.log("Serveur", 2, LogType.DBG, "checkEnchere : Enchère valide");
 			return true;
 		}
 		else {
+			Logger.log("Serveur", 2, LogType.DBG, "checkEnchere : Enchère invalide");
 			return false;
 		}
     }
@@ -170,10 +172,14 @@ public class Serveur {
 	// qu'à cet endroit le retour de celle-ci, donc il est inutile de le stocker
 	// et de le transmettre... (variable "c" du design model)
     void encherir(int prix, String i) {
+		Logger.log("Serveur", 1, LogType.INF, i + " tente d'enchérir à " + prix);
 		if (checkEnchere(prix, i)) {
+			Logger.log("Serveur", 2, LogType.INF, i+" : enchère valide à "+prix);
 			doEnchere(prix, i);
 			Serveur.ventemanager.setTimerDerniereEnchere(getDate());
 			Serveur.broadcaster.enchere(prix, i);
+		} else {
+			Logger.log("Serveur", 2, LogType.WRN, i+" : enchère invalide à "+prix);
 		}
     }
 

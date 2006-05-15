@@ -44,18 +44,12 @@ class ClientEntry {
     void detailsVente(Vente v, List<Objet> liste) {
         if(Client.fsm.detailsVente()) {
             Client.ventemanager.detailsVente(v, liste);
-            // jr : ajout p.r. Design : affichage de la vente
-            // mis à jour ! *ding dong* !
-            Client.hi.affichageVente(v);
         }
     }
 
     void detailsUtilisateur(Utilisateur u) {
         if(Client.fsm.detailsUtilisateur()) {
             Client.usermanager.detailsUtilisateur(u);
-            // jr : modif p.r. Design : on aime actualiser la liste pour voir
-            // les changements, aussi minimes soient-ils
-            Client.hi.affichageListeUtilisateurs(Client.usermanager.getUtilisateurs());
         }
     }
 
@@ -74,9 +68,6 @@ class ClientEntry {
     void listeParticipants(Set<Participant> liste) {
         if(Client.fsm.listeParticipants()) {
             Client.participantmanager.listeParticipants(liste);
-            // modif P.R. Design : passage à HI pour que la liste
-            // soit affichée dans l'Hôtel des Ventes.
-            Client.hi.affichageListeParticipants(liste);
         }
     }
 
@@ -94,8 +85,10 @@ class ClientEntry {
 
     void etatParticipant(Participant p) {
 // ??? inconditionnel pour raisons de cohérence
-        Client.fsm.etatParticipant();
-        Client.participantmanager.etatParticipant(p);
+// s'il y a un problème, c'est la fsm qu'il faut corriger !!!
+		if (Client.fsm.etatParticipant()) {
+			Client.participantmanager.etatParticipant(p);
+		}
     }
 
     void superviseur(String u) {

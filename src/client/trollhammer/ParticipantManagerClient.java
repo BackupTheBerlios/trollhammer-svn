@@ -42,5 +42,8 @@ class ParticipantManagerClient {
         if(Client.client.getMode() == Onglet.HotelDesVentes) {
             Client.hi.affichageListeParticipants(pl);
         }
+		// modif P.R. Design : passage à HI pour que la liste
+		// soit affichée dans l'Hôtel des Ventes.
+		// ??? Client.hi.affichageListeParticipants(liste);
     }
 }

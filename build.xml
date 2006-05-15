@@ -390,14 +390,7 @@
 	</target>
 	
 	<target name="version" description="Affiche le numéro de version">
-		<loadproperties srcFile=".svn/text-base/build.number.svn-base">
-                <filterchain>
-                        <linecontains>
-                                <contains value="build.number"/>
-                        </linecontains>
-                </filterchain>
-        </loadproperties>
-        <echo message="Build : ${build.number}" /> 
+
 	</target>
 
     

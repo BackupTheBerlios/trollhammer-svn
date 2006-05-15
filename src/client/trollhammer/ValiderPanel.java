@@ -8,7 +8,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 class ValiderPanel implements ActionListener
 {
@@ -19,7 +19,7 @@ class ValiderPanel implements ActionListener
 	private FreshPanel hautPanel = null;
 	private JScrollPane jsp = null;
     private JList liste = null;
-    Vector <ValiderObjet> objs = null;
+    ArrayList <ValiderObjet> objs = null;
 	//Panel du bas
 	private CoolPanel basPanel = null;
 	private JButton accepter = null;
@@ -86,13 +86,17 @@ class ValiderPanel implements ActionListener
 	}
 
     void affichageListeObjets(Set<Objet> ol) {
-        objs = new Vector<ValiderObjet>();
+        objs = new ArrayList<ValiderObjet>();
 
         for(Objet o : ol) {
             objs.add(new ValiderObjet(o));
         }
 
-        liste.setListData(objs);
+        // classement de la liste des Objets,
+        // par ID (donc 'chronologiquement' !).
+        Collections.sort(objs, new ComparateurObjetID<ObjetElementListe>());
+
+        liste.setListData(objs.toArray());
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {
                 jsp.validate();

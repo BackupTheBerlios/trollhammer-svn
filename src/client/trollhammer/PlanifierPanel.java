@@ -8,12 +8,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.Collections;
+import java.util.Comparator;
 
 class PlanifierPanel implements ActionListener
 {
@@ -50,7 +52,7 @@ class PlanifierPanel implements ActionListener
 	private JScrollPane jspPan2 = null;
 	private FreshPanel pan2 = null;
     private JList listeAccepte = null;
-    private Vector<PlanifierObjet> objs = null;
+    private ArrayList<PlanifierObjet> objs = null;
 	
 	//pan3 boutons ajouter enlever des objets
 	private FreshPanel pan3 = null;
@@ -280,13 +282,17 @@ class PlanifierPanel implements ActionListener
 	}
 
     void affichageListeObjets(Set<Objet> ol) {
-        objs = new Vector<PlanifierObjet>();
+        objs = new ArrayList<PlanifierObjet>();
 
         for(Objet o : ol) {
             objs.add(new PlanifierObjet(o));
         }
 
-        listeAccepte.setListData(objs);
+        // classement de la liste des Objets,
+        // par ID (donc 'chronologiquement' !).
+        Collections.sort(objs, new ComparateurObjetID<PlanifierObjet>());
+
+        listeAccepte.setListData(objs.toArray());
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {
                 jspPan2.validate();
@@ -302,9 +308,21 @@ class PlanifierPanel implements ActionListener
         // reset de liste
         nomBox.removeAllItems();
         //nomBox.addItem(NOM_VIDE);
+        
+        ArrayList<Vente> ventes = new ArrayList<Vente>(vl);
+        Collections.sort(ventes, new Comparator<Vente>(){
+            public int compare(Vente e1, Vente e2) {
+                return new Integer(e1.getId()).compareTo(
+                    new Integer(e2.getId()));
+            }
+            public boolean equals(Vente e1, Vente e2) {
+                return new Integer(e1.getId()).equals(
+                    new Integer(e2.getId()));
+            }
+        });
 
         // reconstruction de liste
-        for(Vente v : vl) {
+        for(Vente v : ventes) {
             nomBox.addItem(v);
         }
 
@@ -324,7 +342,7 @@ class PlanifierPanel implements ActionListener
 
         // les objets de la vente ! hé oui !
 
-        Vector<PlanifierObjet> vobjs = new Vector<PlanifierObjet>();
+        ArrayList<PlanifierObjet> vobjs = new ArrayList<PlanifierObjet>();
 
         System.out.println("Ensemble IDs de taille "+v.getOIds().size());
 
@@ -336,7 +354,7 @@ class PlanifierPanel implements ActionListener
         }
         System.out.println("Créé ensemble de taille "+vobjs.size());
 
-        listeDansVente.setListData(vobjs);
+        listeDansVente.setListData(vobjs.toArray());
 
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {

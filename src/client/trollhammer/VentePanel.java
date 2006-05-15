@@ -10,7 +10,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collections;
 
 class VentePanel implements ActionListener
 {
@@ -31,7 +32,7 @@ class VentePanel implements ActionListener
 	private String titre = null;
 	private JLabel titreLabel = null;
     private JList liste = null;
-    private Vector <ObjetElementListe> objs = null;
+    private ArrayList <ObjetElementListe> objs = null;
 	
 	//autres éléments
 	private boolean modo = false;
@@ -187,7 +188,7 @@ class VentePanel implements ActionListener
 
     /* relai de methode de HI, affiche la liste des objets de l'onglet Vente ! */
     void affichageListeObjets(Set<Objet> ol) {
-        objs = new Vector<ObjetElementListe>();
+        objs = new ArrayList<ObjetElementListe>();
         for(Objet o : ol) {
             ObjetElementListe element = null;
             switch(o.getStatut()) {
@@ -205,7 +206,11 @@ class VentePanel implements ActionListener
             objs.add(element);
         }
 
-        liste.setListData(objs);
+        // classement de la liste des Objets,
+        // par ID (donc 'chronologiquement' !).
+        Collections.sort(objs, new ComparateurObjetID<ObjetElementListe>());
+
+        liste.setListData(objs.toArray());
     }
 
     void affichageObjet(Objet o) {

@@ -2,7 +2,8 @@ package trollhammer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Set;
 
 class AchatPanel
@@ -13,7 +14,7 @@ class AchatPanel
 	private JLabel titreLabel = null;
 	private String titre = null;
     private JList liste = null;
-    private Vector<AchatObjet> objs = null;
+    private ArrayList<AchatObjet> objs = null;
 
 	public AchatPanel(boolean modo)
 	{
@@ -57,12 +58,16 @@ class AchatPanel
 	}
 
     void afficherListeObjets(Set<Objet> ol) {
-        objs = new Vector<AchatObjet>();
+        objs = new ArrayList<AchatObjet>();
         for(Objet o : ol) {
             objs.add(new AchatObjet(o));
         }
 
-        liste.setListData(objs);
+        // classement de la liste des Objets,
+        // par ID (donc 'chronologiquement' !).
+        Collections.sort(objs, new ComparateurObjetID<ObjetElementListe>());
+        liste.setListData(objs.toArray());
+
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {
                 liste.validate();

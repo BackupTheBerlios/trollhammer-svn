@@ -1,6 +1,7 @@
 package trollhammer;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Comparator;
 
 abstract class ObjetElementListe extends JPanel
 {
@@ -137,5 +138,23 @@ class PlanifierObjet extends ObjetElementListe {
 		this.add(new JLabel(nom));
 		this.add(new JLabel(description));
 		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
+    }
+}
+
+/** Un comparateur pour ordonner les ObjetElementListe affichés dans la GUI.
+ * L'ordre se fait par les IDs des Objets que les ObjetElementListe représentent.
+ * Ce comparateur s'utilise ensuite dans la fonction Collections.sort(liste, comparateur).
+ *
+ * @author Julien Ruffin
+ */
+class ComparateurObjetID<T extends ObjetElementListe> implements Comparator<ObjetElementListe> {
+
+    public int compare(ObjetElementListe e1, ObjetElementListe e2) {
+        return new Integer(e1.getId()).compareTo(
+                new Integer(e2.getId()));
+    }
+    public boolean equals(ObjetElementListe e1, ObjetElementListe e2) {
+        return new Integer(e1.getId()).equals(
+                new Integer(e2.getId()));
     }
 }

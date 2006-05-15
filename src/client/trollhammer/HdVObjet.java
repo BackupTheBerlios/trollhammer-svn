@@ -1,16 +1,47 @@
 package trollhammer;
 import javax.swing.*;
 import java.awt.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 /*
  *@TODO modifier les constructeurs quand l'image existera!
  */
+public class HdVObjet extends JPanel
+{
+	private FormLayout layout = null;
+	private final Color couleur_fond = this.getBackground();
+	private final Color couleur_selectionne = Color.LIGHT_GRAY;
+	private Objet o = null;
+	public HdVObjet(Objet o)
+	{
+		super();
+		layout = new FormLayout("2dlu,pref,2dlu","2dlu,pref,2dlu");
+		this.setLayout(layout);
+		this.o = o;
+	}
+	void selectionne(boolean estSelectionne) {
+        if(estSelectionne) {
+            this.setBackground(couleur_selectionne);
+        } else {
+            this.setBackground(couleur_fond);
+        }
+    }
+	public String getDescription()
+	{
+		return o.getDescription();
+	}
+}
 
 
-public class HdVObjet extends JRadioButton
+
+
+/*public class HdVObjet extends JRadioButton
 {
 	private boolean enCours;
 	private String nom;
 	private ImageIcon img;
+	private final Color couleur_fond = this.getBackground();
+	private final Color couleur_selectionne = Color.LIGHT_GRAY;
 	public HdVObjet(Objet o, ImageIcon img) 
 	{
 		super(img);
@@ -31,4 +62,11 @@ public class HdVObjet extends JRadioButton
 	{
 		this.enCours = enCours;
 	}
-}
+	void selectionne(boolean estSelectionne) {
+        if(estSelectionne) {
+            this.setBackground(couleur_selectionne);
+        } else {
+            this.setBackground(couleur_fond);
+        }
+    }
+}*/

@@ -2,8 +2,8 @@ package trollhammer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import javax.swing.event.*;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -19,7 +19,6 @@ class HdVPanel extends JComponent implements ActionListener
 	private JLabel imgLabel = null;
 	private JScrollPane descrObjetPane = null;
 	private JTextArea descrObjetTextArea = null;
-	private String descrObjet = null;
 	private FreshPanel sallePanel = null;
 	private CoolPanel logPanel = null;
 	private JScrollPane logPane = null; //inside Pane
@@ -41,6 +40,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private double prixEnCours = 0.;
 	private double prochaineEnchere = 0.;
 	private Vector<HdVObjet> vobjs = null;
+	private JList lobjs = null;
 	private String adjEnCours = "";
 	private ButtonGroup grpl = null;
     private String victime = null;
@@ -73,7 +73,7 @@ class HdVPanel extends JComponent implements ActionListener
 		imgLabel = new JLabel("image non\ndisponible");
 		imgLabel.setPreferredSize(new Dimension(150,150));
 		imgLabel.setBorder(BorderFactory.createEtchedBorder());
-		descrObjetTextArea = new JTextArea(descrObjet);
+		descrObjetTextArea = new JTextArea();
 		descrObjetTextArea.setColumns(17);
 		descrObjetTextArea.setEditable(false);
 		descrObjetTextArea.setWrapStyleWord(true);
@@ -194,7 +194,7 @@ class HdVPanel extends JComponent implements ActionListener
 
 	public void actionPerformed(ActionEvent event)
 	{
-        Logger.log("Window", 2, event.getActionCommand());
+        Logger.log("Window", 2, event.getActionCommand()+" mouahahahahahahahahahHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA");
         if(event.getActionCommand().equals("disconnect"))
 		{
             mw.doLogout();
@@ -256,6 +256,7 @@ class HdVPanel extends JComponent implements ActionListener
     }
 	public void affichageVente(Vente v)
 	{
+		//listeObjetsPanel.removeAll();
 		Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
 		vobjs = new Vector<HdVObjet>();
 		for(int i : v.getOIds())
@@ -267,9 +268,41 @@ class HdVPanel extends JComponent implements ActionListener
                 vobjs.add(new HdVObjet(o));
             }
         }
-		affichageListeObjets();
+		lobjs = new JList(vobjs);
+		lobjs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lobjs.setCellRenderer(new ListCellRenderer() {
+			// This is the only method defined by ListCellRenderer.
+			// We just reconfigure the JLabel each time we're called.
+			
+			public Component getListCellRendererComponent(
+														  JList list,
+														  Object value,            // value to display
+														  int index,               // cell index
+														  boolean isSelected,      // is the cell selected
+														  boolean cellHasFocus)    // the list and the cell have the focus
+		{
+				((HdVObjet) value).selectionne(isSelected);
+                return (HdVObjet) value;
+		}
+		});
+		lobjs.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e) {
+				// implicitement, la sélection est toujours de taille un,
+                // donc on peut ne prendre que l'index du début de la sélection
+                HdVObjet obj = (HdVObjet) lobjs.getSelectedValue(); 
+                if(obj != null) { // obj est null si rien n'est séléctionné
+                    //affichage de l'objet séléctionné
+					descrObjetTextArea.setText(obj.getDescription());
+                    
+                }
+            }
+        });
+		listeObjetsPanel.removeAll();
+		listeObjetsPanel.add(lobjs);
+		
+		//affichageListeObjets();
 	}
-	private void affichageListeObjets()
+	/*private void affichageListeObjets()
 	{
 		ObjetsVentegrp = new ButtonGroup();
 		for(HdVObjet o: vobjs)
@@ -286,7 +319,7 @@ class HdVPanel extends JComponent implements ActionListener
                 listeObjetsPanel.repaint();
             }
         });
-	}
+	}*/
 
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();

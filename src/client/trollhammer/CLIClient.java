@@ -20,14 +20,14 @@ class CLIClient extends CLI {
 	public CLIClient() {
 		commandes.add(
 			new CMD("login", 4, "login : se connecter à un serveur.", "Syntaxe : login ADRESSE LOGIN MOTDEPASSE") {
-				void apply(String parameters[]){
+				public void apply(String parameters[]){
 					Client.hi.connecter(parameters[2], parameters[3], parameters[1]);
 				}
 			}
 		);
 		commandes.add(
 			new CMD("logout", 1, "logout : se déconnecter du serveur.", "Ne prend pas d'arguments") {
-				void apply(String parameters[]){
+				public void apply(String parameters[]){
 					Client.hi.executer(Action.Deconnecter);
 				}
 			}

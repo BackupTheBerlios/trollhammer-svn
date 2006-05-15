@@ -24,7 +24,7 @@ class CLIServeur extends CLI {
 		//En premier, quelques commandes déjà implémentées : 
 		commandes.add(
 			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {
-				void apply(String parameters[]){
+				public void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new UtilisateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
 					Logger.log("CMD", 1, LogType.INF, "Utilisateur créé : " + parameters[1]);
 				}
@@ -32,7 +32,7 @@ class CLIServeur extends CLI {
 		);
 		commandes.add(
 			new CMD("nm", 5, "nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE") {
-				void apply(String parameters[]){
+				public void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
 					Logger.log("CMD", 1, LogType.INF, "Modérateur créé : " + parameters[1]);
 				}
@@ -40,7 +40,7 @@ class CLIServeur extends CLI {
 		);
 		commandes.add(
 			new CMD("lv", 1, "lv - Liste la liste des ventes", "lv") {
-				void apply(String parameters[]) {
+				public void apply(String parameters[]) {
 					String liste = "liste des ventes\n";
 					Calendar cal = Calendar.getInstance();
 					VenteServeur vte = Serveur.ventemanager.getVenteEnCours();
@@ -61,7 +61,7 @@ class CLIServeur extends CLI {
 		);
 /*		commandes.add(
 			new CMD(, , , ) {
-				void apply(String parameters[]){
+				public void apply(String parameters[]){
 					
 				}
 			}

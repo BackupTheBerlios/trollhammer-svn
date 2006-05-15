@@ -21,7 +21,7 @@ class Vente implements java.io.Serializable {
 	 * <p>Constructeur par defaut. Se contente d'initialiser la liste d'objets
 	 * avec une ArrayList d'Integer.</p>
      */
-    private Vente() {
+    Vente() {
         objets = new ArrayList<Integer>();
     }
 

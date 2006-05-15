@@ -453,6 +453,7 @@ class HdVPanel extends JComponent implements ActionListener
 		//majEncherePanel();
 		//majAdjPanel();
 		//majInfoAdjPanel();
+		Logger.log("HdVPanel",0,"### MAJCHAMPS.........###");
 		if(Client.client.getDernierEncherisseur() == null)
 			adjEnCours.setText("Aucune...");
 		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))

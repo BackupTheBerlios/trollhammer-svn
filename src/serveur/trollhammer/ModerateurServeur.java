@@ -12,6 +12,7 @@ import java.util.Set;
 
 class ModerateurServeur extends UtilisateurServeur {
 
+	// Constructeurs : START
     ModerateurServeur(Moderateur m) {
         super(m);
     }
@@ -19,15 +20,20 @@ class ModerateurServeur extends UtilisateurServeur {
     ModerateurServeur(String login, String nom, String prenom, String motdepasse) {
         this(new Moderateur(login, nom, prenom, motdepasse));
     }
+	// Constructeurs : END
 
+	// Méthodes du design : START
     /* doLogin() a été enlevée. Elle s'occupe désormais des deux classes.
-     * il serait parfaitement possible de faire une version lourdement
+     * Il serait parfaitement possible de faire une version lourdement
      * paramétrisée de doLogin() avec en paramètres rajoutés les réponses à donner,
      * mais j'ai (jr) préféré faire en sorte qu'elle autodétecte le type et
      * adapte les réponses...
      */
 
-    void disconnect() {
+	/**
+	 * Déconnecte le modérateur.
+	 */
+    public void disconnect() {
         Logger.log("ModerateurServeur", 0, LogType.INF, "[logout] déconnexion : login "+u.getLogin());
         u.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
@@ -42,5 +48,5 @@ class ModerateurServeur extends UtilisateurServeur {
         // Oui, c'est une correction (minime?) à la volée.
         Serveur.ventemanager.modoLeaving(u.getLogin());
     }
-
+	// Méthodes du design : END
 }

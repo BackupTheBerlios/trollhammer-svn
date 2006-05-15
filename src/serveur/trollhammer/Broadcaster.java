@@ -3,20 +3,21 @@ import java.util.Set;
 import java.util.List;
 
 /**
- * La classe se chargeant d'envoyer un message à tous les clients connectés
+ * <p>La classe se chargeant d'envoyer un message à tous les clients connectés
  * au serveur. Ses méthodes portent le nom des messages qui peuvent être envoyés 
- * en "broadcast".
+ * en "broadcast".<p>
  *
  * @author jruffin
  */
 class Broadcaster {
 
+	// Méthodes du design : START
 	/**
-	 * Envoie à tous les clients connectés l'état du participant p.
+	 * <p>Envoie à tous les clients connectés l'état du participant p.</p>
 	 *
 	 * @param	p	participant
 	 */
-    void etatParticipant(Participant p) {
+    public void etatParticipant(Participant p) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.etatParticipant(p);
@@ -24,12 +25,12 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés le message de l'utilisateur i.
+	 * <p>Envoie à tous les clients connectés le message de l'utilisateur i.</p>
 	 *
 	 * @param	m	message
 	 * @param	i	identifiant utilisateur
 	 */
-    void chat(String m, String i) {
+    public void chat(String m, String i) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.chat(m, i);
@@ -37,12 +38,13 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés l'enchère faite par l'utilisateur i.
+	 * <p>Envoie à tous les clients connectés l'enchère faite par l'utilisateur
+	 * i.</p>
 	 *
 	 * @param	prix	prix de l'enchère
 	 * @param	i		identifiant utilisateur
 	 */
-    void enchere(int prix, String i) {
+    public void enchere(int prix, String i) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.enchere(prix, i);
@@ -50,11 +52,11 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés l'événement e.
+	 * <p>Envoie à tous les clients connectés l'événement e.</p>
 	 *
 	 * @param	e	événement
 	 */
-    void evenement(Evenement e) {
+    public void evenement(Evenement e) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.evenement(e);
@@ -62,11 +64,11 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés la notification n.
+	 * <p>Envoie à tous les clients connectés la notification n.</p>
 	 *
 	 * @param	n	notification
 	 */
-    void notification(Notification n) {
+    public void notification(Notification n) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.notification(n);
@@ -74,11 +76,11 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés la liste des ventes l.
+	 * <p>Envoie à tous les clients connectés la liste des ventes l.</p>
 	 *
 	 * @param	l	ensemble de ventes
 	 */
-    void listeVentes(Set<Vente> l) {
+    public void listeVentes(Set<Vente> l) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.listeVentes(l);
@@ -86,13 +88,15 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés les détails de la vente v.
-	 * NB: la vente seule ne contient que la liste des identifiants de ses obj.
+	 * <p>Envoie à tous les clients connectés les détails de la vente v.</p>
+	 *
+	 * <p>NB: la vente seule ne contient que la liste des identifiants de ses
+	 * obj.</p>
 	 *
 	 * @param	v	une vente
 	 * @param	vo	liste d'objets de cette vente
 	 */
-    void detailsVente(Vente v, List<Objet> vo) {
+    public void detailsVente(Vente v, List<Objet> vo) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.detailsVente(v, vo);
@@ -100,15 +104,16 @@ class Broadcaster {
     }
 
 	/**
-	 * Envoie à tous les clients connectés le fait que l'utilisateur i est un
-	 * superviseur.
+	 * <p>Envoie à tous les clients connectés le fait que l'utilisateur i est un
+	 * superviseur.<p>
 	 *
 	 * @param	i	identifiant utilisateur
 	 */
-    void superviseur(String i) {
+    public void superviseur(String i) {
         Set<UtilisateurServeur> liste = Serveur.usermanager.getConnected();
         for(UtilisateurServeur u : liste) {
             u.superviseur(i);
         }
     }
+	// Méthodes du design : END
 }

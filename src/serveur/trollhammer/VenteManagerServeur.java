@@ -13,17 +13,19 @@ import java.util.ArrayList;
  * @author jruffin
  */
 class VenteManagerServeur {
-
 	private int lastId = -1; // l'identifiant de la dernière vente créée
 	private VenteServeur venteEnCours = null; // vente en cours, null si aucune
 	private List<VenteServeur> ventes; // liste des ventes, ordonnée selon t
 	private long timerDerniereEnchere = -1; // utilisé pour gén auto coupdeMASSE
 
+	// Constructeurs : START
     VenteManagerServeur() {
     	ventes = new ArrayList<VenteServeur>();
     	venteEnCours = null;
 	}
+	// Constructeurs : END
 
+	// Méthodes du design : START
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
 	 * fie qu'il faut ajouter l'objet à la fin de la liste. Les changements sont
@@ -399,7 +401,7 @@ class VenteManagerServeur {
         } else {
         	Logger.log("VenteManagerServeur", 2, LogType.INF,
 				"modoLeaving: il n'y a pas de vente en cours ou le modérateur"
-				+"n'en était pas le superviseur");
+				+ "n'en était pas le superviseur");
         }
     }
 

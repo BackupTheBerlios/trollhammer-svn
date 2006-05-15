@@ -1,8 +1,9 @@
 package trollhammer;
 
-/** Adaptateur Serveur pour la classe Objet.
- * Encapsule un Objet, en ajoutant les méthodes Objet spécifiques au Serveur.
- * Permet d'utiliser les mêmes getters/setters qu'une instance d'Objet.
+/**
+ * <p>Adaptateur Serveur pour la classe Objet. Encapsule un Objet, en ajoutant
+ * les méthodes Objet spécifiques au Serveur. Permet d'utiliser les mêmes
+ * getters/setters qu'une instance d'Objet.<p>
  *
  * @author Lionel Sambuc
  * @author squelette : Julien Ruffin
@@ -11,10 +12,13 @@ class ObjetServeur {
 
     Objet objet;
 
+	// Constructeurs : START
     public ObjetServeur(Objet o) {
         this.objet = o;
     }
-
+	// Constructeurs : END
+	
+	// Méthodes du design : START
 	//ls : modif on garde tout de même trace de qui a refusé l'objet...
     boolean invalider(String i) {
 		if (objet.getStatut() == StatutObjet.Propose) {
@@ -38,12 +42,6 @@ class ObjetServeur {
 		}
     }
 
-// cfrey: ça se passe au niveau de ObjectManagerServeur
-//    void sell(String i, Integer prix) {
-//
-//    }
-// ls : redéplacé ici, le fait que l'on le fasse sur l'objet lui-même garanti
-//      qu'il existe...
     /**
      * "Vend" l'objet, c-à-d affecte son prix de vente, l'acheteur, et change 
      * son statut.
@@ -56,7 +54,9 @@ class ObjetServeur {
 		this.setAcheteur(i);
 		this.setStatut(StatutObjet.Vendu);
 	}
-	
+	// Méthodes du design : END
+
+	// Setters & Getters : START
 	Objet getObjet() {
 		return objet;
 	}
@@ -132,4 +132,5 @@ class ObjetServeur {
     void setVendeur(String vendeur) {
         this.objet.setVendeur(vendeur);
     }
+   	// Setters & Getters : END
 }

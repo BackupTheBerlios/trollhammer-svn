@@ -3,99 +3,77 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Sous-classe Adaptateur côté Serveur pour Vente.
- * Permet d'exécuter les opérations sur la vente
- * spécifiques au Serveur.
- */
-
-/* jr : faites-en ce que vous voulez ! sous-type ou pas.
- * Ce bout de squelette date d'avant que je réalise
- * que l'approche 'référence' était
- * - selon moi - 
- * meilleure pour l'Utilisateur.
- * Surtout par rapport au Modérateur.
- *
- * LS : je ne vois absolument pas ce que ça change pour toi.. car de toute 
- * façons tu créer un objet de ta classe adapter, non? de plus dans tout les cas 
- * tu dois sauvegarder d'abord le utilisateurs, puis les modérateurs... Le seul
- * truc que ça change c'est que moi derrière je me retrouve avec des boucles
- * qui font des appels de fonction inutils pour chaque objet / utilisateur de
- * la liste... et vu que l'on traite que ça... ça va être super efficace...
- * dans le genre
- * - selon moi -
- * en plus si on parle de faire des adapter selon les notions de
- * "Design patterns", et bien comment dire... je sais!!
- * __no comment__
- *
+ * <p>Sous-classe Adaptateur côté Serveur pour Vente. Permet d'exécuter les 
+ * opérations sur la vente spécifiques au Serveur.</p>
  */
  
 class VenteServeur extends Vente {
 
-	public VenteServeur(int id, String nom, String description, long date, Mode mode, String superviseur) {
+	// Constructeurs : START
+	VenteServeur(int id, String nom, String description, long date, Mode mode, String superviseur) {
 		super(id, nom, description, date, mode, superviseur);
 	}
-	
+	// Constructeurs : END
+
+	// Méthodes du design : START
 	/**
-	 * Utilisé lors de la déconnection d'un modérateur. Le VenteManager nous
-	 * indique qu'un modérateur se déconnecte de la <b>vente en cours</b>.
+	 * <p>Utilisé lors de la déconnection d'un modérateur. Le VenteManager nous
+	 * indique qu'un modérateur se déconnecte de la <b>vente en cours</b>.</p>
 	 *
 	 * @param 	i	id modérateur qui se déconnecte de la vente en cours
 	 */
-    void modoLeaving(String i) {
+    public void modoLeaving(String i) {
 		// si le modérateur qui se déconnecte de la vente en cours est le
 		// superviseur ...
 		if (this.getSuperviseur().equals(i)) {
 			this.setSuperviseur(null);
 			this.setMode(Mode.Automatique);
-// ??? envoyer un événement VenteAutomatique ???
-// Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
+	// ??? envoyer un événement VenteAutomatique ???
+	// Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
 		}
     }
 
 	/**
-	 * Vérifie si un utilisateur est un superviseur de la vente ou pas.
+	 * <p>Vérifie si un utilisateur est un superviseur de la vente ou pas.</p>
 	 *
 	 * @param	s	identifiant utilisateur
 	 * @return	True si l'utilisateur est un superviseur de la vente, False 
 	 * 			sinon.
 	 */
-    boolean isSuperviseur(String s) {
-		// thou shall not follow the null pointer!
-		//return this.getSuperviseur().equals(s);
-		return this.getSuperviseur() != null ?
-			this.getSuperviseur().equals(s) : false;
+    public boolean isSuperviseur(String s) {
+		return this.getSuperviseur() != null ? this.getSuperviseur().equals(s) : false;
     }
 	
 	/**
-	 * Vente de l'objet si ce n'est pas le superviseur qui est le dernier
-	 * enchérisseur.
+	 * <p>Vente de l'objet si ce n'est pas le superviseur qui est le dernier
+	 * enchérisseur.</p>
 	 *
 	 * @param	i		identifiant du dernier enchérisseur (donc acheteur)
 	 * @param	prix	prix courant
 	 */
-	 //ls : arrrg, encors ces foutu probleme OO...
-    void sellObject(String i, int prix) {
+    public void sellObject(String i, int prix) {
 		if (i != this.getSuperviseur()) {
 			ObjetServeur o = new ObjetServeur(this.removeHead());
 			o.sell(i, prix);
 		}
-// si le dernier enchérisseur est le superviseur, pour l'instant il ne
-// se passe rien ici ...
+		Logger.log("VenteServeur", 1, LogType.ERR, "Vente d'un objet au Superviseur!!!");
+	// si le dernier enchérisseur est le superviseur, pour l'instant il ne
+	// se passe rien ici ...
     }
 
 	/**
-	 * Coupe la tête de la liste des objets d'une vente.
+	 * <p>Coupe la tête de la liste des objets d'une vente.</p>
 	 *
 	 * @return	l'objet qui était en tête de la liste
 	 */
-    Objet removeHead() {
+    public Objet removeHead() {
         return Serveur.objectmanager.getObjet(this.removeFirst()).getObjet();
     }
 
 	/**
-	 * Ajoute un objet (id) dans la liste des objets (ids) d'une vente. Si la
+	 * <p>Ajoute un objet (id) dans la liste des objets (ids) d'une vente. Si la
 	 * position d'insertion vaut -1, cela signifie insertion à la fin de la
-	 * liste.
+	 * liste.</p>
 	 *
 	 * @param	oid		identifiant de l'objet à insérer
 	 * @param	p		position dans la liste
@@ -105,7 +83,7 @@ class VenteServeur extends Vente {
 	 * @param	date	date de l'insertion (dateCourante dans 
 	 *					insérerObjetVente) ??? pas utilisé ici, à voir
 	 */
-    void insertObject(int oid, int p, String u, long date) {
+    public void insertObject(int oid, int p, String u, long date) {
 		if (-1 < p && p < this.getOIds().size()) {
 			this.addOId(p, oid);
 		} else {
@@ -122,25 +100,28 @@ class VenteServeur extends Vente {
 		// 	o.setModérateurQuiAAjoutéL'ObjetALaVente = u;
 		// }
     }
-
+	
+	//ls : Semble ne plus être utilisée... a virer?
 	/**
-	 * Enlève de la liste des objets d'une vente un objet identifié par son 
-	 * identifiant (pas sa position).
+	 * <p>Enlève de la liste des objets d'une vente un objet.Celui-ci est identifié par son 
+	 * identifiant et non pas sa position.</p>
 	 *
 	 * @param	oid		identifiant de l'objet
 	 * @param	u		identifiant de l'utilisateur ??? pas utilisé ici, à voir
 	 */
-    void removeObject(int oid, String u) {
+    public void removeObject(int oid, String u) {
 		this.removeOId(oid);
     }
-    
+	// Méthodes du design : END
+	
+	// Setters & Getters : START
     /**
-     * Retourne la liste des objets de la vente, qui sont au niveau de la vente
-     * stockés sous forme d'une liste d'identifiants.
+     * <p>Retourne la liste des objets de la vente, qui sont au niveau de la vente
+     * stockés sous forme d'une liste d'identifiants.</p>
      *
-     * @return	la liste des objets de la vente
+     * @return	La liste des objets de la vente.
      */
-	List<Objet> getObjets() {
+	public List<Objet> getObjets() {
 		List<Objet> r = new ArrayList<Objet>();
 		for (Integer oid : this.getOIds()) {
 			r.add(Serveur.objectmanager.getObjet(oid).getObjet());
@@ -149,18 +130,19 @@ class VenteServeur extends Vente {
 	}
 
     /**
-     * Retourne une copie du contenu de l'objet, sous la forme d'un objet
-     * de classe Vente.
-     * Utilisé pour la sérialisation : un simple cast, même explicite,
+     * <p>Retourne une copie du contenu de l'objet, sous la forme d'un objet
+     * de classe Vente.</p>
+	 *
+     * <p>Utilisé pour la sérialisation : un simple cast, même explicite,
      * de VenteServeur vers Vente pour l'expédier au Client ne marche
      * pas (provoque une ClassNotFoundException, car le Client
-     * essaie de récupérer un objet VenteServeur 'planqué', casté en Vente)
+     * essaie de récupérer un objet VenteServeur 'planqué', casté en Vente)</p>
      */
-    Vente copieVente() {
+    public Vente copieVente() {
         Vente v = new Vente(this.getId(), this.getNom(), this.getDescription(),
         	this.getDate(), this.getMode(), this.getSuperviseur(),
         	this.getOIds());
         return v;
     }
-
+   	// Setters & Getters : END
 }

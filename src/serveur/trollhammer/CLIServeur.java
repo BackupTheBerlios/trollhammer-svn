@@ -3,12 +3,12 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * <p>Interface Utilisateur du Serveur Trollhammer. C'est une interface en ligne
+ * <p>Interface utilisateur du Serveur Trollhammer. C'est une interface en ligne
  * de commande uniquement (ie une CLI). Elle permet de forger n'importe quelle
- * message envoyé par le serveur, ainsi que ceux recu par celui-ci.</p>
+ * message envoyé par le serveur, ainsi que ceux reçu par celui-ci.</p>
  *
  * <p>Pour ajouter une nouvelle commande, il suffit de l'ajouter au tableau, je 
- * vous laisser prendre exemplesur les deux déjà fournies...</p>
+ * vous laisser prendre exemple sur les deux déjà fournies...</p>
  *
  * <p>IMPORTANT : A l'heure actuelle n'implemente pas une commande par message,
  * et par conséquent cette classe n'est pas terminée...</p>
@@ -17,8 +17,10 @@ import java.util.HashSet;
  */
 
 class CLIServeur extends CLI {
-	public CLIServeur() {
-		//En premier, quelques commandes déjà implémentée : 
+
+	// Constructeurs : START
+	CLIServeur() {
+		//En premier, quelques commandes déjà implémentées : 
 		commandes.add(
 			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {
 				void apply(String parameters[]){
@@ -44,5 +46,5 @@ class CLIServeur extends CLI {
 		);
 */	
 	}
-
+	// Constructeurs : END
 }

@@ -79,7 +79,6 @@ public class Serveur {
     
     /* méthodes du design */
 
-//<<<<<<< .mine
 	/**
 	 * Le superviseur donne un coup de marteau. Les utilisateurs sont avertis de
 	 * cet événement. Si c'est le troisième coup, vendre l'objet au dernier en-
@@ -93,11 +92,8 @@ public class Serveur {
 	 */
 // mode automatique: problème ... qui envoie envoyerCoupdeMASSE ? il devrait y
 // avoir un timeout côté serveur qui génère des coups de marteau ...
-//=======
-//>>>>>>> .r207
     void envoyerCoupdeMASSE(String sender) {
-//<<<<<<< .mine
-/*		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
+		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
 		
 		switch (venteEnCours.isSuperviseur(sender) ? 1 : 0) {
 			case 0:
@@ -120,89 +116,35 @@ public class Serveur {
 				
 				switch (this.marteau) { // nombre de coups de marteau
 					case 0 :
-						this.marteau += 1;
+						this.marteau = 1;
 						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
 						break;
 					case 1 :
-						this.marteau += 1;
+						this.marteau = 2;
 						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
 						break;
 					case 2 :
 						this.marteau = 0;
 						Serveur.broadcaster.evenement(Evenement.Adjuge);
-						Serveur.objectmanager.sell(dernier_encherisseur, prix_courant, venteEnCours.getFirst());
+						venteEnCours.sellObject(dernier_encherisseur, prix_courant);
 						// actualiser vue client
-						Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
+						//Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
 						
 						if (venteEnCours.getOIds().size() == 0) {
 							// c'est le dernier objet qu'on a adjugé
 							Serveur.broadcaster.notification(Notification.FinVente);
 							Serveur.ventemanager.terminateVenteEnCours();
-// envoyer nouvelle liste de ventes ? ici ou là ?
+							VenteServeur nv = Serveur.ventemanager.getStarting();
+							if (nv != null) {
+								Serveur.broadcaster.detailsVente(nv, nv.getObjets());
+							}
 						}
 						break;
 					default :
-						break;
+						Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
 				}
 			default:
-=======
-*/
-		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
-		//1 m := isModérateur(s)
-		if (Serveur.usermanager.isModo(sender)) {
-			//2 [m]: vc :=getVenteEnCours()
-			VenteServeur vc = Serveur.ventemanager.getVenteEnCours();
-			//3 [m && vc != null]: sup := vc.isSuperviseur(s)
-			if (vc != null && vc.isSuperviseur(sender)) {
-				//4 [m && sup && vc != null]: ok := checkPAF(s)
-				//ls : Modif : CheckPAF retirée en tant que fonction a part, vu qu'elle
-				//     n'est utilisée qu'ici...
-				if (!vc.getObjets().isEmpty()) {
-					if (vc.getMode() == Mode.Automatique) {
-						vc.setMode(Mode.Manuel);
-						vc.setSuperviseur(sender);
-						Serveur.broadcaster.superviseur(sender);
-					}
-				}
-				//ls : modif étape "6 [marteau == X]" vers 
-				//     "6 [m && sup && vc != null && marteau == X]"
-				//	   afin de n'augmenter la velauer de marteau que lorsque 
-				//     l'on envoye l'événement aux clients risque de désynch 
-				//     autrement...
-				switch (marteau) {
-				case 0:
-					// 5a [m && sup && vc != null && marteau == 0]: événement(CoupDeMassePAF1)
-					Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
-					// 6a [m && sup && vc != null && marteau == 0]: marteau = 1
-					marteau = 1;
-					break;
-				case 1:
-					// 5b [m && sup && vc != null && marteau == 1]: événement(CoupDeMassePAF2)
-					Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
-					// 6b [m && sup && vc != null && marteau == 0]: marteau = 2
-					marteau = 2;
-					break;
-				case 2:
-					// 5c [m && sup && vc != null && marteau == 2]: événement(Adjugé)
-					Serveur.broadcaster.evenement(Evenement.Adjuge);
-					// 5c [m && sup && vc != null && marteau == 2]: sellObject(dernier_enchérisseur, prix_courant)
-					vc.sellObject(dernier_encherisseur, prix_courant);
-					if (vc.getObjets().isEmpty()) {
-						VenteServeur nv = Serveur.ventemanager.getStarting();
-						if (nv != null) {
-							Serveur.broadcaster.detailsVente(nv, nv.getObjets());
-						}
-						Serveur.ventemanager.remove(vc.getId());
-					}
-
-					// 6c [m && sup && vc != null && marteau == 0]: marteau = 0
-					marteau = 0;
-					break;
-				default:
-					Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
-				}
-			}
-//>>>>>>> .r207
+				break;
 		}
     }
 

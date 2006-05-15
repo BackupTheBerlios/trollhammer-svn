@@ -16,7 +16,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private FreshPanel listeObjetsPanel = null;
 	private CoolPanel infoAdjPanel = null;
 	private CoolPanel selectPanel = null;
-	private JLabel imgLabel = null;
+	private CoolPanel imgPanel = null;
 	private JScrollPane descrObjetPane = null;
 	private JTextArea descrObjetTextArea = null;
 	private FreshPanel sallePanel = null;
@@ -69,15 +69,18 @@ class HdVPanel extends JComponent implements ActionListener
 		infoAdjPanel = new CoolPanel("pref:grow, right:pref","pref, pref");
 		infoAdjPanel.addLabel("Prix d'adjudication: ", new CellConstraints(1,1));
 		infoAdjPanel.addC(prixEnCours, new CellConstraints(2,1));
-		infoAdjPanel.addLabel("Nombres de coups de marteau: ",new CellConstraints(1,2));
+		infoAdjPanel.addLabel("Nombre de coups de marteau: ",new CellConstraints(1,2));
 		infoAdjPanel.addC(new JLabel(""+nbCdM), new CellConstraints(2,2));
 		
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
 		selectPanel.setColumnGroups(new int[][] {{1,3}});
-		imgLabel = new JLabel("image non\ndisponible");
-		imgLabel.setPreferredSize(new Dimension(150,150));
-		imgLabel.setBorder(BorderFactory.createEtchedBorder());
+		imgPanel = new CoolPanel("center:pref:grow","pref:grow,pref,pref,pref:grow");
+		imgPanel.setRowGroups(new int[][] {{1,4}});
+		imgPanel.setPreferredSize(new Dimension(150,150));
+		imgPanel.setBorder(BorderFactory.createEtchedBorder());
+		imgPanel.addC(new JLabel("Image"), new CellConstraints(1,2));
+		imgPanel.addC(new JLabel("non disponible"), new CellConstraints(1,3));
 		descrObjetTextArea = new JTextArea();
 		descrObjetTextArea.setColumns(17);
 		descrObjetTextArea.setEditable(false);
@@ -86,7 +89,7 @@ class HdVPanel extends JComponent implements ActionListener
 		descrObjetPane = new JScrollPane(descrObjetTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		descrObjetPane.setWheelScrollingEnabled(true);
 		//selectPanel.addLabel("Image: ", new CellConstraints(1,1,3,1));
-		selectPanel.addC(imgLabel, new CellConstraints(2,2,CellConstraints.CENTER,CellConstraints.CENTER));
+		selectPanel.addC(imgPanel, new CellConstraints(2,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3,3,1));
 		selectPanel.addC(descrObjetPane, new CellConstraints(1,4,3,1));
 		
@@ -128,7 +131,7 @@ class HdVPanel extends JComponent implements ActionListener
 		enchereButton = new JButton("Enchérir!");
         enchereButton.setActionCommand("encherir");
         enchereButton.addActionListener(this);
-		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
+		encherePanel.addLabel("Prochain prix d'adjudication: ", new CellConstraints(1,1));
 		encherePanel.addC(prochaineEnchere, new CellConstraints(2,1));
 		encherePanel.addC(enchereButton, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
@@ -179,11 +182,11 @@ class HdVPanel extends JComponent implements ActionListener
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel("Liste des objets: ", cc.xyw(2,1,2));
-		builder.addLabel("Informations adjudications: ", cc.xy(4,1));
+		builder.addLabel("Informations Adjudication: ", cc.xy(4,1));
 		builder.add(listeObjetsPanel, cc.xyw(2,2,2));
 		builder.add(infoAdjPanel, cc.xy(4,2));
 		builder.addLabel("Information sur l'objet sélectionné: ", cc.xy(2,3));
-		builder.addLabel("Salle: ", cc.xy(3,3));
+		//builder.addLabel("Salle: ", cc.xy(3,3));
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
 		builder.add(sallePanel, cc.xy(3,4));

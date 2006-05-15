@@ -83,7 +83,6 @@ class VenteObjetPropose extends ObjetElementListe
 		super(obj);
 		//retirer = new JButton("Retirer");
 		
-        this.add(new JLabel(nom));
 		this.add(new JLabel("En attente de validation"));
 		//this.add(retirer);
 		

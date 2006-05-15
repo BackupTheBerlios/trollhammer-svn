@@ -185,7 +185,7 @@ class HdVPanel extends JComponent implements ActionListener
 		builder.addLabel("Informations Adjudication: ", cc.xy(4,1));
 		builder.add(listeObjetsPanel, cc.xyw(2,2,2));
 		builder.add(infoAdjPanel, cc.xy(4,2));
-		builder.addLabel("Information sur l'objet sélectionné: ", cc.xy(2,3));
+		builder.addLabel("Informations sur l'objet sélectionné: ", cc.xy(2,3));
 		//builder.addLabel("Salle: ", cc.xy(3,3));
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
@@ -219,6 +219,7 @@ class HdVPanel extends JComponent implements ActionListener
             Client.hi.executerModo(ActionModo.CoupDeMassePAF);
         } else if(event.getActionCommand().equals("encherir"))
 		{
+            enchereButton.setEnabled(false);
             Client.hi.executer(Action.Encherir);
         } else if(event.getActionCommand().equals("kick"))
 		{
@@ -460,6 +461,12 @@ class HdVPanel extends JComponent implements ActionListener
 
     void affichageEnchere(Integer prix, String i) {    
         texteLogln(i+" enchérit à "+prix);
+
+        // réactiver le bouton enchérir si l'enchérisseur
+        // n'est pas soi-même !
+        if(!i.equals(Client.session.getLogin())) {
+            enchereButton.setEnabled(true);
+        }
 		majChamps();
     }    
 	private void majChamps()
@@ -525,7 +532,9 @@ class HdVPanel extends JComponent implements ActionListener
             case DebutVente:     
                 texteLogln("- Démarrage de vente -");      
                 enchereButton.setEnabled(true);
-                cdmButton.setEnabled(true);
+                if(modo) {
+                    cdmButton.setEnabled(true);
+                }
                 break;     
             case VenteEnCours:    
                 if(!afficher_message_encours) {
@@ -535,11 +544,16 @@ class HdVPanel extends JComponent implements ActionListener
                     afficher_message_encours = false;
                 }
                 enchereButton.setEnabled(true);
-                cdmButton.setEnabled(true);
+                if(modo) {
+                    cdmButton.setEnabled(true);
+                }
                 break;      
             case FinVente:     
                 texteLogln("- Fin de la vente -");      
                 enchereButton.setEnabled(false);
+                if(modo) {
+                    cdmButton.setEnabled(false);
+                }
                 break;   
         }   
     }      
@@ -553,7 +567,9 @@ class HdVPanel extends JComponent implements ActionListener
         // VenteEnCours ou DebutVente, on désactive le bouton 'enchérir'.
         // tout pareil pour le kick et le coup de MASSE.
         enchereButton.setEnabled(false);
-        kickButton.setEnabled(false);
-        cdmButton.setEnabled(false);
+        if(modo) {
+            kickButton.setEnabled(false);
+            cdmButton.setEnabled(false);
+        }
     }
 }

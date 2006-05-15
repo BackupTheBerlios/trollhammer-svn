@@ -242,8 +242,11 @@ class VenteManagerServeur {
 	 * Retourne la liste des identifiants des ventes dans la liste (donc sans la 
 	 * vente en cours s'il y en a une).
 	 */
-	Set<Integer> getVIds() {
-		Set<Integer> r = new HashSet<Integer>();
+	List<Integer> getVIds() {
+		// jr : et vous pensiez avoir un ensemble ordonné pour l'affichage
+        // comme valeur de retour de la méthode ? *tousse tousse* ^^;
+        // Set<Integer> r = new HashSet<Integer>();
+        List<Integer> r = new ArrayList<Integer>();
 		for(VenteServeur v : ventes) {
 			r.add(v.getId());
 		}
@@ -494,12 +497,13 @@ class VenteManagerServeur {
 		this.venteEnCours = null;
 	}
 
-	private class VentesComparator implements Comparator {
-		public int compare(Object v1, Object v2) {
-			if (((VenteServeur) v1).getDate()
-				< ((VenteServeur) v2).getDate()) return -1;
-			if (((VenteServeur) v1).getDate()
-				> ((VenteServeur) v2).getDate()) return +1; 
+    // ajouté les paramètres génériques pour rendre le Comparator 'safe'
+    // (pas de warnings à la compil)
+	private class VentesComparator<T extends VenteServeur>
+            implements Comparator<VenteServeur> {
+		public int compare(VenteServeur v1, VenteServeur v2) {
+			if (v1.getDate() < v2.getDate()) return -1;
+			if (v1.getDate() > v2.getDate()) return +1; 
 			return 0; // v1.getDate == v2.getDate ...
 		}
 		// always safe not to override "equals"
@@ -541,7 +545,7 @@ class VenteManagerServeur {
 */
 			
 			this.ventes.add(v);
-			Collections.sort(this.ventes, new VentesComparator());
+			Collections.sort(this.ventes, new VentesComparator<VenteServeur>());
 //		}
 	}
 	

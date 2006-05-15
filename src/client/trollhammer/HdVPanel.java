@@ -278,6 +278,14 @@ class HdVPanel extends JComponent implements ActionListener
 			ObjetsVentegrp.add(o);
 			o.addActionListener(this);
 		}
+
+        // update graphique
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                listeObjetsPanel.validate();
+                listeObjetsPanel.repaint();
+            }
+        });
 	}
 
     void affichageListeParticipants(Set<Participant> pl) {

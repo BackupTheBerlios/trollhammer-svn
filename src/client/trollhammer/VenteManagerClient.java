@@ -48,7 +48,7 @@ class VenteManagerClient {
 
     VenteClient getVenteEnCours() {
         long min = Long.MAX_VALUE;
-        long prevmin = 0;
+        long prevmin = Long.MAX_VALUE;
         Vente encours = null;
 
         /* d'abord, on prend la vente la plus proche dans le temps */

@@ -114,6 +114,7 @@ public class Client {
             case DebutVente:
             case VenteEnCours:
                 Vente v = Client.ventemanager.getVenteEnCours();
+                System.out.println("v = "+v);
                 
                 if(v != null) {
                     Client.humain.setVente(v);
@@ -448,7 +449,18 @@ class ClientFSM {
     boolean listeParticipants() {
         // modif p.r. Protocol Model : toute la branche
         // HV3-HV5-HV6-HV7 est groupée sur HV4
-        return transition(Etat.HV2, Etat.HV4);
+        return transition(Etat.HV2, Etat.HV4)
+        // modif p.r. proto model : on veut aussi avoir des updates
+        // pendant que la vente se passe, et après avoir rentré dans l'onglet.
+        // ce sont des boucles : on revient simplement sur l'état qui est
+        // en train d'attendre une réponse qui n'a rien à voir avec l'état
+        // des participants (genre la réponse à une enchère)
+            || transition(Etat.HV4, Etat.HV4)
+            || transition(Etat.HV8, Etat.HV8)
+            || transition(Etat.HV9, Etat.HV9)
+            || transition(Etat.HV11, Etat.HV11)
+            || transition(Etat.HV12, Etat.HV12)
+            || transition(Etat.HV13, Etat.HV13);
     }
 
     boolean listeVentes() {
@@ -474,7 +486,18 @@ class ClientFSM {
     }
 
     boolean etatParticipant() {
-        return transition(Etat.HV10, Etat.HV4);
+        return transition(Etat.HV10, Etat.HV4)
+        // modif p.r. proto model : on veut aussi avoir des updates
+        // pendant que la vente se passe, et après avoir rentré dans l'onglet.
+        // ce sont des boucles : on revient simplement sur l'état qui est
+        // en train d'attendre une réponse qui n'a rien à voir avec l'état
+        // des participants (genre la réponse à une enchère)
+            || transition(Etat.HV4, Etat.HV4)
+            || transition(Etat.HV8, Etat.HV8)
+            || transition(Etat.HV9, Etat.HV9)
+            || transition(Etat.HV11, Etat.HV11)
+            || transition(Etat.HV12, Etat.HV12)
+            || transition(Etat.HV13, Etat.HV13);
     }
 
     boolean superviseur() {

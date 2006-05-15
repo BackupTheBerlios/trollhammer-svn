@@ -52,23 +52,29 @@ class VenteManagerClient {
         Vente encours = null;
 
         /* d'abord, on prend la vente la plus proche dans le temps */
+        Logger.log("VenteManagerClient", 2, LogType.DBG, "Tente de trouver Vente en cours dans liste de taille "+ventes.size());
         for(Vente v : ventes) {
-            prevmin = min;
             min = Math.min(min, v.getDate());
             if(min < prevmin) {
                 encours = v;
             }
+            prevmin = min;
+        }
+        Logger.log("VenteManagerClient", 2, LogType.DBG, "Vente potentiellement démarrée : "+encours);
+
+        if(encours != null) {
+            /* puis on vérifie si elle a démarré ! Si pas,
+             * alors on retourne null (ie. aucune vente n'est en cours)
+             */
+            if(encours.getDate() < Client.client.getDate()) {
+                Logger.log("VenteManagerClient", 2, LogType.DBG, "Trouvé vente en cours: "+encours);
+                return new VenteClient(encours.getId(), encours.getNom(), encours.getDescription(), encours.getDate(), encours.getMode(), encours.getSuperviseur());
+            } else {
+                Logger.log("VenteManagerClient", 2, LogType.DBG, "Vente non démarrée : "+encours);
+            }
         }
 
-        /* puis on vérifie si elle a démarré ! Si pas,
-         * alors on retourne null (ie. aucune vente n'est en cours)
-         */
-        if(encours.getDate() < Client.client.getDate()) {
-            return new VenteClient(encours.getId(), encours.getNom(), encours.getDescription(), encours.getDate(), encours.getMode(), encours.getSuperviseur());
-        } else {
-            return null;
-        }
-
+        return null; // rien trouvé
     }
 
     void detailsVente(Vente v, List<Objet> os) {

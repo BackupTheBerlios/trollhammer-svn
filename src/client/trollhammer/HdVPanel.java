@@ -270,6 +270,7 @@ class HdVPanel extends JComponent implements ActionListener
         }
 		lobjs = new JList(vobjs);
 		lobjs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lobjs.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		lobjs.setCellRenderer(new ListCellRenderer() {
 			// This is the only method defined by ListCellRenderer.
 			// We just reconfigure the JLabel each time we're called.

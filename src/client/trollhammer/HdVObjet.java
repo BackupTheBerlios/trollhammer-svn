@@ -9,6 +9,8 @@ import com.jgoodies.forms.layout.FormLayout;
 public class HdVObjet extends JPanel
 {
 	private FormLayout layout = null;
+	private CellConstraints cc = null;
+	private JLabel nomLabel = null;
 	private final Color couleur_fond = this.getBackground();
 	private final Color couleur_selectionne = Color.LIGHT_GRAY;
 	private Objet o = null;
@@ -18,6 +20,9 @@ public class HdVObjet extends JPanel
 		layout = new FormLayout("2dlu,pref,2dlu","2dlu,pref,2dlu");
 		this.setLayout(layout);
 		this.o = o;
+		cc = new CellConstraints();
+		nomLabel = new JLabel(o.getNom());
+		this.add(nomLabel, cc.xy(2,2));
 	}
 	void selectionne(boolean estSelectionne) {
         if(estSelectionne) {

@@ -37,11 +37,11 @@ class HdVPanel extends JComponent implements ActionListener
 	
 	private boolean modo = false;
 	private byte nbCdM = 0;
-	private double prixEnCours = 0.;
-	private double prochaineEnchere = 0.;
+	private JLabel prixEnCours = null;
+	private JLabel prochaineEnchere = null;
 	private Vector<HdVObjet> vobjs = null;
 	private JList lobjs = null;
-	private String adjEnCours = "";
+	private JLabel adjEnCours = null;
 	private ButtonGroup grpl = null;
     private String victime = null;
 	private ButtonGroup ObjetsVentegrp = null;
@@ -60,10 +60,10 @@ class HdVPanel extends JComponent implements ActionListener
 		listeObjetsPanel = new FreshPanel('x', true);
 		
 		//Informations adjudications
-		prixEnCours = Client.client.getPrixCourant();
+		prixEnCours = new JLabel(Client.client.getPrixCourant()+".-");
 		infoAdjPanel = new CoolPanel("pref:grow, right:pref","pref, pref");
 		infoAdjPanel.addLabel("Prix d'adjudication: ", new CellConstraints(1,1));
-		infoAdjPanel.addC(new JLabel(""+prixEnCours), new CellConstraints(2,1));
+		infoAdjPanel.addC(prixEnCours, new CellConstraints(2,1));
 		infoAdjPanel.addLabel("Nombres de coups de marteau: ",new CellConstraints(1,2));
 		infoAdjPanel.addC(new JLabel(""+nbCdM), new CellConstraints(2,2));
 		
@@ -106,23 +106,23 @@ class HdVPanel extends JComponent implements ActionListener
 		
 		//Adjudication en cours
 		if(Client.client.getDernierEncherisseur() == null)
-			adjEnCours = "Aucune...";
+			adjEnCours = new JLabel("Aucune...");
 		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))
-			adjEnCours = "EN VOTRE FAVEUR";
+			adjEnCours = new JLabel("EN VOTRE FAVEUR");
 		else
-			adjEnCours = "CONTRE VOUS!";
+			adjEnCours = new JLabel("CONTRE VOUS!");
 		adjPanel = new CoolPanel("fill:pref:grow","pref,center:pref");
 		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
-		adjPanel.addLabel(adjEnCours, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
+		adjPanel.add(adjEnCours, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
 		//enchère
-		prochaineEnchere = Client.client.getNouveauPrix();
+		prochaineEnchere = new JLabel(Client.client.getNouveauPrix()+".-");
 		encherePanel = new CoolPanel("pref:grow,right:pref,","pref:grow,pref");
 		enchereButton = new JButton("Enchérir!");
         enchereButton.setActionCommand("encherir");
         enchereButton.addActionListener(this);
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
-		encherePanel.addC(new JLabel(""+prochaineEnchere), new CellConstraints(2,1));
+		encherePanel.addC(prochaineEnchere, new CellConstraints(2,1));
 		encherePanel.addC(enchereButton, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
 		//Chat
@@ -224,15 +224,17 @@ class HdVPanel extends JComponent implements ActionListener
         {
             // seulement les HdVUsers lancent ceci. On peut donc faire
             // un cast sur l'objet déclencheur.
-            HdVUser selectionne = (HdVUser) event.getSource();
-            this.victime = selectionne.getLogin();
+            //HdVUser selectionne = (HdVUser) event.getSource();
+            //this.victime = selectionne.getLogin();
+			//becholey: pask on se la pète comme des porcs!!
+			this.victime = ((HdVUser) event.getSource()).getLogin();
         }
 		else if(event.getActionCommand().equals("afficheObjet"))
 		{
-			HdVObjet objetSelectionne = (HdVObjet) event.getSource();
-			descrObjetTextArea.setText(objetSelectionne.getDescription());
-			//objetSelectionne.selectionne(true);
-			
+			//HdVObjet objetSelectionne = (HdVObjet) event.getSource();
+			//descrObjetTextArea.setText(objetSelectionne.getDescription());
+			//becholey: pask on se la pète enocre plus comme des porcs!!
+			descrObjetTextArea.setText(((HdVObjet) event.getSource()).getDescription());
 		}
 	}
 
@@ -282,6 +284,31 @@ class HdVPanel extends JComponent implements ActionListener
             }
         }
 		affichageListeObjets();
+	}
+	private void affichageListeObjets()
+	{
+		listeObjetsPanel.removeAll();
+		
+		ObjetsVentegrp = new ButtonGroup();
+		for(HdVObjet o: vobjs)
+		{
+			
+			o.addActionListener(this);
+			o.setActionCommand("afficheObjet");
+			listeObjetsPanel.add(o);
+			ObjetsVentegrp.add(o);
+			//Logger.log("HdVPanel",0,"@@@ ADD add ADD @@@");
+		}
+		
+        // update graphique
+        SwingUtilities.invokeLater(new Runnable()
+								   {
+            public void run()
+		{
+                listeObjetsPanel.validate();
+                listeObjetsPanel.repaint();
+		}
+								   });
 	}
 	/*public void affichageVente(Vente v) //version avec une JList
 	{
@@ -341,31 +368,7 @@ class HdVPanel extends JComponent implements ActionListener
 								   }
 								   }); // pask on s'la pète!!!
 	}*/
-	private void affichageListeObjets()
-	{
-				listeObjetsPanel.removeAll();
-				
-		ObjetsVentegrp = new ButtonGroup();
-		for(HdVObjet o: vobjs)
-		{
-			
-			o.addActionListener(this);
-			o.setActionCommand("afficheObjet");
-			listeObjetsPanel.add(o);
-			ObjetsVentegrp.add(o);
-			//Logger.log("HdVPanel",0,"@@@ ADD add ADD @@@");
-		}
-
-        // update graphique
-        SwingUtilities.invokeLater(new Runnable()
-								   {
-            public void run()
-		{
-                listeObjetsPanel.validate();
-                listeObjetsPanel.repaint();
-            }
-        });
-	}
+	
 
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();
@@ -447,11 +450,33 @@ class HdVPanel extends JComponent implements ActionListener
     }    
 	private void majChamps()
 	{
-		majEncherePanel();
-		majAdjPanel();
-		majInfoAdjPanel();
+		//majEncherePanel();
+		//majAdjPanel();
+		//majInfoAdjPanel();
+		if(Client.client.getDernierEncherisseur() == null)
+			adjEnCours.setText("Aucune...");
+		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))
+			adjEnCours.setText("EN VOTRE FAVEUR");
+		else
+			adjEnCours.setText("CONTRE VOUS!");
+		prochaineEnchere.setText(""+Client.client.getNouveauPrix());
+		prixEnCours.setText(""+Client.client.getPrixCourant());
+		SwingUtilities.invokeLater(
+								   new Runnable()
+								   {
+									   public void run()
+								   {
+										   adjPanel.validate();
+										   adjPanel.repaint();
+										   encherePanel.validate();
+										   encherePanel.repaint();
+										   infoAdjPanel.validate();
+										   infoAdjPanel.repaint();
+								   }
+								   }); // pask on s'la pète!!!
+		
 	}
-	private void majAdjPanel()
+	/*private void majAdjPanel()
 	{
 		prochaineEnchere = Client.client.getNouveauPrix();
 		try
@@ -479,7 +504,7 @@ class HdVPanel extends JComponent implements ActionListener
 		{
 			infoAdjPanel.repaint();
 		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de infoAdjPanel. repaint!!!!!!!!!!!!!!!!!!!");}
-	}
+	}*/
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     

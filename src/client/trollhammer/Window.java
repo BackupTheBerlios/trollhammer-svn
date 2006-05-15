@@ -261,6 +261,8 @@ class Window implements ActionListener
                 this.valider.affichageListeObjets(ol); break;
             case Planification:
                 this.planifier.affichageListeObjets(ol); break;
+            case Achat:
+                this.achat.affichageListeObjets(ol); break;
         }
     }
 	

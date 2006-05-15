@@ -25,9 +25,10 @@ public class HdVUser extends JRadioButton
 			this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/userIconSelected.gif"));
 		}
 
-        // mettre son nom en rouge !
+        // mettre son nom en rouge non en gras !
         if(login.equals(Client.session.getLogin())) {
-            this.setForeground(new Color(33,94,33));
+            //this.setForeground(new Color(33,94,33));
+			this.setFont(new Font(this.getFont().getFontName(),Font.BOLD,this.getFont().getSize()+1));
         }
 		
 	}

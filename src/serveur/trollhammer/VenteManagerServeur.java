@@ -493,12 +493,19 @@ class VenteManagerServeur {
 		int lastPos = this.ventes.size()-1;
 		VenteServeur lastV = null;
 		
-		if (lastPos > -1) lastV = this.ventes.get(lastPos);
+		if (lastPos > -1) {
+			Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: lastPos="+lastPos);
+			lastV = this.ventes.get(lastPos);
+		}
 		
 		if (lastV == null
 			|| v.getDate() >= lastV.getDate()) {
 			this.ventes.add(v);
+			if (lastV == null) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: lastV null");
+			if (lastV != null && v.getDate() >= lastV.getDate()) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() >= lastV.getDate()");
 		} else {
+			if (lastV != null) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: lastV != null");
+			if (v.getDate() < lastV.getDate()) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() < lastV.getDate()"); 
 			for(int i = 0; i <= lastPos; i++) {
 				if (v.getDate() < this.ventes.get(i).getDate()) {
 					this.ventes.add(i, v);
@@ -522,7 +529,8 @@ class VenteManagerServeur {
 	void donnerCoupdeMASSE() {
 		
 		if (venteEnCours != null
-			&& venteEnCours.getMode() == Mode.Automatique) {
+			&& venteEnCours.getMode() == Mode.Automatique
+			&& Serveur.serveur.getDernierEncherisseur() != null) {
 			
 			if (Serveur.serveur.getDate() >
 				this.timerDerniereEnchere + 60*1000) {

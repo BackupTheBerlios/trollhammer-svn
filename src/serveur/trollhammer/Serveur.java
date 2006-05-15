@@ -198,5 +198,9 @@ public class Serveur {
     long getDate() {
         return System.currentTimeMillis();
     }
+    
+    public String getDernierEncherisseur() {
+    	return this.dernier_encherisseur;
+    }
 
 }

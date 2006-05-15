@@ -41,7 +41,7 @@ public class Client {
         //Client.hi.ecrireChat("lol");
         //Client.hi.executer(Action.Deconnecter);
 
-        attendre();
+        new CLIClient().interprete();
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */
@@ -73,50 +73,6 @@ public class Client {
         Client.fsm = new ClientFSM();
 
         Logger.log("Client", 0, "Client démarré.");
-    }
-
-    /* jr : attendre en acceptant, éventuellement, des commandes simples.
-	 * Permet un peu de contrôle sur les autres threads.
-	*/
-
-    private static void attendre() {
-        try {
-            String commande;
-            java.io.BufferedReader lr = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(System.in));
-
-            do {
-                commande = lr.readLine();
-                interpreter(commande);
-            } while(!commande.equals("q"));
-
-            lr.close();
-        } catch (Exception e) {
-            Logger.log("Client", 0, "utilisateur mauvais : exception sur stdin : "+e.getMessage());
-        }
-    }
-
-    private static void interpreter(String commande) {
-        // on découpe la commande en tokens. WOOOSH.
-        String tokens[] = commande.split("\\s");
-
-        // puis on interprète.
-        
-        if(tokens[0].equals("login")) {
-            if(tokens.length != 4) {
-                System.out.println("login : se connecter à un serveur.\n"
-                        +"Syntaxe : login ADRESSE LOGIN MOTDEPASSE");
-            } else {
-                Client.hi.connecter(tokens[2], tokens[3], tokens[1]);
-            }
-        } else if(tokens[0].equals("logout")) {
-            if(tokens.length != 1) {
-                System.out.println("logout : se déconnecter du serveur.\n"
-                        +"Ne prend pas d'arguments");
-            } else {
-                Client.hi.executer(Action.Deconnecter);
-            }
-        }
     }
 
     /* méthodes du Design */

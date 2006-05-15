@@ -45,7 +45,7 @@ public class Serveur {
         
         // FIN DU TEST
         
-		new CLI().interprete();
+		new CLIServeur().interprete();
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */

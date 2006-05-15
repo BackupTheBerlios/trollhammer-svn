@@ -17,23 +17,49 @@ import java.util.HashSet;
  */
 
 class CLI {
+	/**
+	 * <p>Modélise une commande pour les composant de TrollHammer.</p>
+	 *
+	 * @author Lionel Sambuc
+	 */
 	abstract class CMD {
-		String nom;
-		int nb = 0;
-		String params[];
-		String helpSum = "default message.";
-		String helpSyntax = "none";
+		private String nom;
+		private int nb = 0;
+		private String helpSum = "default message.";
+		private String helpSyntax = "none";
 
-		abstract void apply(String parameters[]);
-		
-		String helpStr() {
+		/**
+		 * <p>Fonction à exécuter lors de l'appel de la commande.</p>
+		 */
+		public abstract void apply(String parameters[]);
+
+		/**
+		 * <p>Renvoie la chaine d'aide, au lieu de l'afficher.</p>
+		 */
+		public String helpStr() {
 			return this.helpSum + "\n\t\tSyntax : " + this.helpSyntax;
 		}
 		
-		void helpPrint() {
+		/**
+		 * <p>Affiche l'aide de la commande à l'aide de Logger.log.</p>
+		 *
+		 * @see Logger
+		 */
+		public void helpPrint() {
 			Logger.log("CLI", 1, LogType.INF, "[help] " + this.helpSum + "\n\t\tSyntax : " + this.helpSyntax);
 		}
 		
+		/**
+		 * <p>Constructeur de CMD.</p>
+		 *
+		 * @param nom	Nom de la commande, ie la chaine de caractère à taper
+		 *				pour l'invoquer.
+		 * @param nb	Nombre d'argument de la commande (minimum 1, ie le nom
+		 *				de celle-ci).
+		 * @param hsum	Texte de l'aide (expliquation)
+		 * @param hsyn	Texte de l'aide, syntax de la commande, avec description
+		 *				des paramètres si nécessaire.
+		 */
 		public CMD(String nom, int nb, String hsum, String hsyn) {
 			this.nb = nb;
 			this.nom = nom;
@@ -45,6 +71,9 @@ class CLI {
 	
 	Set<CMD> commandes = new HashSet<CMD>();
 	
+	/**
+	 * <p>Démarre l'interprétation des commandes tapées sur STDIN.</p>
+	 */
 	public void interprete() {
 		String commande;
 		String tokens[];
@@ -73,7 +102,7 @@ class CLI {
 		//En premier, quelques commandes déjà implémentée : 
 		commandes.add(
 			new CMD("help", 1, "help - affiche l'aide ainsi que toutes les commandes disponibles.", "help") {
-				void apply(String parameters[]) {
+				public void apply(String parameters[]) {
 					String msg = "Liste des commandes disponible : \n";
 					for(CMD p : commandes) {
 						if (p != this) {

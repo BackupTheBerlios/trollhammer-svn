@@ -1,7 +1,9 @@
 package trollhammer;
+
 /**
-* Contient toutes les énumerations utilisée par Trollhammer.
-*/
+ * Contient toutes les énumerations utilisée par Trollhammer.
+ */
+
 enum Action { Encherir, Deconnecter };
 enum ActionModo { CoupDeMassePAF };
 enum Onglet { Achat, Vente, HotelDesVentes, Planification, Validation, GestionUtilisateurs };

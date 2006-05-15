@@ -3,6 +3,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Classe Manager pour les Ventes.
@@ -491,6 +493,17 @@ class VenteManagerServeur {
 	void terminateVenteEnCours() {
 		this.venteEnCours = null;
 	}
+
+	private class VentesComparator implements Comparator {
+		public int compare(Object v1, Object v2) {
+			if (((VenteServeur) v1).getDate()
+				< ((VenteServeur) v2).getDate()) return -1;
+			if (((VenteServeur) v1).getDate()
+				> ((VenteServeur) v2).getDate()) return +1; 
+			return 0; // v1.getDate == v2.getDate ...
+		}
+		// always safe not to override "equals"
+	}
 	
 	/**
 	 * Ajoute une vente à la liste des ventes, à la bonne position en respectant
@@ -499,7 +512,7 @@ class VenteManagerServeur {
 	 * @param	v	vente serveur
 	 */
 	private void addVente(VenteServeur v) {
-		int lastPos = this.ventes.size()-1;
+/*		int lastPos = this.ventes.size()-1;
 		VenteServeur lastV = null;
 		
 		if (lastPos > -1) {
@@ -514,21 +527,28 @@ class VenteManagerServeur {
 			if (lastV != null && v.getDate() >= lastV.getDate()) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() >= lastV.getDate()");
 		} else {
 			if (lastV != null) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: lastV != null");
-			if (v.getDate() < lastV.getDate()) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() < lastV.getDate()"); 
+			if (v.getDate() < lastV.getDate()) Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() < lastV.getDate()");
+			
 			for(int i = 0; i <= lastPos; i++) {
 				if (v.getDate() < this.ventes.get(i).getDate()) {
+					Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() < ventes.get("+i+").getDate()");
 					this.ventes.add(i, v);
+					Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente:  added v at position "+i+"in ventes");
 					return;
 				}
+				Logger.log("VenteManagerServeur", 2, LogType.DBG, "addVente: v.getDate() >= ventes.get("+i+").getDate()");
 			}
-		}
+*/
+			
+			this.ventes.add(v);
+			Collections.sort(this.ventes, new VentesComparator());
+//		}
 	}
 	
 	// c'est un setter ....
 	void setTimerDerniereEnchere(long date) {
 		this.timerDerniereEnchere = date;
 	}
-
 	
 	/**
 	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans

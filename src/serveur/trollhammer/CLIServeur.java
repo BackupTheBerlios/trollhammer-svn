@@ -47,13 +47,13 @@ class CLIServeur extends CLI {
 					if (vte != null) {
 						cal.setTimeInMillis(vte.getDate());
 						String maDate = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.YEAR)+" "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
-						liste += "\t" + maDate + " : " + vte.getId() + " - " + vte.getNom() + " <-- en cours !\n";
+						liste = liste + "\t" + maDate + " : " + vte.getId() + " - " + vte.getNom() + " <-- en cours !\n";
 					}
 					for (int vid : Serveur.ventemanager.getVIds()) {
 						vte = Serveur.ventemanager.getVente(vid);
 						cal.setTimeInMillis(vte.getDate());
 						String maDate = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.YEAR)+" "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
-						liste += "\t" + maDate + " : " + vid + " - " + vte.getNom() + "\n";
+						liste = liste + "\t" + maDate + " : " + vid + " - " + vte.getNom() + "\n";
 					}
 					Logger.log("CMD", 1, LogType.INF, liste);
 				}

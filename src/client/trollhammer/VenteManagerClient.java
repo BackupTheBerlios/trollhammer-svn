@@ -68,7 +68,7 @@ class VenteManagerClient {
              */
             if(encours.getDate() < Client.client.getDate()) {
                 Logger.log("VenteManagerClient", 2, LogType.DBG, "Trouvé vente en cours: "+encours);
-                return new VenteClient(encours.getId(), encours.getNom(), encours.getDescription(), encours.getDate(), encours.getMode(), encours.getSuperviseur());
+                return new VenteClient(encours.getId(), encours.getNom(), encours.getDescription(), encours.getDate(), encours.getMode(), encours.getSuperviseur(), encours.getOIds());
             } else {
                 Logger.log("VenteManagerClient", 2, LogType.DBG, "Vente non démarrée : "+encours);
             }

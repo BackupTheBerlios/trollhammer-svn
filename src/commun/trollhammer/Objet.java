@@ -1,5 +1,8 @@
 package trollhammer;
 
+/**
+ * <p>Classe qui modélise un objet mis en vente.</p>
+ */
 class Objet implements java.io.Serializable {
     
     private int id;
@@ -12,76 +15,83 @@ class Objet implements java.io.Serializable {
     private String acheteur;
     private String vendeur;
 
-    int getId() {
+	// Constructeurs : START
+	// Constructeurs : END
+
+	// Méthodes du design : START
+	// Méthodes du design : END
+	
+	// Setters & Getters : START
+    public int getId() {
         return this.id;
     }
 
-    String getNom() {
+    public String getNom() {
         return this.nom;
     }
 
-    String getDescription() {
+    public String getDescription() {
         return this.description;
     }
 
-    String getModerateur() {
+    public String getModerateur() {
         return this.moderateur;
     }
 
-    int getPrixDeBase() {
+    public int getPrixDeBase() {
         return this.prix_de_base;
     }
 
-    int getPrixDeVente() {
+    public int getPrixDeVente() {
         return this.prix_de_vente;
     }
 
-    StatutObjet getStatut() {
+    public StatutObjet getStatut() {
         return this.statut;
     }
 
-    String getAcheteur() {
+    public String getAcheteur() {
         return this.acheteur;
     }
 
-    String getVendeur() {
+    public String getVendeur() {
         return this.vendeur;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    void setNom(String nom) {
+    public void setNom(String nom) {
         this.nom = nom;
     }
 
-    void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    void setModerateur(String moderateur) {
+    public void setModerateur(String moderateur) {
         this.moderateur = moderateur;
     }
 
-    void setPrixDeBase(int prix_de_base) {
+    public void setPrixDeBase(int prix_de_base) {
         this.prix_de_base = prix_de_base;
     }
 
-    void setPrixDeVente(int prix_de_vente) {
+    public void setPrixDeVente(int prix_de_vente) {
         this.prix_de_vente = prix_de_vente;
     }
 
-    void setStatut(StatutObjet statut) {
+    public void setStatut(StatutObjet statut) {
         this.statut = statut;
     }
 
-    void setAcheteur(String acheteur) {
+    public void setAcheteur(String acheteur) {
         this.acheteur = acheteur;
     }
 
-    void setVendeur(String vendeur) {
+    public void setVendeur(String vendeur) {
         this.vendeur = vendeur;
     }
-
+   	// Setters & Getters : END
 }

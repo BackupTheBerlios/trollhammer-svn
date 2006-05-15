@@ -3,17 +3,15 @@ import java.util.Set;
 import java.util.List;
 
 /**
-* Déclaration des objets-messages qui sont transmis entre le client 
-* et le serveur.
-*
-* <p>Ces objets sont envoyés tels quels commes messages
-* entre Serveur et Client et vice-versa.
-* Cette manière de faire permet la création rapide
-* (syntaxiquement) des messages quand on les expédie,
-* ainsi que la lecture tout aussi rapide de l'autre côté.
-* L'inspiration en vient fortement des 'case classes' de Scala.
-* </p>
-*/
+ * <p>Déclaration des objets-messages qui sont transmis entre le client et le 
+ * serveur.</p>
+ *
+ * <p>Ces objets sont envoyés tels quels commes messages entre Serveur et Client
+ * et vice-versa. Cette manière de faire permet la création rapide
+ * (syntaxiquement) des messages quand on les expédie, ainsi que la lecture tout
+ * aussi rapide de l'autre côté. L'inspiration en vient fortement des 
+ * 'case classes' de Scala.</p>
+ */
 abstract class Message implements java.io.Serializable {
 }
 

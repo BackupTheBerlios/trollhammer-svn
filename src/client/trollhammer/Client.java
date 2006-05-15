@@ -102,7 +102,7 @@ public class Client {
             v.removeFirst();
             Client.ventemanager.getVenteEnCours().setPrices();
             // nécessaire pour garder une certaine cohérence
-            Client.setDernierEncherisseur(null);
+            Client.client.setDernierEncherisseur(null);
             // update de la vue vente !
             Client.hi.affichageVente(Client.ventemanager.getVenteEnCours());
         } else if (v != null && e == Evenement.VenteAutomatique) {

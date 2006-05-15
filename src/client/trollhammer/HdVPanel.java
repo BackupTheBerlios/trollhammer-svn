@@ -17,15 +17,14 @@ class HdVPanel extends JComponent implements ActionListener
 	private CoolPanel infoAdjPanel = null;
 	private CoolPanel selectPanel = null;
 	private JLabel imgLabel = null;
-	private CoolPanel descrObjetPanel = null;
 	private JScrollPane descrObjetPane = null;
-	private JTextArea descrObjetTextArea = null; //avant JTextArea
+	private JTextArea descrObjetTextArea = null;
 	private String descrObjet = null;
 	private FreshPanel sallePanel = null;
 	private CoolPanel logPanel = null;
 	private JScrollPane logPane = null; //inside Pane
 	private String log = null;
-	private JTextArea logArea = null; //avant JTextArea
+	private JTextArea logArea = null;
 	private CoolPanel adjPanel = null;
 	private CoolPanel encherePanel = null;
 	private JButton enchereButton = null;
@@ -68,24 +67,22 @@ class HdVPanel extends JComponent implements ActionListener
 		infoAdjPanel.addLabel("Nombres de coups de marteau: ",new CellConstraints(1,2));
 		
 		//Informations sur l'objets sélectionné
-		selectPanel = new CoolPanel("left:pref:grow","pref,pref,pref,fill:pref:grow");
+		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
+		selectPanel.setColumnGroups(new int[][] {{1,3}});
 		imgLabel = new JLabel("image non\ndisponible");
 		imgLabel.setPreferredSize(new Dimension(150,150));
 		imgLabel.setBorder(BorderFactory.createEtchedBorder());
-		descrObjetPanel = new CoolPanel("fill:pref","fill:pref:grow");
-		//descrObjet = "Bonjour je m'appelle Monsieur Pougnasse et j'aime les noix... pas vous??";
 		descrObjetTextArea = new JTextArea(descrObjet);
-		descrObjetTextArea.setRows(7);
+		descrObjetTextArea.setColumns(17);
 		descrObjetTextArea.setEditable(false);
 		descrObjetTextArea.setWrapStyleWord(true);
 		descrObjetTextArea.setLineWrap(true);
 		descrObjetPane = new JScrollPane(descrObjetTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		descrObjetPane.setWheelScrollingEnabled(true);
-		descrObjetPanel.add(descrObjetPane, new CellConstraints(1,1));
-		selectPanel.addLabel("Image: ", new CellConstraints(1,1));
-		selectPanel.addC(imgLabel, new CellConstraints(1,2));
-		selectPanel.addLabel("Description: ", new CellConstraints(1,3));
-		selectPanel.addC(descrObjetPane, new CellConstraints(1,4));
+		selectPanel.addLabel("Image: ", new CellConstraints(1,1,3,1));
+		selectPanel.addC(imgLabel, new CellConstraints(2,2));
+		selectPanel.addLabel("Description: ", new CellConstraints(1,3,3,1));
+		selectPanel.addC(descrObjetPane, new CellConstraints(1,4,3,1));
 		
 		//Salle//test...
 		//sup = new HdVUser("Mr.Smith",true,true);
@@ -121,12 +118,12 @@ class HdVPanel extends JComponent implements ActionListener
 		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
 		
 		//enchère
-		encherePanel = new CoolPanel("pref:grow,pref,pref","pref");
+		encherePanel = new CoolPanel("pref:grow,pref,","pref:grow,pref");
 		enchereButton = new JButton("Enchérir!");
         enchereButton.setActionCommand("encherir");
         enchereButton.addActionListener(this);
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
-		encherePanel.addC(enchereButton, new CellConstraints(3,1));
+		encherePanel.addC(enchereButton, new CellConstraints(1,2));
 		
 		//Chat
 		chatPanel = new CoolPanel("fill:pref","pref, pref");
@@ -143,7 +140,7 @@ class HdVPanel extends JComponent implements ActionListener
 		chatPanel.addC(chatButton, new CellConstraints(1,2));
 
 		//Panel des commandes
-		cmdPanel = new CoolPanel("left:pref,pref,fill:pref:grow, right:pref","pref");
+		cmdPanel = new CoolPanel("pref,pref,pref","pref");
 		logOutButton = new JButton("Déconnecter");
         logOutButton.setActionCommand("disconnect");
         logOutButton.addActionListener(this);
@@ -176,7 +173,7 @@ class HdVPanel extends JComponent implements ActionListener
 		builder.addLabel("Informations adjudications: ", cc.xy(4,1));
 		builder.add(listeObjetsPanel, cc.xyw(2,2,2));
 		builder.add(infoAdjPanel, cc.xy(4,2));
-		builder.addLabel("Information sur l'objet sélectionné", cc.xy(2,3));
+		builder.addLabel("Information sur l'objet sélectionné: ", cc.xy(2,3));
 		builder.addLabel("Salle: ", cc.xy(3,3));
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
@@ -292,7 +289,6 @@ class HdVPanel extends JComponent implements ActionListener
         }
         }); // pask on s'la pète!!!
     }
-
 	void affichageListeObjets(Set<Objet> ol)
 	{
 		lstObjVect = new Vector<HdVObjet>();
@@ -303,51 +299,4 @@ class HdVPanel extends JComponent implements ActionListener
         }
 		//listeObjetsPanel.setListData(lstObjVect); beuhaaaaah va pas
 	}
-
-    void affichage(Evenement e) {
-		switch (e) {
-		case CoupDeMassePAF1:
-            texteLog("--- PREMIER COUP DE MARTEAU ---");
-			break;
-		case CoupDeMassePAF2:
-            texteLog("--- SECOND COUP DE MARTEAU ---");
-			break;
-		case Adjuge: 
-            texteLog("--- ADJUDICATION ---\n"
-                    +"Objet : "
-                    // le nom de l'objet qui vient d'être vendu (ouf!)
-                    +Client.objectmanager.getObjet(
-                        Client.ventemanager.getVenteEnCours().getFirst()
-                    ).getNom()+"\n"
-                    +"Vendu à : "
-                    +Client.client.getDernierEncherisseur()
-                    +"Au prix de "
-                    +Client.client.getPrixCourant()
-                    );
-			break;
-		case VenteAutomatique: 
-            texteLog("--- Vente en mode automatique ---");
-			break;
-		default : 
-		}
-    }
-
-    void affichageEnchere(Integer prix, String i) {
-        texteLog(i+" enchérit à "+prix);
-    }
-
-    void message(Notification n) {
-        switch (n) {
-            case DebutVente:
-                texteLog("--- Vente en cours ---");
-                break;
-            case VenteEnCours:
-                texteLog("--- Démarrage de la vente ---");
-                break;
-            case FinVente:
-                texteLog("--- Fin de la vente ---");
-                break;
-        }
-    }
-
 }

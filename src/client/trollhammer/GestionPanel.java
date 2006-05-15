@@ -73,7 +73,7 @@ class GestionPanel implements ActionListener
 		
 		droitePane = new JScrollPane(droitePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		droitePane.setBorder(BorderFactory.createEtchedBorder());
-
+		
         liste = new JList();
         liste.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         liste.setCellRenderer(new ListCellRenderer() {
@@ -218,6 +218,9 @@ class GestionPanel implements ActionListener
             }
             utilisateur_selectionne.setStatut(StatutLogin.Banni);
             Client.hi.editerUtilisateur(Edition.Modifier, utilisateur_selectionne);
+			/*for(GestionUtilisateur u : utilisateurs)
+				if(utilisateur_selectionne.getLogin().equals(u.getLogin()))
+					u.setColor(Color.RED);*/
 
             // switch du bouton bannir sur 'débannir'
             boutonDebannir();
@@ -229,6 +232,9 @@ class GestionPanel implements ActionListener
 
             // switch du bouton débannir sur 'bannir'
             boutonBannir();
+			/*for(GestionUtilisateur u : utilisateurs)
+				if(utilisateur_selectionne.getLogin().equals(u.getLogin()))
+					u.setColor(Color.BLACK);*/
 		}
 		
 	}

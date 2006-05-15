@@ -27,7 +27,7 @@ public class HdVUser extends JRadioButton
 
         // mettre son nom en rouge !
         if(login.equals(Client.session.getLogin())) {
-            this.setForeground(Color.RED);
+            this.setForeground(new Color(33,94,33));
         }
 		
 	}

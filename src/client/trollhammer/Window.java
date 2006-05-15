@@ -12,6 +12,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Vector;
+import java.awt.event.KeyEvent;
 
 /* à cause du relais des méthodes de HI */
 import java.util.Set;
@@ -23,6 +24,7 @@ class Window implements ActionListener
 	private JFrame frame = null;  //  @jve:decl-index=0:visual-constraint="0,0"
 	private JMenuBar menuBar = null;
 	private JMenu fichierMenu = null;
+	private JMenuItem decoMenuItem = null;
 	private JMenu helpMenu = null;
 	private JTabbedPane tabbedPane = null;
 	//Panels de l'onglets HDV
@@ -105,12 +107,6 @@ class Window implements ActionListener
 			menuBar.add(getFichierMenu());
 			menuBar.add(getHelpMenu());
 			
-            final Window w = this;
-            getFichierMenu().add(new JMenuItem(new javax.swing.AbstractAction("Déconnexion"){
-                public void actionPerformed(ActionEvent e) {
-                    w.doLogout();
-                }
-            }));
 		}
 		return menuBar;
 	}
@@ -123,6 +119,16 @@ class Window implements ActionListener
 	private JMenu getFichierMenu() {
 		if (fichierMenu == null) {
 			fichierMenu = new JMenu("Fichier");
+			
+            final Window w = this;
+			decoMenuItem = new JMenuItem(new javax.swing.AbstractAction("Déconnexion") {
+                public void actionPerformed(ActionEvent e)
+				{
+                    w.doLogout();
+                }
+            });
+			decoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.META_MASK));
+			fichierMenu.add(decoMenuItem);
 		}
 		return fichierMenu;
 	}

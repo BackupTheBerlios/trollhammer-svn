@@ -17,7 +17,7 @@ class VenteManagerServeur {
 	int lastId = -1;
 	private VenteServeur venteEnCours;
 	private List<VenteServeur> ventes;
-	long dateDerniereEnchere = -1;
+	long timerDerniereEnchere = -1;
 
     VenteManagerServeur() {
     	ventes = new ArrayList<VenteServeur>();
@@ -513,13 +513,23 @@ class VenteManagerServeur {
 		}
 	}
 	
-	void setDateDerniereEnchere(long date) {
-		this.dateDerniereEnchere = date;
+	void setTimerDerniereEnchere(long date) {
+		this.timerDerniereEnchere = date;
 	}
 
+	
+	/**
+	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans
+	 * VenteStarter (toutes les secondes). Si la dernière enchère date de plus
+	 * d'une minute, en mode automatique, un coup de masse est généré.
+	 */
 	void donnerCoupdeMASSE() {
-		if (Serveur.serveur.getDate() > this.dateDerniereEnchere + 60*1000) {
-			Serveur.serveur.envoyerCoupdeMASSE(null);
+		
+		if (venteEnCours != null && venteEnCours.getMode() == Mode.Automatique) {
+			if (Serveur.serveur.getDate() > this.timerDerniereEnchere + 60*1000) {
+				Serveur.serveur.envoyerCoupdeMASSE(null);
+				this.setTimerDerniereEnchere(Serveur.serveur.getDate());
+			}
 		}
 	}
 

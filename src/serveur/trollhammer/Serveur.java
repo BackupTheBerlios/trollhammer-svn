@@ -172,7 +172,7 @@ public class Serveur {
     void encherir(int prix, String i) {
 		if (checkEnchere(prix, i)) {
 			doEnchere(prix, i);
-			Serveur.ventemanager.setDateDerniereEnchere(getDate());
+			Serveur.ventemanager.setTimerDerniereEnchere(getDate());
 			Serveur.broadcaster.enchere(prix, i);
 		}
     }

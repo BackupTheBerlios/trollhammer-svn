@@ -157,9 +157,11 @@ class HdVPanel extends JComponent implements ActionListener
 			cdmButton = new JButton("Coup de Marteau");
             cdmButton.setActionCommand("trollhammer");
             cdmButton.addActionListener(this);
+            cdmButton.setEnabled(false);
 			kickButton = new JButton("Expulser");
 			kickButton.setActionCommand("kick");
 			kickButton.addActionListener(this);
+            kickButton.setEnabled(false);
 			cmdPanel.addC(cdmButton, new CellConstraints(2,1));
 			cmdPanel.addC(kickButton, new CellConstraints(3,1));
 		}
@@ -225,7 +227,9 @@ class HdVPanel extends JComponent implements ActionListener
             //le reset de victime est assuré par l'update de la liste
             //(car après un update plus rien n'est sélectionné)
             if(victime != null) {
+                kickButton.setEnabled(false);
                 Client.hi.kicker(victime);
+                this.victime = null;
             }
 		} else if(event.getActionCommand().equals("setvictime"))
         {
@@ -235,6 +239,7 @@ class HdVPanel extends JComponent implements ActionListener
             //this.victime = selectionne.getLogin();
 			//becholey: pask on se la pète comme des porcs!!
 			this.victime = ((HdVUser) event.getSource()).getLogin();
+            kickButton.setEnabled(true);
         }
 		else if(event.getActionCommand().equals("afficheObjet"))
 		{
@@ -440,7 +445,7 @@ class HdVPanel extends JComponent implements ActionListener
                         +"Vendu à : "   
                         +Client.client.getDernierEncherisseur()+"\n"
                         +"Au prix de "     
-                        +Client.client.getPrixCourant()   
+                        +Client.client.getPrixCourant()+".-"
                         );
                 break;      
             case VenteAutomatique:     
@@ -517,6 +522,7 @@ class HdVPanel extends JComponent implements ActionListener
             case DebutVente:     
                 texteLogln("- Démarrage de vente -");      
                 enchereButton.setEnabled(true);
+                cdmButton.setEnabled(true);
                 break;     
             case VenteEnCours:    
                 if(!afficher_message_encours) {
@@ -526,6 +532,7 @@ class HdVPanel extends JComponent implements ActionListener
                     afficher_message_encours = false;
                 }
                 enchereButton.setEnabled(true);
+                cdmButton.setEnabled(true);
                 break;      
             case FinVente:     
                 texteLogln("- Fin de la vente -");      
@@ -541,6 +548,9 @@ class HdVPanel extends JComponent implements ActionListener
         // jr : a chaque fois que le tab est affiché,
         // et si aucune réception de
         // VenteEnCours ou DebutVente, on désactive le bouton 'enchérir'.
+        // tout pareil pour le kick et le coup de MASSE.
         enchereButton.setEnabled(false);
+        kickButton.setEnabled(false);
+        cdmButton.setEnabled(false);
     }
 }

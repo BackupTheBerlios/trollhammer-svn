@@ -57,6 +57,7 @@ class VenteObjetAccepte extends ObjetElementListe
 	{
 		super(obj);
 		
+        this.add(new JLabel(nom));
 		this.add(new JLabel("Accepté"));
 	}
 }
@@ -82,6 +83,7 @@ class VenteObjetPropose extends ObjetElementListe
 		super(obj);
 		//retirer = new JButton("Retirer");
 		
+        this.add(new JLabel(nom));
 		this.add(new JLabel("En attente de validation"));
 		//this.add(retirer);
 		
@@ -114,7 +116,6 @@ class ValiderObjet extends ObjetElementListe {
     
     public ValiderObjet(Objet obj) {
         super(obj);
-		this.removeAll();
 		this.add(new JLabel(description));
 		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
     }
@@ -125,7 +126,7 @@ class AchatObjet extends ObjetElementListe {
     public AchatObjet(Objet obj) {
         super(obj);
 
-		this.add(new JLabel(nom));
+		this.add(new JLabel(description));
 		this.add(new JLabel("Acheté "+String.valueOf(prix_de_vente)+".-"));
     }
 }
@@ -134,7 +135,6 @@ class PlanifierObjet extends ObjetElementListe {
 
     public PlanifierObjet(Objet obj) {
         super(obj);
-		this.removeAll();
 		this.add(new JLabel(description));
 		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
     }

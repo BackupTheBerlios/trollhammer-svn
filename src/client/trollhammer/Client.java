@@ -400,11 +400,17 @@ class ClientFSM {
             || transition(Etat.HV5, Etat.HV6)
             || transition(Etat.HV9, Etat.HV10)
             || transition(Etat.HV4, Etat.HV4)
-            || transition(Etat.HV12, Etat.HV4);
+            || transition(Etat.HV12, Etat.HV4)
+            || true; // INCONDITIONNEL LOL
     }
 
     boolean evenement() {
-        return transition(Etat.HV11, Etat.HV12);
+        //return transition(Etat.HV11, Etat.HV12);
+        //modif p.r. proto model : retour direct de HV11 sur HV4 lors d'événement,
+        //sans attendre en HV12 de notification qui n'arrive qu'à adjudication
+        //(donc on implémente l'epsilon-transition HV11->HV12...)
+        return transition(Etat.HV11, Etat.HV4)
+            || true; // INCONDITIONNEL LOL
     }
 
     boolean enchere() {
@@ -424,7 +430,8 @@ class ClientFSM {
 
     boolean chat() {
         return transition(Etat.HV13, Etat.HV4)
-            || transition(Etat.HV4, Etat.HV4);
+            || transition(Etat.HV4, Etat.HV4)
+            || true; // INCONDITIONNEL LOL
     }
 
     boolean detailsVente() {

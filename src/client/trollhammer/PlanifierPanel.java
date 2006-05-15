@@ -435,6 +435,7 @@ class PlanifierPanel implements ActionListener
                     v.setNom((String) selectionne);
                     v.setDescription(descrArea.getText());
                     v.setDate(date);
+                    v.setMode(Mode.Automatique);
 
                     Logger.log("PlanifierPanel", 1, LogType.INF, "Creation Vente");
                     Client.hi.editerVente(Edition.Creer, v);

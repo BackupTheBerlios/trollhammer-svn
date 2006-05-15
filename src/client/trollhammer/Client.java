@@ -101,6 +101,8 @@ public class Client {
         if (v != null && e == Evenement.Adjuge) {
             v.removeFirst();
             Client.ventemanager.getVenteEnCours().setPrices();
+            // update de la vue vente !
+            Client.hi.affichageVente(Client.ventemanager.getVenteEnCours());
         } else if (v != null && e == Evenement.VenteAutomatique) {
             v.setMode(Mode.Automatique);
         }
@@ -425,7 +427,8 @@ class ClientFSM {
             || transition(Etat.HV9, Etat.HV9)
             || transition(Etat.HV11, Etat.HV11)
             || transition(Etat.HV12, Etat.HV12)
-            || transition(Etat.HV13, Etat.HV13);
+            || transition(Etat.HV13, Etat.HV13)
+            || true; // INCONDITIONNEL LOL (pour s'inscrire dans le log)
     }
 
     boolean chat() {

@@ -96,6 +96,7 @@
 	</path>
 
     <target name="help" description="Affiche l'aide des differentes target disponibles">
+    
     		<echo> Syntaxe du fichier build du projet Trollhammer</echo>
     		<echo> ----------------------------------------------</echo>
 			<echo> Utilisations: ant [ant options] {target1} [target2 | ... ]</echo>
@@ -324,7 +325,7 @@
     </target>
     
 
-    <target name="megaputz" depends="putz, version" description="Nettoyage de tous les fichiers generes (alias)">
+    <target name="megaputz" depends="putz" description="Nettoyage de tous les fichiers generes (alias)">
 		
         <echo>DESTRUCTION!!.</echo>
 
@@ -385,11 +386,18 @@
     <target name="rejar" depends="megaputz,jar" description="Genere les fichiers jar du projet">
 	</target>
  
-    <target name="total" depends="javadoc,jar" description="Fait tout mouahahaha">
+    <target name="total" depends="javadoc,jar,version" description="Fait tout mouahahaha">
 	</target>
 	
-	<target name="version" description="Incrémente le numéro de version">
-		<buildnumber/>
+	<target name="version" description="Affiche le numéro de version">
+		<loadproperties srcFile=".svn/text-base/build.number.svn-base">
+                <filterchain>
+                        <linecontains>
+                                <contains value="build.number"/>
+                        </linecontains>
+                </filterchain>
+        </loadproperties>
+        <echo message="Build : ${build.number}" /> 
 	</target>
 
     

@@ -417,14 +417,13 @@ class HdVPanel extends JComponent implements ActionListener
 
     void affichage(Evenement e) {    
         switch (e) {    
-            case CoupDeMassePAF1:      
+            case CoupDeMassePAF1:
                 texteLogln("--- PREMIER COUP DE MARTEAU ---");
                 break;   
             case CoupDeMassePAF2:   
                 texteLogln("--- SECOND COUP DE MARTEAU ---");
                 break;     
             case Adjuge:
-				nbCdM = 3;
                 texteLogln("--- ADJUDICATION ---\n"     
                         +"Objet : "      
                         //le nom de l'objet qui vient d'être vendu (ouf!)     
@@ -460,8 +459,8 @@ class HdVPanel extends JComponent implements ActionListener
 			adjEnCours.setText("EN VOTRE FAVEUR");
 		else
 			adjEnCours.setText("CONTRE VOUS!");
-		prochaineEnchere.setText(""+Client.client.getNouveauPrix());
-		prixEnCours.setText(""+Client.client.getPrixCourant());
+		prochaineEnchere.setText(Client.client.getNouveauPrix()+".-");
+		prixEnCours.setText(Client.client.getPrixCourant()+".-");
 		SwingUtilities.invokeLater(
 								   new Runnable()
 								   {

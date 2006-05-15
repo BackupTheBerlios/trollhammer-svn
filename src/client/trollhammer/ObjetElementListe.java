@@ -114,7 +114,7 @@ class ValiderObjet extends ObjetElementListe {
     
     public ValiderObjet(Objet obj) {
         super(obj);
-
+		this.removeAll();
 		this.add(new JLabel(nom+": "+description));
 		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
     }
@@ -134,7 +134,7 @@ class PlanifierObjet extends ObjetElementListe {
 
     public PlanifierObjet(Objet obj) {
         super(obj);
-
+		this.removeAll();
 		this.add(new JLabel(nom));
 		this.add(new JLabel(description));
 		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));

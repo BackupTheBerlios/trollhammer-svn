@@ -24,6 +24,10 @@ class UserManagerClient {
         }
 
         utilisateurs.add(u);
+
+		// jr : modif p.r. Design : on aime actualiser la liste pour voir
+		// les changements, aussi minimes soient-ils
+		Client.hi.affichageListeUtilisateurs(Client.usermanager.getUtilisateurs());
     }
 
     void listeUtilisateurs(Set<Utilisateur> ul) {

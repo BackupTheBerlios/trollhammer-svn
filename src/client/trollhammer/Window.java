@@ -278,7 +278,12 @@ class Window implements ActionListener
 		* je ne comprends pas à quoi ça sert ! (jr)
 		*/
     void affichageVente(Vente v) {
-        planifier.affichageVente(v);
+        switch (Client.client.getMode()) {
+            case Planification:
+                planifier.affichageVente(v); break;
+            case HotelDesVentes:
+                hdv.affichageVente(v); break;
+        }
     }
 	
     /* rajouté du design : oublié pendant la rédaction du DCD !!! (jr) */
@@ -295,7 +300,8 @@ class Window implements ActionListener
                 hdv.message(n);
                 break;
             case VenteEnCours:
-                JOptionPane.showMessageDialog(this.frame, "Une vente est en cours.");
+                // TRES ennuyeux.
+                //JOptionPane.showMessageDialog(this.frame, "Une vente est en cours.");
                 hdv.message(n);
                 break;
             case FinVente:

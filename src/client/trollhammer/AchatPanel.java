@@ -57,7 +57,7 @@ class AchatPanel
 		return buildAchatPanel();
 	}
 
-    void afficherListeObjets(Set<Objet> ol) {
+    void affichageListeObjets(Set<Objet> ol) {
         objs = new ArrayList<AchatObjet>();
         for(Objet o : ol) {
             objs.add(new AchatObjet(o));

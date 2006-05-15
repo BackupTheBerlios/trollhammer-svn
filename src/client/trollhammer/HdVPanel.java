@@ -47,6 +47,11 @@ class HdVPanel extends JComponent implements ActionListener
 	private ButtonGroup ObjetsVentegrp = null;
     private Window mw;
 
+    // afficher les messages "vente en cours" ? utilisé
+    // pour s'assurer qu'on ne le fait qu'au login
+    private boolean afficher_message_encours = false;
+
+
 	public HdVPanel(boolean modo, Window mw)
 	{
 		this.modo = modo;
@@ -97,6 +102,8 @@ class HdVPanel extends JComponent implements ActionListener
 		logArea.setLineWrap(true);
 		logPane = new JScrollPane(logArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		logPane.setWheelScrollingEnabled(true);
+
+        this.afficher_message_encours = true;
 
         // ceci évite que la fenêtre de chat modifie sa taille et fasse foirer
         // le layout en poussant tout le bas de l'interface hors-fenêtre.
@@ -418,26 +425,26 @@ class HdVPanel extends JComponent implements ActionListener
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:
-                texteLogln("--- PREMIER COUP DE MARTEAU ---");
+                texteLogln("- PREMIER COUP DE MARTEAU -");
                 break;   
             case CoupDeMassePAF2:   
-                texteLogln("--- SECOND COUP DE MARTEAU ---");
+                texteLogln("- SECOND COUP DE MARTEAU -");
                 break;     
             case Adjuge:
-                texteLogln("--- ADJUDICATION ---\n"     
-                        +"Objet : "      
+                texteLogln("- ADJUDICATION -\n"     
+                        +"Objet : "
                         //le nom de l'objet qui vient d'être vendu (ouf!)     
                         +Client.objectmanager.getObjet(     
                             Client.ventemanager.getVenteEnCours().getFirst()   
                             ).getNom()+"\n"   
                         +"Vendu à : "   
-                        +Client.client.getDernierEncherisseur()     
+                        +Client.client.getDernierEncherisseur()+"\n"
                         +"Au prix de "     
                         +Client.client.getPrixCourant()   
                         );
                 break;      
             case VenteAutomatique:     
-                texteLogln("--- Vente en mode automatique ---");    
+                texteLogln("- Vente en mode automatique -");    
                 break;   
             default :   
         }      
@@ -508,15 +515,20 @@ class HdVPanel extends JComponent implements ActionListener
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     
-                texteLogln("--- Démarrage de vente ---");      
+                texteLogln("- Démarrage de vente -");      
                 enchereButton.setEnabled(true);
                 break;     
             case VenteEnCours:    
-                texteLogln("--- Vente en cours ---");     
+                if(!afficher_message_encours) {
+                    texteLogln("- Vente en cours -");     
+                    // on l'a affiché, on ne le refait plus
+                    // avant... la prochaine instance de HdVPanel
+                    afficher_message_encours = false;
+                }
                 enchereButton.setEnabled(true);
                 break;      
             case FinVente:     
-                texteLogln("--- Fin de la vente ---");      
+                texteLogln("- Fin de la vente -");      
                 enchereButton.setEnabled(false);
                 break;   
         }   

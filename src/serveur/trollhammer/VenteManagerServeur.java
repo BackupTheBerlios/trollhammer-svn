@@ -14,38 +14,15 @@ import java.util.ArrayList;
  */
 class VenteManagerServeur {
 
-	int lastId = -1;
-	private VenteServeur venteEnCours;
-	private List<VenteServeur> ventes;
-	long timerDerniereEnchere = -1;
+	private int lastId = -1; // l'identifiant de la dernière vente créée
+	private VenteServeur venteEnCours = null; // vente en cours, null si aucune
+	private List<VenteServeur> ventes; // liste des ventes, ordonnée selon t
+	private long timerDerniereEnchere = -1; // utilisé pour gén auto coupdeMASSE
 
     VenteManagerServeur() {
     	ventes = new ArrayList<VenteServeur>();
     	venteEnCours = null;
 	}
-	
-// begin cfrey: ??????
-	//ls : ajout de cette fonction Ô combien necessaire... car je vois mal un
-	//     objet (java) ce supprimer lui-même... enfin ca me parait plus logique
-	//     ce soit ici, utiliser un prototype // a enleverObjetVente(...)
-	/**
-	 * Supprime une vente. Ne propoage aucune erreur si la vente a supprimer
-	 * n'existe pas, car au final c'est la même chose, ie la vente n'existe plus.
-	 *
-	 * @param	iv	Id de la vente à supprimer.
-	 */
-	void remove(int iv) {
-		VenteServeur vs = null;
-		for(VenteServeur vt : ventes) {
-			if (vt.getId() == iv) {
-				vs = vt;
-			}
-		}
-		if (vs != null) {
-			ventes.remove(vs);
-		}
-	}
-// end cfrey: ??????
 
 	/**
 	 * Attribution d'un objet à une vente. Si la position p vaut -1, cela signi-
@@ -63,14 +40,14 @@ class VenteManagerServeur {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(i);
 		long dateCourante = Serveur.serveur.getDate();
 		
-        Logger.log("VenteManagerServeur", 2, LogType.DBG, "Tentative d'insertion de"
-                +" l'OID "+o+" à la position "+p+" de la vente "+v);
+        Logger.log("VenteManagerServeur", 2, LogType.DBG,
+        		   "Tentative d'insertion de" +" l'OID "+o+" à la position "
+        		   +p+" de la vente "+v);
+		
 		if (vte != null) {
 			// la vente existe
 			if (vte.getDate() >= dateCourante) {
 				// vente courante, prochaine ou à venir ?
-				//VenteServeur venteEnCours = getVenteEnCours();
-				
 				if (venteEnCours != null
 					&& venteEnCours.getId() == vte.getId()) {
 					// vte est la vente en cours, pas de modification possible !
@@ -89,8 +66,6 @@ class VenteManagerServeur {
 							// puis de faire l'insertion, pour des raisons de
 							// concurrence ...
 							obj.getObjet().setStatut(StatutObjet.EnVente);
-							// /!\ je propose que ce soit Vente.insertObject
-							// qui s'occupe des histoires de position ...
 							vte.insertObject(o, p, i, dateCourante);
 							u.resultatEdition(StatutEdition.Reussi);
 						} else {
@@ -102,9 +77,11 @@ class VenteManagerServeur {
 						u.resultatEdition(StatutEdition.NonTrouve);
 					}
 
-					if (prochaineVente != null && prochaineVente.getId() == vte.getId()) {
+					if (prochaineVente != null
+						&& prochaineVente.getId() == vte.getId()) {
 						// vte est la prochaine, changements -> broadcast
-						Serveur.broadcaster.detailsVente(vte.copieVente(), vte.getObjets());
+						Serveur.broadcaster.detailsVente(vte.copieVente(),
+														 vte.getObjets());
 					} else {
 						// vte pas la prochaine, changements -> sender
 						u.detailsVente(vte.copieVente(), vte.getObjets());
@@ -113,7 +90,9 @@ class VenteManagerServeur {
                     // jr : oublié dans le Design, présent dans l'Analyse :
                     // renvoyer la liste d'Objets 'Planification' à la fin
                     // du mouvement pour mettre à jour sur le Client sender.
-                    Serveur.objectmanager.obtenirListeObjets(Onglet.Planification, i);
+                    // cfrey: si tu le dis 
+                    Serveur.objectmanager.obtenirListeObjets
+                    	(Onglet.Planification, i);
 				}
 			} else {
 				// vente passée, pas de modification possible !
@@ -127,11 +106,6 @@ class VenteManagerServeur {
 		}
 	}
 
-// spéc étrange: la vente est en cours, on insère un objet en position 0 ...
-// donc ça veut dire qu'on vend le 2ème. problème quand l'objet est adjugé, on
-// supprime la tête de la liste des objets d'une vente ... donc est-ce qu'on
-// ferait pas mieux de bloquer l'ajout/suppression d'objets à une vente en
-// cours, tout simplement ? NB: pour l'instant c'est fait comme dans la spéc.
 	/**
 	 * Suppression d'un objet d'une vente. Les changements sont répercutés chez
 	 * le client qui effectue la modification et chez tout le monde si la vente
@@ -144,43 +118,22 @@ class VenteManagerServeur {
 	 */
     void enleverObjetVente(int oid, int vid, String uid) {
 		VenteServeur vte = this.getVente(vid);
-        // jr : rajouté ceci, pour changer le statut de l'objet...
         ObjetServeur obj = Serveur.objectmanager.getObjet(oid);
-// c'est pas la première fois que ça arrive, mais si u est null, et après je
-// fais un u.resultatEdition ... problème. alors soit on modifie
-// usermanager.getUtilisateur(uid) de telle sorte qu'il ne renvoie pas un null
-// si l'uid ne correpond plus à qqch mais plutôt renvoie un truc non null bidon
-// ou alors (mais ça requiert pas mal de changements), modifier resultatEdition
-// pour qu'elle prenne en paramètre uid et qu'elle gère le cas null (donc ce
-// serait plus une méthode de Utilisateur) ...
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(uid);
 		
 		if (vte != null && obj != null) {
 			// la vente existe (jr : et l'objet aussi)
-
 			if (vte != venteEnCours && (venteEnCours == null
-                    || venteEnCours.getFirst() != oid)) {
-                // jr : l'objet n'est PAS en train d'être vendu.
-                // donc ce n'est PAS le premier de la liste de la vente,
-                // de la vente EN COURS.
-                // le test précédent était (vte.getFirst() == oid) !
-
+				|| venteEnCours.getFirst() != oid)) {
 				// l'objet n'est pas entrain d'être vendu
 				vte.removeOId(oid);
-
-                // jr : et on n'oublie pas de remettre son statut à "Accepté",
-                // oui ?
                 obj.getObjet().setStatut(StatutObjet.Accepte);
-
 				u.resultatEdition(StatutEdition.Reussi);
 			} else {
 				// l'objet est entrain d'être vendu
-// c'est pas la première fois, mais des résultatsEdition plus variés seraient
-// souhaitables ...
 				u.resultatEdition(StatutEdition.NonTrouve);
-                Logger.log("VenteManagerServeur", 2, LogType.WRN, "Objet "+oid+
-                        " en train d'être vendu : refusé de retirer de la vente "
-                        +vid);
+                Logger.log("VenteManagerServeur", 2, LogType.WRN, "Objet "+oid
+               	+" en train d'être vendu : refusé de retirer de la vente "+vid);
 			}
 			
 			if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
@@ -201,48 +154,63 @@ class VenteManagerServeur {
 		}
     }
 
-	// ls : A corriger?? : aucune gestion d'erreur...
-	// cfrey: ajouté 1-2 petits checks
-    void obtenirVente(int v, String sender) {
+	/**
+	 * Envoie les détails d'une vente au sender.
+	 *
+	 * @param	vid		identifiant d'une vente
+	 * @param	sender	identifiant utilisateur
+	 */
+    void obtenirVente(int vid, String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
-		VenteServeur vs = this.getVente(v);
-		if (u != null && vs != null) {
-			u.detailsVente(vs.copieVente(), vs.getObjets());
-		} // else message Log ?
+		VenteServeur vte = this.getVente(vid);
+		if (u != null && vte != null) {
+			u.detailsVente(vte.copieVente(), vte.getObjets());
+		} else {
+			Logger.log("VenteManagerServeur", 2, LogType.DBG,
+				"obtenirVente: utilisateur nulle ou vente nulle");
+		}
     }
 
+	/**
+	 * Envoie la liste des ventes au sender.
+	 *
+	 * @param	sender	identifiant utilisateur
+	 */
     void obtenirListeVentes(String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
-		//ls : Oui, je dois quand même le faire, il semble que java ne gère pas 
-		// aussi bien les règle de sous-typage sur des classes paramétrées que 
-		// Scala.
-		// NB : c'est quand meme plus simple avec le casting implicite, non?
-		// Et surtout ca évite un appel de fonction par itération... 
 		Set<Vente> liste = new HashSet<Vente>();
+		
 		for(VenteServeur v : ventes) {
 			liste.add(v.copieVente());
 		}
 		u.listeVentes(liste);
     }
 
-	//ls : modif, le teste concernant le mode et imbriqué dans le if sur la
-	// date, plutôt qu'à côté avec le test a double (sur la date). 
-	//ls : modif, pour envoyer le message detailsVente, fais appel a la méthode
-	// qui le fait, plutot que copier son code...
-    // jr : exception si aucune vente en cours : ne rien renvoyer.
-    // (sans le fix : NullPointerException pour trouver la prochaine vente inexistante.)
-// cfrey: commentaires out-of-date
+	/**
+	 * Si il y a une vente en cours ou prévue, le sender reçoit les informations
+	 * relatives.
+	 *
+	 * @param	sender	identifiant utilisateur
+	 */
     void obtenirProchaineVente(String sender) {
 		UtilisateurServeur u = Serveur.usermanager.getUtilisateur(sender);
 		VenteServeur vs = this.getStarting();
+		
         if(vs != null) {
+        	// envoie les détails de la prochaine vente au sender
             this.obtenirVente(vs.getId(), sender);
+            
             if(venteEnCours != null && vs.getId() == venteEnCours.getId()) {
+            	Logger.log("VenteManagerServeur", 2, LogType.INF,
+					"obtenirVente: la prochaine vente est la vente en cours");
                 u.notification(Notification.VenteEnCours);
                 if (vs.getMode() == Mode.Manuel) {
                     u.superviseur(vs.getSuperviseur());
                 }
             }
+        } else {
+        	Logger.log("VenteManagerServeur", 2, LogType.INF,
+				"obtenirProchaineVente: pas de prochaine vente");
         }
 	}
 
@@ -257,6 +225,10 @@ class VenteManagerServeur {
         return !uid.equals(venteEnCours.getSuperviseur());
     }
 
+	/**
+	 * Retourne la liste des identifiants des ventes dans la liste (donc sans la 
+	 * vente en cours s'il y en a une).
+	 */
 	Set<Integer> getVIds() {
 		Set<Integer> r = new HashSet<Integer>();
 		for(VenteServeur v : ventes) {
@@ -337,7 +309,8 @@ class VenteManagerServeur {
 				
 			case Supprimer:
 				// peut supprimer si vte pas en cours
-				if (venteEnCours != null && venteEnCours.getId() == vte.getId()) {
+				if (venteEnCours != null
+					&& venteEnCours.getId() == vte.getId()) {
 					u.resultatEdition(StatutEdition.NonTrouve);
 				} else {
 					// pas en cours ou en cours mais pas vte => suppression
@@ -347,6 +320,8 @@ class VenteManagerServeur {
 				break;
 				
 			default:
+				Logger.log("VenteManagerServeur", 2, LogType.DBG,
+					"vente: édition invalide");
 		}
 		
 		// important que ça soit là et pas au début du bloc
@@ -402,10 +377,17 @@ class VenteManagerServeur {
 		}
     }
 
+	/**
+	 * Si un modérateur superviseur qui la vente en cours, certaines
+	 * doivent être mises à jour, et le mode passe en automatique.
+	 *
+	 * @param	sender	identifiant utilisateur
+	 */
     void modoLeaving(String sender) {
         /* si une vente est en cours et que le modo la supervise,
          * prévenir et passer en mode auto. */
-        if(venteEnCours != null && sender.equals(venteEnCours.getSuperviseur())) {
+        if(venteEnCours != null
+           && sender.equals(venteEnCours.getSuperviseur())) {
             //venteEnCours.setSuperviseur(null);
             //venteEnCours.setMode(Mode.Automatique);
 // on va plutôt faire appel à la modoLeaving du Vente non ?            
@@ -414,12 +396,18 @@ class VenteManagerServeur {
             // à vérifier : est-ce que la Vente fait un broadcast de son
             // Mode aux participants présents ? Sinon, il faut penser à
             // le faire ici...
+        } else {
+        	Logger.log("VenteManagerServeur", 2, LogType.INF,
+				"modoLeaving: il n'y a pas de vente en cours ou le modérateur"
+				+"n'en était pas le superviseur");
         }
     }
 
     /**
 	 * Cherche une vente par son identifiant et la retourne,
      * ou null si non trouvée.
+     *
+     * @param	i	identifiant d'une vente
      */
     VenteServeur getVente(int i) {
         for(VenteServeur v : ventes) {
@@ -477,23 +465,28 @@ class VenteManagerServeur {
     			this.venteEnCours.setSuperviseur(null);
     			Serveur.broadcaster.notification(Notification.DebutVente);
     			Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
-				Logger.log("VenteManagerServeur", 2, LogType.DBG, "Démarrage de vente!");
+				Logger.log("VenteManagerServeur", 2, LogType.INF,
+					"Démarrage de vente!");
 			}
 			// aucune en retard, rien ne change
 		}
 		// s'il y en a une en cours, on fait exactement rien
 	}
 	
-	// devra être utilisé par coupDeMASSE, il faut bien que quelqu'un signale
-	// à VenteManagerServeur que la vente est finie (liste objets vide après
-	// dernière adjudication). et oui, terminate ça veut dire ce que ça veut
-	// dire.
+	/**
+	 * Utilisé par envoyerCoupdeMASSE pour indiquer au manager des ventes que
+	 * la vente courante est terminée.
+	 */
 	void terminateVenteEnCours() {
 		this.venteEnCours = null;
 	}
 	
-	// ajoute une vente à la liste de ventes, à la bonne position suivant la
-	// date dans l'ordre croissant (ventes est tout le temps triée).
+	/**
+	 * Ajoute une vente à la liste des ventes, à la bonne position en respectant
+	 * l'ordre temporel croissant. NB: la liste est tout le temps triée.
+	 *
+	 * @param	v	vente serveur
+	 */
 	private void addVente(VenteServeur v) {
 		int lastId = this.ventes.size()-1;
 		VenteServeur lastV = null;
@@ -513,6 +506,7 @@ class VenteManagerServeur {
 		}
 	}
 	
+	// c'est un setter ....
 	void setTimerDerniereEnchere(long date) {
 		this.timerDerniereEnchere = date;
 	}
@@ -525,8 +519,11 @@ class VenteManagerServeur {
 	 */
 	void donnerCoupdeMASSE() {
 		
-		if (venteEnCours != null && venteEnCours.getMode() == Mode.Automatique) {
-			if (Serveur.serveur.getDate() > this.timerDerniereEnchere + 60*1000) {
+		if (venteEnCours != null
+			&& venteEnCours.getMode() == Mode.Automatique) {
+			
+			if (Serveur.serveur.getDate() >
+				this.timerDerniereEnchere + 60*1000) {
 				Serveur.serveur.envoyerCoupdeMASSE(null);
 				this.setTimerDerniereEnchere(Serveur.serveur.getDate());
 			}

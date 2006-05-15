@@ -13,7 +13,6 @@ class ClientEntry {
     }
 
     void notification(Notification n) {
-    
 		if(Client.fsm.notification()) {
             Client.client.notification(n);
         }
@@ -34,12 +33,13 @@ class ClientEntry {
     void chat(String m, String i) {
         Logger.log("ClientEntry", 2, LogType.INF, "[chat] " + i + " dit : " + m);
 
-        // inconditionnel, que ca s'affiche meme hors-onglet
-        // et que le log l'aie note
-        Client.fsm.chat();
-
-        Client.client.chat(m, i);
-    }
+        // inconditionnel, que ca s'affiche meme hors-onglet et que le log
+        // l'aie note
+// s'il y a un problème, c'est la fsm qu'il faut changer !!!
+		if (Client.fsm.chat()) {
+			Client.client.chat(m, i);
+		}
+	}
 
     void detailsVente(Vente v, List<Objet> liste) {
         if(Client.fsm.detailsVente()) {

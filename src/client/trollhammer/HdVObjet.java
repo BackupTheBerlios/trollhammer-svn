@@ -6,7 +6,7 @@ import com.jgoodies.forms.layout.FormLayout;
 /*
  *@TODO modifier les constructeurs quand l'image existera!
  */
-public class HdVObjet extends JPanel
+/*public class HdVObjet extends JPanel
 {
 	private FormLayout layout = null;
 	private CellConstraints cc = null;
@@ -35,43 +35,42 @@ public class HdVObjet extends JPanel
 	{
 		return o.getDescription();
 	}
-}
+}*/
 
 
 
 
-/*public class HdVObjet extends JRadioButton
+public class HdVObjet extends JRadioButton
 {
-	private boolean enCours;
-	private String nom;
-	private ImageIcon img;
+	private ImageIcon img = null;
+	private JLabel label = null;
+	private Objet o = null;
 	private final Color couleur_fond = this.getBackground();
 	private final Color couleur_selectionne = Color.LIGHT_GRAY;
 	public HdVObjet(Objet o, ImageIcon img) 
 	{
 		super(img);
 		this.img= img;
-		this.enCours = enCours;
+		this.o = o;
 	}
 	public HdVObjet(Objet o)
 	{
 		super(o.getNom());
-		nom = o.getNom();
-		enCours = (o.getStatut() == StatutObjet.EnVente);
-	}
-	public boolean getEnCours()
-	{
-		return enCours;
-	}
-	public void setEnCours(boolean enCours)
-	{
-		this.enCours = enCours;
+		//label = new JLabel(o.getNom());
+		//this.setIcon(new ImageIcon(label));
+		this.o = o;
 	}
 	void selectionne(boolean estSelectionne) {
         if(estSelectionne) {
             this.setBackground(couleur_selectionne);
+			label.setBackground(couleur_selectionne);
         } else {
             this.setBackground(couleur_fond);
+			label.setBackground(couleur_fond);
         }
     }
-}*/
+	public String getDescription()
+	{
+		return o.getDescription();
+	}
+}

@@ -227,6 +227,13 @@ class HdVPanel extends JComponent implements ActionListener
             HdVUser selectionne = (HdVUser) event.getSource();
             this.victime = selectionne.getLogin();
         }
+		else if(event.getActionCommand().equals("afficheObjet"))
+		{
+			HdVObjet objetSelectionne = (HdVObjet) event.getSource();
+			descrObjetTextArea.setText(objetSelectionne.getDescription());
+			//objetSelectionne.selectionne(true);
+			
+		}
 	}
 
     /** Ajoute du texte à la fin du contenu du panneau de log.
@@ -260,7 +267,23 @@ class HdVPanel extends JComponent implements ActionListener
     void affichageChat(String m, String i) {
         this.texteLog("<"+i+"> "+m+"\n");
     }
-	public void affichageVente(Vente v)
+	public void affichageVente(Vente v) //version avec JRadionButton
+	{
+		listeObjetsPanel.add(new JLabel("Veuillez patienter..."));
+		//Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
+		vobjs = new Vector<HdVObjet>();
+		for(int i : v.getOIds())
+		{
+			//Logger.log("HdVPanel",0,"@@@ for.. @@@");
+            Objet o = Client.objectmanager.getObjet(i);
+            if(o != null)
+			{
+                vobjs.add(new HdVObjet(o));
+            }
+        }
+		affichageListeObjets();
+	}
+	/*public void affichageVente(Vente v) //version avec une JList
 	{
 		//listeObjetsPanel.removeAll();
 		Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
@@ -274,9 +297,11 @@ class HdVPanel extends JComponent implements ActionListener
                 vobjs.add(new HdVObjet(o));
             }
         }
-		lobjs = new JList(vobjs);
+		lobjs = new JList();
+		lobjs.setLayoutOrientation(JList.HORIZONTAL_WRAP); //marche pô
+		lobjs.setLayout(new BoxLayout(lobjs, BoxLayout.X_AXIS));
 		lobjs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lobjs.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		lobjs.setListData(vobjs);
 		lobjs.setCellRenderer(new ListCellRenderer() {
 			// This is the only method defined by ListCellRenderer.
 			// We just reconfigure the JLabel each time we're called.
@@ -304,29 +329,43 @@ class HdVPanel extends JComponent implements ActionListener
                 }
             }
         });
-		listeObjetsPanel.removeAll();
-		listeObjetsPanel.add(lobjs);
-		
-		//affichageListeObjets();
-	}
-	/*private void affichageListeObjets()
+		SwingUtilities.invokeLater(
+								   new Runnable()
+								   {
+									   public void run()
+								   {
+										   listeObjetsPanel.removeAll();
+										   listeObjetsPanel.add(lobjs);
+										   Logger.log("HdVPanel",0,"remove REMOVE remove");
+										   listeObjetsPanel.validate();
+								   }
+								   }); // pask on s'la pète!!!
+	}*/
+	private void affichageListeObjets()
 	{
+				listeObjetsPanel.removeAll();
+				
 		ObjetsVentegrp = new ButtonGroup();
 		for(HdVObjet o: vobjs)
 		{
+			
+			o.addActionListener(this);
+			o.setActionCommand("afficheObjet");
 			listeObjetsPanel.add(o);
 			ObjetsVentegrp.add(o);
-			o.addActionListener(this);
+			//Logger.log("HdVPanel",0,"@@@ ADD add ADD @@@");
 		}
 
         // update graphique
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run() {
+        SwingUtilities.invokeLater(new Runnable()
+								   {
+            public void run()
+		{
                 listeObjetsPanel.validate();
                 listeObjetsPanel.repaint();
             }
         });
-	}*/
+	}
 
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();

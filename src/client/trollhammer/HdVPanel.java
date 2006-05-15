@@ -41,10 +41,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private double prixEnCours = 0.;
 	private double prochaineEnchere = 0.;
 	private Vector<HdVObjet> lstObjVect = null;
-	//test
-	//private HdVUser sup = null;
-	//private HdVUser l1 = null;
-	//private HdVUser l2 = null;
+	private String adjEnCours = "";
 	private ButtonGroup grpl = null;
     private String victime = null;
 
@@ -57,14 +54,17 @@ class HdVPanel extends JComponent implements ActionListener
 	}
 	private void initHdVComponents()
 	{
-		
+		//majChamps(); //nullPointerException quand tu nous tiens.....
 		//Liste des objets
 		listeObjetsPanel = new FreshPanel('x', true);
 		
 		//Informations adjudications
-		infoAdjPanel = new CoolPanel("pref:grow, pref","pref, pref");
+		prixEnCours = Client.client.getPrixCourant();
+		infoAdjPanel = new CoolPanel("pref:grow, right:pref","pref, pref");
 		infoAdjPanel.addLabel("Prix d'adjudication: ", new CellConstraints(1,1));
+		infoAdjPanel.addC(new JLabel(""+prixEnCours), new CellConstraints(2,1));
 		infoAdjPanel.addLabel("Nombres de coups de marteau: ",new CellConstraints(1,2));
+		infoAdjPanel.addC(new JLabel(""+nbCdM), new CellConstraints(2,2));
 		
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
@@ -79,23 +79,14 @@ class HdVPanel extends JComponent implements ActionListener
 		descrObjetTextArea.setLineWrap(true);
 		descrObjetPane = new JScrollPane(descrObjetTextArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		descrObjetPane.setWheelScrollingEnabled(true);
-		selectPanel.addLabel("Image: ", new CellConstraints(1,1,3,1));
-		selectPanel.addC(imgLabel, new CellConstraints(2,2));
+		//selectPanel.addLabel("Image: ", new CellConstraints(1,1,3,1));
+		selectPanel.addC(imgLabel, new CellConstraints(2,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3,3,1));
 		selectPanel.addC(descrObjetPane, new CellConstraints(1,4,3,1));
 		
-		//Salle//test...
-		//sup = new HdVUser("Mr.Smith",true,true);
-		//l1 = new HdVUser("BOFH",true);
-		//l2 = new HdVUser("FredFooBar",false);
+		//Salle
 		grpl = new ButtonGroup();
-		//grpl.add(sup);
-		//grpl.add(l1);
-		//grpl.add(l2);
 		sallePanel = new FreshPanel('y',true);
-		//sallePanel.add(sup);
-		//sallePanel.add(l1);
-		//sallePanel.add(l2);
 		
 		//Log
 		logPanel = new CoolPanel("fill:pref:grow","fill:pref:grow");
@@ -113,21 +104,29 @@ class HdVPanel extends JComponent implements ActionListener
     	logPanel.addC(logPane, new CellConstraints(1,1));
 		
 		//Adjudication en cours
-		adjPanel = new CoolPanel("pref","pref,pref");
-		
+		if(Client.client.getDernierEncherisseur() == null)
+			adjEnCours = "Aucune...";
+		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))
+			adjEnCours = "EN VOTRE FAVEUR";
+		else
+			adjEnCours = "CONTRE VOUS!";
+		adjPanel = new CoolPanel("pref","pref,center:pref");
 		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
+		adjPanel.addLabel(adjEnCours, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
 		//enchère
-		encherePanel = new CoolPanel("pref:grow,pref,","pref:grow,pref");
+		prochaineEnchere = Client.client.getNouveauPrix();
+		encherePanel = new CoolPanel("pref:grow,right:pref,","pref:grow,pref");
 		enchereButton = new JButton("Enchérir!");
         enchereButton.setActionCommand("encherir");
         enchereButton.addActionListener(this);
 		encherePanel.addLabel("prochain prix d'adjudication: ", new CellConstraints(1,1));
-		encherePanel.addC(enchereButton, new CellConstraints(1,2));
+		encherePanel.addC(new JLabel(""+prochaineEnchere), new CellConstraints(2,1));
+		encherePanel.addC(enchereButton, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
 		//Chat
-		chatPanel = new CoolPanel("fill:pref","pref, pref");
-		chatField = new JTextField(15);
+		chatPanel = new CoolPanel("fill:pref:grow","pref, pref");
+		chatField = new JTextField(/*15*/);
         chatField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chatButton.doClick();
@@ -137,7 +136,7 @@ class HdVPanel extends JComponent implements ActionListener
         chatButton.setActionCommand("sendchat");
         chatButton.addActionListener(this);
 		chatPanel.addC(chatField, new CellConstraints(1,1));
-		chatPanel.addC(chatButton, new CellConstraints(1,2));
+		chatPanel.addC(chatButton, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 
 		//Panel des commandes
 		cmdPanel = new CoolPanel("pref,pref,pref","pref");
@@ -329,16 +328,51 @@ class HdVPanel extends JComponent implements ActionListener
     }     
 
     void affichageEnchere(Integer prix, String i) {    
-        texteLog(i+" enchérit à "+prix);    
+        texteLog(i+" enchérit à "+prix);
+		majChamps();
     }    
-
+	private void majChamps()
+	{
+		majEncherePanel();
+		majAdjPanel();
+		majInfoAdjPanel();
+	}
+	private void majAdjPanel()
+	{
+		prochaineEnchere = Client.client.getNouveauPrix();
+		try
+		{
+			adjPanel.repaint();
+		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de adjPanel.repaint!!!!!!!!!!!!!!!!!!!!!!!!");}
+	}
+	private void majEncherePanel()
+	{
+		if(Client.client.getDernierEncherisseur() == null)
+			adjEnCours = "Aucune...";
+		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))
+			adjEnCours = "EN VOTRE FAVEUR";
+		else
+			adjEnCours = "CONTRE VOUS!";
+		try
+		{
+			encherePanel.repaint();
+		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de encherePanel.repaint!!!!!!!!!!!!!!!!!!!!");}
+	}
+	private void majInfoAdjPanel()
+	{
+		prixEnCours = Client.client.getPrixCourant();
+		try
+		{
+			infoAdjPanel.repaint();
+		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de infoAdjPanel. repaint!!!!!!!!!!!!!!!!!!!");}
+	}
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     
-                texteLog("--- Démarrage vente ---");      
+                texteLog("--- Vente en cours ---");     
                 break;     
             case VenteEnCours:    
-                texteLog("--- Vente en cours ---");     
+                texteLog("--- Démarrage de la vente ---");      
                 break;      
             case FinVente:     
                 texteLog("--- Fin de la vente ---");      

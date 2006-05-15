@@ -490,16 +490,16 @@ class VenteManagerServeur {
 	 * @param	v	vente serveur
 	 */
 	private void addVente(VenteServeur v) {
-		int lastId = this.ventes.size()-1;
+		int lastPos = this.ventes.size()-1;
 		VenteServeur lastV = null;
 		
-		if (lastId > -1) lastV = this.ventes.get(lastId);
+		if (lastPos > -1) lastV = this.ventes.get(lastPos);
 		
 		if (lastV == null
-			|| (lastV != null && v.getDate() >= lastV.getDate())) {
+			|| v.getDate() >= lastV.getDate()) {
 			this.ventes.add(v);
 		} else {
-			for(int i = 0; i <= lastId; i++) {
+			for(int i = 0; i <= lastPos; i++) {
 				if (v.getDate() < this.ventes.get(i).getDate()) {
 					this.ventes.add(i, v);
 					return;

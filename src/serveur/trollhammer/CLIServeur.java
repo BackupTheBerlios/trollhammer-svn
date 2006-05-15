@@ -1,6 +1,7 @@
 package trollhammer;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Calendar;
 
 /**
  * <p>Interface utilisateur du Serveur Trollhammer. C'est une interface en ligne
@@ -34,6 +35,27 @@ class CLIServeur extends CLI {
 				void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
 					Logger.log("CMD", 1, LogType.INF, "Modérateur créé : " + parameters[1]);
+				}
+			}
+		);
+		commandes.add(
+			new CMD("lv", 1, "lv - Liste la liste des ventes", "lv") {
+				void apply(String parameters[]) {
+					String liste = "liste des ventes\n";
+					Calendar cal = Calendar.getInstance();
+					VenteServeur vte = Serveur.ventemanager.getVenteEnCours();
+					if (vte != null) {
+						cal.setTimeInMillis(vte.getDate());
+						String maDate = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.YEAR)+" "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+						liste += "\t" + maDate + " : " + vte.getId() + " - " + vte.getNom() + " <-- en cours !\n";
+					}
+					for (int vid : Serveur.ventemanager.getVIds()) {
+						vte = Serveur.ventemanager.getVente(vid);
+						cal.setTimeInMillis(vte.getDate());
+						String maDate = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.YEAR)+" "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
+						liste += "\t" + maDate + " : " + vid + " - " + vte.getNom() + "\n";
+					}
+					Logger.log("CMD", 1, LogType.INF, liste);
 				}
 			}
 		);

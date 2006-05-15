@@ -423,22 +423,13 @@ class VenteManagerServeur {
 	 * autrement c'est la première de la liste.
      */
     VenteServeur getStarting() {
-		// jr : ne pas essayer de renvoyer la première
-		// vente disponible s'il n'existe absolument
-		// aucune vente dans le manager. Source
-		// de IndexArrayOutOfBoundsException quand
-		// le premier modo qui va créer les ventes
-		// veut se connecter.
-		// cfrey: ok :-)
+    
     	if (this.venteEnCours == null && ventes.size() > 0) {
     		return ventes.get(0);
-    	} else if(ventes.size() > 0) {
-    		// != null, il y en a une en cours, on la retourne
-    		// (même comportement qu'avant avec la comparaison des dates)
+    	} else {
+    		// venteEnCours != null ou size == 0
     		return this.venteEnCours;
-    	} else { // jr : si zéro vente dans le manager, retourner... null
-            return null;
-        }
+    	}
     }
 
     /**

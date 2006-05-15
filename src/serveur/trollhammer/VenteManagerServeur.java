@@ -316,6 +316,11 @@ class VenteManagerServeur {
 					u.resultatEdition(StatutEdition.NonTrouve);
 				} else {
 					// pas en cours ou en cours mais pas vte => suppression
+					// bug ok: ne pas oublier de repasser les objets en statut
+					//		"Accepté" ...
+					for (Objet o : vte.getObjets()) {
+						o.setStatut(StatutObjet.Accepte);
+					}
 					this.ventes.remove(this.getVente(vte.getId()));
 					u.resultatEdition(StatutEdition.Reussi);
 				}

@@ -127,6 +127,7 @@ public class Serveur {
 						this.marteau = 0;
 						Serveur.broadcaster.evenement(Evenement.Adjuge);
 						venteEnCours.sellObject(dernier_encherisseur, prix_courant);
+						this.dernier_encherisseur = null;
 						// actualiser vue client
 						//Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
 						

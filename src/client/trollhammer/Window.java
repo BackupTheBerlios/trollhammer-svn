@@ -233,7 +233,7 @@ class Window implements ActionListener
     /* les méthodes de HI sont relayées ici ! */
 	
     void affichage(Evenement e) {
-        hdv.affichage(e);
+        //hdv.affichage(e);
     }
 	
     void affichageChat(String m, String i) {
@@ -241,7 +241,7 @@ class Window implements ActionListener
     }
 	
     void affichageEnchere(Integer prix, String i) {
-        hdv.affichageEnchere(prix, i);
+        //hdv.affichageEnchere(prix, i);
     }
 	
     void affichageObjet(Objet o) {
@@ -292,15 +292,15 @@ class Window implements ActionListener
             // et ventes en cours, en plus de leur fenêtre de dialogue.
             case DebutVente:
                 JOptionPane.showMessageDialog(this.frame, "Démarrage d'une vente.");
-                hdv.message(n);
+                //hdv.message(n);
                 break;
             case VenteEnCours:
                 JOptionPane.showMessageDialog(this.frame, "Une vente est en cours.");
-                hdv.message(n);
+                //hdv.message(n);
                 break;
             case FinVente:
                 JOptionPane.showMessageDialog(this.frame, "Fin de la vente.");
-                hdv.message(n);
+                //hdv.message(n);
                 break;
             case LogOut:
                 // jr : n'arrive jamais, car la déconnexion côté client se

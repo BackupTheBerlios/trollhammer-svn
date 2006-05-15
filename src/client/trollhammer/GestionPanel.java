@@ -9,8 +9,10 @@ import javax.swing.event.ListSelectionEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.Collections;
+import java.util.Comparator;
 
 class GestionPanel implements ActionListener
 {
@@ -30,7 +32,7 @@ class GestionPanel implements ActionListener
 	//panel de droite
 	private JScrollPane droitePane = null;
 	private FreshPanel droitePanel = null;
-    private Vector<GestionUtilisateur> utilisateurs = null;
+    private ArrayList<GestionUtilisateur> utilisateurs = null;
     private JList liste = null;
 	
 	public GestionPanel(boolean modo)
@@ -145,9 +147,7 @@ class GestionPanel implements ActionListener
 	}
 
     void affichageListeUtilisateurs(Set<Utilisateur> ul) {
-        utilisateurs = new Vector<GestionUtilisateur>();
-        // le fameux 'nouvel utilisateur' en tête de liste
-        utilisateurs.add(GestionUtilisateur.nouvel_utilisateur);
+        utilisateurs = new ArrayList<GestionUtilisateur>();
 
         for(Utilisateur u : ul) {
             GestionUtilisateur gu = null;
@@ -159,7 +159,26 @@ class GestionPanel implements ActionListener
             utilisateurs.add(gu);
         }
 
-        liste.setListData(utilisateurs);
+        // classement de la liste des Utilisateurs.
+
+        Collections.sort(utilisateurs,
+                new Comparator<GestionUtilisateur>(){
+                    public int compare(GestionUtilisateur u1,
+                        GestionUtilisateur u2) {
+                        return (u1.getLogin()).compareTo(u2.getLogin());
+                    }
+                    public boolean equals(GestionUtilisateur u1,
+                        GestionUtilisateur u2) {
+                        return (u1.getLogin()).equals(u2.getLogin());
+                    }
+                }
+        );
+
+        // le fameux 'nouvel utilisateur' en tête de liste
+        utilisateurs.add(0, GestionUtilisateur.nouvel_utilisateur);
+
+        liste.setListData(utilisateurs.toArray());
+
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {
                 droitePane.validate();

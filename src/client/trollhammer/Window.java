@@ -156,6 +156,7 @@ class Window implements ActionListener
 			{
 				tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
 				hdv = new HdVPanel(modo, getWindow());tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
+                hdv.initTab(); // pour désactiver les boutons Enchérir & Autres
 				vente = new VentePanel(modo);tabbedPane.addTab("Vente", null, vente.getComponent(), null);
 				achat = new AchatPanel(modo);tabbedPane.addTab("Achat", null, achat.getComponent(), null);
 			} catch (Exception e) {Logger.log("Window",0,"Initialisation et Ajout des Tabs au tabbedPane... "+e.getMessage()); e.printStackTrace();}
@@ -191,6 +192,7 @@ class Window implements ActionListener
 					
 					switch(onglet) {
 						case 0: // hôtel des ventes
+                            hdv.initTab();
 							Client.hi.voir(Onglet.HotelDesVentes); break;
 						case 1: // vente
 							Client.hi.voir(Onglet.Vente); break;

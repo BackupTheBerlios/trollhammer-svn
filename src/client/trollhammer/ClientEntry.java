@@ -8,98 +8,26 @@ class ClientEntry {
 
     void resultatLogin(StatutLogin s) {
         if(Client.fsm.resultatLogin()) {
-            switch(s) {
-                case Connecte_Utilisateur:
-                    Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Utilisateur");
-                    Client.hi.mainWindow(false);
-                    Client.hi.voir(Onglet.HotelDesVentes);
-                    Client.session.setModerateur(false);
-                    Client.session.setConnecte(true);
-                    break;
-                case Connecte_Moderateur:
-                    Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Modérateur");
-                    Client.hi.mainWindow(true);
-                    Client.hi.voir(Onglet.HotelDesVentes);
-                    Client.session.setModerateur(true);
-                    Client.session.setConnecte(true);
-                    break;
-                case Banni:
-                    Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Banni");
-                    Client.hi.messageErreur(Erreur.Banni);
-                    // mod p.r. design : pas de destroy() (impossible en Java),
-                    // mais on tient quand même à fermer la connexion!
-                    Client.session.fermer();
-                    Client.session = null;
-                    break;
-                case Invalide:
-                    Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Invalide");
-                    Client.hi.messageErreur(Erreur.Invalide);
-                    // mod p.r. design : pas de destroy() (impossible en Java),
-                    // mais on tient quand même à fermer la connexion!
-                    Client.session.fermer();
-                    Client.session = null;
-                    break;
-            }
+            Client.client.resultatLogin(s);
         }
     }
 
     void notification(Notification n) {
-
-        //if(Client.fsm.notification()) {
-            Client.fsm.notification();
-            Client.hi.message(n);
-        //}
-
-        // peu importe réellement l'état de la FSM,
-        // la réception de notifications & updates
-        // est inconditionnelle (l'affichage l'est)
-
-        switch (n) {
-            case FinVente:
-                Client.humain.setVente(null);
-                break;
-            case DebutVente:
-            case VenteEnCours:
-                Vente v = Client.ventemanager.getVenteEnCours();
-                if(v != null) {
-                    Client.humain.setVente(v);
-                }
+    
+		if(Client.fsm.notification()) {
+            Client.client.notification(n);
         }
     }
 
     void evenement(Evenement e) {
         if(Client.fsm.evenement()) {
-            Client.hi.affichage(e);
-        }
-
-        Vente v = Client.humain.getVente();
-
-        if (v != null && e == Evenement.Adjuge) {
-            v.removeFirst();
-            Client.ventemanager.getVenteEnCours().setPrices();
-        } else if (v != null && e == Evenement.VenteAutomatique) {
-            v.setMode(Mode.Automatique);
+        	Client.client.evenement(e);
         }
     }
 
     void enchere(int prix, String i) {
-        Client.client.setPrixCourant(prix);
-
-        // incrément de 10% sur le prix initial
-        // dans le design, on avait fait l'erreur de
-        // faire 10% sur le prix _courant_.
-        // Fix de l'incrément du prix lors d'une enchère
-        Objet o = Client.objectmanager.getObject(
-                Client.humain.getVente().getFirst());
-        //Client.client.setPrixCourant((int) (Client.client.getPrixCourant() + 0.1 * o.getPrixDeBase()));
-		Client.client.setPrixCourant((int) Client.ventemanager.getVenteEnCours().newPrice());
-
-
-        Client.client.setDernierEncherisseur(i);
-
-        if (Client.fsm.enchere()
-                && Client.client.getMode() == Onglet.HotelDesVentes) {
-            Client.hi.affichageEnchere(prix, i);
+        if (Client.fsm.enchere()) {
+			Client.client.enchere(prix, i);
         }
     }
 
@@ -107,10 +35,10 @@ class ClientEntry {
         Logger.log("ClientEntry", 2, LogType.INF, "[chat] " + i + " dit : " + m);
 
         // inconditionnel, que ca s'affiche meme hors-onglet
-        //et que le log l'aie note
+        // et que le log l'aie note
         Client.fsm.chat();
 
-        Client.hi.affichageChat(m, i);
+        Client.client.chat(m, i);
     }
 
     void detailsVente(Vente v, List<Objet> liste) {
@@ -165,17 +93,17 @@ class ClientEntry {
     }
 
     void etatParticipant(Participant p) {
-        // inconditionnel pour raisons de cohérence
+// ??? inconditionnel pour raisons de cohérence
         Client.fsm.etatParticipant();
         Client.participantmanager.etatParticipant(p);
     }
 
     void superviseur(String u) {
-        // inconditionnel pour raisons de cohérence
-        Client.fsm.superviseur();
-        Client.client.setSuperviseur(u);
-        Vente v = Client.humain.getVente();
-        v.setMode(Mode.Manuel);
+// ??? inconditionnel pour raisons de cohérence
+// s'il y a un problème, c'est la fsm qu'il faut corriger !!!
+        if (Client.fsm.superviseur()) {
+        	Client.client.superviseur(u);
+        }
     }
 
 }

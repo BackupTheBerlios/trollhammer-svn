@@ -1,7 +1,8 @@
 package trollhammer;
 
-/** Classe englobante pour la partie Client. C'est un singleton.
-*/
+/**
+ * Classe englobante pour la partie Client. C'est un singleton.
+ */
 public class Client {
 
     /* champs du Design */
@@ -78,27 +79,92 @@ public class Client {
     /* méthodes du Design */
 
     void chat(String m, String i) {
-
+		Client.hi.affichageChat(m, i);
     }
 
     void enchere(int prix, String i) {
-
+		setPrixCourant(prix);
+		Objet o = Client.objectmanager.getObject(Client.humain.getVente().getFirst());
+		Client.client.setPrixCourant(Client.ventemanager.getVenteEnCours().newPrice());
+		Client.client.setDernierEncherisseur(i);
+		if (this.getMode() == Onglet.HotelDesVentes) {
+			Client.hi.affichageEnchere(prix, i);
+		}
     }
 
     void evenement(Evenement e) {
+		Client.hi.affichage(e);
+		Vente v = Client.humain.getVente();
 
+        if (v != null && e == Evenement.Adjuge) {
+            v.removeFirst();
+            Client.ventemanager.getVenteEnCours().setPrices();
+        } else if (v != null && e == Evenement.VenteAutomatique) {
+            v.setMode(Mode.Automatique);
+        }
     }
 
     void notification(Notification n) {
-
+		Client.hi.message(n);
+		
+		switch (n) {
+            case FinVente:
+                Client.humain.setVente(null);
+                break;
+            case DebutVente:
+            case VenteEnCours:
+                Vente v = Client.ventemanager.getVenteEnCours();
+                
+                if(v != null) {
+                    Client.humain.setVente(v);
+                }
+                break;
+            default:
+            	break;
+        }
     }
 
     void resultatLogin(StatutLogin s) {
-
+		switch(s) {
+			case Connecte_Utilisateur:
+				Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Utilisateur");
+				Client.hi.mainWindow(false);
+				Client.hi.voir(Onglet.HotelDesVentes);
+				Client.session.setModerateur(false);
+				Client.session.setConnecte(true);
+				break;
+			case Connecte_Moderateur:
+				Logger.log("ClientEntry", 1, LogType.INF, "[login] reçu réponse : Connecté Modérateur");
+				Client.hi.mainWindow(true);
+				Client.hi.voir(Onglet.HotelDesVentes);
+				Client.session.setModerateur(true);
+				Client.session.setConnecte(true);
+				break;
+			case Banni:
+				Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Banni");
+				Client.hi.messageErreur(Erreur.Banni);
+				// mod p.r. design : pas de destroy() (impossible en Java),
+				// mais on tient quand même à fermer la connexion!
+				Client.session.fermer();
+				Client.session = null;
+				break;
+			case Invalide:
+				Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Invalide");
+				Client.hi.messageErreur(Erreur.Invalide);
+				// mod p.r. design : pas de destroy() (impossible en Java),
+				// mais on tient quand même à fermer la connexion!
+				Client.session.fermer();
+				Client.session = null;
+				break;
+			default:
+				break;
+		}
     }
 
     void superviseur(String i) {
-
+		setSuperviseur(i);
+		Vente v = Client.humain.getVente();
+		v.setMode(Mode.Manuel);
     }
 
     /* fin des méthodes du Design */

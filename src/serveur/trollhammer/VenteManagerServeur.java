@@ -17,6 +17,7 @@ class VenteManagerServeur {
 	int lastId = -1;
 	private VenteServeur venteEnCours;
 	private List<VenteServeur> ventes;
+	long dateDerniereEnchere = -1;
 
     VenteManagerServeur() {
     	ventes = new ArrayList<VenteServeur>();
@@ -509,6 +510,16 @@ class VenteManagerServeur {
 					return;
 				}
 			}
+		}
+	}
+	
+	void setDateDerniereEnchere(long date) {
+		this.dateDerniereEnchere = date;
+	}
+
+	void donnerCoupdeMASSE() {
+		if (Serveur.serveur.getDate() > this.dateDerniereEnchere + 60*1000) {
+			Serveur.serveur.envoyerCoupdeMASSE(null);
 		}
 	}
 

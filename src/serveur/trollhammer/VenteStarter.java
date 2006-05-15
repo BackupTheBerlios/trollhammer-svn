@@ -26,6 +26,7 @@ class VenteStarter extends Thread {
            
 				Serveur.ventemanager.demarrerVente();
 				//Logger.log("VenteStarter", 2, LogType.DBG, "Démarrage de vente!");
+				Serveur.ventemanager.donnerCoupdeMASSE();
 			//}
 			try {
 				Thread.sleep(1000); //dodo pendant une seconde.

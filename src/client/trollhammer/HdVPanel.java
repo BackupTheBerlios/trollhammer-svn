@@ -369,10 +369,10 @@ class HdVPanel extends JComponent implements ActionListener
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     
-                texteLog("--- Vente en cours ---");     
+                texteLog("--- Démarrage de vente ---");      
                 break;     
             case VenteEnCours:    
-                texteLog("--- Démarrage de la vente ---");      
+                texteLog("--- Vente en cours ---");     
                 break;      
             case FinVente:     
                 texteLog("--- Fin de la vente ---");      

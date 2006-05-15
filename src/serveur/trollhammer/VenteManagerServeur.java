@@ -206,7 +206,16 @@ class VenteManagerServeur {
             	Logger.log("VenteManagerServeur", 2, LogType.INF,
 					"obtenirVente: la prochaine vente est la vente en cours");
                 u.notification(Notification.VenteEnCours);
-                if (vs.getMode() == Mode.Manuel) {
+                if (Serveur.serveur.getDernierEncherisseur() != null) {
+					u.enchere(Serveur.serveur.getPrixCourant(), Serveur.serveur.getDernierEncherisseur());
+				}
+				switch (Serveur.serveur.getMarteau()) {
+					case 0: break;
+					case 1: u.evenement(Evenement.CoupDeMassePAF1); break;
+					case 2: u.evenement(Evenement.CoupDeMassePAF2); break;
+					default:
+				}
+				if (vs.getMode() == Mode.Manuel) {
                     u.superviseur(vs.getSuperviseur());
                 }
             }

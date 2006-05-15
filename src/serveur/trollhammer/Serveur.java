@@ -198,7 +198,15 @@ public class Serveur {
     long getDate() {
         return System.currentTimeMillis();
     }
-    
+
+	int getPrixCourant() {
+		return prix_courant;
+	}
+	
+	int getMarteau() {
+		return marteau;
+	}
+
     public String getDernierEncherisseur() {
     	return this.dernier_encherisseur;
     }

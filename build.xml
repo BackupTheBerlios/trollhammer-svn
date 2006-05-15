@@ -383,6 +383,9 @@
 	</target>
     <target name="rejar" depends="megaputz,jar" description="Genere les fichiers jar du projet">
 	</target>
-  
+ 
+     <target name="total" depends="javadoc,jar" description="Fait tout mouahahaha">
+	</target>
+
     
 </project>

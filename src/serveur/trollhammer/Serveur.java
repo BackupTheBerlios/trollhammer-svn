@@ -94,58 +94,61 @@ public class Serveur {
 // avoir un timeout côté serveur qui génère des coups de marteau ...
     void envoyerCoupdeMASSE(String sender) {
 		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
-		
-		switch (venteEnCours.isSuperviseur(sender) ? 1 : 0) {
-			case 0:
-				if (venteEnCours.getMode() == Mode.Automatique) {
-					if (Serveur.usermanager.isModo(sender)) {
-						// promotion du modérateur en superviseur
-						venteEnCours.setSuperviseur(sender);
-						Serveur.broadcaster.superviseur(sender);
-						venteEnCours.setMode(Mode.Manuel);
-						// continue avec le cas où sender == superviseur
-					}
-				} else {
-					// mode Manuel => un superviseur existe déjà => rien
-					break; // (sort du switch)
-				}
-			case 1:
-				// sender est un superviseur ou null (mode automatique)
-				// NB: les questions de superviseur/enchérisseur devraient avoir
-				// été gérées par encherir(prix, user).
-				
-				switch (this.marteau) { // nombre de coups de marteau
-					case 0 :
-						this.marteau = 1;
-						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
-						break;
-					case 1 :
-						this.marteau = 2;
-						Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
-						break;
-					case 2 :
-						this.marteau = 0;
-						Serveur.broadcaster.evenement(Evenement.Adjuge);
-						venteEnCours.sellObject(dernier_encherisseur, prix_courant);
-						this.dernier_encherisseur = null;
-						// actualiser vue client
-						//Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
-						
-						if (venteEnCours.getOIds().size() == 0) {
-							// c'est le dernier objet qu'on a adjugé
-							Serveur.broadcaster.notification(Notification.FinVente);
-							Serveur.ventemanager.terminateVenteEnCours();
-							VenteServeur nv = Serveur.ventemanager.getStarting();
-							if (nv != null) {
-								Serveur.broadcaster.detailsVente(nv, nv.getObjets());
-							}
+		if (venteEnCours != null) {
+			switch (venteEnCours.isSuperviseur(sender) ? 1 : 0) {
+				case 0:
+					if (venteEnCours.getMode() == Mode.Automatique) {
+						if (Serveur.usermanager.isModo(sender)) {
+							// promotion du modérateur en superviseur
+							venteEnCours.setSuperviseur(sender);
+							Serveur.broadcaster.superviseur(sender);
+							venteEnCours.setMode(Mode.Manuel);
+							// continue avec le cas où sender == superviseur
 						}
-						break;
-					default :
-						Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
-				}
-			default:
-				break;
+					} else {
+						// mode Manuel => un superviseur existe déjà => rien
+						break; // (sort du switch)
+					}
+				case 1:
+					// sender est un superviseur ou null (mode automatique)
+					// NB: les questions de superviseur/enchérisseur devraient avoir
+					// été gérées par encherir(prix, user).
+					
+					switch (this.marteau) { // nombre de coups de marteau
+						case 0 :
+							this.marteau = 1;
+							Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF1);
+							break;
+						case 1 :
+							this.marteau = 2;
+							Serveur.broadcaster.evenement(Evenement.CoupDeMassePAF2);
+							break;
+						case 2 :
+							this.marteau = 0;
+							Serveur.broadcaster.evenement(Evenement.Adjuge);
+							venteEnCours.sellObject(dernier_encherisseur, prix_courant);
+							this.dernier_encherisseur = null;
+							// actualiser vue client
+							//Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());
+							
+							if (venteEnCours.getOIds().size() == 0) {
+								// c'est le dernier objet qu'on a adjugé
+								Serveur.broadcaster.notification(Notification.FinVente);
+								Serveur.ventemanager.terminateVenteEnCours();
+								VenteServeur nv = Serveur.ventemanager.getStarting();
+								if (nv != null) {
+									Serveur.broadcaster.detailsVente(nv, nv.getObjets());
+								}
+							}
+							break;
+						default :
+							Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);
+					}
+				default:
+					break;
+			}
+		} else {
+			Logger.log("Serveur", 1, LogType.WRN, "Coups de masse donné, alors qu'il n'y a aucune vente en cours. Message ignoré.");
 		}
     }
 

@@ -412,12 +412,16 @@ class VenteManagerServeur {
      * @param	i	identifiant d'une vente
      */
     VenteServeur getVente(int i) {
-        for(VenteServeur v : ventes) {
-            if(v.getId() == i) {
-                return v;
-            }
-        }
-        return null;
+		if (venteEnCours != null && venteEnCours.getId() == i) {
+			return venteEnCours;
+		} else {
+			for(VenteServeur v : ventes) {
+				if(v.getId() == i) {
+					return v;
+				}
+			}
+			return null;
+		}
     }
 
     /**

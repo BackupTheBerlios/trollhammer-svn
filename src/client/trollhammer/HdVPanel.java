@@ -40,11 +40,11 @@ class HdVPanel extends JComponent implements ActionListener
 	private byte nbCdM = 0;
 	private double prixEnCours = 0.;
 	private double prochaineEnchere = 0.;
-	private Vector<HdVObjet> lstObjVect = null;
+	private Vector<HdVObjet> vobjs = null;
 	private String adjEnCours = "";
 	private ButtonGroup grpl = null;
     private String victime = null;
-
+	private ButtonGroup ObjetsVentegrp = null;
     private Window mw;
 
 	public HdVPanel(boolean modo, Window mw)
@@ -55,6 +55,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private void initHdVComponents()
 	{
 		//majChamps(); //nullPointerException quand tu nous tiens.....
+		
 		//Liste des objets
 		listeObjetsPanel = new FreshPanel('x', true);
 		
@@ -110,7 +111,7 @@ class HdVPanel extends JComponent implements ActionListener
 			adjEnCours = "EN VOTRE FAVEUR";
 		else
 			adjEnCours = "CONTRE VOUS!";
-		adjPanel = new CoolPanel("pref","pref,center:pref");
+		adjPanel = new CoolPanel("fill:pref:grow","pref,center:pref");
 		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
 		adjPanel.addLabel(adjEnCours, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
@@ -126,7 +127,7 @@ class HdVPanel extends JComponent implements ActionListener
 		
 		//Chat
 		chatPanel = new CoolPanel("fill:pref:grow","pref, pref");
-		chatField = new JTextField(/*15*/);
+		chatField = new JTextField();
         chatField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 chatButton.doClick();
@@ -253,6 +254,31 @@ class HdVPanel extends JComponent implements ActionListener
     void affichageChat(String m, String i) {
         this.texteLog("<"+i+"> "+m+"\n");
     }
+	public void affichageVente(Vente v)
+	{
+		Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
+		vobjs = new Vector<HdVObjet>();
+		for(int i : v.getOIds())
+		{
+			Logger.log("HdVPanel",0,"@@@ for.. @@@");
+            Objet o = Client.objectmanager.getObjet(i);
+            if(o != null)
+			{
+                vobjs.add(new HdVObjet(o));
+            }
+        }
+		affichageListeObjets();
+	}
+	private void affichageListeObjets()
+	{
+		ObjetsVentegrp = new ButtonGroup();
+		for(HdVObjet o: vobjs)
+		{
+			listeObjetsPanel.add(o);
+			ObjetsVentegrp.add(o);
+			o.addActionListener(this);
+		}
+	}
 
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();
@@ -288,7 +314,7 @@ class HdVPanel extends JComponent implements ActionListener
         }
         }); // pask on s'la pète!!!
     }
-	void affichageListeObjets(Set<Objet> ol)
+	/*void affichageListeObjets(Set<Objet> ol)
 	{
         lstObjVect = new Vector<HdVObjet>();
         for(Objet o : ol)
@@ -297,17 +323,18 @@ class HdVPanel extends JComponent implements ActionListener
                 lstObjVect.add(new HdVObjet(o));
         }
         //listeObjetsPanel.setListData(lstObjVect); beuhaaaaah va pas
-    }
+    }*/
 
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:      
-                texteLog("--- PREMIER COUP DE MARTEAU ---");      
+                texteLog("--- PREMIER COUP DE MARTEAU ---");
                 break;   
             case CoupDeMassePAF2:   
-                texteLog("--- SECOND COUP DE MARTEAU ---");     
+                texteLog("--- SECOND COUP DE MARTEAU ---");
                 break;     
-            case Adjuge:      
+            case Adjuge:
+				nbCdM = 3;
                 texteLog("--- ADJUDICATION ---\n"     
                         +"Objet : "      
                         //le nom de l'objet qui vient d'être vendu (ouf!)     
@@ -318,7 +345,7 @@ class HdVPanel extends JComponent implements ActionListener
                         +Client.client.getDernierEncherisseur()     
                         +"Au prix de "     
                         +Client.client.getPrixCourant()   
-                        );   
+                        );
                 break;      
             case VenteAutomatique:     
                 texteLog("--- Vente en mode automatique ---");    

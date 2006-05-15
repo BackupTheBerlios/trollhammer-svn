@@ -93,6 +93,9 @@ class VenteManagerClient {
         // le type de la liste est donc de planification...
         // ou bien d'Hôtel des Ventes ? (jr)
         Client.objectmanager.updateListe(Onglet.HotelDesVentes, new HashSet<Objet>(os));
+        // jr : ajout p.r. Design : affichage de la vente
+        // mis à jour ! *ding dong* !
+        Client.hi.affichageVente(v);
     }
 
 }

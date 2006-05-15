@@ -250,6 +250,12 @@ class HdVPanel extends JComponent implements ActionListener
         if( autoScroll ) logArea.setCaretPosition( logArea.getDocument().getLength() );
     }
 
+    /** Idem que texteLog(String texte), mais fait un saut de ligne à la fin.
+    */
+    void texteLogln(String texte) {
+        this.texteLog(texte+"\n");
+    }
+
     /* relai (partiel) des méthodes de HI */
     void affichageChat(String m, String i) {
         this.texteLog("<"+i+"> "+m+"\n");
@@ -370,14 +376,14 @@ class HdVPanel extends JComponent implements ActionListener
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:      
-                texteLog("--- PREMIER COUP DE MARTEAU ---");
+                texteLogln("--- PREMIER COUP DE MARTEAU ---");
                 break;   
             case CoupDeMassePAF2:   
-                texteLog("--- SECOND COUP DE MARTEAU ---");
+                texteLogln("--- SECOND COUP DE MARTEAU ---");
                 break;     
             case Adjuge:
 				nbCdM = 3;
-                texteLog("--- ADJUDICATION ---\n"     
+                texteLogln("--- ADJUDICATION ---\n"     
                         +"Objet : "      
                         //le nom de l'objet qui vient d'être vendu (ouf!)     
                         +Client.objectmanager.getObjet(     
@@ -390,14 +396,14 @@ class HdVPanel extends JComponent implements ActionListener
                         );
                 break;      
             case VenteAutomatique:     
-                texteLog("--- Vente en mode automatique ---");    
+                texteLogln("--- Vente en mode automatique ---");    
                 break;   
             default :   
         }      
     }     
 
     void affichageEnchere(Integer prix, String i) {    
-        texteLog(i+" enchérit à "+prix);
+        texteLogln(i+" enchérit à "+prix);
 		majChamps();
     }    
 	private void majChamps()
@@ -438,15 +444,27 @@ class HdVPanel extends JComponent implements ActionListener
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     
-                texteLog("--- Démarrage de vente ---");      
+                texteLogln("--- Démarrage de vente ---");      
+                enchereButton.setEnabled(true);
                 break;     
             case VenteEnCours:    
-                texteLog("--- Vente en cours ---");     
+                texteLogln("--- Vente en cours ---");     
+                enchereButton.setEnabled(true);
                 break;      
             case FinVente:     
-                texteLog("--- Fin de la vente ---");      
+                texteLogln("--- Fin de la vente ---");      
+                enchereButton.setEnabled(false);
                 break;   
         }   
     }      
 
+    /** Fonction appellée par Window à chaque fois que l'utilisateur sélectionne
+     * l'Onglet Hôtel Des Ventes, permet d'initialiser les boutons à 'désactivé'.
+     */
+    void initTab() {
+        // jr : a chaque fois que le tab est affiché,
+        // et si aucune réception de
+        // VenteEnCours ou DebutVente, on désactive le bouton 'enchérir'.
+        enchereButton.setEnabled(false);
+    }
 }

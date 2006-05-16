@@ -17,6 +17,9 @@ abstract class ObjetElementListe extends JPanel
     protected String vendeur;
     protected Color couleur_fond;
     protected Color couleur_selectionne;
+	protected ImageIcon img = null;
+	protected JPanel leftPan = null;
+	protected JPanel rightPan = null;
 
 	
 	public ObjetElementListe(Objet obj)
@@ -30,9 +33,26 @@ abstract class ObjetElementListe extends JPanel
 		prix_de_vente = obj.getPrixDeVente();
 		acheteur = obj.getAcheteur();
 		vendeur = obj.getVendeur();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //à modifier quand il y aura l'image
+		//begin l'image...
+		this.img = new ImageIcon(obj.getImage().getImage());
+		int h = img.getIconHeight();
+		int w = img.getIconWidth();
+		if(w>h)
+			this.img.setImage(img.getImage().getScaledInstance(50,-1,Image.SCALE_SMOOTH));
+		else
+			this.img.setImage(img.getImage().getScaledInstance(-1,50,Image.SCALE_SMOOTH));
+		//this.add(img);
+		//end l'image...
+		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); //à modifier quand il y aura l'image
 		this.setBorder(BorderFactory.createEtchedBorder());
-		this.add(new JLabel(nom));
+		leftPan = new JPanel();
+		leftPan.setLayout(new BoxLayout(leftPan, BoxLayout.X_AXIS));
+		leftPan.add(new JLabel(img, SwingConstants.CENTER));
+		rightPan = new JPanel();
+		rightPan.setLayout(new BoxLayout(rightPan, BoxLayout.Y_AXIS));
+		rightPan.add(new JLabel(nom));
+		this.add(leftPan);
+		this.add(rightPan);
 
         couleur_fond = this.getBackground();
         couleur_selectionne = Color.LIGHT_GRAY;
@@ -41,8 +61,10 @@ abstract class ObjetElementListe extends JPanel
     void selectionne(boolean estSelectionne) {
         if(estSelectionne) {
             this.setBackground(couleur_selectionne);
+			rightPan.setBackground(couleur_selectionne);
         } else {
             this.setBackground(couleur_fond);
+			rightPan.setBackground(couleur_fond);
         }
     }
 
@@ -57,8 +79,8 @@ class VenteObjetAccepte extends ObjetElementListe
 	{
 		super(obj);
 		
-        this.add(new JLabel(nom));
-		this.add(new JLabel("Accepté"));
+        //this.add(new JLabel(nom));
+		rightPan.add(new JLabel("Accepté"));
 	}
 }
 
@@ -70,7 +92,7 @@ class VenteObjetEnVente extends VenteObjetAccepte
 		/**
 		*TODO comment faire pour savoir quand l'objet sera vendu...
 		*/
-		this.add(new JLabel("Sera vendu le ..."+"à partir de ..."));
+		rightPan.add(new JLabel("Sera vendu prochainement."));
 	}
 }
 
@@ -83,7 +105,7 @@ class VenteObjetPropose extends ObjetElementListe
 		super(obj);
 		//retirer = new JButton("Retirer");
 		
-		this.add(new JLabel("En attente de validation"));
+		rightPan.add(new JLabel("En attente de validation"));
 		//this.add(retirer);
 		
 	}
@@ -97,7 +119,7 @@ class VenteObjetRefuse extends ObjetElementListe
 		/**
 		* TODO cause du refus?
 		*/
-		this.add(new JLabel("Cet Objet à été refusé"));
+		rightPan.add(new JLabel("Cet Objet à été refusé"));
 	}
 }
 
@@ -107,7 +129,7 @@ class VenteObjetVendu extends ObjetElementListe
 	{
 		super(obj);
 		
-		this.add(new JLabel("Vendu "+prix_de_vente+".- à "+obj.getAcheteur()));
+		rightPan.add(new JLabel("Vendu "+prix_de_vente+".- à "+obj.getAcheteur()));
 	}
 }
 
@@ -115,8 +137,8 @@ class ValiderObjet extends ObjetElementListe {
     
     public ValiderObjet(Objet obj) {
         super(obj);
-		this.add(new JLabel(description));
-		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
+		rightPan.add(new JLabel(description));
+		rightPan.add(new JLabel(String.valueOf(prix_de_base)+".-"));
     }
 }
 
@@ -125,8 +147,8 @@ class AchatObjet extends ObjetElementListe {
     public AchatObjet(Objet obj) {
         super(obj);
 
-		this.add(new JLabel(description));
-		this.add(new JLabel("Acheté "+String.valueOf(prix_de_vente)+".-"));
+		rightPan.add(new JLabel(description));
+		rightPan.add(new JLabel("Acheté "+String.valueOf(prix_de_vente)+".-"));
     }
 }
 
@@ -134,8 +156,8 @@ class PlanifierObjet extends ObjetElementListe {
 
     public PlanifierObjet(Objet obj) {
         super(obj);
-		this.add(new JLabel(description));
-		this.add(new JLabel(String.valueOf(prix_de_base)+".-"));
+		rightPan.add(new JLabel(description));
+		rightPan.add(new JLabel(String.valueOf(prix_de_base)+".-"));
     }
 }
 

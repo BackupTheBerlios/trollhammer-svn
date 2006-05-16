@@ -141,7 +141,6 @@
     
     
  	<target name="prepare" description="Construit les differents repertoires necessaires au projet">
-	<!--	<splash imageurl="http://www.bulldogbuckle.com/newsite/images/lg_d1111p.jpg"/> -->
  	    <echo>Creation des repertoires</echo>
  	    <mkdir dir="${build.dir}"/>
  	    <mkdir dir="${build.client}"/>
@@ -256,6 +255,8 @@
     
     
     <target name="run" description="Execution du client et du serveur">
+    	<splash imageurl="http://www.bulldogbuckle.com/newsite/images/lg_d1111p.jpg"/> 
+
 		<sound>
 			<success source="ressources/snd/activation.wav"/>
 		    <fail source=""/>

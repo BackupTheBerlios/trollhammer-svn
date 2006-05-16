@@ -262,6 +262,8 @@ class VentePanel implements ActionListener
 
         // update image tadadaaam
         img = o.getImage();
+        imgLabel.setIcon(img);
+        imgLabel.updateUI();
 
         leftPanel.validate();
         leftPanel.repaint();

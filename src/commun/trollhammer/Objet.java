@@ -1,4 +1,5 @@
 package trollhammer;
+import java.awt.*;
 
 /**
  * <p>Classe qui modélise un objet mis en vente.</p>
@@ -14,6 +15,7 @@ class Objet implements java.io.Serializable {
     private StatutObjet statut;
     private String acheteur;
     private String vendeur;
+	private Image image;
 
 	// Constructeurs : START
 	// Constructeurs : END
@@ -57,6 +59,9 @@ class Objet implements java.io.Serializable {
     public String getVendeur() {
         return this.vendeur;
     }
+	public Image getImage() {
+		return this.image;
+	}
 
     public void setId(int id) {
         this.id = id;
@@ -93,5 +98,9 @@ class Objet implements java.io.Serializable {
     public void setVendeur(String vendeur) {
         this.vendeur = vendeur;
     }
+	
+	public void setImage(Image image) {
+		this.image = image;
+	}
    	// Setters & Getters : END
 }

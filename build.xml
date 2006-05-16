@@ -141,7 +141,7 @@
     
     
  	<target name="prepare" description="Construit les differents repertoires necessaires au projet">
-   <!--	<splash imageurl="http://mediatheque.epfl.ch/albums-actualites2/albun66/6273_G.sized.jpg"/> -->
+		<splash imageurl="http://www.bulldogbuckle.com/newsite/images/lg_d1111p.jpg"/> 
  	    <echo>Creation des repertoires</echo>
  	    <mkdir dir="${build.dir}"/>
  	    <mkdir dir="${build.client}"/>

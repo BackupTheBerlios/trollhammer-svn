@@ -15,7 +15,7 @@ class Objet implements java.io.Serializable {
     private StatutObjet statut;
     private String acheteur;
     private String vendeur;
-	private ImageIcon image;
+	private Image image;
 
 	// Constructeurs : START
 	// Constructeurs : END
@@ -59,7 +59,7 @@ class Objet implements java.io.Serializable {
     public String getVendeur() {
         return this.vendeur;
     }
-	public ImageIcon getImage() {
+	public Image getImage() {
 		return this.image;
 	}
 
@@ -99,7 +99,7 @@ class Objet implements java.io.Serializable {
         this.vendeur = vendeur;
     }
 	
-	public void setImage(ImageIcon image) {
+	public void setImage(Image image) {
 		this.image = image;
 	}
    	// Setters & Getters : END

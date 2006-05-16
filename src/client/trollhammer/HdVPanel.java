@@ -559,6 +559,7 @@ class HdVPanel extends JComponent implements ActionListener
                     cdmButton.setEnabled(false);
                 }
 					imgPanel.removeAll();
+					descrObjetTextArea.setText("");
 				imgPanel.addC(new JLabel("Image"), new CellConstraints(1,2));
 				imgPanel.addC(new JLabel("non disponible"), new CellConstraints(1,3));
 				

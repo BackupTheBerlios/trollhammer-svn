@@ -32,7 +32,7 @@ public class Serveur {
 
         // CECI EST UN TEST
         
-        Serveur.usermanager.addUtilisateur(new ModerateurServeur("tefal", "", "", "tefal"));
+        /*Serveur.usermanager.addUtilisateur(new ModerateurServeur("tefal", "", "", "tefal"));
         Serveur.usermanager.addUtilisateur(new ModerateurServeur("deneo", "", "", "deneo"));
         Serveur.usermanager.addUtilisateur(new ModerateurServeur("mithrandir", "", "", "mithrandir"));
         Serveur.usermanager.addUtilisateur(new ModerateurServeur("dolarcles", "", "", "dolarcles"));
@@ -42,7 +42,8 @@ public class Serveur {
         Serveur.usermanager.addUtilisateur(new UtilisateurServeur("sambuc", "", "", "sambuc"));
         Serveur.usermanager.addUtilisateur(new UtilisateurServeur("cfrey", "", "", "cfrey"));
         Serveur.usermanager.addUtilisateur(new UtilisateurServeur("richon", "", "", "richon"));
-        
+        */
+		
         // FIN DU TEST
         
 		new CLIServeur().interprete();

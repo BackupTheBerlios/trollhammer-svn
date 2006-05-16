@@ -255,13 +255,6 @@
     
     
     <target name="run" description="Execution du client et du serveur">
-    	<splash imageurl="http://www.bulldogbuckle.com/newsite/images/lg_d1111p.jpg"/> 
-
-		<sound>
-			<success source="ressources/snd/activation.wav"/>
-		    <fail source=""/>
-
-		</sound>
 		<parallel>
 			<sequential>
 

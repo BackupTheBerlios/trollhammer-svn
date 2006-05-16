@@ -1,5 +1,5 @@
 /*
- * @(#)ExampleFileFilter.java	1.16 04/07/26
+ * @(#)VentePanelFileFilter.java	1.16 04/07/26
  * 
  * Copyright (c) 2004 Sun Microsystems, Inc. All Rights Reserved.
  * 
@@ -35,9 +35,9 @@
  */
 
 /*
- * @(#)ExampleFileFilter.java	1.16 04/07/26
+ * @(#)VentePanelFileFilter.java	1.16 04/07/26
  */
-
+package trollhammer;
 
 import java.io.File;
 import java.util.Hashtable;
@@ -56,7 +56,7 @@ import javax.swing.filechooser.*;
  * but gif and jpg image files:
  *
  *     JFileChooser chooser = new JFileChooser();
- *     ExampleFileFilter filter = new ExampleFileFilter(
+ *     VentePanelFileFilter filter = new VentePanelFileFilter(
  *                   new String{"gif", "jpg"}, "JPEG & GIF Images")
  *     chooser.addChoosableFileFilter(filter);
  *     chooser.showOpenDialog(this);
@@ -64,7 +64,7 @@ import javax.swing.filechooser.*;
  * @version 1.16 07/26/04
  * @author Jeff Dinkins
  */
-public class ExampleFileFilter extends FileFilter {
+public class VentePanelFileFilter extends FileFilter {
 
     private static String TYPE_UNKNOWN = "Type Unknown";
     private static String HIDDEN_FILE = "Hidden File";
@@ -80,30 +80,30 @@ public class ExampleFileFilter extends FileFilter {
      *
      * @see #addExtension
      */
-    public ExampleFileFilter() {
+    public VentePanelFileFilter() {
 	this.filters = new Hashtable();
     }
 
     /**
      * Creates a file filter that accepts files with the given extension.
-     * Example: new ExampleFileFilter("jpg");
+     * Example: new VentePanelFileFilter("jpg");
      *
      * @see #addExtension
      */
-    public ExampleFileFilter(String extension) {
+    public VentePanelFileFilter(String extension) {
 	this(extension,null);
     }
 
     /**
      * Creates a file filter that accepts the given file type.
-     * Example: new ExampleFileFilter("jpg", "JPEG Image Images");
+     * Example: new VentePanelFileFilter("jpg", "JPEG Image Images");
      *
      * Note that the "." before the extension is not needed. If
      * provided, it will be ignored.
      *
      * @see #addExtension
      */
-    public ExampleFileFilter(String extension, String description) {
+    public VentePanelFileFilter(String extension, String description) {
 	this();
 	if(extension!=null) addExtension(extension);
  	if(description!=null) setDescription(description);
@@ -111,26 +111,26 @@ public class ExampleFileFilter extends FileFilter {
 
     /**
      * Creates a file filter from the given string array.
-     * Example: new ExampleFileFilter(String {"gif", "jpg"});
+     * Example: new VentePanelFileFilter(String {"gif", "jpg"});
      *
      * Note that the "." before the extension is not needed adn
      * will be ignored.
      *
      * @see #addExtension
      */
-    public ExampleFileFilter(String[] filters) {
+    public VentePanelFileFilter(String[] filters) {
 	this(filters, null);
     }
 
     /**
      * Creates a file filter from the given string array and description.
-     * Example: new ExampleFileFilter(String {"gif", "jpg"}, "Gif and JPG Images");
+     * Example: new VentePanelFileFilter(String {"gif", "jpg"}, "Gif and JPG Images");
      *
      * Note that the "." before the extension is not needed and will be ignored.
      *
      * @see #addExtension
      */
-    public ExampleFileFilter(String[] filters, String description) {
+    public VentePanelFileFilter(String[] filters, String description) {
 	this();
 	for (int i = 0; i < filters.length; i++) {
 	    // add filters one by one
@@ -184,7 +184,7 @@ public class ExampleFileFilter extends FileFilter {
      * For example: the following code will create a filter that filters
      * out all files except those that end in ".jpg" and ".tif":
      *
-     *   ExampleFileFilter filter = new ExampleFileFilter();
+     *   VentePanelFileFilter filter = new VentePanelFileFilter();
      *   filter.addExtension("jpg");
      *   filter.addExtension("tif");
      *

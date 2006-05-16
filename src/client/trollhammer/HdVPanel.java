@@ -75,7 +75,7 @@ class HdVPanel extends JComponent implements ActionListener
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
 		selectPanel.setColumnGroups(new int[][] {{1,3}});
-		imgPanel = new CoolPanel("center:pref:grow","pref:grow,pref,pref,pref:grow");
+		imgPanel = new CoolPanel("center:pref:grow","pref:grow,pref,pref,pref,pref:grow");
 		imgPanel.setRowGroups(new int[][] {{1,4}});
 		imgPanel.setPreferredSize(new Dimension(150,150));
 		imgPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -251,6 +251,9 @@ class HdVPanel extends JComponent implements ActionListener
 			//descrObjetTextArea.setText(objetSelectionne.getDescription());
 			//becholey: pask on se la pète enocre plus comme des porcs!!
 			descrObjetTextArea.setText(((HdVObjet) event.getSource()).getDescription());
+			imgPanel.removeAll();
+			imgPanel.addC(new JLabel(((HdVObjet) event.getSource()).getImage(), SwingConstants.CENTER), new CellConstraints(1,3));
+			imgPanel.updateUI();
 		}
 	}
 

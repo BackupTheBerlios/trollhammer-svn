@@ -19,12 +19,15 @@ class VentePanel implements ActionListener
 	private CoolPanel leftPanel = null;
 	private JLabel imgLabel = null;
 	private JButton parcourir = null;
+	private ImageIcon img = null;
+	private ImageIcon objImg = null;
 	private JTextField objTitre = null;
 	private JTextArea objDescr = null;
 	private JScrollPane objDescrPane = null;
 	private JTextField objPrix = null;
 	private JButton proposer = null;
 	private JButton raz = null;
+	private JFileChooser chooser = null;
 	
 	//éléments du Panel de droite
 	private JScrollPane rightPane = null;
@@ -49,7 +52,7 @@ class VentePanel implements ActionListener
 	private void initComponents()
 	{
 		//éléments du Panel de gauche
-		imgLabel = new JLabel();
+		imgLabel = new JLabel((Icon)null,SwingConstants.CENTER);
 		imgLabel.setPreferredSize(new Dimension(150,150));
 		imgLabel.setBorder(BorderFactory.createEtchedBorder());
 		parcourir = new JButton("Parcourir");
@@ -160,6 +163,8 @@ class VentePanel implements ActionListener
                 o.setStatut(StatutObjet.Propose);
                 // le vendeur de l'objet est celui qui le propose, par définition
                 o.setVendeur(Client.session.getLogin());
+				// on ajoute la zolie zimage
+				o.setImage(objImg);
 
                 // EXPEDITION DE L'OBJET A PROPOSER
                 Client.hi.proposerObjet(o);
@@ -179,10 +184,36 @@ class VentePanel implements ActionListener
             objTitre.setText("");
             objDescr.setText("");
             objPrix.setText("");
+			imgLabel.setIcon(null);
+			imgLabel.updateUI();
             // a faire : déselectionner l'image...
         } else if(event.getActionCommand().equals("browse"))
 		{
-			//blabla
+			chooser = new JFileChooser();
+			// Note: source for ExampleFileFilter can be found in FileChooserDemo,
+			// under the demo/jfc directory in the JDK.
+			VentePanelFileFilter filter = new VentePanelFileFilter();
+			filter.addExtension("jpg");
+			filter.addExtension("gif");
+			filter.addExtension("png");
+			filter.setDescription("JPG, GIF & PNG Images");
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showOpenDialog(leftPanel);
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				//System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+				img = new ImageIcon(chooser.getSelectedFile().getAbsolutePath());
+				int h = img.getIconHeight();
+				int w = img.getIconWidth();
+				if(w>h)
+					img.setImage(img.getImage().getScaledInstance(120,-1,Image.SCALE_SMOOTH));
+				else
+					img.setImage(img.getImage().getScaledInstance(-1,120,Image.SCALE_SMOOTH));
+				Logger.log("VentePanel",2,chooser.getSelectedFile().getName());
+				objImg = new ImageIcon(img.getImage());
+				imgLabel.setIcon(img);
+				imgLabel.updateUI();
+				
+			}
 		}
 	}
 

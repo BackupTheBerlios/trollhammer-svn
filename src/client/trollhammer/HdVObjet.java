@@ -42,24 +42,33 @@ import com.jgoodies.forms.layout.FormLayout;
 
 public class HdVObjet extends JRadioButton
 {
+	//private ImageIcon imgIcon = null;
 	private ImageIcon img = null;
 	private JLabel label = null;
 	private Objet o = null;
 	private final Color couleur_fond = this.getBackground();
 	private final Color couleur_selectionne = Color.LIGHT_GRAY;
-	public HdVObjet(Objet o, ImageIcon img) 
+	public HdVObjet(Objet o) 
 	{
-		super(img);
-		this.img= img;
+		super();
 		this.o = o;
+		this.img = new ImageIcon(o.getImage().getImage());
+		int h = img.getIconHeight();
+		int w = img.getIconWidth();
+		if(w>h)
+			this.img.setImage(img.getImage().getScaledInstance(30,-1,Image.SCALE_SMOOTH));
+		else
+			this.img.setImage(img.getImage().getScaledInstance(-1,30,Image.SCALE_SMOOTH));
+		//img.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH);
+		this.setIcon(img);
 	}
-	public HdVObjet(Objet o)
+	/*public HdVObjet(Objet o)
 	{
 		super(o.getNom());
 		//label = new JLabel(o.getNom());
 		//this.setIcon(new ImageIcon(label));
 		this.o = o;
-	}
+	}*/
 	void selectionne(boolean estSelectionne) {
         if(estSelectionne) {
             this.setBackground(couleur_selectionne);
@@ -72,5 +81,9 @@ public class HdVObjet extends JRadioButton
 	public String getDescription()
 	{
 		return o.getDescription();
+	}
+	public ImageIcon getImage()
+	{
+		return o.getImage();
 	}
 }

@@ -1,5 +1,5 @@
 package trollhammer;
-import java.awt.*;
+import javax.swing.*;
 
 /**
  * <p>Classe qui modélise un objet mis en vente.</p>

@@ -557,7 +557,7 @@ class VenteManagerServeur {
 	/**
 	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans
 	 * VenteStarter (toutes les secondes). Si la dernière enchère date de plus
-	 * d'une minute, en mode automatique, un coup de masse est généré.
+	 * de 30 secondes, en mode automatique, un coup de masse est généré.
 	 */
 	void donnerCoupdeMASSE() {
 		
@@ -566,7 +566,7 @@ class VenteManagerServeur {
 			&& Serveur.serveur.getDernierEncherisseur() != null) {
 			
 			if (Serveur.serveur.getDate() >
-				this.timerDerniereEnchere + 60*1000) {
+				this.timerDerniereEnchere + 30*1000) { 
 				Serveur.serveur.envoyerCoupdeMASSE(null);
 				this.setTimerDerniereEnchere(Serveur.serveur.getDate());
 			}

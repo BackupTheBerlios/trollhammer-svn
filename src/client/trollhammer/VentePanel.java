@@ -149,33 +149,43 @@ class VentePanel implements ActionListener
         Logger.log("VentePanel", 2, event.getActionCommand());
         if(event.getActionCommand().equals("proposer")) {
             try {
-                // CREATION DE L'OBJET A PROPOSER
-                Objet o = new Objet();
-                // NB : l'ID de l'objet nouvellement créé vaut par défaut 0.
-                // Au Serveur de corriger le tir en attribuant une ID réelle.
-                o.setId(0);
-                o.setNom(objTitre.getText());
-                o.setDescription(objDescr.getText());
-                o.setPrixDeBase(Integer.parseInt(objPrix.getText()));
-                // normalement pas réglé à ce stade, mais c'est préférable,
-                // surtout si la valeur par défaut est zéro, ce qui dans cet
-                // enum se traduit par Statuto.Vendu !
-                o.setStatut(StatutObjet.Propose);
-                // le vendeur de l'objet est celui qui le propose, par définition
-                o.setVendeur(Client.session.getLogin());
-				// on ajoute la zolie zimage
-				o.setImage(objImg);
+                int id = 0; // id par defaut = 0, le serveur corrige
+                String nom = objTitre.getText();
+                String description = objDescr.getText();
+                int prix_de_base = Integer.parseInt(objPrix.getText());
 
-                // EXPEDITION DE L'OBJET A PROPOSER
-                Client.hi.proposerObjet(o);
+                if(img != null && !nom.equals("") && !description.equals("") && prix_de_base > 0) {
+                    // CREATION DE L'OBJET A PROPOSER
+                    Objet o = new Objet();
+                    // NB : l'ID de l'objet nouvellement créé vaut par défaut 0.
+                    // Au Serveur de corriger le tir en attribuant une ID réelle.
+                    o.setId(0);
+                    o.setNom(nom);
+                    o.setDescription(description);
+                    o.setPrixDeBase(prix_de_base);
+                    // normalement pas réglé à ce stade, mais c'est préférable,
+                    // surtout si la valeur par défaut est zéro, ce qui dans cet
+                    // enum se traduit par Statuto.Vendu !
+                    o.setStatut(StatutObjet.Propose);
+                    // le vendeur de l'objet est celui qui le propose, par définition
+                    o.setVendeur(Client.session.getLogin());
+                    // on ajoute la zolie zimage
+                    o.setImage(objImg);
 
-                // vider les champs de la proposition d'objet
-                objTitre.setText("");
-                objDescr.setText("");
-                // champ de prix mis à zéro seulement si tout se passe bien,
-                // sinon il indique l'erreur.
-                objPrix.setText("");
-                // a terme, il faudra aussi enlever l'image sélectionnée ici
+                    // EXPEDITION DE L'OBJET A PROPOSER
+                    Client.hi.proposerObjet(o);
+
+                    // vider les champs de la proposition d'objet
+                    objTitre.setText("");
+                    objDescr.setText("");
+                    // champ de prix mis à zéro seulement si tout se passe bien,
+                    // sinon il indique l'erreur.
+                    objPrix.setText("");
+                    // a terme, il faudra aussi enlever l'image sélectionnée ici
+                    img = null;
+                    imgLabel.setIcon(null);
+
+                }
             } catch(java.lang.NumberFormatException nfe) {
                 Logger.log("VentePanel", 1, nfe.getMessage()+" (prix incorrect)");
                 objPrix.setText("prix invalide");
@@ -185,6 +195,7 @@ class VentePanel implements ActionListener
             objDescr.setText("");
             objPrix.setText("");
 			imgLabel.setIcon(null);
+            img = null;
 			imgLabel.updateUI();
             // a faire : déselectionner l'image...
         } else if(event.getActionCommand().equals("browse"))
@@ -248,5 +259,11 @@ class VentePanel implements ActionListener
         objTitre.setText(o.getNom());
         objDescr.setText(o.getDescription());
         objPrix.setText(Integer.toString(o.getPrixDeBase()));
+
+        // update image tadadaaam
+        img = o.getImage();
+
+        leftPanel.validate();
+        leftPanel.repaint();
     }
 }

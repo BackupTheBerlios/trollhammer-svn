@@ -28,8 +28,7 @@ class VenteServeur extends Vente {
 		if (this.getSuperviseur().equals(i)) {
 			this.setSuperviseur(null);
 			this.setMode(Mode.Automatique);
-	// ??? envoyer un événement VenteAutomatique ???
-	// Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
+	        Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
 		}
     }
 

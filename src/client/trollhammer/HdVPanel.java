@@ -288,7 +288,7 @@ class HdVPanel extends JComponent implements ActionListener
 	public void affichageVente(Vente v) //version avec JRadionButton
 	{
 		listeObjetsPanel.add(new JLabel("Veuillez patienter..."));
-		//Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
+		Logger.log("HdVPanel",2, LogType.DBG, "Affichage Vente");
 		vobjs = new Vector<HdVObjet>();
 		for(int i : v.getOIds())
 		{
@@ -300,6 +300,7 @@ class HdVPanel extends JComponent implements ActionListener
             }
         }
 		affichageListeObjets();
+        majChamps();
 	}
 	private void affichageListeObjets()
 	{

@@ -120,7 +120,6 @@ public class Client {
             case DebutVente:
             case VenteEnCours:
                 Vente v = Client.ventemanager.getVenteEnCours();
-                System.out.println("v = "+v);
                 
                 if(v != null) {
                     Client.humain.setVente(v);

@@ -286,7 +286,6 @@ class Window implements ActionListener
             case Planification:
                 planifier.affichageVente(v); break;
             case HotelDesVentes:
-                // pas encore implémenté
                 hdv.affichageVente(v); break;
         }
     }

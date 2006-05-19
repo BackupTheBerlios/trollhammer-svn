@@ -2,8 +2,9 @@ package trollhammer;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Comparator;
+import com.jgoodies.forms.layout.CellConstraints;
 
-abstract class ObjetElementListe extends JPanel
+abstract class ObjetElementListe extends CoolPanel
 {
 	protected Objet obj;
 	protected int id;
@@ -24,7 +25,7 @@ abstract class ObjetElementListe extends JPanel
 	
 	public ObjetElementListe(Objet obj)
 	{
-		super();
+		super("pref,2dlu,pref","pref");
 		id = obj.getId();
 		nom = obj.getNom();
 		description = obj.getDescription();
@@ -43,16 +44,16 @@ abstract class ObjetElementListe extends JPanel
 			this.img.setImage(img.getImage().getScaledInstance(-1,50,Image.SCALE_SMOOTH));
 		//this.add(img);
 		//end l'image...
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); //à modifier quand il y aura l'image
-		this.setBorder(BorderFactory.createEtchedBorder());
+		//this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); //à modifier quand il y aura l'image
+		//this.setBorder(BorderFactory.createEtchedBorder());
 		leftPan = new JPanel();
 		leftPan.setLayout(new BoxLayout(leftPan, BoxLayout.X_AXIS));
 		leftPan.add(new JLabel(img, SwingConstants.CENTER));
 		rightPan = new JPanel();
 		rightPan.setLayout(new BoxLayout(rightPan, BoxLayout.Y_AXIS));
 		rightPan.add(new JLabel(nom));
-		this.add(leftPan);
-		this.add(rightPan);
+		this.addC(leftPan, new CellConstraints(1,1));
+		this.addC(rightPan, new CellConstraints(3,1));
 
         couleur_fond = this.getBackground();
         couleur_selectionne = Color.LIGHT_GRAY;

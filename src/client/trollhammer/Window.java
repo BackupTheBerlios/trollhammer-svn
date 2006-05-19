@@ -25,6 +25,7 @@ class Window implements ActionListener
 	private JMenuBar menuBar = null;
 	private JMenu fichierMenu = null;
 	private JMenuItem decoMenuItem = null;
+	private JMenuItem exitMenuItem = null;
 	private JMenu helpMenu = null;
 	private JTabbedPane tabbedPane = null;
 	//Panels de l'onglets HDV
@@ -123,12 +124,21 @@ class Window implements ActionListener
             final Window w = this;
 			decoMenuItem = new JMenuItem(new javax.swing.AbstractAction("Déconnexion") {
                 public void actionPerformed(ActionEvent e)
-				{
+			{
                     w.doLogout();
-                }
+			}
             });
-			decoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.META_MASK));
+			decoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+			exitMenuItem = new JMenuItem(new javax.swing.AbstractAction("Quitter") {
+                public void actionPerformed(ActionEvent e)
+			{
+                    w.doLogout();
+			}
+            });
+			exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+			
 			fichierMenu.add(decoMenuItem);
+			fichierMenu.add(exitMenuItem);
 		}
 		return fichierMenu;
 	}

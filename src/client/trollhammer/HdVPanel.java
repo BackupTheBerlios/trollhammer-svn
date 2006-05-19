@@ -19,6 +19,10 @@ class HdVPanel extends JComponent implements ActionListener
 	private CoolPanel imgPanel = null;
 	private JScrollPane descrObjetPane = null;
 	private JTextArea descrObjetTextArea = null;
+	private CoolPanel salleANDobjEnCoursPanel = null;
+	private CoolPanel objEnCoursPanel = null;
+	private JLabel imgObjEnCoursLabel = null;
+	private ImageIcon imgObjEnCours = null;
 	private FreshPanel sallePanel = null;
 	private CoolPanel logPanel = null;
 	private JScrollPane logPane = null; //inside Pane
@@ -36,7 +40,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private JButton kickButton = null;
 	
 	private boolean modo = false;
-	private byte nbCdM = 0;
+	private JLabel nbCdMLabel = null;
 	private JLabel prixEnCours = null;
 	private JLabel prochaineEnchere = null;
 	private Vector<HdVObjet> vobjs = null;
@@ -67,10 +71,11 @@ class HdVPanel extends JComponent implements ActionListener
 		//Informations adjudications
 		prixEnCours = new JLabel(Client.client.getPrixCourant()+".-");
 		infoAdjPanel = new CoolPanel("pref:grow, right:pref","pref, pref");
+		nbCdMLabel = new JLabel("0");
 		infoAdjPanel.addLabel("Prix d'adjudication: ", new CellConstraints(1,1));
 		infoAdjPanel.addC(prixEnCours, new CellConstraints(2,1));
 		infoAdjPanel.addLabel("Nombre de coups de marteau: ",new CellConstraints(1,2));
-		infoAdjPanel.addC(new JLabel(""+nbCdM), new CellConstraints(2,2));
+		infoAdjPanel.addC(nbCdMLabel, new CellConstraints(2,2));
 		
 		//Informations sur l'objets sélectionné
 		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
@@ -93,9 +98,16 @@ class HdVPanel extends JComponent implements ActionListener
 		selectPanel.addLabel("Description: ", new CellConstraints(1,3,3,1));
 		selectPanel.addC(descrObjetPane, new CellConstraints(1,4,3,1));
 		
-		//Salle
+		//Salle && objet en cours...
 		grpl = new ButtonGroup();
+		salleANDobjEnCoursPanel = new CoolPanel("pref:grow","pref,fill:pref:grow");
+		objEnCoursPanel = new CoolPanel("center:pref:grow","pref");
+		imgObjEnCoursLabel = new JLabel((ImageIcon)null, SwingConstants.CENTER);
+		imgObjEnCoursLabel.setPreferredSize(new Dimension(55,55));
+		objEnCoursPanel.addC(imgObjEnCoursLabel, new CellConstraints(1,1));
 		sallePanel = new FreshPanel('y',true);
+		salleANDobjEnCoursPanel.addC(objEnCoursPanel, new CellConstraints(1,1));
+		salleANDobjEnCoursPanel.addC(sallePanel, new CellConstraints(1,2));
 		
 		//Log
 		logPanel = new CoolPanel("fill:pref:grow","fill:pref:grow");
@@ -121,8 +133,8 @@ class HdVPanel extends JComponent implements ActionListener
 			adjEnCours = new JLabel("EN VOTRE FAVEUR");
 		else
 			adjEnCours = new JLabel("CONTRE VOUS!");
-		adjPanel = new CoolPanel("fill:pref:grow","pref,center:pref");
-		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1));
+		adjPanel = new CoolPanel("fill:pref:grow","pref,pref:grow");
+		adjPanel.addLabel("Adjudication en cours: ", new CellConstraints(1,1,CellConstraints.CENTER,CellConstraints.CENTER));
 		adjPanel.add(adjEnCours, new CellConstraints(1,2,CellConstraints.CENTER,CellConstraints.CENTER));
 		
 		//enchère
@@ -189,7 +201,7 @@ class HdVPanel extends JComponent implements ActionListener
 		//builder.addLabel("Salle: ", cc.xy(3,3));
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
-		builder.add(sallePanel, cc.xy(3,4));
+		builder.add(salleANDobjEnCoursPanel, cc.xy(3,4));
 		builder.add(logPanel, cc.xy(4,4));
 		builder.addLabel("Chat: ", cc.xy(4,5));
 		builder.add(adjPanel, cc.xy(2,6));
@@ -302,6 +314,19 @@ class HdVPanel extends JComponent implements ActionListener
                 vobjs.add(new HdVObjet(o));
             }
         }
+		//Affichage de l'objet en cours !!!!!!!!DOIT ÊTRE SYNCRO!!!!!!!
+		
+		imgObjEnCours = new ImageIcon(vobjs.firstElement().getImage());
+		int h = imgObjEnCours.getIconHeight();
+		int w = imgObjEnCours.getIconWidth();
+		Logger.log("HdVPanel",2,"imgObjEnCours h: "+h+", w: "+w);
+		if(w>h)
+			imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(50,-1,Image.SCALE_SMOOTH));
+		else
+			imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(-1,50,Image.SCALE_SMOOTH));
+		
+		imgObjEnCoursLabel.setIcon(imgObjEnCours);
+		
 		affichageListeObjets();
         majChamps();
 	}
@@ -330,65 +355,6 @@ class HdVPanel extends JComponent implements ActionListener
 		}
 								   });
 	}
-	/*public void affichageVente(Vente v) //version avec une JList
-	{
-		//listeObjetsPanel.removeAll();
-		Logger.log("HdVPanel",0,"@@@ Affichage Panel @@@");
-		vobjs = new Vector<HdVObjet>();
-		for(int i : v.getOIds())
-		{
-			Logger.log("HdVPanel",0,"@@@ for.. @@@");
-            Objet o = Client.objectmanager.getObjet(i);
-            if(o != null)
-			{
-                vobjs.add(new HdVObjet(o));
-            }
-        }
-		lobjs = new JList();
-		lobjs.setLayoutOrientation(JList.HORIZONTAL_WRAP); //marche pô
-		lobjs.setLayout(new BoxLayout(lobjs, BoxLayout.X_AXIS));
-		lobjs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		lobjs.setListData(vobjs);
-		lobjs.setCellRenderer(new ListCellRenderer() {
-			// This is the only method defined by ListCellRenderer.
-			// We just reconfigure the JLabel each time we're called.
-			
-			public Component getListCellRendererComponent(
-														  JList list,
-														  Object value,            // value to display
-														  int index,               // cell index
-														  boolean isSelected,      // is the cell selected
-														  boolean cellHasFocus)    // the list and the cell have the focus
-		{
-				((HdVObjet) value).selectionne(isSelected);
-                return (HdVObjet) value;
-		}
-		});
-		lobjs.addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent e) {
-				// implicitement, la sélection est toujours de taille un,
-                // donc on peut ne prendre que l'index du début de la sélection
-                HdVObjet obj = (HdVObjet) lobjs.getSelectedValue(); 
-                if(obj != null) { // obj est null si rien n'est séléctionné
-                    //affichage de l'objet séléctionné
-					descrObjetTextArea.setText(obj.getDescription());
-                    
-                }
-            }
-        });
-		SwingUtilities.invokeLater(
-								   new Runnable()
-								   {
-									   public void run()
-								   {
-										   listeObjetsPanel.removeAll();
-										   listeObjetsPanel.add(lobjs);
-										   Logger.log("HdVPanel",0,"remove REMOVE remove");
-										   listeObjetsPanel.validate();
-								   }
-								   }); // pask on s'la pète!!!
-	}*/
-	
 
     void affichageListeParticipants(Set<Participant> pl) {
         grpl = new ButtonGroup();
@@ -424,26 +390,20 @@ class HdVPanel extends JComponent implements ActionListener
         }
         }); // pask on s'la pète!!!
     }
-	/*void affichageListeObjets(Set<Objet> ol)
-	{
-        lstObjVect = new Vector<HdVObjet>();
-        for(Objet o : ol)
-        {
-            if(o.getStatut() == StatutObjet.EnVente)
-                lstObjVect.add(new HdVObjet(o));
-        }
-        //listeObjetsPanel.setListData(lstObjVect); beuhaaaaah va pas
-    }*/
 
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:
                 texteLogln("- PREMIER COUP DE MARTEAU -");
+				nbCdMLabel.setText("1");
                 break;   
             case CoupDeMassePAF2:   
                 texteLogln("- SECOND COUP DE MARTEAU -");
+				nbCdMLabel.setText("2");
                 break;     
             case Adjuge:
+				
+				nbCdMLabel.setText("3"); // à gicler si besoin est...
                 texteLogln("- ADJUDICATION -\n"     
                         +"Objet : "
                         //le nom de l'objet qui vient d'être vendu (ouf!)     
@@ -455,6 +415,8 @@ class HdVPanel extends JComponent implements ActionListener
                         +"Au prix de "     
                         +Client.client.getPrixCourant()+".-"
                         );
+				
+				nbCdMLabel.setText("0");
                 break;      
             case VenteAutomatique:     
                 texteLogln("- Vente en mode automatique -");    
@@ -498,39 +460,14 @@ class HdVPanel extends JComponent implements ActionListener
 										   encherePanel.repaint();
 										   infoAdjPanel.validate();
 										   infoAdjPanel.repaint();
+										   imgObjEnCoursLabel.validate();
+										   imgObjEnCoursLabel.repaint();
+										   
 								   }
 								   }); // pask on s'la pète!!!
 		
 	}
-	/*private void majAdjPanel()
-	{
-		prochaineEnchere = Client.client.getNouveauPrix();
-		try
-		{
-			adjPanel.repaint();
-		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de adjPanel.repaint!!!!!!!!!!!!!!!!!!!!!!!!");}
-	}
-	private void majEncherePanel()
-	{
-		if(Client.client.getDernierEncherisseur() == null)
-			adjEnCours = "Aucune...";
-		else if(Client.client.getDernierEncherisseur().equals(Client.session.getLogin()))
-			adjEnCours = "EN VOTRE FAVEUR";
-		else
-			adjEnCours = "CONTRE VOUS!";
-		try
-		{
-			encherePanel.repaint();
-		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de encherePanel.repaint!!!!!!!!!!!!!!!!!!!!");}
-	}
-	private void majInfoAdjPanel()
-	{
-		prixEnCours = Client.client.getPrixCourant();
-		try
-		{
-			infoAdjPanel.repaint();
-		} catch(Exception e){Logger.log("HdVPanel",0,"mais putain de infoAdjPanel. repaint!!!!!!!!!!!!!!!!!!!");}
-	}*/
+
     void message(Notification n) {     
         switch (n) {      
             case DebutVente:     

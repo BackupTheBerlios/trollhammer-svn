@@ -32,13 +32,13 @@ package trollhammer;
  */
 class Logger {
 	// C'est ici que l'on choisi le lvl de logging
-	static final private int level = 1; 
+	static final private int level = 2; 
 	static final private boolean [] what = {
 		true, // Afficher les message de type INF?
 		true, // Afficher les message de type ERR?
 		true, // Afficher les message de type WRN?
-		false, // Afficher les message de type DBG?
-		false  // Afficher les message de type NSP?
+		true, // Afficher les message de type DBG?
+		true  // Afficher les message de type NSP?
 	};
 	
 	/**

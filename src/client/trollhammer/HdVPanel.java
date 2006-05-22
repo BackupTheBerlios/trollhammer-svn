@@ -316,7 +316,7 @@ class HdVPanel extends JComponent implements ActionListener
         }
 		//Affichage de l'objet en cours !!!!!!!!DOIT ÊTRE SYNCRO!!!!!!!
 		
-		imgObjEnCours = new ImageIcon(vobjs.firstElement().getImage());
+		imgObjEnCours = new ImageIcon(vobjs.firstElement().getImage().getImage());
 		int h = imgObjEnCours.getIconHeight();
 		int w = imgObjEnCours.getIconWidth();
 		Logger.log("HdVPanel",2,"imgObjEnCours h: "+h+", w: "+w);

@@ -1,8 +1,5 @@
 package trollhammer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusAdapter;
+import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,12 +7,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-class LoginWindow implements ActionListener {
+class LoginWindow implements ActionListener, KeyListener
+{
 	
 
 	private JFrame loginFrame = null;  //  @jve:decl-index=0:visual-constraint="418,169"
 	private JMenuBar menuBar = null;
 	private JMenu fichierMenu = null;
+	private JMenuItem exitMenuItem = null;
 	private JMenu aideMenu = null;
 	private JTextPane bienvenue = null;
 	private String name = null;
@@ -51,13 +50,15 @@ class LoginWindow implements ActionListener {
 		bienvenue = new JTextPane();
 		bienvenue.setText("Veuillez s'il vous plait vous identifier.");
 		nomField = new JTextField();
+		nomField.addKeyListener(this);
 		passwordField = new JPasswordField();
+		passwordField.addKeyListener(this);
 		String[] data = {"localhost"};
 		srvBox = new JComboBox(data);
 		srvBox.setEditable(true);
+		srvBox.addKeyListener(this);
 		connectB = new JButton("Connecter");
 		connectB.setActionCommand("connect");
-		connectB.setMnemonic(java.awt.event.KeyEvent.VK_ENTER);
 		connectB.setToolTipText("Cliquez pour se connecter");
 		connectB.addActionListener(this);
 		RaZB = new JButton("RàZ");
@@ -146,6 +147,16 @@ class LoginWindow implements ActionListener {
 		}
 		
 	}
+	public void keyPressed(KeyEvent e)
+	{
+		//Logger.log("LoginWindow",2,"KeyEvent!!!\n\t"+e.getKeyCode()+" =? "+KeyEvent.VK_ENTER+" (Enter)\n\t"+e.getKeyCode()+" =? "+KeyEvent.VK_ESCAPE+" (Esc)");
+		if(e.getKeyCode() == KeyEvent.VK_ENTER)
+			connectB.doClick();
+		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			RaZB.doClick();
+	}
+	public void keyReleased(KeyEvent e){}
+	public void keyTyped(KeyEvent e){}
 
     void setVisible(boolean visible) {
         this.loginFrame.setVisible(visible);
@@ -163,6 +174,8 @@ class LoginWindow implements ActionListener {
 			menuBar.add(getAideMenu());
 
             final LoginWindow w = this;
+	    //mais Julien c'est moche!!
+	    /*
             getFichierMenu().add(new JMenuItem(
                         new javax.swing.AbstractAction("Quitter"){
                 public void actionPerformed(ActionEvent e) {
@@ -170,6 +183,7 @@ class LoginWindow implements ActionListener {
                     System.exit(0);
                 }
             }));
+	    */
 		}
 		return menuBar;
 	}
@@ -180,9 +194,18 @@ class LoginWindow implements ActionListener {
 	 * @return javax.swing.JMenu	
 	 */
 	private JMenu getFichierMenu() {
+		final LoginWindow w = this;
 		if (fichierMenu == null) {
 			fichierMenu = new JMenu();
 			fichierMenu.setText("Fichier");
+			exitMenuItem = new JMenuItem(new javax.swing.AbstractAction("Quitter") {
+				public void actionPerformed(ActionEvent e)
+				{
+		                        w.setVisible(false);
+					System.exit(0);
+				}});
+			exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+			fichierMenu.add(exitMenuItem);
 		}
 		return fichierMenu;
 	}

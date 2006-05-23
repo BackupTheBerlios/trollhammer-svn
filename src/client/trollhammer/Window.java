@@ -133,6 +133,8 @@ class Window implements ActionListener
                 public void actionPerformed(ActionEvent e)
 			{
                     w.doLogout();
+		    w.setVisible(false);
+		    System.exit(0);
 			}
             });
 			exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));

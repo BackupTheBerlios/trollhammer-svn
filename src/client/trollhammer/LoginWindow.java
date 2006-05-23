@@ -44,7 +44,6 @@ class LoginWindow implements ActionListener, KeyListener
 		loginFrame.setVisible(true);
 		
 	}
-	
 	private void initComponents()
 	{
 		bienvenue = new JTextPane();

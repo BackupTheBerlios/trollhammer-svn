@@ -1,6 +1,8 @@
 package trollhammer;
 import java.io.*;
 import java.net.*;
+import javax.net.ssl.*;
+import java.security.KeyStore;
 
 /**
  * Point d'entrée des commandes pour le Serveur.
@@ -223,16 +225,35 @@ class ServeurEntryListener extends Thread {
     public static final int PORT = 1777;
 
     public void run() {
-        try {
+        Socket s; // le socket d'une nouvelle connexion
 
-            ss = new ServerSocket(PORT); 
+        try {
+            // magie noire SSL.
+            // 
+            // One Socket to connect them all,
+            // One Socket to find them,
+            // One Socket to handshake them all
+            //   and to the IP bind them,
+            // In the land of SSL where the ciphers lie.
+            ss = getSSLServerSocket(PORT);
+
             Logger.log("ServeurEntry", 0, LogType.INF, "[net] Serveur actif sur le port : " + PORT);
-            Socket s; // le socket d'une nouvelle connexion
 
             while(true) {
-                s = ss.accept(); // attendre et obtenir le socket d'une
+                // attendre et obtenir le socket d'une
                 // nouvelle connexion
-                // et lancer le thread handler dessus.
+                // et lancer le thread handler dessus,
+                // après un handshake SSL pour mettre en place la crypto.
+                // (ce n'est pas nécessaire puisqu'on va tout de suite
+                // écrire dessus et cela déclenche le handshake s'il n'est
+                // pas fait, mais autant le mettre explicitement).
+                s = ss.accept();
+
+                // autant dire que le cast va foirer fort si la connexion n'est pas
+                // du SSL. Ce n'est pas si mal, comme moyen d'exiger une connexion
+                // sécurisée.
+                ((SSLSocket) s).startHandshake();
+
                 new ServeurEntryHandler(s).start();
             }
         } catch (Exception e) {
@@ -246,6 +267,58 @@ class ServeurEntryListener extends Thread {
             }
         } 
     }
+
+    /** Méthode de création de Socket Serveur SSL, prend en charge la 'magie noire' nécessaire à l'opération. La paire de clés utilisée est spécifique à trollhammer,
+     * et est lue dans un fichier fourni. La clé publique utilisée comme certificat
+     * est également fournie. Grandement repris d'un exemple SSL de Sun, ClassFileServer.java.
+     */
+    private ServerSocket getSSLServerSocket(int port) {
+        Logger.log("ServeurEntry", 2, LogType.DBG, "[net] Création Socket serveur SSL.");
+        ClassLoader cl = this.getClass().getClassLoader();
+        SSLServerSocketFactory ssf = null;
+        ServerSocket ss = null;
+
+        try {
+            //set up key manager to do server authentication
+            SSLContext ctx;
+            KeyManagerFactory kmf;
+            TrustManagerFactory tmf;
+            KeyStore ks;
+            KeyStore ts;
+            char[] passphrase = "trollhammer".toCharArray();
+
+            // le contexte SSL qui contient la clés et le certificat,
+            // ainsi que les factories pour sortir les gestionnaires
+            // de certifs' et de clés que l'on va mettre dans le contexte.
+            ctx = SSLContext.getInstance("TLS");
+            kmf = KeyManagerFactory.getInstance("SunX509");
+            tmf = TrustManagerFactory.getInstance("SunX509");
+            ks = KeyStore.getInstance("JKS");
+            ts = KeyStore.getInstance("JKS");
+
+            // on charge la clé et le certif des fichiers ad hoc.
+            ks.load(cl.getResourceAsStream("trollkeys"), passphrase);
+            ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+            // on initialise les gestionnaires qui les représentent.
+            kmf.init(ks, passphrase);
+            tmf.init(ks);
+            // puis on en initialise le contexte SSL qui servira à
+            // créer le ServerSocket SSL qu'on va utiliser !
+            ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+            // on crée la Factory avec le contexte correct.
+            ssf = ctx.getServerSocketFactory();
+
+            Logger.log("ServeurEntry", 2, LogType.DBG, "[net] Magie noire SSL faite");
+            // puis finalement le ServerSocket (ouf) !
+            ss = ssf.createServerSocket(port); 
+        } catch (Exception e) {
+            Logger.log("ServeurEntry", 0, LogType.ERR, "[net] Erreur de création Socket serveur SSL : "+e.getMessage());
+        }
+
+        return ss;
+    }
+
 }
 
 /** Un thread qui répond aux commandes d'une connexion particulière.

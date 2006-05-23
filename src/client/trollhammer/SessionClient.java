@@ -1,6 +1,8 @@
 package trollhammer;
 import java.io.*;
 import java.net.*;
+import javax.net.ssl.*;
+import java.security.KeyStore;
 
 class SessionClient {
 
@@ -29,16 +31,74 @@ class SessionClient {
      * null sinon.
      */
     static SessionClient login(String i, String m, String s) {
+        Socket socket; // le socket qui va être créé
         try {
+
+            // magie noire SSL.
+            // つくりましょう、 つくりましょう、
+            // さて さて なに が できる か な 。。。
+            socket = getSSLSocket(s, PORT);
+            // でみかした !!!
+
             Logger.log("SessionClient", 1, LogType.INF, "[net] Tentative de connexion sur " + s + ", port " + PORT + "...");
-            Socket socket = new Socket(s, PORT);
+
             Logger.log("SessionClient", 1, LogType.INF, "[net] Connecté sur le serveur " + s + " (" + socket.getInetAddress() + ")");
             return new SessionClient(i, m, s, socket);
-        } catch (IOException ioe) {
-            Logger.log("SessionClient", 0, LogType.ERR, "[net] Ne peut pas se connecter à " + s);
+        } catch (Exception e) {
+            Logger.log("SessionClient", 0, LogType.ERR, "[net] Exception fatale :"
+                    +e.getMessage());
             return null;
         }
     }
+
+
+    /** Méthode de création de Socket SSL, prend en charge la 'magie noire' nécessaire à l'opération. La clé publique utilisée comme certificat est fournie dans un fichier spécifique à trollhammer. Grandement repris d'un exemple SSL de Sun, ClassFileServer.java.
+     */
+    private static Socket getSSLSocket(String addr, int port) {
+            Logger.log("SessionClient", 2, LogType.DBG, "[net] Création Socket SSL.");
+            ClassLoader cl = ClassLoader.getSystemClassLoader();
+            SSLSocketFactory sf = null;
+            Socket s = null;
+
+            try {
+                //set up key manager to do server authentication
+                SSLContext ctx;
+                TrustManagerFactory tmf;
+                KeyStore ts;
+                char[] passphrase = "trollhammer".toCharArray();
+
+                // le contexte SSL qui contient le certificat,
+                // ainsi que les factories pour sortir le gestionnaire
+                // de certifs' que l'on va mettre dans le contexte.
+                ctx = SSLContext.getInstance("TLS");
+                tmf = TrustManagerFactory.getInstance("SunX509");
+                ts = KeyStore.getInstance("JKS");
+
+                // on charge la clé le certif du fichier ad hoc.
+                ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+                // on initialise le gestionnaires qui le représente.
+                tmf.init(ts);
+                // puis on en initialise le contexte SSL qui servira à
+                // créer le Socket SSL qu'on va utiliser !
+                ctx.init(null, tmf.getTrustManagers(), null);
+
+                // on crée la Factory avec le contexte correct.
+                sf = ctx.getSocketFactory();
+
+                Logger.log("SessionClient", 2, LogType.DBG, "[net] Magie noire SSL faite");
+                // puis, enfin, le Socket SSL (ouf) !
+                s = sf.createSocket(addr, port); 
+
+            } catch (IOException ioe) {
+                Logger.log("SessionClient", 0, LogType.ERR, "[net] Ne peut pas se connecter à " + s);
+                return null;
+            } catch (Exception e) {
+                Logger.log("SessionClient", 0, LogType.ERR, "[net] Erreur de création Socket SSL : "+e.getMessage());
+            }
+
+            return s;
+    }
+
 
     /* parlons-en, du constructeur. L'argument 'adresse' se voit ajouté un Socket,
      * et ce dernier doit déjà être ouvert. login() le garantit.

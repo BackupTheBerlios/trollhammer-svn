@@ -349,7 +349,15 @@ class ClientFSM {
     }
 
     boolean kicker() {
-        return transition(Etat.HV4, Etat.HV9)
+        //return transition(Etat.HV4, Etat.HV9)
+        // modif p.r. Design : ne pas faire de transition
+        // vers l'état HV9 pour attendre une notification
+        // qui n'arrivera... jamais. En effet, la notification
+        // de kick est envoyée à la _victime_, pas à l'initiateur
+        // du kick. Passage direct à l'état HV10, en attente du
+        // etatParticipant révélateur de la déconnexion de la victime,
+        // donc.
+        return transition(Etat.HV4, Etat.HV10)
             // modif p.r. Design : permettre le kick
             // lors d'un kick-ban dans GestionUtilisateurs
             || transition(Etat.GU4, Etat.GU4);
@@ -401,7 +409,9 @@ class ClientFSM {
     boolean notification() {
         return transition(Etat.TR2, Etat.L1)
             || transition(Etat.HV5, Etat.HV6)
-            || transition(Etat.HV9, Etat.HV10)
+            // modif p.r. Design : pas sensé arriver
+            // depuis que le kick n'envoie plus sur HV9
+            //|| transition(Etat.HV9, Etat.HV10)
             || transition(Etat.HV4, Etat.HV4)
             || transition(Etat.HV12, Etat.HV4)
             || true; // INCONDITIONNEL LOL

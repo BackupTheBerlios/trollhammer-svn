@@ -316,17 +316,25 @@ class HdVPanel extends JComponent implements ActionListener
         }
 		//Affichage de l'objet en cours !!!!!!!!DOIT ÊTRE SYNCRO!!!!!!!
 		
-		imgObjEnCours = new ImageIcon(vobjs.firstElement().getImage().getImage());
-		int h = imgObjEnCours.getIconHeight();
-		int w = imgObjEnCours.getIconWidth();
-		Logger.log("HdVPanel",2,"imgObjEnCours h: "+h+", w: "+w);
-		if(w>h)
-			imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(50,-1,Image.SCALE_SMOOTH));
-		else
-			imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(-1,50,Image.SCALE_SMOOTH));
-		
-		imgObjEnCoursLabel.setIcon(imgObjEnCours);
-		
+        // jr : rajouté test de taille, comme ça vente vide ou pas de vente
+        // ne fait pas d'exception quand on essaie d'avoir le firstElement
+        // d'un vecteur... vide...
+        // C'est cela qui est à l'origine du bug qui quitte l'interface à
+        // la fin de la dernière vente planifiée (comme montré dans notre...
+        // démo...)
+        if(vobjs.size() > 0) {
+            imgObjEnCours = new ImageIcon(vobjs.firstElement().getImage().getImage());
+            int h = imgObjEnCours.getIconHeight();
+            int w = imgObjEnCours.getIconWidth();
+            Logger.log("HdVPanel",2,"imgObjEnCours h: "+h+", w: "+w);
+            if(w>h)
+                imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(50,-1,Image.SCALE_SMOOTH));
+            else
+                imgObjEnCours.setImage(imgObjEnCours.getImage().getScaledInstance(-1,50,Image.SCALE_SMOOTH));
+
+            imgObjEnCoursLabel.setIcon(imgObjEnCours);
+
+        }
 		affichageListeObjets();
         majChamps();
 	}

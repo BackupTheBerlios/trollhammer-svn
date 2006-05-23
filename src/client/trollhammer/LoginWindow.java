@@ -172,7 +172,7 @@ class LoginWindow implements ActionListener, KeyListener
 			menuBar.add(getFichierMenu());
 			menuBar.add(getAideMenu());
 
-            final LoginWindow w = this;
+            //final LoginWindow w = this;
 	    //mais Julien c'est moche!!
 	    /*
             getFichierMenu().add(new JMenuItem(
@@ -193,14 +193,13 @@ class LoginWindow implements ActionListener, KeyListener
 	 * @return javax.swing.JMenu	
 	 */
 	private JMenu getFichierMenu() {
-		final LoginWindow w = this;
 		if (fichierMenu == null) {
 			fichierMenu = new JMenu();
 			fichierMenu.setText("Fichier");
 			exitMenuItem = new JMenuItem(new javax.swing.AbstractAction("Quitter") {
 				public void actionPerformed(ActionEvent e)
 				{
-		                        w.setVisible(false);
+		                        setVisible(false);
 					System.exit(0);
 				}});
 			exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));

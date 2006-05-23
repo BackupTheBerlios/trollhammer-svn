@@ -2,12 +2,9 @@ package trollhammer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -80,10 +77,10 @@ class Window implements ActionListener
                 /* juste pour garder la référence et l'utiliser dans l'Adapter
 				* (c'est absolument dégueulasse, je sais)
 				*/
-                final Window w = this;
+                //final Window w = this;
                 frame.addWindowListener(new WindowAdapter() {
                     public void windowClosing(WindowEvent e) {
-                        w.doLogout();
+                        doLogout();
                     }
                 });
             }
@@ -121,19 +118,18 @@ class Window implements ActionListener
 		if (fichierMenu == null) {
 			fichierMenu = new JMenu("Fichier");
 			
-            final Window w = this;
-			decoMenuItem = new JMenuItem(new javax.swing.AbstractAction("Déconnexion") {
+            	decoMenuItem = new JMenuItem(new javax.swing.AbstractAction("Déconnexion") {
                 public void actionPerformed(ActionEvent e)
 			{
-                    w.doLogout();
+                    doLogout();
 			}
             });
 			decoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
 			exitMenuItem = new JMenuItem(new javax.swing.AbstractAction("Quitter") {
                 public void actionPerformed(ActionEvent e)
 			{
-                    w.doLogout();
-		    w.setVisible(false);
+                    doLogout();
+		    setVisible(false);
 		    System.exit(0);
 			}
             });
@@ -167,10 +163,16 @@ class Window implements ActionListener
 			try
 			{
 				tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
-				hdv = new HdVPanel(modo, getWindow());tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
+				hdv = new HdVPanel(modo, getWindow());
+				tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
                 hdv.initTab(); // pour désactiver les boutons Enchérir & Autres
-				vente = new VentePanel(modo);tabbedPane.addTab("Vente", null, vente.getComponent(), null);
-				achat = new AchatPanel(modo);tabbedPane.addTab("Achat", null, achat.getComponent(), null);
+				vente = new VentePanel(modo);
+				tabbedPane.addTab("Vente", null, vente.getComponent(), null);
+				achat = new AchatPanel(modo);
+				tabbedPane.addTab("Achat", null, achat.getComponent(), null);
+				tabbedPane.setMnemonicAt(0,KeyEvent.VK_1);
+				tabbedPane.setMnemonicAt(1,KeyEvent.VK_2);
+				tabbedPane.setMnemonicAt(2,KeyEvent.VK_3);
 			} catch (Exception e) {Logger.log("Window",0,"Initialisation et Ajout des Tabs au tabbedPane... "+e.getMessage()); e.printStackTrace();}
 			// ATTENTION : SI MODIFICATION DE L'ORDRE DES ONGLETS,
 			//             ALORS LE REPERCUTER DANS LE LISTENER
@@ -181,6 +183,10 @@ class Window implements ActionListener
 				valider = new ValiderPanel(modo);tabbedPane.addTab("Valider", null, valider.getComponent(), null);
 				planifier = new PlanifierPanel(modo);tabbedPane.addTab("Planifier", null, planifier.getComponent(), null);
 				gestion = new GestionPanel(modo);tabbedPane.addTab("Gestion des utilisateurs", null, gestion.getComponent(), null);
+				tabbedPane.setMnemonicAt(3,KeyEvent.VK_4);
+				tabbedPane.setMnemonicAt(4,KeyEvent.VK_5);
+				tabbedPane.setMnemonicAt(5,KeyEvent.VK_6);
+				
 			}
 			
 			/* Listener s'occupant de gérer les changements dans la barre d'onglets.

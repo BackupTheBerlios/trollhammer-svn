@@ -15,3 +15,8 @@ enum Evenement { CoupDeMassePAF1, CoupDeMassePAF2, Adjuge, VenteAutomatique }
 enum Notification { DebutVente, VenteEnCours, FinVente, LogOut, Deconnexion, Kicke }
 enum Erreur { Deconnecte, Invalide, Banni, ExisteDeja, NonTrouve, DejaEffectue }
 enum Mode { Automatique, Manuel }
+
+/** <p>Enum non présent dans le Design ; il est utilisé pour déterminer quel déplacement un Objet doit effectuer dans la liste d'une Vente.</p>
+ * <p>@author Julien Ruffin</p>
+ */
+enum TypeDeplacement {UP, DOWN, TOP, BOTTOM};

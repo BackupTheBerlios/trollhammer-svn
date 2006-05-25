@@ -135,6 +135,55 @@ class Vente implements java.io.Serializable {
 	}
 	// Méthodes du design : END
 	
+    /** <p>Place l'Objet désigné par le paramètre <i>oid</i> à la position
+     * donnée par <i>td</i> dans la liste d'Objets de la Vente.</p>
+     * <p>En pratique, cette méthode renvoie une édition de la vente avec
+     * la liste d'objets modifiée (où le déplacement a été fait).</p>
+     *
+     * @param   oid     ID de l'Objet à déplacer.
+     * @param   td      Type de déplacement à effectuer.
+     */
+    void moveObjet(int oid, TypeDeplacement td) {
+        List<Integer> objets = this.getOIds();
+
+        if(objets.contains((Object) oid)) {
+            int index = objets.indexOf(oid);
+
+            switch (td) {
+                case UP:
+                    if(index != 0) {
+                        index--;
+                    }
+                    break;
+                case DOWN:
+                    if(index != objets.size() - 1) {
+                        index++;
+                    }
+                    break;
+                case TOP:
+                    index = 0;
+                    break;
+                case BOTTOM:
+                    index = -1;
+                    break;
+            }
+
+            // cast bizarre pour être sûr d'appliquer remove(Object o) et pas
+            // remove(int index), puisque oid est un int !
+            //
+            // on enlève l'objet de la liste à sa position actuelle
+            objets.remove((Object) oid);
+            // pour le remettre à la nouvelle.
+            if(index != -1) {
+                // cas index précis
+                objets.add(index, oid);
+            } else {
+                // cas "mettre à la fin"
+                objets.add(oid);
+            }
+        }
+    }
+
 	// Setters & Getters : START
 	// cfrey: accès au truc private
 	public List<Integer> getOIds() {

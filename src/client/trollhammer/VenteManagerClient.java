@@ -104,4 +104,25 @@ class VenteManagerClient {
         Client.hi.affichageVente(v);
     }
 
+    /** <p>Place l'Objet désigné par le paramètre <i>oid</i> à la position
+     * donnée par <i>td</i> dans la liste d'Objets de la Vente
+     * désignée par le paramètre <i>vid</i>.</p>
+     * <p>En pratique, cette méthode renvoie une édition de la vente avec
+     * la liste d'objets modifiée (où le déplacement a été fait).</p>
+     */
+    void moveObjet(int vid, int oid, TypeDeplacement td) {
+        Vente v = getVente(vid);
+        Objet o = Client.objectmanager.getObject(oid);
+
+        if(v != null && o != null) {
+            v.moveObjet(oid, td);
+
+            // jr : et on envoie l'update. En faisant un bypass de la FSM.
+            // C'est affreux, mais je n'arrive pas trouver le bug !
+            Client.hi.editerVente(Edition.Modifier, v);
+            //Client.session.vente(Edition.Modifier, v);
+            //Client.hi.affichageVente(v);
+        }
+    }
+
 }

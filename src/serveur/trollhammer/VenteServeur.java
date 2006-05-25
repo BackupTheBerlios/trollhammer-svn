@@ -13,6 +13,10 @@ class VenteServeur extends Vente {
 	VenteServeur(int id, String nom, String description, long date, Mode mode, String superviseur) {
 		super(id, nom, description, date, mode, superviseur);
 	}
+
+	VenteServeur(int id, String nom, String description, long date, Mode mode, String superviseur, List<Integer> objets) {
+		super(id, nom, description, date, mode, superviseur, objets);
+	}
 	// Constructeurs : END
 
 	// Méthodes du design : START

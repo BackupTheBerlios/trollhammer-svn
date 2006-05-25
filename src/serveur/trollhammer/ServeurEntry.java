@@ -196,7 +196,8 @@ class ServeurEntry {
         if (Serveur.usermanager.isModo(sender)) {
 			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(),
 									   v.getDescription(), v.getDate(),
-									   v.getMode(), v.getSuperviseur()), sender);
+									   v.getMode(), v.getSuperviseur(), v.getOIds()),
+                                       sender);
         } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"vente\" ignored.");
 		}

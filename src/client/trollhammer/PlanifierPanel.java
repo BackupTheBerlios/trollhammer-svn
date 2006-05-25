@@ -305,6 +305,8 @@ class PlanifierPanel implements ActionListener
 
     void affichageListeVentes(Set<Vente> vl) {
         Logger.log("PlanifierPanel", 2, LogType.DBG, "Reçu liste de Ventes de taille "+vl.size());
+        // la vente sélectionnée actuellement.
+        Object vp =  nomBox.getSelectedItem();
         // reset de liste
         nomBox.removeAllItems();
         //nomBox.addItem(NOM_VIDE);
@@ -326,6 +328,13 @@ class PlanifierPanel implements ActionListener
             nomBox.addItem(v);
         }
 
+        // resélection de la vente précédemment sélectionnée.
+        if(vp != null) {
+            nomBox.setSelectedItem(vp);
+        } else {
+            nomBox.setSelectedItem(NOM_VIDE);
+        }
+
         // tadaaaam !
     }
 
@@ -333,6 +342,21 @@ class PlanifierPanel implements ActionListener
         // rien à sélectionner, déjà fait avant (puisqu'une sélection
         // a appellé l'update)
         //nomBox.setSelectedItem(NOM_VIDE);
+        //
+
+        // par contre, on garde l'ID de l'objet sélectionné dans la liste d'objets
+        // de la vente en mémoire. (l'ID parce que l'Objet même est remplacé
+        // lors d'un update de liste...)
+
+        Object sel = listeDansVente.getSelectedValue();
+        Object nsel = null; // la nouvelle sélection
+        int selID;
+        if(sel instanceof PlanifierObjet) {
+            selID = ((PlanifierObjet) sel).getId();   
+        } else {
+            selID = -1;
+        }
+
         GregorianCalendar date = new GregorianCalendar();
         date.setTimeInMillis(v.getDate());
 
@@ -349,12 +373,29 @@ class PlanifierPanel implements ActionListener
         for(int i : v.getOIds()) {
             Objet o = Client.objectmanager.getObjet(i);
             if(o != null) {
-                vobjs.add(new PlanifierObjet(o));
+                PlanifierObjet planobj = new PlanifierObjet(o);
+                
+                vobjs.add(planobj);
+                
+                // utilisé pour savoir si l'objet
+                // a une ID identique à celui sélectionné
+                // précédemment. Si oui, sa représentation
+                // (PlanifierObjet) est celle qu'il faut
+                // sélectionner !
+                if(o.getId() == selID) {
+                    nsel = planobj;
+                }
             }
         }
         System.out.println("Créé ensemble de taille "+vobjs.size());
 
         listeDansVente.setListData(vobjs.toArray());
+
+        // si l'objet précédemment sélectionné est toujours dans la liste
+        // d'objets à afficher, le resélectionner.
+        if(nsel != null) {
+            listeDansVente.setSelectedValue(nsel, true);
+        }
 
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {
@@ -494,10 +535,11 @@ class PlanifierPanel implements ActionListener
             if(!listeDansVente.isSelectionEmpty()
                     && nomBox.getSelectedItem() instanceof Vente
                     && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
-                int index = listeDansVente.getSelectedIndex();
+                //int index = listeDansVente.getSelectedIndex();
                 int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
                 int vid = ((Vente) nomBox.getSelectedItem()).getId();
 
+                /*
                 // si on garde l'index, retire l'objet puis l'insère à
                 // (index - 2), considérant que toute la liste aura été
                 // décalée de 1 après le retrait, alors replacer l'objet
@@ -507,29 +549,35 @@ class PlanifierPanel implements ActionListener
                 // (mais c'est le notify() à faire ailleurs qui merde)
                 // (IllegalMonitorStateException)
                 Client.hi.ajouterObjetVente(oid, vid, index-2);
+                */
+
+                Client.ventemanager.moveObjet(vid, oid, TypeDeplacement.UP);
             }
         } else if(commande.equals("down")) {
             // descendre d'un cran dans la liste des ventes
             if(!listeDansVente.isSelectionEmpty()
                     && nomBox.getSelectedItem() instanceof Vente
                     && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
-                int index = listeDansVente.getSelectedIndex();
+                //int index = listeDansVente.getSelectedIndex();
                 int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
                 int vid = ((Vente) nomBox.getSelectedItem()).getId();
 
+                /*
                 // si on garde l'index, retire l'objet puis l'insère à
                 // ce même index, considérant que toute la liste aura été
                 // décalée de 1 après le retrait, alors replacer l'objet
                 // sur le même index l'aura fait bouger d'un cran vers le bas.
                 /*Client.hi.retirerObjetVente(oid, vid);
                 Client.hi.ajouterObjetVente(oid, vid, index);*/
+                
+                Client.ventemanager.moveObjet(vid, oid, TypeDeplacement.DOWN);
             }
         } else if(commande.equals("top")) {
             // insérer au tout début de la liste des ventes
             if(!listeDansVente.isSelectionEmpty()
                     && nomBox.getSelectedItem() instanceof Vente
                     && listeDansVente.getSelectedValue() instanceof PlanifierObjet) {
-                int index = listeDansVente.getSelectedIndex();
+                //int index = listeDansVente.getSelectedIndex();
                 int oid = ((PlanifierObjet) listeDansVente.getSelectedValue()).getId();
                 int vid = ((Vente) nomBox.getSelectedItem()).getId();
 
@@ -538,6 +586,8 @@ class PlanifierPanel implements ActionListener
                 Client.hi.retirerObjetVente(oid, vid);
                 Client.hi.ajouterObjetVente(oid, vid, 0);
                 */
+
+                Client.ventemanager.moveObjet(vid, oid, TypeDeplacement.TOP);
             }
         } else if(commande.equals("bottom")) {
             // insérer en queue de la liste des ventes
@@ -551,6 +601,8 @@ class PlanifierPanel implements ActionListener
                 // on a l'index spécial -1 pour ça, c'est pas beau la technique ?
                 /*Client.hi.retirerObjetVente(oid, vid);
                 Client.hi.ajouterObjetVente(oid, vid, -1);*/
+
+                Client.ventemanager.moveObjet(vid, oid, TypeDeplacement.BOTTOM);
             }
         }
     }

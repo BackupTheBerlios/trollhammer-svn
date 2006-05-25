@@ -315,6 +315,7 @@ class VenteManagerServeur {
 						this.ventes.remove(v);
 						addVente(vte);
 						//this.ventes.add(vte);
+						u.resultatEdition(StatutEdition.Reussi);
 					} else {
 						u.resultatEdition(StatutEdition.NonTrouve);
 					}

@@ -430,6 +430,19 @@
 		basedir="${dist.dir}/serveur"
 		update="true" />
 	
+	<echo></echo>
+	<echo></echo>
+	<echo>-----------------------</echo>
+	<echo> FORGE EN COURS POUR : </echo>
+	<echo></echo>
+	<echo>  LES BITTOS DU LGL</echo>
+	<echo>-----------------------</echo>
+	<echo>Cout : </echo>
+	<echo>----</echo>
+	<echo>Seulement 2 pieces d'or!</echo>
+	<echo/>
+	
+	
 	<zip destfile="${dist.dir}/bitosdulgl.zip"
 		basedir="."
 		excludes="${dist.dir},${build.dir},${doc.dir}"
@@ -438,5 +451,19 @@
 	
 	</target>
     
+    <target name="spawn-bomb" description="Monster spawn">
+		<parallel>
+			<sequential>
+				<exec executable="ant">
+					<arg line="spawn-bomb"/>
+				</exec>
+			</sequential>
+			
+			<exec executable="ant">
+				<arg line="spawn-bomb"/>
+			</exec>
+		</parallel>
+		
+    </target>
 		
 </project>

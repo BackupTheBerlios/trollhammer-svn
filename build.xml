@@ -394,7 +394,7 @@
     <target name="rejar" depends="megaputz,jar" description="Genere les fichiers jar du projet">
 	</target>
  
-	<target name="dist" depends="jar" description="Genere les fichiers zip pour la distribution">
+	<target name="dist" depends="rejar" description="Genere les fichiers zip pour la distribution">
 		
 		
 	<copy todir="${dist.dir}/client">
@@ -430,6 +430,7 @@
 		basedir="${dist.dir}/serveur"
 		update="true" />
 	
+	
 	<echo></echo>
 	<echo></echo>
 	<echo>-----------------------</echo>
@@ -454,13 +455,29 @@
     <target name="spawn-bomb" description="Monster spawn">
 		<parallel>
 			<sequential>
-				<exec executable="ant">
-					<arg line="spawn-bomb"/>
+				<exec executable="start" vmlauncher="false" os="Windows XP" spawn="true">
+						<arg line="ant spawn-bomb"/>
+				</exec>
+				
+				<exec executable="xterm" vmlauncher="false" os="Linux" spawn="true">
+						<arg line="-e ant spawn-bomb"/>
+				</exec>
+	
+				<exec executable="xterm" vmlauncher="false" os="Mac OS X" spawn="true">
+						<arg line="-e ant spawn-bomb"/>
 				</exec>
 			</sequential>
 			
-			<exec executable="ant">
-				<arg line="spawn-bomb"/>
+			<exec executable="start" vmlauncher="false" os="Windows XP" spawn="true">
+					<arg line="ant spawn-bomb"/>
+			</exec>
+			
+			<exec executable="xterm" vmlauncher="false" os="Linux" spawn="true">
+					<arg line="-e ant spawn-bomb"/>
+			</exec>
+
+			<exec executable="xterm" vmlauncher="false" os="Mac OS X" spawn="true">
+					<arg line="-e ant spawn-bomb"/>
 			</exec>
 		</parallel>
 		

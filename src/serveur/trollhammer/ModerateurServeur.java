@@ -16,6 +16,9 @@ class ModerateurServeur extends UtilisateurServeur {
     ModerateurServeur(Moderateur m) {
         super(m);
     }
+    ModerateurServeur(Moderateur m, SessionServeur s) {
+        super(m,s);
+    }
 
     ModerateurServeur(String login, String nom, String prenom, String motdepasse) {
         this(new Moderateur(login, nom, prenom, motdepasse));

@@ -175,7 +175,21 @@ class UserManagerServeur {
 			*/
 			//plutôt que ca : 
 				utilisateurs.remove(t);
-				utilisateurs.add(new UtilisateurServeur(u));
+
+                // jr : transformation en objet Adapter _selon_ Modérateur
+                // ou pas (autrement, le Modérateur se voit... 'destitué')
+                //
+                // on n'oublie pas d'ailleurs de relayer la Session de l'actuel
+                // objet Adapter, sous peine d'avoir de gros problèmes : envoyer
+                // des messages à une session == null !
+                if(u instanceof Moderateur) {
+                    utilisateurs.add(
+                            new ModerateurServeur((Moderateur) u, t.getSession()));
+                } else if(u instanceof Utilisateur) {
+                    utilisateurs.add(
+                            new UtilisateurServeur(u, t.getSession()));
+                }
+
 				s.resultatEdition(StatutEdition.Reussi);
 			} else {
 				s.resultatEdition(StatutEdition.NonTrouve);

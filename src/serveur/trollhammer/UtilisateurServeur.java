@@ -20,6 +20,11 @@ class UtilisateurServeur {
         this.u = u;
     }
 
+    UtilisateurServeur(Utilisateur u, SessionServeur s) {
+        this(u);
+        this.session = s;
+    }
+
     UtilisateurServeur(String login, String nom, String prenom, String motdepasse) {
         this(new Utilisateur(login, nom, prenom, motdepasse));
     }

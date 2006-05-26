@@ -290,7 +290,7 @@ class GestionPanel implements ActionListener
     }
 
     void boutonDebannir() {
-        bannir.setText("Débannir");
+        bannir.setText("Réhabiliter");
         bannir.setActionCommand("unban");
     }
 }

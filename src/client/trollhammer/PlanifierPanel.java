@@ -328,11 +328,37 @@ class PlanifierPanel implements ActionListener
             nomBox.addItem(v);
         }
 
-        // resélection de la vente précédemment sélectionnée.
-        if(vp != null) {
-            nomBox.setSelectedItem(vp);
+        // resélection de la vente précédemment sélectionnée, si elle existe toujours.
+        // et précision de ceci au Client, pour que la FSM suive. Sinon ?
+        // KABOOM.
+        if(vp != null && vp instanceof Vente) {
+            if(Client.ventemanager.getVente(((Vente) vp).getId()) != null) {
+                Client.hi.choisirVente(((Vente) vp).getId());
+                nomBox.setSelectedItem(vp);
+            } else {
+                razChamps();
+            }
+        } else if(vp != null && vp instanceof String) {
+            // SI vp != null et est une String ayant servi à créer
+            // une vente, alors on cherche dans la liste des nouvelles ventes
+            // la vente portant ce nom ! sinon, BOOM.
+            Vente the_vente = null;
+
+            for(Vente vte : ventes) {
+                if(vte.getNom().equals((String) vp)) {
+                    the_vente = vte;
+                }
+            }
+
+            if(the_vente != null) {
+                nomBox.setSelectedItem(the_vente);
+            } else {
+                razChamps();
+            }
+
         } else {
-            nomBox.setSelectedItem(NOM_VIDE);
+            // si rien de clair sélectionné avant, BOOM.
+            razChamps();
         }
 
         // tadaaaam !

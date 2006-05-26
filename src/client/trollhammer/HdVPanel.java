@@ -380,8 +380,15 @@ class HdVPanel extends JComponent implements ActionListener
 
             if(u != null) {
                 // assurer la mise à jour de la victime du kick
-                u.addActionListener(this);
-                u.setActionCommand("setvictime");
+                // (seulement si modo, sinon on override l'icône
+                // "sélectionné" pour qu'elle soit identique
+                // à l'icône déselectionné !)
+                if(modo) {
+                    u.addActionListener(this);
+                    u.setActionCommand("setvictime");
+                } else {
+                    u.setSelectedIcon(u.getIcon());
+                }
                 grpl.add(u);
                 sallePanel.add(u);
             }

@@ -105,10 +105,20 @@ class SessionServeur {
 
     void kaboom() {
         try {
+            // barbarie : s'interrompre une demi-seconde pour laisser le temps
+            // au trafic d'en finir. Ca peut paraître fou, mais c'est nécessaire.
+            // l'option SO_LINGER des Sockets devrait se charger d'attendre
+            // le temps nécessaire à la transmission avant de faire un reset
+            // de la connexion, mais ne le fait _PAS_. Donc... à la main,
+            // qu'on le fait. Gorito, gorito... 
+            Thread.sleep(500);
+            oos.flush();
             oos.close();
             s.close();
         } catch (IOException ioe) {
             Logger.log("SessionServeur", 1, LogType.WRN, "[net] Erreur de fermeture de Session : "+ioe.getMessage());
+        } catch (InterruptedException ie) {
+            Logger.log("SessionServeur", 1, LogType.ERR, "MAIS TANT MIEUX QUE J'ARRIVE PAS DORMIR ! (trad. : erreur de sleep() dans la fermeture de Session");
         }
     }
 }

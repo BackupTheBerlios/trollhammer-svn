@@ -383,4 +383,12 @@ class Window implements ActionListener
                 break;
         }
     }
+
+    /* rajout p.r. Design : afficher quand un utilisateur devient
+     * superviseur de vente, pour dire que la vente passe en manuel !
+     */
+
+    void superviseur(String i) {
+        hdv.superviseur(i);
+    }
 }

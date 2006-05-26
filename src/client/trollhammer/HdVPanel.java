@@ -425,9 +425,13 @@ class HdVPanel extends JComponent implements ActionListener
                         );
 				
 				nbCdMLabel.setText("0");
+                enchereButton.setEnabled(true);
                 break;      
             case VenteAutomatique:     
                 texteLogln("- Vente en mode automatique -");    
+                if(modo) {
+                    cdmButton.setEnabled(true);
+                }
                 break;   
             default :   
         }      
@@ -437,8 +441,9 @@ class HdVPanel extends JComponent implements ActionListener
         texteLogln(i+" enchérit à "+prix);
 
         // réactiver le bouton enchérir si l'enchérisseur
-        // n'est pas soi-même !
-        if(!i.equals(Client.session.getLogin())) {
+        // n'est pas soi-même ! (et si on n'est pas superviseur)
+        if(!i.equals(Client.session.getLogin())
+                && !Client.session.getLogin().equals(Client.client.getSuperviseur())) {
             enchereButton.setEnabled(true);
         }
 		majChamps();
@@ -523,7 +528,24 @@ class HdVPanel extends JComponent implements ActionListener
         enchereButton.setEnabled(false);
         if(modo) {
             kickButton.setEnabled(false);
-            cdmButton.setEnabled(false);
+        }
+    }
+
+    /* rajout p.r. Design : afficher quand un utilisateur devient
+     * superviseur de vente, pour dire que la vente passe en manuel !
+     */
+
+    void superviseur(String i) {
+        texteLogln("- Vente en mode manuel -");      
+        texteLogln("- commissaire priseur : "+i+" -");
+        if(modo) {
+            if(i.equals(Client.session.getLogin())) {
+                cdmButton.setEnabled(true);
+                enchereButton.setEnabled(false);
+            } else {
+                cdmButton.setEnabled(false);
+                enchereButton.setEnabled(true);
+            }
         }
     }
 }

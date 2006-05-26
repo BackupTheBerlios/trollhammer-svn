@@ -173,6 +173,7 @@ public class Client {
 		setSuperviseur(i);
 		Vente v = Client.humain.getVente();
 		v.setMode(Mode.Manuel);
+        Client.hi.superviseur(i);
     }
 
     /* fin des méthodes du Design */

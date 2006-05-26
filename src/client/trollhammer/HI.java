@@ -54,6 +54,14 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
         }
     }
 			
+    /* rajout p.r. Design : afficher quand un utilisateur devient
+     * superviseur de vente, pour dire que la vente passe en manuel !
+     */
+
+    void superviseur(String i) {
+        mw.superviseur(i);
+    }
+
     /* méthodes du Design */
 
     void accepterProposition(int i) {

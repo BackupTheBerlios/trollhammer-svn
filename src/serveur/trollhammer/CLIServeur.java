@@ -26,7 +26,7 @@ class CLIServeur extends CLI {
 			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {
 				public void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new UtilisateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
-					Logger.log("CMD", 1, LogType.INF, "Utilisateur créé : " + parameters[1]);
+					Logger.log("CMD", 0, LogType.INF, "Utilisateur créé : " + parameters[1]);
 				}
 			}
 		);
@@ -34,7 +34,7 @@ class CLIServeur extends CLI {
 			new CMD("nm", 5, "nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE") {
 				public void apply(String parameters[]){
 					Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
-					Logger.log("CMD", 1, LogType.INF, "Modérateur créé : " + parameters[1]);
+					Logger.log("CMD", 0, LogType.INF, "Modérateur créé : " + parameters[1]);
 				}
 			}
 		);
@@ -55,7 +55,7 @@ class CLIServeur extends CLI {
 						String maDate = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+"."+cal.get(Calendar.YEAR)+" "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE);
 						liste = liste + "\t" + maDate + " : " + vid + " - " + vte.getNom() + "\n";
 					}
-					Logger.log("CMD", 1, LogType.INF, liste);
+					Logger.log("CMD", 0, LogType.INF, liste);
 				}
 			}
 		);

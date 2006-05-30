@@ -85,7 +85,7 @@ class Vente implements java.io.Serializable {
 	 * <p>Renvoie une IndexOutOfBoundsException si la liste est vide.</p>
 	 */
 	public int getFirst() {
-        return objets.get(0);
+        return objets.get(0).intValue();
     }
 
 	/**
@@ -93,7 +93,7 @@ class Vente implements java.io.Serializable {
 	 * liste des objets de la vente.</p>
 	 */
     public int removeFirst() {
-        return objets.remove(0);
+        return objets.remove(0).intValue();
     }
 
 	/**
@@ -105,7 +105,7 @@ class Vente implements java.io.Serializable {
 	 * @param	elt		Id de l'objet.
 	 */
 	public void addOId(int index, int elt) {
-		this.objets.add(index, elt);
+		this.objets.add(index, new Integer(elt));
         Logger.log("Vente", 2, LogType.DBG, "Insertion de l'OID " + elt
                 + " à la position " + index + " réussi");
 	}
@@ -116,7 +116,7 @@ class Vente implements java.io.Serializable {
 	 * @param	elt		Id de l'objet.
 	 */
 	public void addOId(int elt) {
-		this.objets.add(elt);
+		this.objets.add(new Integer(elt));
         Logger.log("Vente", 2, LogType.DBG, "Insertion de l'OID " + elt
                 + " en fin de liste réussi"); 
 	}
@@ -128,10 +128,17 @@ class Vente implements java.io.Serializable {
 	 * @param	oid		Id de l'objet à supprimer.
 	 */
 	public void removeOId(int oid) {
+		for (Integer i : this.getOIds()) {
+			if (i.intValue() == oid) {
+				this.objets.remove(i);
+			}
+		}
+		//ls : OLD implementation.
+		/* 
 		int p = this.getOIds().indexOf(oid);
 		if (p != -1) {
 			this.objets.remove(p);
-		}
+		}*/
 	}
 	// Méthodes du design : END
 	
@@ -144,9 +151,50 @@ class Vente implements java.io.Serializable {
      * @param   td      Type de déplacement à effectuer.
      */
     void moveObjet(int oid, TypeDeplacement td) {
-        List<Integer> objets = this.getOIds();
-
-        if(objets.contains((Object) oid)) {
+	//ls : Verison revue, qui me semble plus propre, quand à l'utilisation de la
+	//     List<Integer>
+		Integer t = null;
+		int index = -1;
+		for(Integer i : objets) {
+			if (i.intValue() == oid) {
+				index = objets.indexOf(i);
+				t = i;
+			}
+		}
+		
+		if (t != null) {
+			switch (td) {
+				case UP:
+					if(index != 0) {
+						index--;
+					}
+					break;
+				case DOWN:
+					if(index != objets.size() - 1) {
+						index++;
+					}
+					break;
+				case TOP:
+					index = 0;
+					break;
+				case BOTTOM:
+					index = -1;
+					break;
+			}
+			// on enlève l'objet de la liste à sa position actuelle
+			objets.remove(t);
+            // pour le remettre à la nouvelle.
+            if(index != -1) {
+                // cas index précis
+                objets.add(index, t);
+            } else {
+                // cas "mettre à la fin"
+                objets.add(t);
+            }
+		}
+        
+/*		List<Integer> objets = this.getOIds();
+		if(objets.contains(new Integer(oid))) {
             int index = objets.indexOf(oid);
 
             switch (td) {
@@ -181,7 +229,7 @@ class Vente implements java.io.Serializable {
                 // cas "mettre à la fin"
                 objets.add(oid);
             }
-        }
+        }*/
     }
 
 	// Setters & Getters : START

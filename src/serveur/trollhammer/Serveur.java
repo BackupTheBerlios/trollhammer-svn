@@ -18,13 +18,13 @@ public class Serveur {
      * correcte attribuée au démarrage du Serveur. */
 
     static Serveur serveur = null;
-    static ServeurEntry serveurentry;
-    static Broadcaster broadcaster;
-    static ObjectManagerServeur objectmanager;
-    static UserManagerServeur usermanager;
-    static ParticipantManagerServeur participantmanager;
-    static VenteManagerServeur ventemanager;
-    static ChatSystem chatsystem;
+    static ServeurEntry serveurentry = null;
+    static Broadcaster broadcaster = null;
+    static ObjectManagerServeur objectmanager = null;
+    static UserManagerServeur usermanager = null;
+    static ParticipantManagerServeur participantmanager = null;
+    static VenteManagerServeur ventemanager = null;
+    static ChatSystem chatsystem = null;
 
     /* la méthode main... */
     public static void main(String[] args) {
@@ -91,8 +91,6 @@ public class Serveur {
 	 * @param	sender	identifiant du modérateur qui donne le coup de marteau
 	 * author	cfrey
 	 */
-// mode automatique: problème ... qui envoie envoyerCoupdeMASSE ? il devrait y
-// avoir un timeout côté serveur qui génère des coups de marteau ...
     void envoyerCoupdeMASSE(String sender) {
 		VenteServeur venteEnCours = Serveur.ventemanager.getVenteEnCours();
 		if (venteEnCours != null) {
@@ -179,12 +177,12 @@ public class Serveur {
     void encherir(int prix, String i) {
 		Logger.log("Serveur", 1, LogType.INF, i + " tente d'enchérir à " + prix);
 		if (checkEnchere(prix, i)) {
-			Logger.log("Serveur", 2, LogType.INF, i+" : enchère valide à "+prix);
+			Logger.log("Serveur", 2, LogType.INF, i + " : enchère valide à " + prix);
 			doEnchere(prix, i);
 			Serveur.ventemanager.setTimerDerniereEnchere(getDate());
 			Serveur.broadcaster.enchere(prix, i);
 		} else {
-			Logger.log("Serveur", 2, LogType.WRN, i+" : enchère invalide à "+prix);
+			Logger.log("Serveur", 2, LogType.WRN, i + " : enchère invalide à " + prix);
 		}
     }
 

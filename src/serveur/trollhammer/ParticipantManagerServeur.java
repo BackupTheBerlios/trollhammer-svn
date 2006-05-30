@@ -8,6 +8,7 @@ import java.util.HashSet;
  * La liste des Participants est en réalité tirée de la liste d'Utilisateurs
  * de UserManagerServeur.
  *
+ * @author Lionel Sambuc
  * @author squelette : Julien Ruffin
  */
 class ParticipantManagerServeur {
@@ -26,7 +27,7 @@ class ParticipantManagerServeur {
         for(UtilisateurServeur u : ul) {
             if(u.getStatut() == StatutLogin.Connecte_Utilisateur
             || u.getStatut() == StatutLogin.Connecte_Moderateur) {
-                pl.add(u.getUtilisateur()); //cast inutile, utilisateur est un sous-type... c'est automatique
+                pl.add(u);
             }
         }
         s.listeParticipants(pl);
@@ -46,7 +47,7 @@ class ParticipantManagerServeur {
         Set<Participant> pl = new HashSet<Participant>();
         Set<UtilisateurServeur> ul = Serveur.usermanager.getUtilisateurs();
         for(UtilisateurServeur u : ul) {
-			pl.add(u.getUtilisateur()); // cf ci-dessus, nous ne somme pas en C++
+			pl.add(u);
         }
         s.listeParticipants(pl);
 	}

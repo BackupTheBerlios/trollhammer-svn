@@ -7,11 +7,12 @@ package trollhammer;
  */
 class Utilisateur extends Participant {
 
-    private String mot_de_passe;
+    protected String mot_de_passe;
 
 	// Constructeurs : START
 	/**
-	 * <p>Crée un Utilisateur, avec les valeurs assignées.</p>
+	 * <p>Crée un Utilisateur, avec les valeurs assignées. Le statut est affecté
+	 * à <code>Deconnecte</code></p>
 	 *
 	 * @param	login			Nom d'utilisateur, doit être unique, car c'est 
 	 *							l'identifiant système (un String).
@@ -21,6 +22,20 @@ class Utilisateur extends Participant {
 	 */
     Utilisateur(String login, String nom, String prenom, String mot_de_passe) {
         super(login, nom, prenom);
+        this.mot_de_passe = mot_de_passe;
+    }
+	/**
+	 * <p>Crée un Utilisateur, avec les valeurs assignées.</p>
+	 *
+	 * @param	login			Nom d'utilisateur, doit être unique, car c'est 
+	 *							l'identifiant système (un String).
+	 * @param	nom				Nom de l'utilisateur (un String)
+	 * @param	prenom			Prenom de l'utilisateur (un String)
+	 * @param	statut			Statut du participant (Enumération StatutLogin)
+	 * @param	mot_de_passe	Mot de passe de l'utilisateur (un String)
+	 */
+    Utilisateur(String login, String nom, String prenom, StatutLogin statut, String mot_de_passe) {
+        super(login, nom, prenom, statut);
         this.mot_de_passe = mot_de_passe;
     }
 	// Constructeurs : END
@@ -48,7 +63,8 @@ class Moderateur extends Utilisateur {
 
 	// Constructeurs : START
 	/**
-	 * <p>Crée un Modérateur, avec les valeurs assignées.</p>
+	 * <p>Crée un Modérateur, avec les valeurs assignées. Le statut est affecté
+	 * à <code>Deconnecte</code></p>
 	 *
 	 * @param	login			Nom d'utilisateur, doit être unique, car c'est 
 	 *							l'identifiant système (un String).
@@ -58,6 +74,19 @@ class Moderateur extends Utilisateur {
 	 */
     Moderateur(String login, String nom, String prenom, String mot_de_passe) {
         super(login, nom, prenom, mot_de_passe);
+    }
+	/**
+	 * <p>Crée un Modérateur, avec les valeurs assignées.</p>
+	 *
+	 * @param	login			Nom d'utilisateur, doit être unique, car c'est 
+	 *							l'identifiant système (un String).
+	 * @param	nom				Nom du modérateur (un String)
+	 * @param	prenom			Prenom du modérateur (un String)
+	 * @param	statut			Statut du participant (Enumération StatutLogin)
+	 * @param	mot_de_passe	Mot de passe du modérateur (un String)
+	 */
+    Moderateur(String login, String nom, String prenom, StatutLogin statut, String mot_de_passe) {
+        super(login, nom, prenom, statut, mot_de_passe);
     }
 	// Constructeurs : END
 

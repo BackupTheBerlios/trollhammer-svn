@@ -2,6 +2,7 @@ package trollhammer;
 import java.net.*;
 import java.io.*;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -64,7 +65,9 @@ class SessionServeur {
     }
 
     void detailsUtilisateur(Utilisateur u) {
-        envoyer(new detailsUtilisateur(u));
+		//ls : fixe pour ne pas modifier notre design foireux
+		//On a bad trippé sur la maniere de géré les sessions...
+        envoyer(new detailsUtilisateur(new Utilisateur(u.getLogin(), u.getNom(), u.getPrenom(), u.getStatut(), u.getMotDePasse())));
     }
 
     void listeObjets(Onglet type, Set<Objet> lo) {
@@ -72,11 +75,27 @@ class SessionServeur {
     }
 
     void listeUtilisateurs(Set<Utilisateur> ul) {
-        envoyer(new listeUtilisateurs(ul));
+		//ls : fixe pour ne pas modifier notre design foireux
+		//On a bad trippé sur la maniere de géré les sessions...
+		Set<Utilisateur> ulp = new HashSet<Utilisateur>();
+		for (Utilisateur up : ul) {
+			if (up instanceof ModerateurServeur) {
+				ulp.add(new Moderateur(up.getLogin(), up.getNom(), up.getPrenom(), up.getStatut(), up.getMotDePasse()));
+			} else if (up instanceof UtilisateurServeur) {
+				ulp.add(new Utilisateur(up.getLogin(), up.getNom(), up.getPrenom(), up.getStatut(), up.getMotDePasse()));
+			}
+		}
+        envoyer(new listeUtilisateurs(ulp));
     }
 
     void listeParticipants(Set<Participant> pl) {
-        envoyer(new listeParticipants(pl));
+		//ls : fixe pour ne pas modifier notre design foireux
+		//On a bad trippé sur la maniere de géré les sessions...
+		Set<Participant> plp = new HashSet<Participant>();
+		for (Participant pp : pl) {
+			plp.add(new Participant(pp.getLogin(), pp.getNom(), pp.getPrenom(), pp.getStatut()));
+		}
+        envoyer(new listeParticipants(plp));
     }
 
     void listeVentes(Set<Vente> l) {
@@ -88,7 +107,9 @@ class SessionServeur {
     }
 
     void etatParticipant(Participant p) {
-        envoyer(new etatParticipant(p));
+		//ls : fixe pour ne pas modifier notre design foireux
+		//On a bad trippé sur la maniere de géré les sessions...
+        envoyer(new etatParticipant(new Participant(p.getLogin(), p.getNom(), p.getPrenom(), p.getStatut())));
     }
 
     void superviseur(String i) {
@@ -118,7 +139,7 @@ class SessionServeur {
         } catch (IOException ioe) {
             Logger.log("SessionServeur", 1, LogType.WRN, "[net] Erreur de fermeture de Session : "+ioe.getMessage());
         } catch (InterruptedException ie) {
-            Logger.log("SessionServeur", 1, LogType.ERR, "MAIS TANT MIEUX QUE J'ARRIVE PAS DORMIR ! (trad. : erreur de sleep() dans la fermeture de Session");
+            Logger.log("SessionServeur", 1, LogType.ERR, "MAIS TANT MIEUX QUE J'ARRIVE PAS A DORMIR ! (trad. : erreur de sleep() dans la fermeture de Session");
         }
     }
 }

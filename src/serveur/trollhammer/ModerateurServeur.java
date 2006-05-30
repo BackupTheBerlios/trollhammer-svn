@@ -17,11 +17,11 @@ class ModerateurServeur extends UtilisateurServeur {
         super(m);
     }
     ModerateurServeur(Moderateur m, SessionServeur s) {
-        super(m,s);
+        super(m, s);
     }
 
     ModerateurServeur(String login, String nom, String prenom, String motdepasse) {
-        this(new Moderateur(login, nom, prenom, motdepasse));
+        super(login, nom, prenom, motdepasse);
     }
 	// Constructeurs : END
 
@@ -39,7 +39,7 @@ class ModerateurServeur extends UtilisateurServeur {
     public void disconnect() {
 		//ls :  Vive l'OO, ca évite le copier-coller de code...
 		super.disconnect();
-        Serveur.ventemanager.modoLeaving(u.getLogin());
+        Serveur.ventemanager.modoLeaving(this.login);
     }
 	// Méthodes du design : END
 }

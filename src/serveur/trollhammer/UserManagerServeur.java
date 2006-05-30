@@ -92,7 +92,7 @@ class UserManagerServeur {
 		if (victime != null && (victime.getStatut() == StatutLogin.Connecte_Utilisateur || victime.getStatut() == StatutLogin.Connecte_Moderateur)) {
 			victime.notification(Notification.Kicke);
 			victime.disconnect();
-			Serveur.broadcaster.etatParticipant((Participant) victime.getUtilisateur());
+			Serveur.broadcaster.etatParticipant(victime);
 		}
     }
 
@@ -117,27 +117,23 @@ class UserManagerServeur {
         UtilisateurServeur u = this.getUtilisateur(sender);
         u.notification(Notification.Deconnexion);
         u.disconnect();
-        Serveur.broadcaster.etatParticipant((Participant) u.getUtilisateur());
+        Serveur.broadcaster.etatParticipant(u);
     }
 
     void obtenirListeUtilisateurs(String sender) {
 		UtilisateurServeur u = this.getUtilisateur(sender);
-		//ls : C'est une horreur CA, si on avait du sous-typage, je n'aurais pas à le faire...
 		Set<Utilisateur> liste = new HashSet<Utilisateur>();
 		for (UtilisateurServeur t : utilisateurs) {
-			liste.add(t.getUtilisateur());
+			liste.add(t);
 		}
 		u.listeUtilisateurs(liste);
     }
 
     void obtenirListeParticipants(String sender) {
 		UtilisateurServeur u = this.getUtilisateur(sender);
-		//ls : C'est une horreur CA, si on avait du sous-typage, je n'aurais pas à le faire...
-		// a noter que les relations objet me permettent de passer des Utilisateurs qui se 
-		// voient castés en leur sur class Participant...
 		Set<Participant> liste = new HashSet<Participant>();
 		for (UtilisateurServeur t : utilisateurs) {
-			liste.add(t.getUtilisateur());
+			liste.add(t);
 		}
 		u.listeParticipants(liste);
     }
@@ -145,7 +141,7 @@ class UserManagerServeur {
     void obtenirUtilisateur(String i, String sender) {
 		UtilisateurServeur s = this.getUtilisateur(sender);
 		UtilisateurServeur u = this.getUtilisateur(i);
-		s.detailsUtilisateur(u.getUtilisateur());
+		s.detailsUtilisateur(u);
     }
 
 	//ls : plein de truck a checker en plus.. a revoir..
@@ -153,10 +149,18 @@ class UserManagerServeur {
 		UtilisateurServeur t = Serveur.usermanager.getUtilisateur(u.getLogin());
 		UtilisateurServeur s = Serveur.usermanager.getUtilisateur(sender);
 		
+		UtilisateurServeur n = null;
+		if (u instanceof Moderateur) {
+			n = new ModerateurServeur((Moderateur) u, t.getSession());
+		} else {
+			n = new UtilisateurServeur(u, t.getSession());
+		}
+		n.setStatut(u.getStatut());
+		
 		switch (e) {
 		case Creer:
 			if (t == null) {
-				utilisateurs.add(new UtilisateurServeur(u)); // ls  : genre ici.. quid de j'ajoute un user qui existe déjà??
+				utilisateurs.add(n);
 				s.resultatEdition(StatutEdition.Reussi);
 			} else {
 				s.resultatEdition(StatutEdition.ExisteDeja);
@@ -164,32 +168,8 @@ class UserManagerServeur {
 			break;
 		case Modifier:
 			if (t != null) {
-			// ls : Quand on réfléchi pas on pond une horreur comme ça :
-			/*	for(UtilisateurServeur us : utilisateurs) {
-					if (us.getUtilisateur().getLogin().equals(u.getLogin())) {
-						utilisateurs.remove(us);
-						utilisateurs.add(new UtilisateurServeur(u));
-						s.resultatEdition(StatutEdition.Reussi);
-					}
-				}
-			*/
-			//plutôt que ca : 
 				utilisateurs.remove(t);
-
-                // jr : transformation en objet Adapter _selon_ Modérateur
-                // ou pas (autrement, le Modérateur se voit... 'destitué')
-                //
-                // on n'oublie pas d'ailleurs de relayer la Session de l'actuel
-                // objet Adapter, sous peine d'avoir de gros problèmes : envoyer
-                // des messages à une session == null !
-                if(u instanceof Moderateur) {
-                    utilisateurs.add(
-                            new ModerateurServeur((Moderateur) u, t.getSession()));
-                } else if(u instanceof Utilisateur) {
-                    utilisateurs.add(
-                            new UtilisateurServeur(u, t.getSession()));
-                }
-
+				utilisateurs.add(n);
 				s.resultatEdition(StatutEdition.Reussi);
 			} else {
 				s.resultatEdition(StatutEdition.NonTrouve);
@@ -210,7 +190,7 @@ class UserManagerServeur {
 		// rien la liste... car je ne la renvoie pas.
 		Set<Utilisateur> lu = new HashSet<Utilisateur>();
 		for(UtilisateurServeur us : utilisateurs) {
-			lu.add(us.getUtilisateur());
+			lu.add(us);
 		}
 
 		switch (e) {

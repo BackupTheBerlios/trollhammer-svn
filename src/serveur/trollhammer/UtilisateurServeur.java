@@ -10,121 +10,79 @@ import java.util.List;
  * @author Julien Ruffin
  */
 
-class UtilisateurServeur {
+class UtilisateurServeur extends Utilisateur{
 
-    Utilisateur u;
     SessionServeur session;
 
 	// Constructeurs : START
+	
     UtilisateurServeur(Utilisateur u) {
-        this.u = u;
+        super(u.getLogin(), u.getNom(), u.getPrenom(), u.getMotDePasse());
     }
 
     UtilisateurServeur(Utilisateur u, SessionServeur s) {
-        this(u);
+        super(u.getLogin(), u.getNom(), u.getPrenom(), u.getMotDePasse());
         this.session = s;
     }
 
     UtilisateurServeur(String login, String nom, String prenom, String motdepasse) {
-        this(new Utilisateur(login, nom, prenom, motdepasse));
+        super(login, nom, prenom, motdepasse);
     }
 	// Constructeurs : END
 
 	// Méthodes du design : START
-	/**
-	 *
-	 */
     public void resultatLogin(StatutLogin s) {
         session.resultatLogin(s);
     }
 
-	/**
-	 *
-	 */
     public void chat(String m, String i) {
         session.chat(m, i);
     }
 
-	/**
-	 *
-	 */
     public void notification(Notification n) {
         session.notification(n);
     }
 
-	/**
-	 *
-	 */
     public void evenement(Evenement e) {
         session.evenement(e);
     }
 
-	/**
-	 *
-	 */
     public void enchere(int prix, String i) {
         session.enchere(prix, i);
     }
 
-	/**
-	 *
-	 */
     public void detailsVente(Vente v, List<Objet> o) {
         session.detailsVente(v, o);
     }
 
-	/**
-	 *
-	 */
     public void detailsUtilisateur(Utilisateur u) {
         session.detailsUtilisateur(u);
     }
 
-	/**
-	 *
-	 */
     public void listeObjets(Onglet type, Set<Objet> lo) {
         session.listeObjets(type, lo);
     }
 
-	/**
-	 *
-	 */
     public void listeUtilisateurs(Set<Utilisateur> ul) {
         session.listeUtilisateurs(ul);
     }
 
-	/**
-	 *
-	 */
     public void listeParticipants(Set<Participant> pl) {
         session.listeParticipants(pl);
     }
 
-	/**
-	 *
-	 */
     public void listeVentes(Set<Vente> l) {
         session.listeVentes(l);
     }
 
-	/**
-	 *
-	 */
     public void resultatEdition(StatutEdition s) {
         session.resultatEdition(s);
     }
 
-	/**
-	 *
-	 */
     public void etatParticipant(Participant p) {
         session.etatParticipant(p);
     }
 
-	/**
-	 *
-	 */
     public void superviseur(String i) {
         session.superviseur(i);
     }
@@ -148,116 +106,65 @@ class UtilisateurServeur {
         // tout ce qui est utile à la généralisation de la méthode est ici.
         StatutLogin reponse_login_correct = StatutLogin.Connecte_Utilisateur;
         String type = "Utilisateur";
-		//ls : le but du parametre who, ce n'es psa de faire joli dans la console,
-		// si ton message part toujours d'ici, qu'il l'affiche en tant que tel, pas 
-		// un pseudo fake.
+
         if(this instanceof ModerateurServeur) {
-            Logger.log("UtilisateurServeur", 2, LogType.DBG, u.getLogin() + " est un Modérateur.");
+            Logger.log("UtilisateurServeur", 2, LogType.DBG, login + " est un Modérateur.");
             reponse_login_correct = StatutLogin.Connecte_Moderateur;
             type = "Modérateur";
         }
 
-        Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] vérification statut/pass pour " + u.getLogin());
-        String mot_de_passe = u.getMotDePasse();
-        StatutLogin statut = u.getStatut();
+        Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] vérification statut/pass pour " + login);
 
         if(mdp.equals(mot_de_passe) && statut != StatutLogin.Connecte_Utilisateur
                 && statut != StatutLogin.Banni) {
-            Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] login " + type + " accepté : login " + u.getLogin());
+            Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] login " + type + " accepté : login " + login);
 
             sess.resultatLogin(reponse_login_correct);
             // la session est valide, on la fixe pour l'Utilisateur
             this.session = sess;
-            u.setStatut(reponse_login_correct);
+            this.setStatut(reponse_login_correct);
             Logger.log("UtilisateurServeur", 2, LogType.INF, "[login] envoi de la liste des Participants connectés");
 			//ls : pourquoi refaire le travail, alors qu'il est fait par une opération?
-            Serveur.participantmanager.obtenirListeParticipants(this.getLogin());
+            Serveur.participantmanager.obtenirListeParticipants(login);
             Logger.log("UtilisateurServeur", 2, LogType.INF, "[login] broadcast du login");
-            Serveur.broadcaster.etatParticipant((Participant) u);
+            Serveur.broadcaster.etatParticipant(this);
         } else if (!mdp.equals(mot_de_passe)) {
-            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " refusé, mauvais mot de passe : login " + u.getLogin());
+            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " refusé, mauvais mot de passe : login " + login);
             sess.resultatLogin(StatutLogin.Invalide);
-            u.setStatut(StatutLogin.Deconnecte);
+            this.setStatut(StatutLogin.Deconnecte);
             sess.kaboom();
         } else if (statut == StatutLogin.Banni) {
-            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " banni refusé : login " + u.getLogin());
+            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " banni refusé : login " + login);
             sess.resultatLogin(StatutLogin.Banni);
             sess.kaboom();
         } else if (statut == reponse_login_correct) {
             // t'es déjà connecté gaillard, va voir ailleurs
-            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login refusé pour " + u.getLogin() + " : déjà connecté !");
+            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login refusé pour " + login + " : déjà connecté !");
             sess.resultatLogin(StatutLogin.Deja_Connecte);
             sess.kaboom();
         } else {
             // pas sensé arriver. on ignore...
-            Logger.log("UtilisateurServeur", 0, LogType.ERR, "[login] cas non-traité de login " + type + " : login " + u.getLogin());
+            Logger.log("UtilisateurServeur", 0, LogType.ERR, "[login] cas non-traité de login " + type + " : login " + login);
             sess.kaboom();
         }
 
     }
 
-	/**
-	 *
-	 */
     public void disconnect() {
-        Logger.log("UtilisateurServeur", 0, LogType.INF, "[logout] déconnexion : login " + u.getLogin());
-        u.setStatut(StatutLogin.Deconnecte);
+        Logger.log("UtilisateurServeur", 0, LogType.INF, "[logout] déconnexion : login " + login);
+        this.setStatut(StatutLogin.Deconnecte);
         this.session.kaboom();
         this.session = null;
     }
 	// Méthodes du design : END
 	
 	// Setters & Getters : START
-    public Utilisateur getUtilisateur() {
-        return this.u;
-    }
-
-    public String getLogin() {
-        return u.getLogin();
-    }
-
-    public String getNom() {
-        return u.getNom();
-    }
-
-    public String getPrenom() {
-        return u.getPrenom();
-    }
-
-    public StatutLogin getStatut() {
-        return u.getStatut();
-    }
-
     public SessionServeur getSession() {
         return this.session;
     }
-
-    public void setLogin(String login) {
-        u.setLogin(login);
-    }
-
-    public void setNom(String nom) {
-        u.setNom(nom);
-    }
-
-    public void setPrenom(String prenom) {
-        u.setPrenom(prenom);
-    }
-
-    public void setStatut(StatutLogin statut) {
-        u.setStatut(statut);
-    }
-
-    public void setSession(SessionServeur sess) {
+	
+	public void setSession(SessionServeur sess) {
         this.session = sess;
     }
-
-    public String getMotDePasse() {
-        return u.getMotDePasse();
-    }
-
-    public void setMotDePasse(String mot_de_passe) {
-        u.setMotDePasse(mot_de_passe);
-    }
-   	// Setters & Getters : END
+	// Setters & Getters : END
 }

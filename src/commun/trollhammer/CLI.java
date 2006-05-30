@@ -46,7 +46,7 @@ class CLI {
 		 * @see Logger
 		 */
 		public void helpPrint() {
-			Logger.log("CLI", 1, LogType.INF, "[help] " + this.helpSum + "\n\t\tSyntax : " + this.helpSyntax);
+			Logger.log("CLI", 0, LogType.INF, "[help] " + this.helpSum + "\n\t\tSyntax : " + this.helpSyntax);
 		}
 		
 		/**
@@ -77,13 +77,17 @@ class CLI {
 	public void interprete() {
 		String commande;
 		String tokens[];
+		boolean known;
+		Logger.logwln("CLI", 0, LogType.INF, "Trollhammer> ");
 		try {
 			java.io.BufferedReader lr = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
 			do {
+				known = false;
 				commande = lr.readLine();
 				tokens = commande.split("\\s");
 				for(CMD c : commandes) {
 					if (c.nom.equals(tokens[0])) {
+						known = true;
 						if (tokens.length == c.nb) {
 							c.apply(tokens);
 						} else {
@@ -91,10 +95,17 @@ class CLI {
 						}
 					}
 				}
+				if (!known && tokens[0].length() != 0 && !(commande.equals("q") || commande.equals("Q"))) {
+					Logger.log("CLI", 0, LogType.INF, "[help] Unknown command \"" + tokens[0] + "\". Enter \'help\' to see available commands.");
+				}
+				if (!(commande.equals("q") || commande.equals("Q"))) {
+					Logger.logwln("CLI", 0, LogType.INF, "Trollhammer> ");
+				}
 			} while(!(commande.equals("q") || commande.equals("Q")));
             lr.close();
         } catch (Exception e) {
             Logger.log("CLI", 0, LogType.ERR, "[sys] Exception sur stdin : " + e.getMessage());
+			this.interprete(); // On relance l'interpretation CLI
         }
 	}
 	
@@ -109,7 +120,7 @@ class CLI {
 							msg = msg + "\n\t" + p.helpStr();
 						}
 					}
-					Logger.log("CLI", 1, LogType.INF, "[help] " + msg + "\n\tq ou Q - Quitte le serveur.\n\n[help] END.");
+					Logger.log("CLI", 0, LogType.INF, "[help] " + msg + "\n\tq ou Q - Quitte le serveur.\n\n[help] END.");
 				}
 			}
 		);

@@ -58,7 +58,8 @@ class Logger {
 	 * Log un message, avec en plus le type d'information que c'est.
 	 * 
 	 * <p>Log le String passé en paramètre, en indiquant l'expéditeur, si et 
-	 * seulement si le niveau de logging et suffisant pour ce message.</p>
+	 * seulement si le niveau de logging et suffisant pour ce message. Un retour
+	 * a la ligne est automatiquement ajouté.</p>
 	 *
 	 * @param who	String contenant le nom de la classe qui fait l'appel.
 	 * @param lvl	Level minimum à partir duquel le message doit être loggé.
@@ -66,6 +67,22 @@ class Logger {
 	 * @param msg	String qui est le message à logger.
 	 */
 	public static void log(String who, int lvl, LogType lgt, String msg) {
+		logwln(who, lvl, lgt, msg + "\n");
+	}
+
+	/**
+	 * Log un message, avec en plus le type d'information que c'est.
+	 * 
+	 * <p>Log le String passé en paramètre, en indiquant l'expéditeur, si et 
+	 * seulement si le niveau de logging et suffisant pour ce message. Aucun
+	 * retour a la ligne n'est ajouté.</p>
+	 *
+	 * @param who	String contenant le nom de la classe qui fait l'appel.
+	 * @param lvl	Level minimum à partir duquel le message doit être loggé.
+	 * @param lgt	Prend une valeur de l'énumeration LOGTYPE.
+	 * @param msg	String qui est le message à logger.
+	 */
+	public static void logwln(String who, int lvl, LogType lgt, String msg) {
 		if (lvl <= level) {
 			// Indente le message suivant sa priorité
 			String tmp = "";
@@ -83,7 +100,7 @@ class Logger {
 				default : slgt = "UKN";
 			}
 			if (print) {
-				System.out.println("[" + slgt + "] "+ tmp + "[" + who + "] " + msg);
+				System.out.print("[" + slgt + "] "+ tmp + "[" + who + "] " + msg);
 			}
 		}	
 	}

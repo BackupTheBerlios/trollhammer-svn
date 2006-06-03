@@ -11,8 +11,6 @@
      
 <project name="troll" default="help" basedir=".">
 
-	<property name="launch4j.dir" location="C:\Program Files\Launch4j"/>
-
 	<property name="build.compiler" value="modern"/>
     <property name="src.dir" value="src"/>
     <property name="src.client" value="${src.dir}/client"/>

@@ -238,7 +238,8 @@ class HdVPanel extends JComponent implements ActionListener
             Client.hi.executerModo(ActionModo.CoupDeMassePAF);
         } else if(event.getActionCommand().equals("encherir"))
 		{
-            enchereButton.setEnabled(false);
+            //enchereButton.setEnabled(false);
+            verifierEnchere();
             Client.hi.executer(Action.Encherir);
         } else if(event.getActionCommand().equals("kick"))
 		{
@@ -436,18 +437,22 @@ class HdVPanel extends JComponent implements ActionListener
             case CoupDeMassePAF1:
                 texteLogln("- PREMIER COUP DE MARTEAU -");
 				nbCdMLabel.setText("1");
+                /*
                 if(modo && Client.session.getLogin().
                         equals(Client.humain.getVente().getSuperviseur())) {
                     enchereButton.setEnabled(false);
-                }
+                }*/
+                verifierEnchere();
                 break;   
             case CoupDeMassePAF2:   
                 texteLogln("- SECOND COUP DE MARTEAU -");
 				nbCdMLabel.setText("2");
+                /*
                 if(modo && Client.session.getLogin().
                         equals(Client.humain.getVente().getSuperviseur())) {
                     enchereButton.setEnabled(false);
-                }
+                }*/
+                verifierEnchere();
                 break;     
             case Adjuge:
 				
@@ -465,13 +470,16 @@ class HdVPanel extends JComponent implements ActionListener
                         );
 				
 				nbCdMLabel.setText("0");
+                /*
                 if(modo && Client.session.getLogin().
                         equals(Client.humain.getVente().getSuperviseur())) {
                     enchereButton.setEnabled(false);
-                }
+                }*/
+                verifierEnchere();
                 break;      
             case VenteAutomatique:     
                 texteLogln("- Vente en mode automatique -");    
+                verifierEnchere();
                 if(modo) {
                     cdmButton.setEnabled(true);
                 }
@@ -485,12 +493,14 @@ class HdVPanel extends JComponent implements ActionListener
 
         // réactiver le bouton enchérir si l'enchérisseur
         // n'est pas soi-même ! (et si on n'est pas superviseur)
+        /*
         if(!i.equals(Client.session.getLogin())
                 && !Client.session.getLogin().equals(Client.client.getSuperviseur())) {
             enchereButton.setEnabled(true);
         } else {
             enchereButton.setEnabled(false);
-        }
+        }*/
+        verifierEnchere();
 
 		majChamps();
     }    
@@ -532,7 +542,8 @@ class HdVPanel extends JComponent implements ActionListener
             case DebutVente:     
                 texteLogln("- Démarrage de vente -");      
 
-                enchereButton.setEnabled(true);
+                //enchereButton.setEnabled(true);
+                verifierEnchere();
 
                 if(modo) {
                     cdmButton.setEnabled(true);
@@ -546,7 +557,8 @@ class HdVPanel extends JComponent implements ActionListener
                     afficher_message_encours = false;
                 }
 
-                enchereButton.setEnabled(true);
+                //enchereButton.setEnabled(true);
+                verifierEnchere();
 
                 if(modo) {
                     cdmButton.setEnabled(true);
@@ -554,7 +566,8 @@ class HdVPanel extends JComponent implements ActionListener
                 break;      
             case FinVente:     
                 texteLogln("- Fin de la vente -");      
-                enchereButton.setEnabled(false);
+                //enchereButton.setEnabled(false);
+                verifierEnchere();
                 if(modo) {
                     cdmButton.setEnabled(false);
                 }
@@ -575,7 +588,8 @@ class HdVPanel extends JComponent implements ActionListener
         // et si aucune réception de
         // VenteEnCours ou DebutVente, on désactive le bouton 'enchérir'.
         // tout pareil pour le kick et le coup de MASSE.
-        enchereButton.setEnabled(false);
+        //enchereButton.setEnabled(false);
+        verifierEnchere();
         if(modo) {
             kickButton.setEnabled(false);
         }
@@ -588,14 +602,46 @@ class HdVPanel extends JComponent implements ActionListener
     void superviseur(String i) {
         texteLogln("- Vente en mode manuel -");      
         texteLogln("- commissaire priseur : "+i+" -");
+        verifierEnchere();
         if(modo) {
             if(i.equals(Client.session.getLogin())) {
                 cdmButton.setEnabled(true);
-                enchereButton.setEnabled(false);
+                //enchereButton.setEnabled(false);
             } else {
                 cdmButton.setEnabled(false);
+                //enchereButton.setEnabled(true);
+            }
+        }
+    }
+
+    /* vérifier si le coup de masse ou l'enchère sont possibles, et activer
+     * ou désactiver les boutons pour en conséquence.
+     */
+
+    void verifierEnchere() {
+        if(Client.humain.getVente() != null) {
+            if(modo && Client.session.getLogin().equals(
+                        Client.humain.getVente().getSuperviseur())) {
+                enchereButton.setEnabled(false);
+            } else if(
+                    Client.session.getLogin().equals(
+                        Client.client.getDernierEncherisseur())
+                    ) {
+                enchereButton.setEnabled(false);
+            } else {
                 enchereButton.setEnabled(true);
             }
+        } else {
+            enchereButton.setEnabled(false);
+        }
+
+        encherePanel.validate();
+        encherePanel.repaint();
+    }
+
+    void verifierCDM() {
+        if(modo) {
+
         }
     }
 }

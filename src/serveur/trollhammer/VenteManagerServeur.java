@@ -473,9 +473,10 @@ class VenteManagerServeur {
     		// aucune actuellement, on vérifie s'il y en a pas une en retard.
     		// on va de toute façon pas en lancer une dans l'avenir par rapport
     		// à la date courante ...
+			// ls : On vérifie encore que la vente à démarrer possède des objets...
     		if (ventes.size() > 0
 				&& ventes.get(0).getDate() <= Serveur.serveur.getDate()
-				&& ventes.get(0).getOIds().size() != 0) {
+				&& ventes.get(0).getOIds().size() > 0) {
 				
     			this.venteEnCours = ventes.remove(0);
     			this.venteEnCours.setSuperviseur(null);

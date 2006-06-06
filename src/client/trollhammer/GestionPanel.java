@@ -54,11 +54,11 @@ class GestionPanel implements ActionListener
 		supprimer.setActionCommand("del");
 		supprimer.addActionListener(this);
         // petit hack : créer le bouton dans sa version
-        // qui prend le plus de place (avec label "débannir"),
+        // qui prend le plus de place (avec label "réhabiliter"),
         // la fixer avec setPreferredSize() pour qu'il ne
         // soit plus changé de taille, et le repasser
         // dans son "Bannir" par défaut
-		bannir = new JButton("Débannir");
+		bannir = new JButton("Réhabiliter");
 		bannir.setActionCommand("ban");
 		bannir.addActionListener(this);
         bannir.setPreferredSize(bannir.getPreferredSize());

@@ -151,9 +151,17 @@ class UserManagerServeur {
 		
 		UtilisateurServeur n = null;
 		if (u instanceof Moderateur) {
-			n = new ModerateurServeur((Moderateur) u, t.getSession());
+            if(t != null) {
+                n = new ModerateurServeur((Moderateur) u, t.getSession());
+            } else {
+                n = new ModerateurServeur((Moderateur) u);
+            }
 		} else {
-			n = new UtilisateurServeur(u, t.getSession());
+            if(t != null) {
+                n = new UtilisateurServeur(u, t.getSession());
+            } else {
+                n = new UtilisateurServeur(u);
+            }
 		}
 		n.setStatut(u.getStatut());
 		

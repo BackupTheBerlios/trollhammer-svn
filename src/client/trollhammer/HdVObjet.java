@@ -78,6 +78,9 @@ public class HdVObjet extends JRadioButton
 			label.setBackground(couleur_fond);
         }
     }
+    public String getNom() {
+        return o.getNom();
+    }
 	public String getDescription()
 	{
 		return o.getDescription();

@@ -20,6 +20,7 @@ class HdVPanel extends JComponent implements ActionListener
 	private CoolPanel selectPanel = null;
 	private CoolPanel imgPanel = null;
 	private JScrollPane descrObjetPane = null;
+    private JTextField nomObjetTextField = null;
 	private JTextArea descrObjetTextArea = null;
 	private CoolPanel salleANDobjEnCoursPanel = null;
 	private CoolPanel objEnCoursPanel = null;
@@ -80,7 +81,7 @@ class HdVPanel extends JComponent implements ActionListener
 		infoAdjPanel.addC(nbCdMLabel, new CellConstraints(2,2));
 		
 		//Informations sur l'objets sélectionné
-		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,fill:pref:grow");
+		selectPanel = new CoolPanel("pref,left:pref:grow,pref","pref,center:pref,pref,pref,pref,fill:pref:grow");
 		selectPanel.setColumnGroups(new int[][] {{1,3}});
 		imgPanel = new CoolPanel("center:pref:grow","pref:grow,pref,pref,pref,pref:grow");
 		imgPanel.setRowGroups(new int[][] {{1,4}});
@@ -88,6 +89,8 @@ class HdVPanel extends JComponent implements ActionListener
 		imgPanel.setBorder(BorderFactory.createEtchedBorder());
 		imgPanel.addC(new JLabel("Image"), new CellConstraints(1,2));
 		imgPanel.addC(new JLabel("non disponible"), new CellConstraints(1,3));
+        nomObjetTextField = new JTextField();
+        nomObjetTextField.setEditable(false);
 		descrObjetTextArea = new JTextArea();
 		descrObjetTextArea.setColumns(17);
 		descrObjetTextArea.setEditable(false);
@@ -97,8 +100,10 @@ class HdVPanel extends JComponent implements ActionListener
 		descrObjetPane.setWheelScrollingEnabled(true);
 		//selectPanel.addLabel("Image: ", new CellConstraints(1,1,3,1));
 		selectPanel.addC(imgPanel, new CellConstraints(2,2,CellConstraints.CENTER,CellConstraints.CENTER));
-		selectPanel.addLabel("Description: ", new CellConstraints(1,3,3,1));
-		selectPanel.addC(descrObjetPane, new CellConstraints(1,4,3,1));
+		selectPanel.addLabel("Nom : ", new CellConstraints(1,3,3,1));
+		selectPanel.addC(nomObjetTextField, new CellConstraints(1,4,3,1));
+		selectPanel.addLabel("Description : ", new CellConstraints(1,5,3,1));
+		selectPanel.addC(descrObjetPane, new CellConstraints(1,6,3,1));
 		
 		//Salle && objet en cours...
 		grpl = new ButtonGroup();
@@ -264,6 +269,7 @@ class HdVPanel extends JComponent implements ActionListener
 			//HdVObjet objetSelectionne = (HdVObjet) event.getSource();
 			//descrObjetTextArea.setText(objetSelectionne.getDescription());
 			//becholey: pask on se la pète enocre plus comme des porcs!!
+            nomObjetTextField.setText(((HdVObjet) event.getSource()).getNom());
 			descrObjetTextArea.setText(((HdVObjet) event.getSource()).getDescription());
 			imgPanel.removeAll();
 			imgPanel.addC(new JLabel(((HdVObjet) event.getSource()).getImage(), SwingConstants.CENTER), new CellConstraints(1,3));
@@ -430,10 +436,18 @@ class HdVPanel extends JComponent implements ActionListener
             case CoupDeMassePAF1:
                 texteLogln("- PREMIER COUP DE MARTEAU -");
 				nbCdMLabel.setText("1");
+                if(modo && Client.session.getLogin().
+                        equals(Client.humain.getVente().getSuperviseur())) {
+                    enchereButton.setEnabled(false);
+                }
                 break;   
             case CoupDeMassePAF2:   
                 texteLogln("- SECOND COUP DE MARTEAU -");
 				nbCdMLabel.setText("2");
+                if(modo && Client.session.getLogin().
+                        equals(Client.humain.getVente().getSuperviseur())) {
+                    enchereButton.setEnabled(false);
+                }
                 break;     
             case Adjuge:
 				
@@ -451,7 +465,10 @@ class HdVPanel extends JComponent implements ActionListener
                         );
 				
 				nbCdMLabel.setText("0");
-                enchereButton.setEnabled(true);
+                if(modo && Client.session.getLogin().
+                        equals(Client.humain.getVente().getSuperviseur())) {
+                    enchereButton.setEnabled(false);
+                }
                 break;      
             case VenteAutomatique:     
                 texteLogln("- Vente en mode automatique -");    
@@ -471,7 +488,10 @@ class HdVPanel extends JComponent implements ActionListener
         if(!i.equals(Client.session.getLogin())
                 && !Client.session.getLogin().equals(Client.client.getSuperviseur())) {
             enchereButton.setEnabled(true);
+        } else {
+            enchereButton.setEnabled(false);
         }
+
 		majChamps();
     }    
 	private void majChamps()
@@ -511,7 +531,9 @@ class HdVPanel extends JComponent implements ActionListener
         switch (n) {      
             case DebutVente:     
                 texteLogln("- Démarrage de vente -");      
+
                 enchereButton.setEnabled(true);
+
                 if(modo) {
                     cdmButton.setEnabled(true);
                 }
@@ -523,7 +545,9 @@ class HdVPanel extends JComponent implements ActionListener
                     // avant... la prochaine instance de HdVPanel
                     afficher_message_encours = false;
                 }
+
                 enchereButton.setEnabled(true);
+
                 if(modo) {
                     cdmButton.setEnabled(true);
                 }

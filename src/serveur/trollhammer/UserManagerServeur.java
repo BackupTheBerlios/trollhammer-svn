@@ -168,6 +168,9 @@ class UserManagerServeur {
 			break;
 		case Modifier:
 			if (t != null) {
+				if(n.getStatut() == StatutLogin.Banni) {
+					kickerUtilisateur(n.getLogin(), sender);
+				}
 				utilisateurs.remove(t);
 				utilisateurs.add(n);
 				s.resultatEdition(StatutEdition.Reussi);

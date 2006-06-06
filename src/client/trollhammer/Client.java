@@ -537,7 +537,10 @@ class ClientFSM {
     }
 
     boolean superviseur() {
-        return transition(Etat.HV4, Etat.HV4);
+        return transition(Etat.HV4, Etat.HV4)
+            // rajout : changement de superviseur pendant qu'on donne le coup
+            // de marteau !
+            || transition(Etat.HV11, Etat.HV11);
 //            || transition(Etat.HV4, Etat.HV7); retiré cette branche : ne mène
 //            à rien ???
     }

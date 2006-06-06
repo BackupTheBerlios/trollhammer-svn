@@ -474,13 +474,14 @@ class VenteManagerServeur {
     		// on va de toute façon pas en lancer une dans l'avenir par rapport
     		// à la date courante ...
     		if (ventes.size() > 0
-                    && ventes.get(0).getDate() <= Serveur.serveur.getDate()) {
+				&& ventes.get(0).getDate() <= Serveur.serveur.getDate()
+				&& ventes.get(0).getOIds().size() != 0) {
+				
     			this.venteEnCours = ventes.remove(0);
     			this.venteEnCours.setSuperviseur(null);
-    			Serveur.broadcaster.notification(Notification.DebutVente);
-    			Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
-				Logger.log("VenteManagerServeur", 2, LogType.INF,
-					"Démarrage de vente!");
+				Serveur.broadcaster.notification(Notification.DebutVente);
+				Serveur.broadcaster.evenement(Evenement.VenteAutomatique);
+				Logger.log("VenteManagerServeur", 2, LogType.INF, "Démarrage de vente!");
 			}
 			// aucune en retard, rien ne change
 		}

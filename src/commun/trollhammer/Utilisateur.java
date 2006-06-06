@@ -6,7 +6,8 @@ package trollhammer;
  * @author Julien Ruffin
  */
 class Utilisateur extends Participant {
-
+//ls : pour cceux qui pourrai être choqué par les protected, je me permet de 
+//     faire référence à http://java.sun.com/docs/books/tutorial/java/javaOO/accesscontrol.html    
     protected String mot_de_passe;
 
 	// Constructeurs : START

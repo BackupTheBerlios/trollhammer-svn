@@ -70,7 +70,7 @@ class VenteServeur extends Vente {
 	 * @return	l'objet qui était en tête de la liste
 	 */
     public Objet removeHead() {
-        return Serveur.objectmanager.getObjet(this.removeFirst()).getObjet();
+        return Serveur.objectmanager.getObjet(this.removeFirst());
     }
 
 	/**
@@ -127,7 +127,7 @@ class VenteServeur extends Vente {
 	public List<Objet> getObjets() {
 		List<Objet> r = new ArrayList<Objet>();
 		for (Integer oid : this.getOIds()) {
-			r.add(Serveur.objectmanager.getObjet(oid).getObjet());
+			r.add(Serveur.objectmanager.getObjet(oid));
 		}
 		return r;
 	}

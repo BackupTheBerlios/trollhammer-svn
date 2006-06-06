@@ -76,28 +76,28 @@ class ObjectManagerServeur {
 		case Vente:
 			for (ObjetServeur o : objets) {
 				if (o.getVendeur().equals(sender)) {
-					liste.add(o.getObjet());
+					liste.add(o);
 				}
 			}
 			break;
 		case Achat:
 			for (ObjetServeur o : objets) {
 				if (o.getAcheteur() != null && o.getAcheteur().equals(sender)) {
-					liste.add(o.getObjet());
+					liste.add(o);
 				}
 			}
 			break;
 		case Validation:
 			for (ObjetServeur o : objets) {
 				if (o.getStatut() == StatutObjet.Propose) {
-					liste.add(o.getObjet());
+					liste.add(o);
 				}
 			}
 			break;
 		case Planification:
 			for (ObjetServeur o : objets) {
 				if (o.getStatut() == StatutObjet.Accepte) {
-					liste.add(o.getObjet());
+					liste.add(o);
 				}
 			}
 			break;

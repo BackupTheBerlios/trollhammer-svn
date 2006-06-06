@@ -5,19 +5,45 @@ import javax.swing.*;
  * <p>Classe qui modélise un objet mis en vente.</p>
  */
 class Objet implements java.io.Serializable {
-    
-    private int id;
-    private String nom;
-    private String description;
-    private String moderateur;
+	private int id;
+	private String nom;
+	private String description;
+	private String moderateur;
 	private int prix_de_base;
-    private int prix_de_vente;
-    private StatutObjet statut;
-    private String acheteur;
-    private String vendeur;
+	private int prix_de_vente;
+	private StatutObjet statut;
+	private String acheteur;
+	private String vendeur;
 	private ImageIcon image;
 
 	// Constructeurs : START
+	//ls : présent afin que le code qui utilise le constructeur par défaut
+	//     continue de fonctionner...
+	Objet() {
+		this.id = 0;
+		this.nom = null;
+		this.description = null;
+		this.moderateur = null;
+		this.prix_de_base = 0;
+		this.prix_de_vente = 0;
+		this.statut = null;
+		this.acheteur = null;
+		this.vendeur = null;
+		this.image = null;
+	}
+	
+	Objet(int id, String nom, String description, String moderateur, int prix_de_base, int prix_de_vente, StatutObjet statut, String acheteur, String vendeur, ImageIcon image) {
+		this.id = id;
+		this.nom = nom;
+		this.description = description;
+		this.moderateur = moderateur;
+		this.prix_de_base = prix_de_base;
+		this.prix_de_vente = prix_de_vente;
+		this.statut = statut;
+		this.acheteur = acheteur;
+		this.vendeur = vendeur;
+		this.image = image;
+	}
 	// Constructeurs : END
 
 	// Méthodes du design : START

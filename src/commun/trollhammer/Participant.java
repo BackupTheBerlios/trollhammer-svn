@@ -10,7 +10,8 @@ package trollhammer;
  * @author Julien Ruffin
  */
 class Participant implements java.io.Serializable {
-    
+//ls : pour cceux qui pourrai être choqué par les protected, je me permet de 
+//     faire référence à http://java.sun.com/docs/books/tutorial/java/javaOO/accesscontrol.html    
     protected String login;
     protected String nom;
     protected String prenom;

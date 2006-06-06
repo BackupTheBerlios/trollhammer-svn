@@ -63,13 +63,13 @@ class VenteManagerServeur {
 					
 					if (obj != null) {
 						// obj existe
-						StatutObjet s = obj.getObjet().getStatut();
+						StatutObjet s = obj.getStatut();
 						
 						if (s == StatutObjet.Accepte) {
 							// il est important de changer le statut d'abord,
 							// puis de faire l'insertion, pour des raisons de
 							// concurrence ...
-							obj.getObjet().setStatut(StatutObjet.EnVente);
+							obj.setStatut(StatutObjet.EnVente);
 							vte.insertObject(o, p, i, dateCourante);
 							u.resultatEdition(StatutEdition.Reussi);
 						} else {
@@ -131,7 +131,7 @@ class VenteManagerServeur {
 				|| venteEnCours.getFirst() != oid)) {
 				// l'objet n'est pas entrain d'être vendu
 				vte.removeOId(oid);
-                obj.getObjet().setStatut(StatutObjet.Accepte);
+                obj.setStatut(StatutObjet.Accepte);
 				u.resultatEdition(StatutEdition.Reussi);
 			} else {
 				// l'objet est entrain d'être vendu
@@ -243,9 +243,6 @@ class VenteManagerServeur {
 	 * vente en cours s'il y en a une).
 	 */
 	List<Integer> getVIds() {
-		// jr : et vous pensiez avoir un ensemble ordonné pour l'affichage
-        // comme valeur de retour de la méthode ? *tousse tousse* ^^;
-        // Set<Integer> r = new HashSet<Integer>();
         List<Integer> r = new ArrayList<Integer>();
 		for(VenteServeur v : ventes) {
 			r.add(v.getId());
@@ -573,5 +570,4 @@ class VenteManagerServeur {
 			}
 		}
 	}
-
 }

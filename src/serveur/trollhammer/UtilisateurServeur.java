@@ -7,6 +7,7 @@ import java.util.List;
  * Session associée ainsi que l'envoi de messages à l'Utilisateur, plus quelques
  * opérations spécifiques, notamment le login/logout.</p>
  *
+ * @author Lionel Sambuc
  * @author Julien Ruffin
  */
 

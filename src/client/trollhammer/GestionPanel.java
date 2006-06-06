@@ -233,15 +233,23 @@ class GestionPanel implements ActionListener
 		}
 		else if(event.getActionCommand().equals("ban"))
 		{
+            // --- ENLEVE ---
             // jr : modif p.r. Design : kicker l'Utilisateur avant de le marquer
             // banni. En effet, être banni et connecté est contradictoire.
             // Gros kick seulement si l'utilisateur est actuellement connecté,
             // bien sûr.
+            // --- DEPLACE SERVER-SIDE (possible incohérence si l'on n'a pas en cache
+            // Client le statut actuel exact de la victime, ce qui n'est parfois
+            // pas le cas si on la bannit, débannit, la victime se reconnecte et on
+            // tente de la rebannir : son statut dans le cache est 'déconnecté' alors
+            // qu'il est connecté ---
+            /*
             if(utilisateur_selectionne.getStatut() == StatutLogin.Connecte_Utilisateur
             || utilisateur_selectionne.getStatut() == StatutLogin.Connecte_Moderateur) {
 
                 Client.hi.kicker(utilisateur_selectionne.getLogin());
             }
+            */
             utilisateur_selectionne.setStatut(StatutLogin.Banni);
             Client.hi.editerUtilisateur(Edition.Modifier, utilisateur_selectionne);
 			/*for(GestionUtilisateur u : utilisateurs)

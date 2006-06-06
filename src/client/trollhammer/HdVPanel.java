@@ -9,6 +9,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Collections;
+import java.util.Comparator;
 
 class HdVPanel extends JComponent implements ActionListener
 {
@@ -368,7 +370,24 @@ class HdVPanel extends JComponent implements ActionListener
         grpl = new ButtonGroup();
         sallePanel.removeAll();
         this.victime = null; // reset de la victime !
-        for(Participant p : pl) {
+
+        // liste ordonnée des participants
+        Vector<Participant> participants = new Vector<Participant>();
+        participants.addAll(pl);
+
+        // classement de la liste des Participants.
+        Collections.sort(participants,
+                new Comparator<Participant>(){
+                    public int compare(Participant p1, Participant p2) {
+                        return (p1.getLogin()).compareTo(p2.getLogin());
+                    }
+                    public boolean equals(Participant p1, Participant p2) {
+                        return (p1.getLogin()).equals(p2.getLogin());
+                    }
+                }
+        );
+
+        for(Participant p : participants) {
             HdVUser u = null;
             if(p.getStatut() == StatutLogin.Connecte_Utilisateur) {
                 // false == utilisateur pas modo

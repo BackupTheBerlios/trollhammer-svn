@@ -128,10 +128,15 @@ class Vente implements java.io.Serializable {
 	 * @param	oid		Id de l'objet à supprimer.
 	 */
 	public void removeOId(int oid) {
+		Integer id = null;
 		for (Integer i : this.getOIds()) {
 			if (i.intValue() == oid) {
-				this.objets.remove(i);
+				id = i;
 			}
+		}
+		
+		if (id != null) {
+			this.objets.remove(id);
 		}
 		//ls : OLD implementation.
 		/* 

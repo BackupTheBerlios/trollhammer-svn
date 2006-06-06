@@ -138,7 +138,12 @@ public class Serveur {
 								if (nv != null) {
 									Serveur.broadcaster.detailsVente(nv, nv.getObjets());
 								}
-							}
+							} else {
+                                // il reste des objets à vendre, mettre prix_courant
+                                // au prix de base du nouvel objet
+                                this.prix_courant = 
+                                    venteEnCours.getObjets().get(0).getPrixDeBase();
+                            }
 							break;
 						default :
 							Logger.log("Serveur", 1, LogType.WRN, "wtf?? On est pas près de la finir cette vente!! marteau == " + marteau);

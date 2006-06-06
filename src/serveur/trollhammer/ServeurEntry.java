@@ -342,7 +342,7 @@ class ServeurEntryHandler extends Thread {
     ServeurEntryHandler(Socket socket) {
         this.s = socket;
         this.etat = Etat.L1;
-        Logger.log("ServeurEntry", 1, LogType.INF, "[net] Connexion de " + s.getInetAddress());
+        Logger.log("ServeurEntryHandler", 1, LogType.INF, "[net] Connexion de " + s.getInetAddress());
     }
 
     /** Boucle de lecture des objets sérialisés reçus du socket.

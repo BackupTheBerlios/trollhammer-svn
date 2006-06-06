@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Classe d'envoi de messages réseau à un client.
@@ -60,8 +61,13 @@ class SessionServeur {
         envoyer(new enchere(prix, i));
     }
 
-    void detailsVente(Vente v, List<Objet> o) {
-        envoyer(new detailsVente(v, o));
+    void detailsVente(Vente v, List<Objet> ol) {
+		List<Objet> olp = new ArrayList<Objet>();
+		for (Objet o : ol) {
+			olp.add(new Objet(o.getId(), o.getNom(), o.getDescription(), o.getModerateur(), o.getPrixDeBase(), o.getPrixDeVente(), o.getStatut(), o.getAcheteur(), o.getVendeur(), o.getImage()));
+		}
+        envoyer(new detailsVente(new Vente(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()),
+								 olp));
     }
 
     void detailsUtilisateur(Utilisateur u) {
@@ -70,8 +76,12 @@ class SessionServeur {
         envoyer(new detailsUtilisateur(new Utilisateur(u.getLogin(), u.getNom(), u.getPrenom(), u.getStatut(), u.getMotDePasse())));
     }
 
-    void listeObjets(Onglet type, Set<Objet> lo) {
-        envoyer(new listeObjets(type, lo));
+    void listeObjets(Onglet type, Set<Objet> ol) {
+		Set<Objet> olp = new HashSet<Objet>();
+		for (Objet o : ol) {
+			olp.add(new Objet(o.getId(), o.getNom(), o.getDescription(), o.getModerateur(), o.getPrixDeBase(), o.getPrixDeVente(), o.getStatut(), o.getAcheteur(), o.getVendeur(), o.getImage()));
+		}
+        envoyer(new listeObjets(type, olp));
     }
 
     void listeUtilisateurs(Set<Utilisateur> ul) {
@@ -99,7 +109,11 @@ class SessionServeur {
     }
 
     void listeVentes(Set<Vente> l) {
-        envoyer(new listeVentes(l));
+		Set<Vente> vlp = new HashSet<Vente>();
+		for (Vente vp : l) {
+			vlp.add(new Vente(vp.getId(), vp.getNom(), vp.getDescription(), vp.getDate(), vp.getMode(), vp.getSuperviseur(), vp.getOIds()));
+		}
+        envoyer(new listeVentes(vlp));
     }
 
     void resultatEdition(StatutEdition s) {

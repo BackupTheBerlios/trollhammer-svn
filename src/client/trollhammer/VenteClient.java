@@ -27,7 +27,9 @@ class VenteClient extends Vente {
         if(this.getOIds().size() > 0) {
             Objet o = Client.objectmanager.getObject(this.getFirst());
             if(o != null) {
-                return (int) (Client.client.getPrixCourant() + 0.1*o.getPrixDeBase());
+                // le max(...) est ici pour assurer un incrément minimal de 1 à l'enchère
+                return (int) Math.max(Client.client.getPrixCourant() + 1,
+                        Client.client.getPrixCourant() + 0.1*o.getPrixDeBase());
             }
         }
 		return 0;

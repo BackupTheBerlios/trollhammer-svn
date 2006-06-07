@@ -33,7 +33,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		textArea.setEditable(false);
 		JButton button = new JButton("clear");
 		
-		consoleInput = new JTextField(256);
+		consoleInput = new JTextField();
 		
 		frame.getContentPane().setLayout(new BorderLayout());
 		frame.getContentPane().add(consoleInput, BorderLayout.NORTH);

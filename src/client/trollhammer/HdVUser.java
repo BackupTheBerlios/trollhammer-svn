@@ -14,15 +14,39 @@ public class HdVUser extends JRadioButton
 		this.login = login;
 		if(modo)
 		{
-			this.setIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/modoIcon.gif"));
+			try
+			{
+				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/modoIcon.gif")));
+			}catch(NullPointerException e)
+			{
+				this.setIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/modoIcon.gif"));
+			}
 			this.setForeground(Color.BLUE);
-			this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/modoIconSelected.gif"));
+			try
+			{
+				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/modoIconSelected.gif")));
+			}catch(NullPointerException e)
+			{
+				this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/modoIconSelected.gif"));
+			}
 		}
 		else
 		{
+			try
+			{
+				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/userIcon.gif")));
+			}catch(NullPointerException e)
+			{
 			this.setIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/userIcon.gif"));
+			}
 			this.setForeground(Color.BLACK);
+			try
+			{
+				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/userIconSelected.gif")));
+			}catch(NullPointerException e)
+			{
 			this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/userIconSelected.gif"));
+			}
 		}
 
         // mettre son nom en rouge non en gras !

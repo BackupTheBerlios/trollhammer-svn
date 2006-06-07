@@ -163,6 +163,7 @@ class Window implements ActionListener
 			try
 			{
 				tabbedPane = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);
+				//tabbedPane.addKeyListener(this);
 				hdv = new HdVPanel(modo, getWindow());
 				tabbedPane.addTab("Hotel des ventes", null, hdv.getComponent(), null);
                 hdv.initTab(); // pour désactiver les boutons Enchérir & Autres

@@ -200,10 +200,23 @@ class PlanifierPanel implements ActionListener
         jspPan2.setPreferredSize(new Dimension(150, 150));
 		
 		//pan3
-		add = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/add.png"));
+		try
+		{
+			add = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/add.png")));
+		} catch(NullPointerException e)
+		{
+			add = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/add.png"));
+		}
+		
 		add.setActionCommand("add");
 		add.addActionListener(this);
-		remove = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/remove.png"));
+		try
+		{
+			remove = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/remove.png")));
+		} catch(NullPointerException e)
+		{
+			remove = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/remove.png"));
+		}
 		remove.setActionCommand("remove");
 		remove.addActionListener(this);
 		pan3 = new FreshPanel('y',true);
@@ -240,16 +253,40 @@ class PlanifierPanel implements ActionListener
         jspPan4.setPreferredSize(new Dimension(150, 150));
 		
 		//pan5
-		up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));
+		try
+		{
+			up = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/up.png")));
+		} catch(NullPointerException e)
+		{
+			up = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/up.png"));
+		}
         up.setActionCommand("up");
         up.addActionListener(this);
-		down = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/down.png"));
+		try
+		{
+			down = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/down.png")));
+		} catch(NullPointerException e)
+		{
+			down = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/down.png"));
+		}
         down.setActionCommand("down");
         down.addActionListener(this);
-		top = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/top.png"));
+		try
+		{
+			top = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/top.png")));
+		} catch(NullPointerException e)
+		{
+			top = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/top.png"));
+		}
         top.setActionCommand("top");
         top.addActionListener(this);
-		bottom = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/bottom.png"));
+		try
+		{
+			bottom = new JButton(new ImageIcon(this.getClass().getResource("/ressources/img/bottom.png")));
+		} catch(NullPointerException e)
+		{
+			bottom = new JButton(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/bottom.png"));
+		}
         bottom.setActionCommand("bottom");
         bottom.addActionListener(this);
 		internPan5 = new CoolPanel("pref:grow,pref,pref:grow","pref:grow,pref,pref,pref,pref,pref:grow");

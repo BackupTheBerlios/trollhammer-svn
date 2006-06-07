@@ -74,8 +74,14 @@ class SessionClient {
                 tmf = TrustManagerFactory.getInstance("SunX509");
                 ts = KeyStore.getInstance("JKS");
 
-                // on charge la clé le certif du fichier ad hoc.
-                ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+                // on charge la clé le certif du fichier ad hoc, depuis le
+                // fichier s'il est présent, sinon depuis le JAR.
+                try {
+                    ts.load(new FileInputStream("trolltrust"), passphrase);
+                } catch (NullPointerException npe) {
+                    ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+                }
+
                 // on initialise le gestionnaires qui le représente.
                 tmf.init(ts);
                 // puis on en initialise le contexte SSL qui servira à

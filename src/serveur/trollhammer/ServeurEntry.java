@@ -298,8 +298,19 @@ class ServeurEntryListener extends Thread {
             ts = KeyStore.getInstance("JKS");
 
             // on charge la clé et le certif des fichiers ad hoc.
-            ks.load(cl.getResourceAsStream("trollkeys"), passphrase);
-            ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+            // depuis le fichier fourni, ou le JAR si fichier il n'y a pas.
+            try {
+                ks.load(new FileInputStream("trollkeys"), passphrase);
+            } catch (NullPointerException npe) {
+                ks.load(cl.getResourceAsStream("trollkeys"), passphrase);
+            }
+
+            try {
+                ts.load(new FileInputStream("trolltrust"), passphrase);
+            } catch (NullPointerException npe) {
+                ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
+            }
+
             // on initialise les gestionnaires qui les représentent.
             kmf.init(ks, passphrase);
             tmf.init(ks);

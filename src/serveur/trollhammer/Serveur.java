@@ -28,6 +28,9 @@ public class Serveur {
 
     /* la méthode main... */
     public static void main(String[] args) {
+    	
+    	new Console();
+    
         Serveur.demarrer();
 
         // CECI EST UN TEST

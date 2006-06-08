@@ -386,7 +386,14 @@ class VenteManagerServeur {
 				case Modifier:
 					if (v == null) {
 						u.listeVentes(l);
-					}
+					} else {
+                        // jr : rajout du renvoi des détails de la vente
+                        // qui vient d'etre modifiée (faisait bugger, à raison,
+                        // la FSM client lors de la modification
+                        // de l'ordre des objets dans la liste
+                        // d'une vente quand celle-ci n'était pas la prochaine)
+                        u.detailsVente(vte.copieVente(), vte.getObjets());
+                    }
 					break;
 				case Supprimer:
                     u.listeVentes(l);

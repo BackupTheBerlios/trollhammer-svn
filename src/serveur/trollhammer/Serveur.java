@@ -28,28 +28,34 @@ public class Serveur {
 
     /* la méthode main... */
     public static void main(String[] args) {
-    	
-    	new Console();
-    
-        Serveur.demarrer();
-
-        // CECI EST UN TEST
-        
-        /*Serveur.usermanager.addUtilisateur(new ModerateurServeur("tefal", "", "", "tefal"));
-        Serveur.usermanager.addUtilisateur(new ModerateurServeur("deneo", "", "", "deneo"));
-        Serveur.usermanager.addUtilisateur(new ModerateurServeur("mithrandir", "", "", "mithrandir"));
-        Serveur.usermanager.addUtilisateur(new ModerateurServeur("dolarcles", "", "", "dolarcles"));
-        Serveur.usermanager.addUtilisateur(new ModerateurServeur("spitfire", "", "", "spitfire"));
-        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("jruffin", "", "", "jruffin"));
-        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("becholey", "", "", "becholey"));
-        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("sambuc", "", "", "sambuc"));
-        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("cfrey", "", "", "cfrey"));
-        Serveur.usermanager.addUtilisateur(new UtilisateurServeur("richon", "", "", "richon"));
-        */
+    	boolean consoleUI = true;
+		boolean err = false;
+		// ls parse les arguements de la ligne de commande.
+		int i = 0;
+		while (i < args.length) {
+			if(args[i].equals("-c")) {
+				consoleUI = false;
+			 // ajouter les arguments valables (pour extensibilité)
+			} /*else if () { 
+			// ajouter les arguments valables (pour extensibilité)
+			} */else {
+				err = true; // unknown argument
+			}
+			i++;
+		}
 		
-        // FIN DU TEST
-        
-		new CLIServeur().interprete();
+		if (err) {
+			Logger.log("Serveur", 0, LogType.ERR, "[sys] Paramètres invalide!\n" +
+			"Syntaxe : java -jar serveur.jar [-c]\n" +
+			"\t-c : désactive la console graphique, et utilise le terminal");
+		} else {
+			if (consoleUI) {
+				new Console();
+			}
+			Serveur.demarrer();
+			// ls : N'affiche pas le prompt si on est dans la console graphique.
+			new CLIServeur(!consoleUI).interprete();
+		}
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)
          */

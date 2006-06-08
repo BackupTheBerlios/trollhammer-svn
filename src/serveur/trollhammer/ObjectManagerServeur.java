@@ -111,5 +111,13 @@ class ObjectManagerServeur {
 		o.setId(++lastID);
 		objets.add(o);
     }
+	
+	//getter pour sauvegarder le truc
+	public int getLastId() {
+		return lastID;
+	}
 
+    public Set<ObjetServeur> getObjets() {
+		return objets;
+	}
 }

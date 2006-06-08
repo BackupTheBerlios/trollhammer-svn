@@ -560,6 +560,16 @@ class VenteManagerServeur {
 	void setTimerDerniereEnchere(long date) {
 		this.timerDerniereEnchere = date;
 	}
+
+	//getter pour sauvegarder le truc
+	public int getLastId() {
+		return lastId;
+	}
+
+    public List<VenteServeur> getVentes() {
+		return ventes;
+	}
+
 	
 	/**
 	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans

@@ -26,16 +26,22 @@ class CLIServeur extends CLI {
 		commandes.add(
 			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {
 				public void apply(String parameters[]){
-					Serveur.usermanager.addUtilisateur(new UtilisateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
-					Logger.log("CMD", 0, LogType.INF, "Utilisateur créé : " + parameters[1]);
+					if (!Serveur.usermanager.addUtilisateur(new UtilisateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]))) {
+						Logger.log("CMD", 0, LogType.ERR, "Il existe déjà un utilisateur avec comme login : " + parameters[1]);
+					} else {
+						Logger.log("CMD", 0, LogType.INF, "Utilisateur créé : " + parameters[1]);
+					}
 				}
 			}
 		);
 		commandes.add(
 			new CMD("nm", 5, "nm - Créé un nouveau modérateur.", "nm LOGIN NOM PRENOM MOTDEPASSE") {
 				public void apply(String parameters[]){
-					Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]));
-					Logger.log("CMD", 0, LogType.INF, "Modérateur créé : " + parameters[1]);
+					if (!Serveur.usermanager.addUtilisateur(new ModerateurServeur(parameters[1], parameters[2], parameters[3], parameters[4]))) {
+						Logger.log("CMD", 0, LogType.ERR, "Il existe déjà un modérateur avec comme login : " + parameters[1]);
+					} else {
+						Logger.log("CMD", 0, LogType.INF, "Modérateur créé : " + parameters[1]);
+					}
 				}
 			}
 		);

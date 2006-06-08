@@ -79,12 +79,14 @@ class UserManagerServeur {
 
 //fonction a virer, qui ne date pas du design model, et qui ne font pas le boulot comme il faut
 //corrigerais ca après mardi, LS
-    void addUtilisateur(UtilisateurServeur u) {
+    boolean addUtilisateur(UtilisateurServeur u) {
+		for (Utilisateur i : utilisateurs) {
+			if (i.getLogin().equals(u.getLogin())) {
+				return false;
+			}
+		}
         utilisateurs.add(u);
-    }
-
-    void removeUtilisateur(UtilisateurServeur u) {
-        utilisateurs.remove(u);
+		return true;
     }
 
     void kickerUtilisateur(String i, String sender) {

@@ -66,6 +66,21 @@ class CLIServeur extends CLI {
 				}
 			}
 		);
+		commandes.add(
+			new CMD("dp", 2, "dp - Dump les données actuelles du serveur", "dp FILENAME") {
+				public void apply(String parameters[]){
+					Serveur.serveur.saveState(parameters[1]);
+				}
+			}
+		);
+		commandes.add(
+			new CMD("ld", 2, "ld - Charge les données depuis un fichier", "ld FILENAME") {
+				public void apply(String parameters[]){
+					Serveur.serveur.loadState(parameters[1]);
+				}
+			}
+		);
+
 /*		commandes.add(
 			new CMD(, , , ) {
 				public void apply(String parameters[]){

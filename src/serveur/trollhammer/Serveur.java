@@ -33,6 +33,7 @@ public class Serveur {
     public static void main(String[] args) {
     	boolean consoleUI = true;
 		boolean err = false;
+		String defaultFile = "data.bin";
 		// ls parse les arguements de la ligne de commande.
 		int i = 0;
 		while (i < args.length) {
@@ -56,8 +57,13 @@ public class Serveur {
 				new Console();
 			}
 			Serveur.demarrer();
+			//ls : a décommenter quand les fonction de load/store seront complète :
+			//loadState(defaultFile);
 			// ls : N'affiche pas le prompt si on est dans la console graphique.
 			new CLIServeur(!consoleUI).interprete();
+			//ls : a décommenter quand les fonction de load/store seront complète :
+			//saveState(defaultFile);
+
 		}
         /* attente finie => tout quitter, en forçant la main même au threads
          * qui attendent ad eternam (ie. le thread Listener)

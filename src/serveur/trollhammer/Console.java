@@ -127,7 +127,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		} else {
 			consoleInput.selectAll();
 			//String command = consoleInput.getText();
-			textArea.append(command+"\n"); // echo ou pas ?
+			textArea.append("> "+command+"\n"); // echo ou pas ?
 			textArea.setCaretPosition(textArea.getText().length());
 			try {
 				for (char c : command.toCharArray()) {

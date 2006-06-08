@@ -28,9 +28,13 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		int x = (int)(frameSize.width/2);
 		int y = (int)(frameSize.height/2);
 		frame.setBounds(x, y, frameSize.width, frameSize.height);
-		
-		textArea = new JTextArea();
 		textArea.setEditable(false);
+		//ls : Pour avoir une police fixe, ça sort mieux avec les messages console :-D
+		textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		//ls : preferred size of 80 columns of text // pas pris en compte, car
+		//     la fenêtre est plus large actuellement...
+		textArea = new JTextArea(0 , 80);
+		textArea.setLineWrap(true);
 		JButton button = new JButton("clear");
 		
 		consoleInput = new JTextField();

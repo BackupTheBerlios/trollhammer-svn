@@ -20,7 +20,8 @@ import java.util.Calendar;
 class CLIServeur extends CLI {
 
 	// Constructeurs : START
-	CLIServeur() {
+	CLIServeur(boolean b) {
+		super(b);
 		//En premier, quelques commandes déjà implémentées : 
 		commandes.add(
 			new CMD("nu", 5, "nu - Créé un nouvel Utilisateur.", "nu LOGIN NOM PRENOM MOTDEPASSE") {

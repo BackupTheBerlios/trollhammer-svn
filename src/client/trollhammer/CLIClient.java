@@ -18,6 +18,7 @@ import java.util.HashSet;
 
 class CLIClient extends CLI {
 	public CLIClient() {
+		super(true);
 		commandes.add(
 			new CMD("login", 4, "login : se connecter à un serveur.", "Syntaxe : login ADRESSE LOGIN MOTDEPASSE") {
 				public void apply(String parameters[]){

@@ -69,7 +69,8 @@ class CLI {
 	}
 	
 	
-	Set<CMD> commandes = new HashSet<CMD>();
+	protected Set<CMD> commandes = new HashSet<CMD>();
+	protected boolean printPrompt = true;
 	
 	/**
 	 * <p>Démarre l'interprétation des commandes tapées sur STDIN.</p>
@@ -78,7 +79,9 @@ class CLI {
 		String commande;
 		String tokens[];
 		boolean known;
-		Logger.logwln("CLI", 0, LogType.INF, "Trollhammer> ");
+		if (printPrompt) {
+			Logger.logwln("CLI", 0, LogType.INF, "Trollhammer> ");
+		}
 		try {
 			java.io.BufferedReader lr = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
 			do {
@@ -98,7 +101,7 @@ class CLI {
 				if (!known && tokens[0].length() != 0 && !(commande.equals("q") || commande.equals("Q"))) {
 					Logger.log("CLI", 0, LogType.INF, "[help] Unknown command \"" + tokens[0] + "\". Enter \'help\' to see available commands.");
 				}
-				if (!(commande.equals("q") || commande.equals("Q"))) {
+				if (printPrompt && !(commande.equals("q") || commande.equals("Q"))) {
 					Logger.logwln("CLI", 0, LogType.INF, "Trollhammer> ");
 				}
 			} while(!(commande.equals("q") || commande.equals("Q")));
@@ -110,7 +113,12 @@ class CLI {
 	}
 	
 	public CLI() {
-		//En premier, quelques commandes déjà implémentée : 
+		this(true);
+	}
+	
+	public CLI(boolean b) {
+		//En premier, quelques commandes déjà implémentée :
+		printPrompt = b; 
 		commandes.add(
 			new CMD("help", 1, "help - affiche l'aide ainsi que toutes les commandes disponibles.", "help") {
 				public void apply(String parameters[]) {

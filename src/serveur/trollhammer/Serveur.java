@@ -1,4 +1,7 @@
 package trollhammer;
+import java.util.HashSet;
+import java.util.Set;
+import java.io.*;
 
 /**
  * Serveur Trollhammer.
@@ -226,5 +229,57 @@ public class Serveur {
     public String getDernierEncherisseur() {
     	return this.dernier_encherisseur;
     }
-
+    
+    public void saveState(String filename) {
+    	try {
+    		FileOutputStream fos = new FileOutputStream(filename);
+    		ObjectOutputStream oos = new ObjectOutputStream(fos);
+    	
+    		// les utilisateurs
+    		Set<UtilisateurServeur> ul = Serveur.serveur.usermanager.getUtilisateurs();
+    		Set<Utilisateur> ulp = new HashSet<Utilisateur>();
+			for (Utilisateur up : ul) {
+				if (up instanceof ModerateurServeur) {
+					ulp.add(new Moderateur(up.getLogin(), up.getNom(), up.getPrenom(), up.getStatut(), up.getMotDePasse()));
+				} else if (up instanceof UtilisateurServeur) {
+					ulp.add(new Utilisateur(up.getLogin(), up.getNom(), up.getPrenom(), up.getStatut(), up.getMotDePasse()));
+				}
+			}
+			oos.writeObject(ulp);
+			
+			// lastId
+			oos.writeInt(Serveur.serveur.objectmanager.getLastId());
+			
+			// les objets
+			Set<ObjetServeur> ol = Serveur.serveur.objectmanager.getObjets();
+			Set<Objet> olp = new HashSet<Objet>();
+			for (Objet o : ol) {
+				olp.add(new Objet(o.getId(), o.getNom(), o.getDescription(), o.getModerateur(), o.getPrixDeBase(), o.getPrixDeVente(), o.getStatut(), o.getAcheteur(), o.getVendeur(), o.getImage()));
+			}
+			oos.writeObject(olp);
+    	} catch (Exception e) {
+			Logger.log("Serveur", 0, LogType.ERR, "saveState: "+e.toString());
+    	}
+    }
+    
+    public void loadState(String filename) {
+    	try {
+    		FileInputStream fis = new FileInputStream(filename);
+    		ObjectInputStream ois = new ObjectInputStream(fis);
+    		
+    		// les utilisateurs
+    		Set<Utilisateur> ul = (Set<Utilisateur>) ois.readObject();
+    		//... boucle, setUtilisateurs
+    		
+    		// lastId
+    		Serveur.serveur.objectmanager.setLastId(ois.readInt());
+    		
+    		// les objets
+    		Set<ObjetServeur> ol = (Set<ObjetServeur>) ois.readObject();
+    		//... boucle, setObjets
+    		
+    	} catch (Exception e) {
+    		Logger.log("Serveur", 0, LogType.ERR, "loadState: "+e.toString());
+    	}
+    }
 }

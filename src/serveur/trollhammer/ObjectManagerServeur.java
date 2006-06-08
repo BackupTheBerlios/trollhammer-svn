@@ -8,7 +8,7 @@ import java.util.HashSet;
  * @author squelette : Julien Ruffin
  */
 class ObjectManagerServeur {
-	int lastID = -1;
+	private int lastID = -1;
 
     Set<ObjetServeur> objets;
 	
@@ -115,6 +115,10 @@ class ObjectManagerServeur {
 	//getter pour sauvegarder le truc
 	public int getLastId() {
 		return lastID;
+	}
+
+	public void setLastId(int truc) {
+		this.lastID = truc;
 	}
 
     public Set<ObjetServeur> getObjets() {

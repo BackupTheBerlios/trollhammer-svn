@@ -552,11 +552,7 @@ class ServeurEntryHandler extends Thread {
                 Serveur.serveurentry.obtenirListeParticipants(olp.sender);
             }
         } else if (m instanceof obtenirVente) {
-            if (etat == Etat.PL3) {
-                etat = Etat.PL4;
-                obtenirVente ov = (obtenirVente) m;
-                Serveur.serveurentry.obtenirVente(ov.v, ov.sender);
-            } else if (etat == Etat.PL4) {
+            if (etat == Etat.PL3 || etat == Etat.PL4) {
                 etat = Etat.PL4;
                 obtenirVente ov = (obtenirVente) m;
                 Serveur.serveurentry.obtenirVente(ov.v, ov.sender);

@@ -370,9 +370,11 @@ class PlanifierPanel implements ActionListener
         // KABOOM.
         if(vp != null && vp instanceof Vente) {
             if(Client.ventemanager.getVente(((Vente) vp).getId()) != null) {
-                Client.hi.choisirVente(((Vente) vp).getId());
+                System.out.println("vente resélectionnée.");
                 nomBox.setSelectedItem(vp);
+                Client.hi.choisirVente(((Vente) vp).getId());
             } else {
+                System.out.println("on a perdu la vente !!!");
                 razChamps();
             }
         } else if(vp != null && vp instanceof String) {
@@ -388,8 +390,11 @@ class PlanifierPanel implements ActionListener
             }
 
             if(the_vente != null) {
+                System.out.println("on a retrouvé Carmen San Diego !");
                 nomBox.setSelectedItem(the_vente);
+                Client.hi.choisirVente(the_vente.getId());
             } else {
+                System.out.println("on a PERDU Carmen San Diego !");
                 razChamps();
             }
 
@@ -414,60 +419,65 @@ class PlanifierPanel implements ActionListener
         Object sel = listeDansVente.getSelectedValue();
         Object nsel = null; // la nouvelle sélection
         int selID;
-        if(sel instanceof PlanifierObjet) {
-            selID = ((PlanifierObjet) sel).getId();   
-        } else {
-            selID = -1;
-        }
 
-        GregorianCalendar date = new GregorianCalendar();
-        date.setTimeInMillis(v.getDate());
+        // ça se corse. l'update ne doit se faire que
+        // si la vente qui arrive porte un nom identique
+        // à la vente sélectionnée, pour des raisons de cohérence.
+        Object vente_prec = nomBox.getSelectedItem();
 
-        ouvDateFTF.setText(dateFormat.format(date.getTime()));
-        ouvHeureFTF.setText(heureFormat.format(date.getTime()));
-        descrArea.setText(v.getDescription());
+        if(vente_prec != null && vente_prec.toString().equals(v.toString())) {
+            if(sel instanceof PlanifierObjet) {
+                selID = ((PlanifierObjet) sel).getId();   
+            } else {
+                selID = -1;
+            }
 
-        // les objets de la vente ! hé oui !
+            GregorianCalendar date = new GregorianCalendar();
+            date.setTimeInMillis(v.getDate());
 
-        ArrayList<PlanifierObjet> vobjs = new ArrayList<PlanifierObjet>();
+            ouvDateFTF.setText(dateFormat.format(date.getTime()));
+            ouvHeureFTF.setText(heureFormat.format(date.getTime()));
+            descrArea.setText(v.getDescription());
 
-        System.out.println("Ensemble IDs de taille "+v.getOIds().size());
+            // les objets de la vente ! hé oui !
 
-        for(int i : v.getOIds()) {
-            Objet o = Client.objectmanager.getObjet(i);
-            if(o != null) {
-                PlanifierObjet planobj = new PlanifierObjet(o);
-                
-                vobjs.add(planobj);
-                
-                // utilisé pour savoir si l'objet
-                // a une ID identique à celui sélectionné
-                // précédemment. Si oui, sa représentation
-                // (PlanifierObjet) est celle qu'il faut
-                // sélectionner !
-                if(o.getId() == selID) {
-                    nsel = planobj;
+            ArrayList<PlanifierObjet> vobjs = new ArrayList<PlanifierObjet>();
+
+            for(int i : v.getOIds()) {
+                Objet o = Client.objectmanager.getObjet(i);
+                if(o != null) {
+                    PlanifierObjet planobj = new PlanifierObjet(o);
+
+                    vobjs.add(planobj);
+
+                    // utilisé pour savoir si l'objet
+                    // a une ID identique à celui sélectionné
+                    // précédemment. Si oui, sa représentation
+                    // (PlanifierObjet) est celle qu'il faut
+                    // sélectionner !
+                    if(o.getId() == selID) {
+                        nsel = planobj;
+                    }
                 }
             }
-        }
-        System.out.println("Créé ensemble de taille "+vobjs.size());
 
-        listeDansVente.setListData(vobjs.toArray());
+            listeDansVente.setListData(vobjs.toArray());
 
-        // si l'objet précédemment sélectionné est toujours dans la liste
-        // d'objets à afficher, le resélectionner.
-        if(nsel != null) {
-            listeDansVente.setSelectedValue(nsel, true);
-        }
-
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run() {
-                jspPan4.validate();
-                jspPan4.repaint();
-                listeDansVente.validate();
-                listeDansVente.repaint();
+            // si l'objet précédemment sélectionné est toujours dans la liste
+            // d'objets à afficher, le resélectionner.
+            if(nsel != null) {
+                listeDansVente.setSelectedValue(nsel, true);
             }
-        });
+
+            SwingUtilities.invokeLater(new Runnable(){
+                public void run() {
+                    jspPan4.validate();
+                    jspPan4.repaint();
+                    listeDansVente.validate();
+                    listeDansVente.repaint();
+                }
+            });
+        }
 
     }
 
@@ -526,7 +536,14 @@ class PlanifierPanel implements ActionListener
                     // immutable, puisqu'il sert à sélectionner!
                     // s'il est changé, alors c'est une nouvelle vente
                     // avec le nouveau nom qui est créée...
-                    v = (Vente) selectionne;
+                    
+                    // autre bug avec un workaround :
+                    // la liste d'objets se vide si on fait
+                    // un cast de selectionne et qu'on le renvoie.
+                    // Alors, on prend son ID et
+                    // on cherche la vente correcte dans le manager.
+                    // v = (Vente) selectionne;
+                    v = Client.ventemanager.getVente(((Vente) selectionne).getId());
                     v.setDescription(descrArea.getText());
                     v.setDate(date);
 
@@ -675,5 +692,7 @@ class PlanifierPanel implements ActionListener
         ouvDateFTF.setText("");
         ouvHeureFTF.setText("");
         descrArea.setText("");
+        // vider l'affichage des objets de la vente
+        listeDansVente.setModel(new DefaultListModel());
     }
 }

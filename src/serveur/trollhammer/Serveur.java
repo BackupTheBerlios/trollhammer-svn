@@ -1,6 +1,8 @@
 package trollhammer;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.*;
 
 /**
@@ -253,16 +255,24 @@ public class Serveur {
 			}
 			oos.writeObject(ulp);
 			
-			// lastId
-			oos.writeInt(Serveur.serveur.objectmanager.getLastId());
-			
 			// les objets
 			Set<ObjetServeur> ol = Serveur.serveur.objectmanager.getObjets();
 			Set<Objet> olp = new HashSet<Objet>();
 			for (Objet o : ol) {
 				olp.add(new Objet(o.getId(), o.getNom(), o.getDescription(), o.getModerateur(), o.getPrixDeBase(), o.getPrixDeVente(), o.getStatut(), o.getAcheteur(), o.getVendeur(), o.getImage()));
 			}
+			oos.writeInt(Serveur.serveur.objectmanager.getLastId());
 			oos.writeObject(olp);
+			
+			// les ventes
+			List<VenteServeur> vl = Serveur.serveur.ventemanager.getVentes();
+			List<Vente> vlp = new ArrayList<Vente>();
+			for (Vente v : vl) {
+				vlp.add(new Vente(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
+			}
+			oos.writeInt(Serveur.serveur.ventemanager.getLastId());
+			oos.writeObject(vlp);
+			
     	} catch (Exception e) {
 			Logger.log("Serveur", 0, LogType.ERR, "saveState: "+e.toString());
     	}
@@ -274,15 +284,32 @@ public class Serveur {
     		ObjectInputStream ois = new ObjectInputStream(fis);
     		
     		// les utilisateurs
-    		Set<Utilisateur> ul = (Set<Utilisateur>) ois.readObject();
-    		//... boucle, setUtilisateurs
+    		Set<Utilisateur> ul = (HashSet<Utilisateur>) ois.readObject();
+    		Set<UtilisateurServeur> ulp = new HashSet<UtilisateurServeur>();
+    		for (Utilisateur u : ul) {
+    			ulp.add((UtilisateurServeur) u);
+    		}
+    		Serveur.serveur.usermanager.setUtilisateurs(ulp);
     		
-    		// lastId
-    		Serveur.serveur.objectmanager.setLastId(ois.readInt());
     		
     		// les objets
-    		Set<ObjetServeur> ol = (Set<ObjetServeur>) ois.readObject();
-    		//... boucle, setObjets
+    		Serveur.serveur.objectmanager.setLastId(ois.readInt());
+    		Set<Objet> ol = (HashSet<Objet>) ois.readObject();
+    		Set<ObjetServeur> olp = new HashSet<ObjetServeur>();
+    		for (Objet o : ol) {
+    			olp.add((ObjetServeur) o);
+    		}
+    		Serveur.serveur.objectmanager.setObjets(olp);
+    		
+    		// les ventes
+    		Serveur.serveur.ventemanager.setLastId(ois.readInt());
+    		List<Vente> vl = (ArrayList<Vente>) ois.readObject();
+    		List<VenteServeur> vlp = new ArrayList<VenteServeur>();
+    		for (Vente v : vl) {
+    			vlp.add((VenteServeur) v);
+    		}
+    		Serveur.serveur.ventemanager.setVentes(vlp);
+    		
     		
     	} catch (Exception e) {
     		Logger.log("Serveur", 0, LogType.ERR, "loadState: "+e.toString());

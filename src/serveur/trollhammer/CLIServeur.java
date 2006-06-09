@@ -67,7 +67,7 @@ class CLIServeur extends CLI {
 			}
 		);
 		commandes.add(
-			new CMD("dp", 2, "dp - Dump les données actuelles du serveur", "dp FILENAME") {
+			new CMD("st", 2, "st - Store les données actuelles du serveur", "st FILENAME") {
 				public void apply(String parameters[]){
 					Serveur.serveur.saveState(parameters[1]);
 				}

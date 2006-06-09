@@ -124,4 +124,8 @@ class ObjectManagerServeur {
     public Set<ObjetServeur> getObjets() {
 		return objets;
 	}
+	
+	public void setObjets(Set<ObjetServeur> set) {
+		this.objets = set;
+	}
 }

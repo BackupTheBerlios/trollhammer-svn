@@ -223,7 +223,11 @@ class UserManagerServeur {
 		
     }
 
-    Set<UtilisateurServeur> getUtilisateurs() {
+    public Set<UtilisateurServeur> getUtilisateurs() {
         return utilisateurs;
+    }
+    
+    public void setUtilisateurs(Set<UtilisateurServeur> set) {
+    	this.utilisateurs = set;
     }
 }

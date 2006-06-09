@@ -561,6 +561,10 @@ class VenteManagerServeur {
 		this.timerDerniereEnchere = date;
 	}
 
+	void setLastId(int id) {
+		this.lastId = id;
+	}
+
 	//getter pour sauvegarder le truc
 	public int getLastId() {
 		return lastId;
@@ -570,6 +574,9 @@ class VenteManagerServeur {
 		return ventes;
 	}
 
+	public void setVentes(List<VenteServeur> list) {
+		this.ventes = list;
+	}
 	
 	/**
 	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans

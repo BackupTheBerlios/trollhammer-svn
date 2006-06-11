@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
 
 class HdVPanel extends JComponent implements ActionListener
 {
@@ -22,7 +24,10 @@ class HdVPanel extends JComponent implements ActionListener
 	private JScrollPane descrObjetPane = null;
     private JTextField nomObjetTextField = null;
 	private JTextArea descrObjetTextArea = null;
-	private CoolPanel salleANDobjEnCoursPanel = null;
+	private CoolPanel milieuPanel = null;
+    private CoolPanel statutVentePanel = null;
+    private JScrollPane statutVentePane = null;
+    private JTextArea statutVenteArea = null;
 	private CoolPanel objEnCoursPanel = null;
 	private JLabel imgObjEnCoursLabel = null;
 	private ImageIcon imgObjEnCours = null;
@@ -107,14 +112,33 @@ class HdVPanel extends JComponent implements ActionListener
 		
 		//Salle && objet en cours...
 		grpl = new ButtonGroup();
-		salleANDobjEnCoursPanel = new CoolPanel("pref:grow","pref,fill:pref:grow");
+		milieuPanel = new CoolPanel("pref:grow","pref,pref,fill:pref:grow");
+        statutVentePanel = new CoolPanel("fill:pref:grow", "fill:pref:grow");
 		objEnCoursPanel = new CoolPanel("center:pref:grow","pref");
+        statutVenteArea = new JTextArea();
+		statutVenteArea.setEditable(true);
+		statutVenteArea.setWrapStyleWord(true);
+		statutVenteArea.setLineWrap(true);
+        statutVenteArea.setBackground(milieuPanel.getBackground());
+        // triche : choper la fonte d'un label
+        statutVenteArea.setFont(nbCdMLabel.getFont());
+
+        statutVentePane = new JScrollPane(statutVenteArea,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Dimension size = statutVentePane.getPreferredSize();
+        statutVentePane.setPreferredSize(new Dimension(size.width, 3*size.height));
+
+		statutVentePanel.addC(statutVentePane, new CellConstraints(1,1));
+
 		imgObjEnCoursLabel = new JLabel((ImageIcon)null, SwingConstants.CENTER);
 		imgObjEnCoursLabel.setPreferredSize(new Dimension(55,55));
 		objEnCoursPanel.addC(imgObjEnCoursLabel, new CellConstraints(1,1));
 		sallePanel = new FreshPanel('y',true);
-		salleANDobjEnCoursPanel.addC(objEnCoursPanel, new CellConstraints(1,1));
-		salleANDobjEnCoursPanel.addC(sallePanel, new CellConstraints(1,2));
+		milieuPanel.addC(statutVentePanel, new CellConstraints(1,1));
+		milieuPanel.addC(objEnCoursPanel, new CellConstraints(1,2));
+		milieuPanel.addC(sallePanel, new CellConstraints(1,3));
 		
 		//Log
 		logPanel = new CoolPanel("fill:pref:grow","fill:pref:grow");
@@ -208,7 +232,7 @@ class HdVPanel extends JComponent implements ActionListener
 		//builder.addLabel("Salle: ", cc.xy(3,3));
 		builder.addLabel("Log: ", cc.xy(4,3));
 		builder.add(selectPanel, cc.xy(2,4));
-		builder.add(salleANDobjEnCoursPanel, cc.xy(3,4));
+		builder.add(milieuPanel, cc.xy(3,4));
 		builder.add(logPanel, cc.xy(4,4));
 		builder.addLabel("Chat: ", cc.xy(4,5));
 		builder.add(adjPanel, cc.xy(2,6));
@@ -346,6 +370,23 @@ class HdVPanel extends JComponent implements ActionListener
         }
 		affichageListeObjets();
         majChamps();
+
+        /* affichage du statut de la vente - en cours, ou si c'est la prochaine,
+         * heure de démarrage. */
+        boolean en_cours = 
+            Client.ventemanager.isInVenteEnCours(Client.client.getDate());
+
+        if(en_cours) {
+            statutVenteArea.setText(
+                    "Vente en cours : "+v.getNom());
+        } else {
+            GregorianCalendar date = new GregorianCalendar();
+            date.setTimeInMillis(v.getDate());
+            SimpleDateFormat df = new SimpleDateFormat();
+            statutVenteArea.setText(
+                    "Prochaine vente : "+v.getNom()+"\n"
+                    +"Date : "+df.format(date.getTime()));
+        }
 	}
 	private void affichageListeObjets()
 	{
@@ -597,17 +638,15 @@ class HdVPanel extends JComponent implements ActionListener
      * l'Onglet Hôtel Des Ventes, permet d'initialiser les boutons à 'désactivé'.
      */
     void initTab() {
-        // jr : a chaque fois que le tab est affiché,
-        // et si aucune réception de
-        // VenteEnCours ou DebutVente, on désactive le bouton 'enchérir'.
-        // tout pareil pour le kick et le coup de MASSE.
-        //enchereButton.setEnabled(false);
+        // jr : actions a prendre par défaut à l'affichage du tab.
         verifierEnchere();
         verifierCDM();
 
         if(modo) {
             kickButton.setEnabled(false);
         }
+
+        statutVenteArea.setText("Aucune vente planifiée");
     }
 
     /* rajout p.r. Design : afficher quand un utilisateur devient

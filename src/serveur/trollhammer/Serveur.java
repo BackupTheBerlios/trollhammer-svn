@@ -9,6 +9,7 @@ import java.io.*;
  * Serveur Trollhammer.
  * Cette classe est un singleton.
  *
+ * @author Lionel Sambuc & Charles François Rey
  * @author squelette : Julien Ruffin, implémentation : Julien Ruffin
  */
 public class Serveur {
@@ -65,11 +66,9 @@ public class Serveur {
 				new Console();
 			}
 			Serveur.demarrer();
-			//ls : a décommenter quand les fonction de load/store seront complète :
 			Serveur.serveur.loadState(defaultFile);
 			// ls : N'affiche pas le prompt si on est dans la console graphique.
 			new CLIServeur(!consoleUI).interprete();
-			//ls : a décommenter quand les fonction de load/store seront complète :
 			Serveur.serveur.saveState(defaultFile);
 
 		}

@@ -116,7 +116,13 @@ class UtilisateurServeur extends Utilisateur{
 
         Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] vérification statut/pass pour " + login);
 
-        if(mdp.equals(mot_de_passe) && statut != StatutLogin.Connecte_Utilisateur
+        if (statut == reponse_login_correct) {
+            // t'es déjà connecté gaillard, va voir ailleurs
+            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login refusé pour " + login + " : déjà connecté !");
+            sess.resultatLogin(StatutLogin.Deja_Connecte);
+            sess.kaboom();
+        } else if(mdp.equals(mot_de_passe) && statut != StatutLogin.Connecte_Utilisateur
+                // happy day scenario (avec les petits anges et tout et tout)
                 && statut != StatutLogin.Banni) {
             Logger.log("UtilisateurServeur", 1, LogType.INF, "[login] login " + type + " accepté : login " + login);
 
@@ -137,11 +143,6 @@ class UtilisateurServeur extends Utilisateur{
         } else if (statut == StatutLogin.Banni) {
             Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login " + type + " banni refusé : login " + login);
             sess.resultatLogin(StatutLogin.Banni);
-            sess.kaboom();
-        } else if (statut == reponse_login_correct) {
-            // t'es déjà connecté gaillard, va voir ailleurs
-            Logger.log("UtilisateurServeur", 1, LogType.WRN, "[login] login refusé pour " + login + " : déjà connecté !");
-            sess.resultatLogin(StatutLogin.Deja_Connecte);
             sess.kaboom();
         } else {
             // pas sensé arriver. on ignore...

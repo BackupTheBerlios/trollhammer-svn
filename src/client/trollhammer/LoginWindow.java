@@ -241,7 +241,7 @@ class LoginWindow implements ActionListener, KeyListener
                 break;
             case ExisteDeja:
                 JOptionPane.showMessageDialog(this.loginFrame,
-                        "Erreur : Existe déjà.");
+                        "Erreur : Vous êtes déjà connecté.");
                 break;
             case NonTrouve:
                 JOptionPane.showMessageDialog(this.loginFrame,

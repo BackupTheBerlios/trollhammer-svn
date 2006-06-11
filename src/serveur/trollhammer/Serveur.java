@@ -247,11 +247,13 @@ public class Serveur {
     }
     
     public void saveState(String filename) {
+    		FileOutputStream fos = null;
+    		ObjectOutputStream oos = null;
     	try {
     		int un = 0, on = 0, vn = 0;
     		
-    		FileOutputStream fos = new FileOutputStream(filename);
-    		ObjectOutputStream oos = new ObjectOutputStream(fos);
+    		fos = new FileOutputStream(filename);
+    		oos = new ObjectOutputStream(fos);
     	
     		// les utilisateurs
     		Set<UtilisateurServeur> ul = Serveur.serveur.usermanager.getUtilisateurs();
@@ -291,54 +293,77 @@ public class Serveur {
 			
     	} catch (Exception e) {
 			Logger.log("Serveur", 0, LogType.ERR, "saveState: "+e.toString());
-    	}
+    	} finally {
+            try {
+            if(oos != null) {
+                oos.close();
+            }
+            if(fos != null) {
+                fos.close();
+            }
+            } catch (Exception e) {
+                Logger.log("Serveur", 0, LogType.ERR, "saveState: erreur de fermeture de stream (l'excès)");
+            }
+        }
     }
     
     public void loadState(String filename) {
+    		FileInputStream fis = null; 
+    		ObjectInputStream ois = null;
     	try {
     		int un = 0, on = 0, vn = 0;
     		
-    		FileInputStream fis = new FileInputStream(filename);
-    		ObjectInputStream ois = new ObjectInputStream(fis);
-    		
-    		// les utilisateurs
-    		Set<Utilisateur> ul = (HashSet<Utilisateur>) ois.readObject();
-    		Set<UtilisateurServeur> ulp = new HashSet<UtilisateurServeur>();
-    		for (Utilisateur u : ul) {
-    			un += 1;
-				if (u instanceof Moderateur) {
-					ulp.add(new ModerateurServeur((Moderateur) u));
-				} else {
-					ulp.add(new UtilisateurServeur(u));
-				}
-    		}
-    		Serveur.serveur.usermanager.setUtilisateurs(ulp);
-    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+un+"#UtilisateurServeur");
-    		
-    		// les objets
-    		Serveur.serveur.objectmanager.setLastId(ois.readInt());
-    		Set<Objet> ol = (HashSet<Objet>) ois.readObject();
-    		Set<ObjetServeur> olp = new HashSet<ObjetServeur>();
-    		for (Objet o : ol) {
-    			on += 1;
-    			olp.add(new ObjetServeur(o));
-    		}
-    		Serveur.serveur.objectmanager.setObjets(olp);
-    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+on+"#ObjetServeur");
-    		
-    		// les ventes
-    		Serveur.serveur.ventemanager.setLastId(ois.readInt());
-    		List<Vente> vl = (ArrayList<Vente>) ois.readObject();
-    		List<VenteServeur> vlp = new ArrayList<VenteServeur>();
-    		for (Vente v : vl) {
-    			vn += 1;
-    			vlp.add(new VenteServeur(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
-    		}
-    		Serveur.serveur.ventemanager.setVentes(vlp);
-    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+vn+"#VenteServeur");
-    		
-    	} catch (Exception e) {
-    		Logger.log("Serveur", 0, LogType.ERR, "loadState: "+e.toString());
-    	}
+    		fis = new FileInputStream(filename);
+    		ois = new ObjectInputStream(fis);
+
+            // les utilisateurs
+            Set<Utilisateur> ul = (HashSet<Utilisateur>) ois.readObject();
+            Set<UtilisateurServeur> ulp = new HashSet<UtilisateurServeur>();
+            for (Utilisateur u : ul) {
+                un += 1;
+                if (u instanceof Moderateur) {
+                    ulp.add(new ModerateurServeur((Moderateur) u));
+                } else {
+                    ulp.add(new UtilisateurServeur(u));
+                }
+            }
+            Serveur.serveur.usermanager.setUtilisateurs(ulp);
+            Logger.log("Serveur", 0, LogType.INF, "loadState: "+un+"#UtilisateurServeur");
+
+            // les objets
+            Serveur.serveur.objectmanager.setLastId(ois.readInt());
+            Set<Objet> ol = (HashSet<Objet>) ois.readObject();
+            Set<ObjetServeur> olp = new HashSet<ObjetServeur>();
+            for (Objet o : ol) {
+                on += 1;
+                olp.add(new ObjetServeur(o));
+            }
+            Serveur.serveur.objectmanager.setObjets(olp);
+            Logger.log("Serveur", 0, LogType.INF, "loadState: "+on+"#ObjetServeur");
+
+            // les ventes
+            Serveur.serveur.ventemanager.setLastId(ois.readInt());
+            List<Vente> vl = (ArrayList<Vente>) ois.readObject();
+            List<VenteServeur> vlp = new ArrayList<VenteServeur>();
+            for (Vente v : vl) {
+                vn += 1;
+                vlp.add(new VenteServeur(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
+            }
+            Serveur.serveur.ventemanager.setVentes(vlp);
+            Logger.log("Serveur", 0, LogType.INF, "loadState: "+vn+"#VenteServeur");
+        } catch (Exception e) {
+            Logger.log("Serveur", 0, LogType.ERR, "loadState: "+e.toString());
+        } finally {
+            try {
+                if(ois != null) {
+                    ois.close();
+                }
+                if(fis != null) {
+                    fis.close();
+                }
+            } catch (Exception e) {
+                Logger.log("Serveur", 0, LogType.ERR, "loadState: erreur de fermeture de stream (l'excès)");
+            }
+        }
     }
 }

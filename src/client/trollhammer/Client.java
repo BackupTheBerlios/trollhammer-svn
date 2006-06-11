@@ -173,6 +173,13 @@ public class Client {
 				Client.session.fermer();
 				Client.session = null;
 				break;
+            case Deja_Connecte:
+                Logger.log("ClientEntry", 1, LogType.WRN, "[login] reçu réponse : Déjà Connecté");
+				Client.hi.messageErreur(Erreur.ExisteDeja);
+				// mod p.r. design : pas de destroy() (impossible en Java),
+				// mais on tient quand même à fermer la connexion!
+				Client.session.fermer();
+				Client.session = null;
 			default:
 				break;
 		}

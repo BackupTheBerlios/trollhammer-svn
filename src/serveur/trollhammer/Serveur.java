@@ -59,13 +59,14 @@ public class Serveur {
 		if (err) {
 			Logger.log("Serveur", 0, LogType.ERR, "[sys] Paramètres invalide!\n" +
 			"Syntaxe : java -jar serveur.jar [-c] [-f filename]\n" +
-			"\t-c : désactive la console graphique, et utilise le terminal"+
-			"\t-f filename : Le fichier à charger et dans lequel sauvegarder.");
+			"\t-c : utilise STDOUT au lieu de l'interface console utilisateur.\n"+
+			"\t-f filename : le fichier à charger et dans lequel sauvegarder.\n");
 		} else {
 			if (consoleUI) {
 				new Console();
 			}
 			Serveur.demarrer();
+// mais à quoi ça sert de faire ces loadState/saveState avec defaultFile ???
 			Serveur.serveur.loadState(defaultFile);
 			// ls : N'affiche pas le prompt si on est dans la console graphique.
 			new CLIServeur(!consoleUI).interprete();
@@ -245,6 +246,8 @@ public class Serveur {
     
     public void saveState(String filename) {
     	try {
+    		int un = 0, on = 0, vn = 0;
+    		
     		FileOutputStream fos = new FileOutputStream(filename);
     		ObjectOutputStream oos = new ObjectOutputStream(fos);
     	
@@ -252,6 +255,7 @@ public class Serveur {
     		Set<UtilisateurServeur> ul = Serveur.serveur.usermanager.getUtilisateurs();
     		Set<Utilisateur> ulp = new HashSet<Utilisateur>();
 			for (Utilisateur up : ul) {
+				un += 1;
 				if (up instanceof ModerateurServeur) {
 					ulp.add(new Moderateur(up.getLogin(), up.getNom(), up.getPrenom(), up.getStatut(), up.getMotDePasse()));
 				} else if (up instanceof UtilisateurServeur) {
@@ -259,24 +263,29 @@ public class Serveur {
 				}
 			}
 			oos.writeObject(ulp);
+			Logger.log("Serveur", 0, LogType.INF, "saveState: "+un+"#UtilisateurServeur");
 			
 			// les objets
 			Set<ObjetServeur> ol = Serveur.serveur.objectmanager.getObjets();
 			Set<Objet> olp = new HashSet<Objet>();
 			for (Objet o : ol) {
+				on += 1;
 				olp.add(new Objet(o.getId(), o.getNom(), o.getDescription(), o.getModerateur(), o.getPrixDeBase(), o.getPrixDeVente(), o.getStatut(), o.getAcheteur(), o.getVendeur(), o.getImage()));
 			}
 			oos.writeInt(Serveur.serveur.objectmanager.getLastId());
 			oos.writeObject(olp);
+			Logger.log("Serveur", 0, LogType.INF, "saveState: "+on+"#ObjetServeur");
 			
 			// les ventes
 			List<VenteServeur> vl = Serveur.serveur.ventemanager.getVentes();
 			List<Vente> vlp = new ArrayList<Vente>();
 			for (Vente v : vl) {
+				vn += 1;
 				vlp.add(new Vente(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
 			}
 			oos.writeInt(Serveur.serveur.ventemanager.getLastId());
 			oos.writeObject(vlp);
+			Logger.log("Serveur", 0, LogType.INF, "saveState: "+vn+"#VenteServeur");
 			
     	} catch (Exception e) {
 			Logger.log("Serveur", 0, LogType.ERR, "saveState: "+e.toString());
@@ -285,6 +294,8 @@ public class Serveur {
     
     public void loadState(String filename) {
     	try {
+    		int un = 0, on = 0, vn = 0;
+    		
     		FileInputStream fis = new FileInputStream(filename);
     		ObjectInputStream ois = new ObjectInputStream(fis);
     		
@@ -292,6 +303,7 @@ public class Serveur {
     		Set<Utilisateur> ul = (HashSet<Utilisateur>) ois.readObject();
     		Set<UtilisateurServeur> ulp = new HashSet<UtilisateurServeur>();
     		for (Utilisateur u : ul) {
+    			un += 1;
 				if (u instanceof Moderateur) {
 					ulp.add(new ModerateurServeur((Moderateur) u));
 				} else {
@@ -299,26 +311,29 @@ public class Serveur {
 				}
     		}
     		Serveur.serveur.usermanager.setUtilisateurs(ulp);
-    		
+    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+un+"#UtilisateurServeur");
     		
     		// les objets
     		Serveur.serveur.objectmanager.setLastId(ois.readInt());
     		Set<Objet> ol = (HashSet<Objet>) ois.readObject();
     		Set<ObjetServeur> olp = new HashSet<ObjetServeur>();
     		for (Objet o : ol) {
+    			on += 1;
     			olp.add(new ObjetServeur(o));
     		}
     		Serveur.serveur.objectmanager.setObjets(olp);
+    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+on+"#ObjetServeur");
     		
     		// les ventes
     		Serveur.serveur.ventemanager.setLastId(ois.readInt());
     		List<Vente> vl = (ArrayList<Vente>) ois.readObject();
     		List<VenteServeur> vlp = new ArrayList<VenteServeur>();
     		for (Vente v : vl) {
+    			vn += 1;
     			vlp.add(new VenteServeur(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
     		}
     		Serveur.serveur.ventemanager.setVentes(vlp);
-    		
+    		Logger.log("Serveur", 0, LogType.INF, "loadState: "+vn+"#VenteServeur");
     		
     	} catch (Exception e) {
     		Logger.log("Serveur", 0, LogType.ERR, "loadState: "+e.toString());

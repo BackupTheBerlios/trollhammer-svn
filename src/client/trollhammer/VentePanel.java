@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -66,6 +68,15 @@ class VentePanel implements ActionListener
 		objDescrPane = new JScrollPane(objDescr, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		objPrix = new JTextField();
 		objPrix.setHorizontalAlignment(JTextField.RIGHT);
+        objPrix.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                objPrix.selectAll();
+            }
+            public void focusLost(FocusEvent e) {
+                objPrix.setSelectionStart(0);
+                objPrix.setSelectionEnd(0);
+            }
+        });
 		proposer = new JButton("Proposer");
         proposer.setActionCommand("proposer");
         proposer.addActionListener(this);
@@ -185,6 +196,8 @@ class VentePanel implements ActionListener
                     img = null;
                     imgLabel.setIcon(null);
 
+                } else if(prix_de_base <= 0) {
+                    throw new java.lang.NumberFormatException();
                 }
             } catch(java.lang.NumberFormatException nfe) {
                 Logger.log("VentePanel", 1, nfe.getMessage()+" (prix incorrect)");

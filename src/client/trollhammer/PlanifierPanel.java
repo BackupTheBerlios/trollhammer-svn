@@ -147,7 +147,7 @@ class PlanifierPanel implements ActionListener
 		descrArea.setLineWrap(true);
 		descrArea.setWrapStyleWord(true);
 		descrPane = new JScrollPane(descrArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		nouveau = new JButton("Nouveau"); //va falloir faire qu'on puisse le modifier si on séléctionne une vente déjà existante
+		nouveau = new JButton("RàZ"); //va falloir faire qu'on puisse le modifier si on séléctionne une vente déjà existante
 		nouveau.setActionCommand("new");
 		nouveau.addActionListener(this);
 		valider = new JButton("Valider");

@@ -194,9 +194,7 @@ class ServeurEntry {
     void vente(Edition e, Vente v, String sender) {
         Logger.log("ServeurEntry", 2, LogType.DBG, "Appel de modification de Vente");
         if (Serveur.usermanager.isModo(sender)) {
-			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(),
-									   v.getDescription(), v.getDate(),
-									   v.getMode(), v.getSuperviseur(), v.getOIds()),
+			Serveur.ventemanager.vente(e, new VenteServeur(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()),
                                        sender);
         } else {
 			Logger.log("ServeurEntry", 1, LogType.WRN, "[net] User " + sender + " is not moderator, msg \"vente\" ignored.");

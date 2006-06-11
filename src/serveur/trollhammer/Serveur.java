@@ -41,8 +41,13 @@ public class Serveur {
 		while (i < args.length) {
 			if(args[i].equals("-c")) {
 				consoleUI = false;
-			 // ajouter les arguments valables (pour extensibilité)
-			} /*else if () { 
+			} else if (args[i].equals("-f")) { 
+				if (args[++i].length() == 0) {
+					err = true;
+				} else {
+					defaultFile = args[i];
+				}
+			}/*else if () { 
 			// ajouter les arguments valables (pour extensibilité)
 			} */else {
 				err = true; // unknown argument
@@ -52,19 +57,20 @@ public class Serveur {
 		
 		if (err) {
 			Logger.log("Serveur", 0, LogType.ERR, "[sys] Paramètres invalide!\n" +
-			"Syntaxe : java -jar serveur.jar [-c]\n" +
-			"\t-c : désactive la console graphique, et utilise le terminal");
+			"Syntaxe : java -jar serveur.jar [-c] [-f filename]\n" +
+			"\t-c : désactive la console graphique, et utilise le terminal"+
+			"\t-f filename : Le fichier à charger et dans lequel sauvegarder.");
 		} else {
 			if (consoleUI) {
 				new Console();
 			}
 			Serveur.demarrer();
 			//ls : a décommenter quand les fonction de load/store seront complète :
-			//loadState(defaultFile);
+			Serveur.serveur.loadState(defaultFile);
 			// ls : N'affiche pas le prompt si on est dans la console graphique.
 			new CLIServeur(!consoleUI).interprete();
 			//ls : a décommenter quand les fonction de load/store seront complète :
-			//saveState(defaultFile);
+			Serveur.serveur.saveState(defaultFile);
 
 		}
         /* attente finie => tout quitter, en forçant la main même au threads
@@ -287,7 +293,11 @@ public class Serveur {
     		Set<Utilisateur> ul = (HashSet<Utilisateur>) ois.readObject();
     		Set<UtilisateurServeur> ulp = new HashSet<UtilisateurServeur>();
     		for (Utilisateur u : ul) {
-    			ulp.add((UtilisateurServeur) u);
+				if (u instanceof Moderateur) {
+					ulp.add(new ModerateurServeur((Moderateur) u));
+				} else {
+					ulp.add(new UtilisateurServeur(u));
+				}
     		}
     		Serveur.serveur.usermanager.setUtilisateurs(ulp);
     		
@@ -297,7 +307,7 @@ public class Serveur {
     		Set<Objet> ol = (HashSet<Objet>) ois.readObject();
     		Set<ObjetServeur> olp = new HashSet<ObjetServeur>();
     		for (Objet o : ol) {
-    			olp.add((ObjetServeur) o);
+    			olp.add(new ObjetServeur(o));
     		}
     		Serveur.serveur.objectmanager.setObjets(olp);
     		
@@ -306,7 +316,7 @@ public class Serveur {
     		List<Vente> vl = (ArrayList<Vente>) ois.readObject();
     		List<VenteServeur> vlp = new ArrayList<VenteServeur>();
     		for (Vente v : vl) {
-    			vlp.add((VenteServeur) v);
+    			vlp.add(new VenteServeur(v.getId(), v.getNom(), v.getDescription(), v.getDate(), v.getMode(), v.getSuperviseur(), v.getOIds()));
     		}
     		Serveur.serveur.ventemanager.setVentes(vlp);
     		

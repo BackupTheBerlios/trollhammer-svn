@@ -50,7 +50,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		
 		try {
 			PipedInputStream pinin = new PipedInputStream(this.poutout);
-			System.setIn(pinin);//new PipedInputStream(pinin, true)); 
+			System.setIn(pinin); 
 		}
 		catch (java.io.IOException io) {
 			textArea.append("Couldn't redirect STDIN to this console\n"+io.getMessage());
@@ -97,6 +97,9 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		this.notifyAll();
 		
 		try {
+			poutout.write('q');
+			poutout.write('\n');
+			poutout.flush();
 			poutout.close();
 		} catch (Exception e) {}
 			
@@ -110,7 +113,8 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 			pin2.close();
 		} catch (Exception e) {}
 		
-		System.exit(0);
+		//System.exit(0);
+		// on va quitter de manière plus propre, cf ligne 100
 	}		
 		
 	public synchronized void windowClosing(WindowEvent evt) {

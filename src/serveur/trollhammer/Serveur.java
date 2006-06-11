@@ -67,6 +67,8 @@ public class Serveur {
 			}
 			Serveur.demarrer();
 // mais à quoi ça sert de faire ces loadState/saveState avec defaultFile ???
+// ... vu, Console va être modifié pour quitter autrement ce qui rendra son
+// utilité à la chose ...
 			Serveur.serveur.loadState(defaultFile);
 			// ls : N'affiche pas le prompt si on est dans la console graphique.
 			new CLIServeur(!consoleUI).interprete();

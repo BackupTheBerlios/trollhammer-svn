@@ -180,6 +180,10 @@ public class Client {
 				// mais on tient quand même à fermer la connexion!
 				Client.session.fermer();
 				Client.session = null;
+                break;
+            case Deconnecte:
+                Client.hi.forcerFermeture();
+                break;
 			default:
 				break;
 		}

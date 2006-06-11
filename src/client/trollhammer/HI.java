@@ -46,6 +46,7 @@ public class HI {  //doit être public si on veut un main... donc a gicler en te
 
     /** Fermer la fenêtre principale et revenir à la fenêtre de Login.
      * Utilisé lors des déconnexions forcées et autres kicks.
+     * (et rétrospectivement, dans les cas normaux aussi en fait)
      */
     void forcerFermeture() {
         if(mw != null && lw != null) {

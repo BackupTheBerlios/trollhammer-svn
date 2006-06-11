@@ -24,7 +24,7 @@ public class HdVUser extends JRadioButton
 			this.setForeground(Color.BLUE);
 			try
 			{
-				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/modoIconSelected.gif")));
+				this.setSelectedIcon(new ImageIcon(this.getClass().getResource("/ressources/img/modoIconSelected.gif")));
 			}catch(NullPointerException e)
 			{
 				this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/modoIconSelected.gif"));
@@ -42,7 +42,7 @@ public class HdVUser extends JRadioButton
 			this.setForeground(Color.BLACK);
 			try
 			{
-				this.setIcon(new ImageIcon(this.getClass().getResource("/ressources/img/userIconSelected.gif")));
+				this.setSelectedIcon(new ImageIcon(this.getClass().getResource("/ressources/img/userIconSelected.gif")));
 			}catch(NullPointerException e)
 			{
 			this.setSelectedIcon(new ImageIcon(System.getProperty("user.dir")+"/ressources/img/userIconSelected.gif"));

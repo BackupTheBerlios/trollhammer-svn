@@ -95,10 +95,12 @@ public class Client {
     }
 
     void evenement(Evenement e) {
-		Client.hi.affichage(e);
+		//Client.hi.affichage(e);
 		Vente v = Client.humain.getVente();
 
         if (v != null && e == Evenement.Adjuge) {
+            // cas spécial : on affiche avant de faire la modif
+            Client.hi.affichage(e);
             v.removeFirst();
             Client.ventemanager.getVenteEnCours().setPrices();
             // nécessaire pour garder une certaine cohérence
@@ -106,13 +108,18 @@ public class Client {
             // update de la vue vente !
             Client.hi.affichageVente(Client.ventemanager.getVenteEnCours());
         } else if (v != null && e == Evenement.VenteAutomatique) {
+            v.setSuperviseur(null);
+            this.setSuperviseur(null);
             v.setMode(Mode.Automatique);
+            // normalement l'affichage se fait à la fin
+            Client.hi.affichage(e);
+        } else {
+            Client.hi.affichage(e);
         }
+
     }
 
     void notification(Notification n) {
-		Client.hi.message(n);
-		
 		switch (n) {
             case FinVente:
                 Client.humain.setVente(null);
@@ -130,6 +137,8 @@ public class Client {
             default:
             	break;
         }
+
+		Client.hi.message(n);
     }
 
     void resultatLogin(StatutLogin s) {
@@ -465,6 +474,9 @@ class ClientFSM {
 
     boolean listeObjets() {
         return transition(Etat.PL3, Etat.PL4)
+            // petit rajout : liste d'objets envoyée en mise à jour
+            // après suppression, c'est possible dans la phase planification
+            || transition(Etat.PL7, Etat.PL7)
             || transition(Etat.PL10, Etat.PL4)
             || transition(Etat.VA2, Etat.VA3)
             || transition(Etat.VA5, Etat.VA6)

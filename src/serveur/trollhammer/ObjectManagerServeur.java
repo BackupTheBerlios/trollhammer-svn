@@ -103,6 +103,7 @@ class ObjectManagerServeur {
 			break;
 		default : 
 		}
+        System.out.println("EXPEDITION DE LA LISTE D'OBJETS");
 		u.listeObjets(t, liste);
     }
 

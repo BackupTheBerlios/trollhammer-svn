@@ -330,7 +330,7 @@ class VenteManagerServeur {
 					// pas en cours ou en cours mais pas vte => suppression
 					// bug ok: ne pas oublier de repasser les objets en statut
 					//		"Accepté" ...
-					for (Objet o : vte.getObjets()) {
+					for (Objet o : this.getVente(vte.getId()).getObjets()) {
 						o.setStatut(StatutObjet.Accepte);
 					}
 					this.ventes.remove(this.getVente(vte.getId()));
@@ -368,6 +368,12 @@ class VenteManagerServeur {
 					break;
 				case Supprimer:
 					if (v != null) {
+                        // renvoi de la liste des objets Acceptes.
+                        // Elle vient de changer si les objets de la vente
+                        // qui a été supprimée ont été remis dans le 'pool'
+                        // d'objets attribuables à une vente.
+                        Serveur.objectmanager.obtenirListeObjets(
+                                Onglet.Planification,uid);
 						Serveur.broadcaster.listeVentes(l);
 					}
 					break;
@@ -396,6 +402,13 @@ class VenteManagerServeur {
                     }
 					break;
 				case Supprimer:
+                    // renvoi de la liste des objets Acceptes.
+                    // Elle vient de changer si les objets de la vente
+                    // qui a été supprimée ont été remis dans le 'pool'
+                    // d'objets attribuables à une vente.
+                    Serveur.objectmanager.obtenirListeObjets(
+                            Onglet.Planification,uid);
+
                     u.listeVentes(l);
 					break;
 				default:

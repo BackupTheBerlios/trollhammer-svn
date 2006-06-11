@@ -435,7 +435,7 @@ class HdVPanel extends JComponent implements ActionListener
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:
-                texteLogln("- PREMIER COUP DE MARTEAU -");
+                texteLogln("<b>- PREMIER COUP DE MARTEAU -</b>");
 				nbCdMLabel.setText("1");
                 /*
                 if(modo && Client.session.getLogin().
@@ -445,7 +445,7 @@ class HdVPanel extends JComponent implements ActionListener
                 verifierEnchere();
                 break;   
             case CoupDeMassePAF2:   
-                texteLogln("- SECOND COUP DE MARTEAU -");
+                texteLogln("<b>- SECOND COUP DE MARTEAU -</b>");
 				nbCdMLabel.setText("2");
                 /*
                 if(modo && Client.session.getLogin().
@@ -476,13 +476,17 @@ class HdVPanel extends JComponent implements ActionListener
                     enchereButton.setEnabled(false);
                 }*/
                 verifierEnchere();
+                verifierCDM();
                 break;      
             case VenteAutomatique:     
-                texteLogln("- Vente en mode automatique -");    
+                texteLogln("<b>- Vente en mode automatique -</b>");    
                 verifierEnchere();
+                verifierCDM();
+                /*
                 if(modo) {
                     cdmButton.setEnabled(true);
                 }
+                */
                 break;   
             default :   
         }      
@@ -501,6 +505,7 @@ class HdVPanel extends JComponent implements ActionListener
             enchereButton.setEnabled(false);
         }*/
         verifierEnchere();
+        verifierCDM();
 
 		majChamps();
     }    
@@ -544,10 +549,13 @@ class HdVPanel extends JComponent implements ActionListener
 
                 //enchereButton.setEnabled(true);
                 verifierEnchere();
+                verifierCDM();
 
+                /*
                 if(modo) {
                     cdmButton.setEnabled(true);
                 }
+                */
                 break;     
             case VenteEnCours:    
                 if(!afficher_message_encours) {
@@ -559,20 +567,23 @@ class HdVPanel extends JComponent implements ActionListener
 
                 //enchereButton.setEnabled(true);
                 verifierEnchere();
+                verifierCDM();
 
-                if(modo) {
-                    cdmButton.setEnabled(true);
-                }
                 break;      
             case FinVente:     
                 texteLogln("- Fin de la vente -");      
                 //enchereButton.setEnabled(false);
                 verifierEnchere();
+                verifierCDM();
+
+                /*
                 if(modo) {
                     cdmButton.setEnabled(false);
                 }
-					imgPanel.removeAll();
-					descrObjetTextArea.setText("");
+                */
+
+                imgPanel.removeAll();
+                descrObjetTextArea.setText("");
 				imgPanel.addC(new JLabel("Image"), new CellConstraints(1,2));
 				imgPanel.addC(new JLabel("non disponible"), new CellConstraints(1,3));
 				
@@ -590,6 +601,8 @@ class HdVPanel extends JComponent implements ActionListener
         // tout pareil pour le kick et le coup de MASSE.
         //enchereButton.setEnabled(false);
         verifierEnchere();
+        verifierCDM();
+
         if(modo) {
             kickButton.setEnabled(false);
         }
@@ -603,6 +616,8 @@ class HdVPanel extends JComponent implements ActionListener
         texteLogln("- Vente en mode manuel -");      
         texteLogln("- commissaire priseur : "+i+" -");
         verifierEnchere();
+        verifierCDM();
+        /*
         if(modo) {
             if(i.equals(Client.session.getLogin())) {
                 cdmButton.setEnabled(true);
@@ -612,6 +627,7 @@ class HdVPanel extends JComponent implements ActionListener
                 //enchereButton.setEnabled(true);
             }
         }
+        */
     }
 
     /* vérifier si le coup de masse ou l'enchère sont possibles, et activer
@@ -619,6 +635,27 @@ class HdVPanel extends JComponent implements ActionListener
      */
 
     void verifierEnchere() {
+        boolean en_cours = 
+            Client.ventemanager.isInVenteEnCours(Client.client.getDate());
+        String login = Client.session.getLogin();
+        String superviseur = Client.client.getSuperviseur();
+        String dernier_encherisseur = Client.client.getDernierEncherisseur();
+
+        if(en_cours) {
+            if(modo && login.equals(superviseur)) {
+                    enchereButton.setEnabled(false);
+            } else {
+                if(login.equals(dernier_encherisseur)) {
+                    enchereButton.setEnabled(false);
+                } else {
+                    enchereButton.setEnabled(true);
+                }
+            }
+        } else {
+            enchereButton.setEnabled(false);
+        }
+
+        /*
         if(Client.humain.getVente() != null) {
             if(modo && Client.session.getLogin().equals(
                         Client.humain.getVente().getSuperviseur())) {
@@ -637,11 +674,30 @@ class HdVPanel extends JComponent implements ActionListener
 
         encherePanel.validate();
         encherePanel.repaint();
+        */
     }
 
     void verifierCDM() {
         if(modo) {
+            boolean en_cours = 
+                Client.ventemanager.isInVenteEnCours(Client.client.getDate());
+            //boolean en_cours = Client.humain.getVente() != null ? true : false;
+            String login = Client.session.getLogin();
+            String superviseur = Client.client.getSuperviseur();
+            String dernier_encherisseur = Client.client.getDernierEncherisseur();
 
+            if(en_cours) {
+                if(superviseur == null || login.equals(superviseur)) {
+                    cdmButton.setEnabled(true);
+                } else {
+                    cdmButton.setEnabled(false);
+                }
+            } else {
+                cdmButton.setEnabled(false);
+            }
+
+            cmdPanel.validate();
+            cmdPanel.repaint();
         }
     }
 }

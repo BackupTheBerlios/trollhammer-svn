@@ -370,11 +370,9 @@ class PlanifierPanel implements ActionListener
         // KABOOM.
         if(vp != null && vp instanceof Vente) {
             if(Client.ventemanager.getVente(((Vente) vp).getId()) != null) {
-                System.out.println("vente resélectionnée.");
                 nomBox.setSelectedItem(vp);
                 Client.hi.choisirVente(((Vente) vp).getId());
             } else {
-                System.out.println("on a perdu la vente !!!");
                 razChamps();
             }
         } else if(vp != null && vp instanceof String) {
@@ -390,11 +388,9 @@ class PlanifierPanel implements ActionListener
             }
 
             if(the_vente != null) {
-                System.out.println("on a retrouvé Carmen San Diego !");
                 nomBox.setSelectedItem(the_vente);
                 Client.hi.choisirVente(the_vente.getId());
             } else {
-                System.out.println("on a PERDU Carmen San Diego !");
                 razChamps();
             }
 

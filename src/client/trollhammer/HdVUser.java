@@ -7,7 +7,7 @@ public class HdVUser extends JRadioButton
 	private String login;
 	private boolean modo;
 	private boolean sup;
-	public HdVUser(String login, boolean modo)
+	public HdVUser(String login, boolean modo, String selflogin)
 	{
 		super(login);
 		this.modo = modo;
@@ -50,12 +50,14 @@ public class HdVUser extends JRadioButton
 		}
 
         // mettre son nom en rouge non en gras !
-        if(login.equals(Client.session.getLogin())) {
+        if(login.equals(selflogin)) {
             //this.setForeground(new Color(33,94,33));
-			this.setFont(new Font(this.getFont().getFontName(),Font.BOLD,this.getFont().getSize()+1));
+            this.setForeground(Color.RED);
+			//this.setFont(new Font(this.getFont().getFontName(),Font.BOLD,this.getFont().getSize()+1));
         }
 		
 	}
+    /*
 	public HdVUser(String login, boolean superviseur, boolean modo)
 	{
 		super(login);
@@ -67,6 +69,7 @@ public class HdVUser extends JRadioButton
 		this.setForeground(new Color(217,217,25));	//Gold
 			
 	}
+    */
 
     String getLogin() {
         return this.login;

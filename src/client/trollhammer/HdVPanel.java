@@ -396,12 +396,14 @@ class HdVPanel extends JComponent implements ActionListener
 
         for(Participant p : participants) {
             HdVUser u = null;
+            String selflogin = Client.session.getLogin();
+
             if(p.getStatut() == StatutLogin.Connecte_Utilisateur) {
                 // false == utilisateur pas modo
-                u = new HdVUser(p.getLogin(), false);
+                u = new HdVUser(p.getLogin(), false, selflogin);
             } else if(p.getStatut() == StatutLogin.Connecte_Moderateur) {
                 // true == utilisateur modo
-                u = new HdVUser(p.getLogin(), true); 
+                u = new HdVUser(p.getLogin(), true, selflogin); 
             }
 
             if(u != null) {
@@ -435,7 +437,7 @@ class HdVPanel extends JComponent implements ActionListener
     void affichage(Evenement e) {    
         switch (e) {    
             case CoupDeMassePAF1:
-                texteLogln("<b>- PREMIER COUP DE MARTEAU -</b>");
+                texteLogln("- PREMIER COUP DE MARTEAU -");
 				nbCdMLabel.setText("1");
                 /*
                 if(modo && Client.session.getLogin().
@@ -445,7 +447,7 @@ class HdVPanel extends JComponent implements ActionListener
                 verifierEnchere();
                 break;   
             case CoupDeMassePAF2:   
-                texteLogln("<b>- SECOND COUP DE MARTEAU -</b>");
+                texteLogln("- SECOND COUP DE MARTEAU -");
 				nbCdMLabel.setText("2");
                 /*
                 if(modo && Client.session.getLogin().
@@ -479,7 +481,7 @@ class HdVPanel extends JComponent implements ActionListener
                 verifierCDM();
                 break;      
             case VenteAutomatique:     
-                texteLogln("<b>- Vente en mode automatique -</b>");    
+                texteLogln("- Vente en mode automatique -");
                 verifierEnchere();
                 verifierCDM();
                 /*

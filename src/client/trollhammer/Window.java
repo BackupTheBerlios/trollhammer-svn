@@ -128,9 +128,8 @@ class Window implements ActionListener
 			exitMenuItem = new JMenuItem(new javax.swing.AbstractAction("Quitter") {
                 public void actionPerformed(ActionEvent e)
 			{
-                    doLogout();
-		    setVisible(false);
-		    System.exit(0);
+                doLogout();
+                System.exit(0);
 			}
             });
 			exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
@@ -244,13 +243,19 @@ class Window implements ActionListener
     public void doLogout() {
         Client.hi.executer(Action.Deconnecter);
         frame.setVisible(false);
+        frame.dispose();
         lw.setVisible(true);
     }
 
-    void setVisible(boolean visible) {
-        frame.setVisible(visible);
+    /** Fermer la fenêtre principale et revenir à la fenêtre de Login.
+     * Utilisé lors des déconnexions forcées et autres kicks.
+     */
+    public void forcerFermeture() {
+        frame.setVisible(false);
+        frame.dispose();
+        lw.setVisible(true);
     }
-	
+
     /* les méthodes de HI sont relayées ici ! */
 	
     void affichage(Evenement e) {

@@ -220,6 +220,8 @@ class VenteManagerServeur {
 				}
 				if (vs.getMode() == Mode.Manuel) {
                     u.superviseur(vs.getSuperviseur());
+                } else {
+                    u.evenement(Evenement.VenteAutomatique);
                 }
             }
         } else {

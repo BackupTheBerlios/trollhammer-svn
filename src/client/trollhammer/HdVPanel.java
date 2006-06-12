@@ -519,10 +519,14 @@ class HdVPanel extends JComponent implements ActionListener
                     enchereButton.setEnabled(false);
                 }*/
                 //verifierEnchere();
-                if(!modo || !Client.session.getLogin().equals(Client.humain.getVente().getSuperviseur())) {
-                    enchereButton.setEnabled(true);
-                } else {
+                System.out.println("login : "+Client.session.getLogin()
+                        +" et superviseur : "+Client.client.getSuperviseur());
+                if(modo &&
+                        Client.session.getLogin()
+                        .equals(Client.client.getSuperviseur())) {
                     enchereButton.setEnabled(false);
+                } else {
+                    enchereButton.setEnabled(true);
                 }
                 verifierCDM();
                 break;      
@@ -733,7 +737,8 @@ class HdVPanel extends JComponent implements ActionListener
             String dernier_encherisseur = Client.client.getDernierEncherisseur();
 
             if(en_cours) {
-                if(superviseur == null || login.equals(superviseur)) {
+                if((superviseur == null || login.equals(superviseur))
+                        && !login.equals(dernier_encherisseur)){
                     cdmButton.setEnabled(true);
                 } else {
                     cdmButton.setEnabled(false);

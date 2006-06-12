@@ -81,6 +81,33 @@ class CLIServeur extends CLI {
 			}
 		);
 
+		commandes.add(
+			new CMD("set", 3 , "set - affecte certaines variables", "set var val") {
+				public void apply(String parameters[]){
+					if (parameters[1].equals("autoInterval")) {
+						Serveur.ventemanager.setAutoInterval(new Integer(parameters[2]));
+						Logger.log("CMD", 0, LogType.INF, "var "+parameters[1]+" set to val "+ Serveur.ventemanager.getAutoInterval());
+					// d'autres variables ?
+					} else {
+						Logger.log("CMD", 0, LogType.ERR, "set: var invalide");
+					}
+				}
+			}
+		);
+
+		commandes.add(
+			new CMD("get", 2 , "get - récupère la valeur de certaines variables", "get var") {
+				public void apply(String parameters[]){
+					if (parameters[1].equals("autoInterval")) {
+						Logger.log("CMD", 0, LogType.INF, "returned val "+ Serveur.ventemanager.getAutoInterval());
+					// d'autres variables ?
+					} else {
+						Logger.log("CMD", 0, LogType.ERR, "get: var invalide");
+					}
+				}
+			}
+		);
+
 /*		commandes.add(
 			new CMD(, , , ) {
 				public void apply(String parameters[]){

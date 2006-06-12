@@ -19,6 +19,7 @@ class VenteManagerServeur {
 	private VenteServeur venteEnCours = null; // vente en cours, null si aucune
 	private List<VenteServeur> ventes; // liste des ventes, ordonnée selon t
 	private long timerDerniereEnchere = -1; // utilisé pour gén auto coupdeMASSE
+	private int autoInterval = 30;
 
 	// Constructeurs : START
     VenteManagerServeur() {
@@ -591,19 +592,37 @@ class VenteManagerServeur {
 		this.ventes = list;
 	}
 	
+	public void setAutoInterval(int val) {
+		if (val < 1) {
+			val = 1; // minimum 1 sec
+		}
+		this.autoInterval = val;
+	}
+	
+	public int getAutoInterval() {
+		return this.autoInterval;
+	}
+	
 	/**
 	 * Envoi automatique du coup de masse, si nécessaire. Appelé dans
 	 * VenteStarter (toutes les secondes). Si la dernière enchère date de plus
 	 * de 30 secondes, en mode automatique, un coup de masse est généré.
 	 */
 	void donnerCoupdeMASSE() {
+		int interval = this.autoInterval;
+		if (Serveur.serveur.getMarteau() > 0) {
+			interval = this.autoInterval / 3;
+			if (interval < 1) {
+				interval = 1;
+			}
+		}
 		
 		if (venteEnCours != null
 			&& venteEnCours.getMode() == Mode.Automatique
 			&& Serveur.serveur.getDernierEncherisseur() != null) {
 			
 			if (Serveur.serveur.getDate() >
-				this.timerDerniereEnchere + 30*1000) { 
+				this.timerDerniereEnchere + interval*1000) { 
 				Serveur.serveur.envoyerCoupdeMASSE(null);
 				this.setTimerDerniereEnchere(Serveur.serveur.getDate());
 			}

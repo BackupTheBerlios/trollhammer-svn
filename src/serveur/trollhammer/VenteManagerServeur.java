@@ -610,8 +610,9 @@ class VenteManagerServeur {
 	 */
 	void donnerCoupdeMASSE() {
 		int interval = this.autoInterval;
-		if (Serveur.serveur.getMarteau() > 0) {
-			interval = this.autoInterval / 3;
+		
+		if (Serveur.serveur != null && Serveur.serveur.getMarteau() > 0) {
+			interval = interval / 3;
 			if (interval < 1) {
 				interval = 1;
 			}

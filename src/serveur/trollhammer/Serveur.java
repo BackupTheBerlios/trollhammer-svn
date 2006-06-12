@@ -16,7 +16,7 @@ public class Serveur {
     
     /* champs du design */
     // private long date; // remplacé par getDate() !
-    private int marteau;
+    private int marteau = 0;
     private int prix_courant;
     private String dernier_encherisseur;
 
@@ -241,7 +241,7 @@ public class Serveur {
 	}
 	
 	int getMarteau() {
-		return marteau;
+		return this.marteau;
 	}
 
     public String getDernierEncherisseur() {

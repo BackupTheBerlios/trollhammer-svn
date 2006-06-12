@@ -29,7 +29,7 @@ class SessionServeur {
         }
     }
 
-    private void envoyer(Message m) {
+    private synchronized void envoyer(Message m) {
         try {
             Logger.log("SessionServeur", 2, LogType.DBG, "[net] envoi de " + m);
             oos.writeObject(m);

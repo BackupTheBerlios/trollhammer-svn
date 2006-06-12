@@ -518,7 +518,12 @@ class HdVPanel extends JComponent implements ActionListener
                         equals(Client.humain.getVente().getSuperviseur())) {
                     enchereButton.setEnabled(false);
                 }*/
-                verifierEnchere();
+                //verifierEnchere();
+                if(!modo || !Client.session.getLogin().equals(Client.humain.getVente().getSuperviseur())) {
+                    enchereButton.setEnabled(true);
+                } else {
+                    enchereButton.setEnabled(false);
+                }
                 verifierCDM();
                 break;      
             case VenteAutomatique:     

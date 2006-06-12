@@ -82,7 +82,8 @@ class ObjectManagerServeur {
 			break;
 		case Achat:
 			for (ObjetServeur o : objets) {
-				if (o.getAcheteur() != null && o.getAcheteur().equals(sender)) {
+				if (o.getAcheteur() != null && o.getAcheteur().equals(sender)
+                    && o.getStatut() == StatutObjet.Vendu) {
 					liste.add(o);
 				}
 			}
@@ -103,7 +104,8 @@ class ObjectManagerServeur {
 			break;
 		default : 
 		}
-        System.out.println("EXPEDITION DE LA LISTE D'OBJETS");
+        Logger.log("ObjectManagerServeur", 2, LogType.DBG, "liste d'objets de type"+t
+                +"retourne "+liste.size()+" elements");
 		u.listeObjets(t, liste);
     }
 

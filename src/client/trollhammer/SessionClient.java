@@ -228,7 +228,7 @@ class SessionClient {
 
     /* fin méthodes du design */
 
-    private void envoyer(Message m) {
+    private synchronized void envoyer(Message m) {
         try {
             Logger.log("SessionClient", 2, LogType.INF, "[net] Envoi de la requête : " + m);
             oos.writeObject(m);

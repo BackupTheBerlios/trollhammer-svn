@@ -153,7 +153,9 @@ public class Serveur {
 						case 2 :
 							this.marteau = 0;
 							Serveur.broadcaster.evenement(Evenement.Adjuge);
+                            System.out.println("[Serveur] dernier encherisseur 1 = "+dernier_encherisseur);
 							venteEnCours.sellObject(dernier_encherisseur, prix_courant);
+                            System.out.println("[Serveur] dernier encherisseur 2 = "+dernier_encherisseur);
 							this.dernier_encherisseur = null;
 							// actualiser vue client
 							//Serveur.broadcaster.detailsVente(venteEnCours, venteEnCours.getObjets());

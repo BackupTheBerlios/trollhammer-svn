@@ -55,13 +55,8 @@ class VenteServeur extends Vente {
 	 * @param	prix	prix courant
 	 */
     public void sellObject(String i, int prix) {
-		if (i != this.getSuperviseur()) {
-			ObjetServeur o = new ObjetServeur(this.removeHead());
-			o.sell(i, prix);
-		}
-		Logger.log("VenteServeur", 1, LogType.ERR, "Vente d'un objet au Superviseur!!!");
-	// si le dernier enchérisseur est le superviseur, pour l'instant il ne
-	// se passe rien ici ...
+        ObjetServeur o = this.removeHead();
+        o.sell(i, prix);
     }
 
 	/**
@@ -69,7 +64,7 @@ class VenteServeur extends Vente {
 	 *
 	 * @return	l'objet qui était en tête de la liste
 	 */
-    public Objet removeHead() {
+    public ObjetServeur removeHead() {
         return Serveur.objectmanager.getObjet(this.removeFirst());
     }
 

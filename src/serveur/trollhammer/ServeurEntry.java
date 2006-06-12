@@ -273,7 +273,7 @@ class ServeurEntryListener extends Thread {
      */
     private ServerSocket getSSLServerSocket(int port) {
         Logger.log("ServeurEntry", 2, LogType.DBG, "[net] Création Socket serveur SSL.");
-        ClassLoader cl = this.getClass().getClassLoader();
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
         SSLServerSocketFactory ssf = null;
         ServerSocket ss = null;
 
@@ -299,13 +299,13 @@ class ServeurEntryListener extends Thread {
             // depuis le fichier fourni, ou le JAR si fichier il n'y a pas.
             try {
                 ks.load(new FileInputStream("trollkeys"), passphrase);
-            } catch (NullPointerException npe) {
+            } catch (IOException ioe) {
                 ks.load(cl.getResourceAsStream("trollkeys"), passphrase);
             }
 
             try {
                 ts.load(new FileInputStream("trolltrust"), passphrase);
-            } catch (NullPointerException npe) {
+            } catch (IOException ioe) {
                 ts.load(cl.getResourceAsStream("trolltrust"), passphrase);
             }
 
@@ -324,6 +324,7 @@ class ServeurEntryListener extends Thread {
             ss = ssf.createServerSocket(port); 
         } catch (Exception e) {
             Logger.log("ServeurEntry", 0, LogType.ERR, "[net] Erreur de création Socket serveur SSL : "+e.getMessage());
+            e.printStackTrace();
         }
 
         return ss;

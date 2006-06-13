@@ -230,6 +230,8 @@ class GestionPanel implements ActionListener
 		{
             // houlà, c'est sérieux ça.
             Client.hi.editerUtilisateur(Edition.Supprimer, utilisateur_selectionne);
+
+            razChamps();
 		}
 		else if(event.getActionCommand().equals("ban"))
 		{

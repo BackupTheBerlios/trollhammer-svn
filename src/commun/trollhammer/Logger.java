@@ -37,8 +37,8 @@ class Logger {
 		true, // Afficher les message de type INF?
 		true, // Afficher les message de type ERR?
 		true, // Afficher les message de type WRN?
-		true, // Afficher les message de type DBG?
-		true  // Afficher les message de type NSP?
+		false, // Afficher les message de type DBG?
+		false  // Afficher les message de type NSP?
 	};
 	
 	/**

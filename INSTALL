@@ -1,0 +1,3 @@
+On most systems, double-clicking on client.jar or serveur.jar should launch the program. Another way is typing "java -jar client.jar" or "java -jar serveur.jar" in a terminal.
+
+If double-clicking on the client jar causes a CPU overuse followed by a crash, please try the manuel java -jar method. Reason is unknown but might be related to stdout printing without actual visualization of it.
